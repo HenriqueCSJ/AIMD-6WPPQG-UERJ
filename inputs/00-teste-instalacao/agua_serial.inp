@@ -1,0 +1,6 @@
+# Teste de instalacao: energia HF, nao e uma simulacao AIMD.
+! HF def2-SVP TightSCF SP
+%maxcore 256
+%scf MaxIter 100 end
+* xyzfile 0 1 agua.xyz
+

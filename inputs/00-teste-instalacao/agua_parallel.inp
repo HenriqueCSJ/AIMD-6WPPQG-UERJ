@@ -1,0 +1,7 @@
+# Mesmo teste com dois processos. Inicie pelo executavel orca, sem mpirun externo.
+! HF def2-SVP TightSCF SP
+%pal nprocs 2 end
+%maxcore 256
+%scf MaxIter 100 end
+* xyzfile 0 1 agua.xyz
+

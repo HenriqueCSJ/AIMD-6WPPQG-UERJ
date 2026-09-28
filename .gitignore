@@ -1,0 +1,33 @@
+# Calculos locais e ambientes
+execucoes/
+.local/
+.venv/
+__pycache__/
+.ipynb_checkpoints/
+*.pyc
+.DS_Store
+Thumbs.db
+
+# Arquivos volumosos/reiniciaveis gerados pelo ORCA
+*.gbw
+*.ges
+*.tmp
+*.tmp.*
+*.densities
+*.hess
+*.engrad
+*.prop
+*.property.txt
+*.cis
+*.uco
+*.uno
+
+# Nao redistribuir instaladores, pacotes ORCA ou ambientes MPI
+*.run
+*.exe
+*.msi
+*.tar.gz
+*.tar.xz
+*.tar.bz2
+*.zip
+
