@@ -51,7 +51,9 @@ O workshop acontece de **5 a 8 de outubro de 2026**, no âmbito do Programa de P
 
 ## Comece por aqui
 
-1. **Escolha uma instalação.** Recomendamos Windows 11/10 com **WSL2 + Ubuntu 24.04 LTS**. Há também uma rota inteiramente nativa para Windows.
+> **Recomendamos o uso de WSL2 com Ubuntu 24.04 LTS para acompanhar o minicurso no Windows 11 ou 10.** A instalação nativa no Windows está disponível como alternativa.
+
+1. **Siga o guia recomendado:** [WSL2 + Ubuntu + ORCA](tutoriais/01-wsl2-ubuntu-orca.md).
 2. **Cadastre-se no fórum do ORCA** e obtenha o pacote **6.1.1** indicado no guia escolhido.
 3. **Faça os testes serial e paralelo** antes do encontro. Eles verificam a instalação com um cálculo pequeno.
 4. **Confira a preparação** e mantenha uma cópia deste repositório no seu computador.
@@ -59,14 +61,14 @@ O workshop acontece de **5 a 8 de outubro de 2026**, no âmbito do Programa de P
 | Rota recomendada | Alternativa |
 | :--- | :--- |
 | **[WSL2 + Ubuntu + ORCA](tutoriais/01-wsl2-ubuntu-orca.md)** | **[Windows + ORCA + MS-MPI](tutoriais/02-windows-orca-msmpi.md)** |
-| Windows 11 ou 10 · Ubuntu 24.04 LTS · Open MPI **4.1.8** | Windows 64 bits · MS-MPI **10.1.12498.52** |
-| Inclui script para instalar o Open MPI em uma pasta do usuário. | Inclui download do runtime e conferência da versão. |
+| Windows 11 ou 10 · Ubuntu 24.04 LTS · Open MPI **4.1.6 via apt** | Windows 64 bits · MS-MPI **10.1.12498.52** |
+| Instalação do Open MPI pelos pacotes oficiais do Ubuntu. | Inclui download do runtime e conferência da versão. |
 
 - **[Preparação para o minicurso →](tutoriais/00-preparacao.md)**
 - **[Teste sua instalação →](tutoriais/03-testar-instalacao.md)**
 - **[Downloads e documentação oficial →](tutoriais/04-links-e-referencias.md)**
 
-> **O MPI acompanha o pacote escolhido do ORCA.** O pacote Linux AVX2 indicado para este minicurso informa Open MPI **4.1.8**. O Open MPI 4.1.6 dos repositórios padrão do Ubuntu 24.04 não é a versão adotada neste guia. Os detalhes e a verificação estão no [tutorial Linux](tutoriais/01-wsl2-ubuntu-orca.md).
+> **Preparação simplificada:** usamos o Open MPI **4.1.6 do Ubuntu via apt**, testado localmente com ORCA **6.1.1**. O download Linux informa compilação com MPI **4.1.8**; o [tutorial Linux](tutoriais/01-wsl2-ubuntu-orca.md) explica a escolha e os testes para conferir seu ambiente.
 
 ## Materiais do minicurso
 
@@ -79,7 +81,7 @@ O workshop acontece de **5 a 8 de outubro de 2026**, no âmbito do Programa de P
 | [`trajetorias/`](trajetorias/README.md) | Trajetórias de exemplo para visualização, a adicionar com as aulas. |
 | [`resultados/`](resultados/README.md) | Saídas de referência e orientações de comparação, a adicionar. |
 | [`notebooks/`](notebooks/README.md) | Cadernos de análise, a adicionar. |
-| [`scripts/`](scripts/README.md) | Instalação do Open MPI e diagnóstico do ambiente. |
+| [`scripts/`](scripts/README.md) | Diagnóstico do ambiente Linux e Windows. |
 | [`tutoriais/`](tutoriais/README.md) | Guias de instalação, preparação e primeiro teste. |
 | [`assets/`](assets/README.md) | Identidade visual e créditos do workshop. |
 

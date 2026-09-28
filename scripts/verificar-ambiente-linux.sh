@@ -18,10 +18,12 @@ if command -v mpirun >/dev/null; then
     command -v mpirun
     aimd_mpi_version="$(mpirun --version 2>&1)"
     printf '%s\n' "$aimd_mpi_version"
-    [[ "$aimd_mpi_version" == *"Open MPI"* && "$aimd_mpi_version" == *"4.1.8"* ]] ||
-        check_failure "Ative Open MPI 4.1.8 para este pacote."
+    [[ "$aimd_mpi_version" == *"Open MPI"* && "$aimd_mpi_version" =~ 4\.1\.6($|[[:space:]]) ]] ||
+        check_failure "O roteiro usa Open MPI 4.1.6 do Ubuntu 24.04 via apt. Confira a versao ativa."
+    [[ "$(readlink -f "$(command -v mpirun)")" == "$(readlink -f /usr/bin/mpirun)" ]] ||
+        check_failure "mpirun nao aponta para /usr/bin/mpirun. Confira PATH, Conda e outras instalacoes de MPI."
 else
-    check_failure "mpirun nao encontrado."
+    check_failure "mpirun nao encontrado. Instale openmpi-bin pelo apt."
 fi
 if command -v orca >/dev/null; then
     aimd_orca_exe="$(readlink -f "$(command -v orca)")"
@@ -32,6 +34,13 @@ if command -v orca >/dev/null; then
         printf '%s\n' "$aimd_libraries" | grep -E 'libmpi|not found' || true
         [[ "$aimd_libraries" != *"not found"* ]] ||
             check_failure "Ha bibliotecas ausentes no modulo paralelo."
+        aimd_mpi_library="$(awk '$1 == "libmpi.so.40" && $2 == "=>" {print $3; exit}' <<< "$aimd_libraries")"
+        if [[ -n "$aimd_mpi_library" && -f "$aimd_mpi_library" ]]; then
+            [[ "$(readlink -f "$aimd_mpi_library")" == "$(readlink -f /usr/lib/x86_64-linux-gnu/libmpi.so.40)" ]] ||
+                check_failure "ORCA carrega libmpi de outra instalacao. Confira LD_LIBRARY_PATH."
+        else
+            check_failure "libmpi.so.40 do Ubuntu nao foi identificada no modulo paralelo."
+        fi
     else
         check_failure "Modulo orca_startup_mpi nao encontrado junto ao executavel."
     fi
@@ -40,4 +49,3 @@ else
 fi
 echo "Este diagnostico nao substitui os testes serial/paralelo nem verifica a versao do ORCA."
 [[ "$aimd_failures" -eq 0 ]]
-

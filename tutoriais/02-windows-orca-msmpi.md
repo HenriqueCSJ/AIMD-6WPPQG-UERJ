@@ -2,7 +2,11 @@
 
 [← Tutoriais](README.md) · [Rota WSL2 + Ubuntu](01-wsl2-ubuntu-orca.md)
 
-**Configuração adotada:** ORCA **6.1.1 para Windows 64 bits** + **Microsoft MPI 10.1.3**, cujo número de build é **10.1.12498.52**.
+**Rota alternativa.** Para acompanhar o minicurso, recomendamos [WSL2 + Ubuntu 24.04 LTS](01-wsl2-ubuntu-orca.md). Use este guia se optar pela instalação nativa no Windows.
+
+**Ainda não tem WSL instalado?** O [guia recomendado começa pela instalação do WSL2 e do Ubuntu do zero](01-wsl2-ubuntu-orca.md#1-instale-o-wsl2), incluindo reinício e criação do usuário Linux. Se preferir continuar com a instalação nativa abaixo, **ela não requer WSL**.
+
+**Configuração desta alternativa:** ORCA **6.1.1 para Windows 64 bits** + **Microsoft MPI 10.1.3**, cujo número de build é **10.1.12498.52**.
 
 Você executará os comandos no **PowerShell do Windows**. O Open MPI usado no Ubuntu não substitui o MS-MPI desta rota.
 

@@ -112,8 +112,8 @@ Inclua a rota usada, o sistema operacional, a versão do ORCA, a versão do MPI 
 
 ## Verificação desta versão dos materiais
 
-Em 28/09/2026, o script compilou e instalou Open MPI 4.1.8 em um diretório isolado sob Ubuntu 24.04.4/WSL2. Os dois inputs deste repositório terminaram normalmente com uma instalação existente de ORCA 6.1.1; o segundo iniciou dois processos e ambos produziram a mesma energia final.
+Em 28/09/2026, os dois inputs deste repositório foram executados sequencialmente com uma instalação existente de **ORCA 6.1.1** e **Open MPI 4.1.6 dos pacotes Ubuntu** (`4.1.6-7ubuntu2`), sob Ubuntu 24.04.4/WSL2. Foi usado `/usr/bin/mpirun`, e o módulo paralelo do ORCA carregou a `libmpi.so.40` do sistema. Ambos terminaram normalmente; o segundo iniciou dois processos e as energias finais coincidiram.
 
-Essa verificação não incluiu instalar o Windows/WSL do zero nem baixar novamente o pacote ORCA autenticado do fórum. A rota Windows nativa foi conferida na documentação oficial e na sintaxe PowerShell, mas não foi executada de ponta a ponta nesta revisão.
+Essa verificação confirma os testes de instalação neste ambiente; não cobre todos os módulos do ORCA. Os pacotes MPI já estavam instalados: não foi repetida uma instalação limpa pelo apt. Também não incluiu instalar o Windows/WSL do zero nem baixar novamente o pacote ORCA autenticado do fórum. A rota Windows nativa foi conferida na documentação oficial e na sintaxe PowerShell, mas não foi executada de ponta a ponta nesta revisão.
 
 [Voltar à preparação →](00-preparacao.md)

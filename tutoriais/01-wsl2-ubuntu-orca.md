@@ -2,35 +2,79 @@
 
 [← Tutoriais](README.md) · [Alternativa Windows nativo](02-windows-orca-msmpi.md)
 
-**Rota do minicurso:** Windows 11/10 → WSL2 → Ubuntu 24.04 LTS → Open MPI **4.1.8** → ORCA **6.1.1** Linux x86-64 AVX2.
+**Rota recomendada para o minicurso:** Windows 11/10 → WSL2 → Ubuntu 24.04 LTS → Open MPI **4.1.6 via apt** → ORCA **6.1.1** Linux x86-64 AVX2.
 
 ## 1. Instale o WSL2
 
-**No Windows**, abra o PowerShell como administrador. O procedimento simplificado requer Windows 11 ou Windows 10 versão 2004/build 19041 ou posterior. Consulte a [orientação da Microsoft](https://learn.microsoft.com/pt-br/windows/wsl/install); para builds antigas, use o [procedimento manual](https://learn.microsoft.com/pt-br/windows/wsl/install-manual).
+**Ainda não tem WSL? Comece aqui.** Este passo instala o ambiente Linux antes de preparar o ORCA. WSL é o Subsistema do Windows para Linux; Ubuntu é a distribuição que usaremos dentro dele.
 
-Confira as distribuições e instale a versão escolhida:
+### 1.1. Confira seu ponto de partida
 
-```powershell
-wsl --list --online
-wsl --install -d Ubuntu-24.04
-```
+Pressione **Win+R**, digite `winver` e confirme a versão do Windows. O procedimento abaixo requer **Windows 11** ou **Windows 10 versão 2004/build 19041 ou posterior**. Em versões anteriores, atualize pelo Windows Update ou consulte a [instalação manual da Microsoft](https://learn.microsoft.com/pt-br/windows/wsl/install-manual).
 
-Reinicie quando solicitado. Abra **Ubuntu 24.04** no menu Iniciar e crie seu usuário Linux. Ao digitar a senha, o terminal não mostra caracteres: isso é normal.
+No menu Iniciar, procure **PowerShell**, clique com o botão direito e escolha **Executar como administrador**. Aceite a solicitação do Windows. Você precisará de acesso à internet.
 
-De volta ao **PowerShell**, confira:
+Se nunca instalou o WSL, pode ir direto ao **passo 1.2**. Se não sabe se ele já está instalado, confira:
 
 ```powershell
-wsl --update
 wsl --list --verbose
 ```
 
-A coluna `VERSION` da distribuição deve mostrar **2**. Se mostrar 1, converta-a:
+- **WSL ausente ou nenhuma distribuição instalada:** siga o passo 1.2.
+- **Ubuntu já aparece:** não precisa reinstalá-lo; vá ao passo 1.3. No passo 2, confira se a versão real é Ubuntu 24.04. Se quiser instalar essa versão separadamente, siga o passo 1.2.
+- **Comando não reconhecido ou opção inválida:** consulte as orientações ao final desta seção.
+
+### 1.2. Se você ainda não tem WSL, instale do zero
+
+Na mesma janela do **PowerShell como administrador**, execute:
+
+```powershell
+wsl --install -d Ubuntu-24.04
+```
+
+Esse comando instala o WSL e solicita o Ubuntu **24.04 LTS**. Se o WSL já existir, ele adiciona a distribuição indicada. O procedimento segue a [instalação oficial da Microsoft](https://learn.microsoft.com/pt-br/windows/wsl/install).
+
+Salve seu trabalho e **reinicie o computador quando solicitado**. Depois, abra **Ubuntu 24.04** pelo menu Iniciar. Se ele ainda não aparecer, confira novamente `wsl --list --verbose`; se Ubuntu-24.04 não estiver listado, repita o comando de instalação após o reinício.
+
+### 1.3. Abra o Ubuntu e crie seu usuário Linux
+
+Na primeira abertura, aguarde a configuração e crie um nome de usuário simples, como `aluno`, e uma senha. Essa conta pertence ao **Ubuntu** e pode ser diferente da conta do Windows. Ao digitar a senha, **nenhum caractere ou asterisco aparece**; digite normalmente e pressione Enter. Ela será usada nos comandos `sudo`. Veja a [orientação oficial sobre a conta Linux](https://learn.microsoft.com/pt-br/windows/wsl/setup/environment).
+
+Se o Ubuntu já estava configurado, use seu usuário existente. Para abri-lo pelo PowerShell, também é possível executar:
+
+```powershell
+wsl -d Ubuntu-24.04
+```
+
+Use o nome exato mostrado por `wsl --list --verbose` se sua distribuição tiver outro nome.
+
+### 1.4. Confirme que está usando WSL2
+
+Volte à janela do **PowerShell**. Se abriu o Ubuntu pelo comando `wsl -d`, digite `exit` para retornar ao PowerShell na mesma janela. Então execute:
+
+```powershell
+wsl --update
+wsl --set-default-version 2
+wsl --list --verbose
+```
+
+A coluna **VERSION** deve mostrar **2** na linha do Ubuntu. O comando de versão padrão vale para novas distribuições; ele não converte as existentes. Se a linha mostrar **1**, salve uma cópia dos arquivos importantes dessa distribuição antes de convertê-la:
 
 ```powershell
 wsl --set-version Ubuntu-24.04 2
+wsl --list --verbose
 ```
 
-Se o nome exibido for diferente, use exatamente o nome da sua distribuição. O nome registrado no WSL pode sobreviver a uma atualização do Ubuntu; a versão real será conferida dentro do Linux.
+Use o nome exato da sua distribuição. A [referência de comandos da Microsoft](https://learn.microsoft.com/pt-br/windows/wsl/basic-commands) explica a atualização e a conversão. O estado `Stopped` é normal quando o Ubuntu está fechado.
+
+**Pronto para continuar:** você consegue abrir o Ubuntu, tem um usuário Linux e a coluna VERSION mostra **2**. Abra o Ubuntu e siga o passo 2. O nome registrado no WSL pode sobreviver a uma atualização do Ubuntu; a versão real será conferida dentro do Linux.
+
+### Se a instalação inicial não funcionar
+
+- **`wsl` não reconhecido ou `--install` indisponível:** confira `winver`, aplique as atualizações do Windows e reinicie. Se persistir, siga o [procedimento manual completo](https://learn.microsoft.com/pt-br/windows/wsl/install-manual), que inclui habilitar os recursos do Windows, reiniciar, instalar o kernel quando necessário e adicionar a distribuição Linux.
+- **Download parado em 0% ou problema com a Microsoft Store:** tente, no PowerShell como administrador, `wsl --install --web-download -d Ubuntu-24.04`.
+- **Ubuntu-24.04 não encontrado:** execute `wsl --list --online` e confira a grafia disponível; atualize o WSL com `wsl --update` antes de tentar novamente.
+- **Erro `0x80370102` ou mensagem de virtualização:** confira a Plataforma de Máquina Virtual e a virtualização no BIOS/UEFI, conforme a [solução de problemas da Microsoft](https://learn.microsoft.com/pt-br/windows/wsl/troubleshooting). Reinicie depois de habilitar os recursos. Em computador institucional, peça apoio à equipe de TI se precisar de permissão.
 
 ## 2. Confira o Linux e o processador
 
@@ -49,13 +93,13 @@ Se AVX2 não aparecer, não execute esse pacote: será necessário escolher uma 
 
 ### Por que Ubuntu 24.04?
 
-É a base LTS escolhida para padronizar a aula. Seus repositórios trazem [Open MPI 4.1.6](https://packages.ubuntu.com/noble/openmpi-bin), enquanto **o pacote ORCA indicado aqui declara 4.1.8**. Por isso, instalaremos a versão exata em uma pasta própria. A recomendação genérica 4.1.6 encontrada em parte da documentação ORCA não substitui a dependência do arquivo selecionado.
+É a base LTS escolhida para padronizar a aula. Instalaremos o [Open MPI 4.1.6 fornecido pelo Ubuntu](https://packages.ubuntu.com/noble/amd64/openmpi-bin) diretamente pelo gerenciador de pacotes `apt`, sem compilação manual.
 
 ## 3. Prepare as ferramentas e baixe o material da aula
 
 ```bash
 sudo apt update
-sudo apt install -y build-essential gfortran curl ca-certificates tar gzip xz-utils git nano
+sudo apt install -y ca-certificates tar xz-utils git nano
 mkdir -p "$HOME/cursos"
 cd "$HOME/cursos"
 git clone https://github.com/HenriqueCSJ/AIMD-6WPPQG-UERJ.git
@@ -66,33 +110,30 @@ Se a pasta já existir, entre nela em vez de repetir o clone. Também é possív
 
 Para os cálculos, prefira o sistema de arquivos Linux. A [Microsoft explica a diferença entre arquivos no Windows e no WSL](https://learn.microsoft.com/pt-br/windows/wsl/filesystems). Você pode abrir a pasta atual no Explorador com `explorer.exe .`.
 
-## 4. Instale o Open MPI 4.1.8
+## 4. Instale o Open MPI pelo apt
 
-Execute, na raiz do repositório:
-
-```bash
-bash scripts/instalar-openmpi-4.1.8.sh
-```
-
-O script baixa o [código oficial do Open MPI 4.1.8](https://www.open-mpi.org/software/ompi/v4.1/), compila com duas tarefas simultâneas e instala em `~/.local/opt/openmpi-4.1.8`. A compilação pode levar vários minutos. O [procedimento de compilação do projeto](https://www.open-mpi.org/faq/?category=building) usa a sequência configurar → compilar → instalar.
-
-Apenas a instalação das dependências no passo anterior usa `sudo`. O MPI fica no seu usuário; o script não substitui o MPI do sistema, não baixa ORCA e não altera `.bashrc`. Se houver falha, ele indica a pasta dos logs.
-
-Ative o MPI nesta janela:
+No **Ubuntu**, execute:
 
 ```bash
-export PATH="$HOME/.local/opt/openmpi-4.1.8/bin:$PATH"
-export LD_LIBRARY_PATH="$HOME/.local/opt/openmpi-4.1.8/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+sudo apt update
+sudo apt install -y openmpi-bin libopenmpi-dev
+command -v mpirun
 mpirun --version
 ```
 
-A saída deve identificar **Open MPI 4.1.8**. Confirme o lançamento de dois processos:
+O caminho esperado é **`/usr/bin/mpirun`**, com **Open MPI 4.1.6** no Ubuntu 24.04. O `apt` instala os pacotes e suas dependências; não é necessário configurar um diretório próprio de MPI em `PATH` ou `LD_LIBRARY_PATH`.
+
+Confirme o lançamento de dois processos:
 
 ```bash
 mpirun -np 2 hostname
 ```
 
 O nome do computador deve aparecer duas vezes. Esse comando verifica o MPI; mais adiante, o ORCA será iniciado diretamente pelo seu próprio executável.
+
+**Versão de compilação e ambiente da aula:** o pacote ORCA escolhido informa vínculo com **Open MPI 4.1.8**. Para o minicurso, adotamos o **4.1.6 do Ubuntu via apt**, também indicado genericamente no [tutorial oficial do ORCA](https://www.faccts.de/docs/orca/6.1/tutorials/first_steps/parallel.html). Essa combinação passou nos nossos testes locais serial e paralelo com ORCA 6.1.1; faça os [testes na sua instalação](03-testar-instalacao.md). Esse resultado não garante todos os módulos ou ambientes possíveis.
+
+**Se você seguiu a versão anterior deste guia:** retire as referências ao MPI compilado em `~/.local/opt/openmpi-4.1.8` dos arquivos de ativação que editou, como `~/.config/aimd/env.sh` e, se aplicável, `~/.bashrc`. Abra um novo terminal Ubuntu, sem outro ambiente MPI ativo, e confira novamente `command -v mpirun` e `mpirun --version`. Não é necessário apagar a instalação antiga.
 
 ## 5. Cadastre-se e baixe o ORCA
 
@@ -101,7 +142,7 @@ O nome do computador deve aparecer duas vezes. Esse comando verifica o MPI; mais
 3. Acesse o [pacote ORCA 6.1.1 Linux x86-64 AVX2 — arquivo 275](https://orcaforum.kofo.mpg.de/filebase/index.php?file/275-orca-6-1-1-linux-x86-64-avx2-tar-xz-archive/).
 4. Baixe o arquivo **.tar.xz** associado ao pacote. Cada participante usa sua própria conta.
 
-**Especificação do pacote adotado:** binários seriais e paralelos vinculados dinamicamente a **Open MPI 4.1.8**, **AVX2 obrigatório**, **glibc mínima 2.17**.
+**Especificação informada para o download:** binários seriais e paralelos vinculados dinamicamente a **Open MPI 4.1.8**, **AVX2 obrigatório**, **glibc mínima 2.17**. O runtime usado neste roteiro é o **Open MPI 4.1.6 via apt**, conforme o passo 4.
 
 > **Confira o arquivo baixado.** A descrição fornecida para essa página de 6.1.1 cita o nome `orca_6_1_0_linux_x86-64_shared_openmpi418_avx2.tar.xz`. Preserve o nome real do download e confira a versão no cabeçalho do primeiro cálculo. Renomear o arquivo não muda a versão do programa. Se o cabeçalho mostrar 6.1.0, volte à página de downloads e confirme o pacote 6.1.1.
 
@@ -137,8 +178,8 @@ Cole o bloco abaixo, substituindo `PASTA_QUE_CONTEM_ORCA` pelo caminho encontrad
 
 ```bash
 export ORCA_DIR="$HOME/software/orca-6.1.1/PASTA_QUE_CONTEM_ORCA"
-export PATH="$ORCA_DIR:$HOME/.local/opt/openmpi-4.1.8/bin:$PATH"
-export LD_LIBRARY_PATH="$ORCA_DIR/lib:$HOME/.local/opt/openmpi-4.1.8/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+export PATH="$ORCA_DIR:$PATH"
+export LD_LIBRARY_PATH="$ORCA_DIR/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
 ```
 
 No nano, salve com **Ctrl+O**, Enter e saia com **Ctrl+X**. Ative o arquivo **em cada novo terminal** usado para a aula:
@@ -151,7 +192,7 @@ mpirun --version
 ldd "$ORCA_DIR/orca_startup_mpi"
 ```
 
-Não deve haver `not found`. A biblioteca `libmpi` deve resolver para o Open MPI 4.1.8 escolhido. O manual do ORCA orienta a [usar caminho completo e bibliotecas do ambiente correspondente](https://www.faccts.de/docs/orca/6.1/manual/contents/essentialelements/parallel.html).
+Não deve haver `not found`. A biblioteca `libmpi.so.40` deve apontar para o MPI do sistema, normalmente em `/lib/x86_64-linux-gnu/` ou `/usr/lib/x86_64-linux-gnu/`. O manual do ORCA orienta a [usar caminho completo e bibliotecas do ambiente correspondente](https://www.faccts.de/docs/orca/6.1/manual/contents/essentialelements/parallel.html).
 
 Na raiz do repositório:
 
@@ -163,10 +204,9 @@ bash scripts/verificar-ambiente-linux.sh
 
 ## Quando algo não funciona
 
-- **WSL travado em 0%:** a Microsoft documenta `wsl --install --web-download -d Ubuntu-24.04` como alternativa.
-- **Erro de virtualização:** confira a virtualização no firmware e as instruções oficiais de [solução de problemas do WSL](https://learn.microsoft.com/pt-br/windows/wsl/troubleshooting).
-- **`mpirun` ainda mostra 4.1.6/5.x:** reative `env.sh` e confira `command -v mpirun`. Não remova o MPI do sistema.
-- **Falha na compilação:** veja `configure.log`, `build.log` ou `install.log` na pasta informada pelo script. Refaça a instalação das dependências se faltarem compiladores. Um destino incompleto não é sobrescrito automaticamente.
+- **Instalação do WSL ou virtualização:** volte às [orientações de instalação inicial](#se-a-instalação-inicial-não-funcionar).
+- **Pacote não encontrado pelo apt:** execute `sudo apt update` e confirme Ubuntu 24.04. Os pacotes Open MPI ficam no repositório Universe; se estiver desabilitado, habilite-o com `sudo add-apt-repository universe`, atualize a lista e repita a instalação. Se o comando não existir, instale `software-properties-common` pelo apt.
+- **`mpirun` mostra outra versão ou outro caminho:** confira `command -v mpirun` e `apt-cache policy openmpi-bin`. Desative ambientes Conda ou configurações de MPI que estejam tomando precedência e reabra o terminal. O roteiro espera o MPI de `/usr/bin`; não remova o MPI do sistema.
 - **`Illegal instruction`:** confira AVX2 e se o arquivo corresponde à arquitetura.
 - **Biblioteca ausente:** confira `LD_LIBRARY_PATH` e `ldd "$ORCA_DIR/orca_startup_mpi"`; não copie bibliotecas aleatórias para o sistema.
 - **`bad interpreter` ou `$'\r'`:** o script foi salvo com fins de linha Windows. Use a cópia do Git ou salve o arquivo com finais de linha LF no editor.
