@@ -99,7 +99,8 @@
       if(!run){run=makeRun(key);const n=state.runs.filter(r=>r.key===key).length;if(n)run.label=`${key} (${n+1})`;state.runs.push(run);}
       for(const part of parts){try{addParsed(run,part);accepted++;if(part.kind==='xyz'&&!trajectoryRun)trajectoryRun=run;}catch(error){const separate=makeRun(key,`${key} · ${part.kind==='out'?'.out':'CSV'} separado`);addParsed(separate,part);state.runs.push(separate);warnings.push(error.message);accepted++;if(part.kind==='xyz'&&!trajectoryRun)trajectoryRun=separate;}}
     }
-    const selected=visible();if(selected.length>4){selected.slice(4).forEach(r=>r.visible=false);warnings.push('Quatro simulações selecionadas para comparação. Use as caixas para escolher outras.');}
+    if(trajectoryRun)trajectoryRun.visible=true;
+    const selected=trajectoryRun?[trajectoryRun,...visible().filter(r=>r!==trajectoryRun)]:visible();if(selected.length>4){selected.slice(4).forEach(r=>r.visible=false);warnings.push('Quatro simulações selecionadas para comparação. Use as caixas para escolher outras.');}
     state.busy=false;document.body.classList.remove('busy');$('file-input').value='';
     if(trajectoryRun)state.tab='trajectory';
     renderAll(trajectoryRun?.id);message([accepted?`${accepted} arquivo(s) carregado(s).`:'Nenhum arquivo foi carregado.',accepted&&!state.runs.some(r=>r.xyz)?'Para ver o movimento em 3D, carregue também o arquivo -traj.xyz.':'',...warnings].filter(Boolean).join('\n'),warnings.length===0);
@@ -129,13 +130,19 @@
   }
   function renderRuns(){
     $('runs').innerHTML=state.runs.map(r=>{const n=energy(r)?.rows.length||0;return `<div class="run-card" style="--run-color:${r.color}"><label><input type="checkbox" data-run="${r.id}" ${r.visible?'checked':''}><span><strong>${esc(r.label)}</strong><small>${r.reference?'Referência da aula':'Seu arquivo'} · ${n?n+' pontos':r.xyz?r.xyz.elements.length+' átomos':'sem série MD'}</small></span></label><button type="button" class="remove-run" data-remove="${r.id}" aria-label="Remover ${esc(r.label)}">×</button></div>`;}).join('');
-    $('runs').querySelectorAll('[data-run]').forEach(c=>c.addEventListener('change',()=>{const r=state.runs.find(r=>r.id===Number(c.dataset.run));if(c.checked&&visible().length>=4){c.checked=false;message('Compare até quatro simulações por vez. Desmarque uma para escolher outra.');return;}r.visible=c.checked;renderEnergy();}));
-    $('runs').querySelectorAll('[data-remove]').forEach(b=>b.addEventListener('click',()=>{stop();state.runs=state.runs.filter(r=>r.id!==Number(b.dataset.remove));state.viewRun=null;renderAll();}));
+    $('runs').querySelectorAll('[data-run]').forEach(c=>c.addEventListener('change',()=>{const r=state.runs.find(r=>r.id===Number(c.dataset.run));if(c.checked&&visible().length>=4){c.checked=false;message('Compare até quatro simulações por vez. Desmarque uma para escolher outra.');return;}stop();r.visible=c.checked;updateRunSelectors();changeTab(state.tab);}));
+    $('runs').querySelectorAll('[data-remove]').forEach(b=>b.addEventListener('click',()=>{stop();state.runs=state.runs.filter(r=>r.id!==Number(b.dataset.remove));renderAll();}));
   }
   function updateSelect(id,runs){const selected=$(id).value;$(id).replaceChildren();runs.forEach(r=>{const opt=document.createElement('option');opt.value=r.id;opt.textContent=r.label;$(id).append(opt);});if(runs.some(r=>String(r.id)===selected))$(id).value=selected;}
+  function updateRunSelectors(preferredTrajectory){
+    for(const [id,compatible] of [['trajectory-run',r=>r.xyz],['distance-run',r=>r.xyz||r.colvars]]){
+      const runs=visible().filter(compatible);updateSelect(id,runs);$(id).disabled=!runs.length;
+      if(runs.some(r=>r.id===preferredTrajectory))$(id).value=preferredTrajectory;
+    }
+  }
   function renderAll(preferredTrajectory){
     const loaded=state.runs.length>0;$('workspace').hidden=!loaded;$('welcome-guide').hidden=loaded;document.body.classList.toggle('loaded',loaded);if(!loaded){stop();return;}
-    renderRuns();updateSelect('trajectory-run',state.runs.filter(r=>r.xyz));updateSelect('distance-run',state.runs.filter(r=>r.xyz||r.colvars));if(preferredTrajectory){$('trajectory-run').value=preferredTrajectory;$('distance-run').value=preferredTrajectory;}renderDetails();changeTab(state.tab);
+    renderRuns();updateRunSelectors(preferredTrajectory);renderDetails();changeTab(state.tab);
   }
   function changeTab(tab){stop();state.tab=tab;for(const name of ['energy','trajectory','distance']){$('panel-'+name).hidden=name!==tab;$('tab-'+name).setAttribute('aria-selected',name===tab);$('tab-'+name).tabIndex=name===tab?0:-1;}
     if(tab==='energy')renderEnergy();if(tab==='trajectory')renderTrajectory();if(tab==='distance')renderDistances(true);
@@ -145,7 +152,7 @@
   function renderEnergy(){
     const runs=visible().filter(r=>energy(r)?.rows.length),has=runs.length>0;$('energy-empty').hidden=has;$('energy-content').hidden=!has;$('export-energy').disabled=!has;
     renderStageSummary(runs,'energy-stage-summary');$('energy-first-window').hidden=!runs.some(r=>r.key==='etanol_instavel');
-    if(!has){for(const id of ['energy-chart','temperature-chart','energy-stats','time-summary'])$(id).replaceChildren();$('energy-empty').innerHTML='<strong>Adicione uma série de dinâmica.</strong>Carregue o arquivo -md-ener.csv ou um .out com a tabela de MD. Uma otimização ou um XYZ isolado não contém todas as energias da dinâmica.';$('energy-guide').innerHTML='<h3>Qual pergunta o seu arquivo permite responder?</h3><p>Uma geometria pode ser explorada nas abas Trajetória e Geometria. Para acompanhar energia e temperatura, precisamos da série ao longo do tempo.</p>';return;}
+    if(!has){for(const id of ['energy-chart','temperature-chart','energy-stats','time-summary'])$(id).replaceChildren();$('energy-empty').innerHTML=!visible().length?'<strong>Marque uma simulação acima.</strong>As caixas selecionam os cálculos disponíveis nas três abas.':'<strong>Adicione uma série de dinâmica.</strong>Carregue o arquivo -md-ener.csv ou um .out com a tabela de MD. Uma otimização ou um XYZ isolado não contém todas as energias da dinâmica.';$('energy-guide').innerHTML='<h3>Qual pergunta o seu arquivo permite responder?</h3><p>Uma geometria pode ser explorada nas abas Trajetória e Geometria. Para acompanhar energia e temperatura, precisamos da série ao longo do tempo.</p>';return;}
     const keys=[...document.querySelectorAll('[name="energy-series"]:checked')].map(x=>x.value),labels={total:'Total · E',potential:'Potencial · U',kinetic:'Cinética · K'},metricColors={total:'#006e66',potential:'#8e5ea2',kinetic:'#ac6300'},dashes={total:'',potential:'5 3',kinetic:'2 3'},delta=$('energy-mode').value==='delta',factor=energyFactor(),tf=timeFactor();
     const series=[];for(const [ri,r] of runs.entries()){const rows=energy(r).rows,viewRows=energyRowsInWindow(r);for(const [ki,key] of keys.entries()){const first=rows.find(x=>x[key]!==null)?.[key];if(first===undefined)continue;series.push({name:runs.length===1?labels[key]:`${r.label} · ${labels[key]}`,color:runs.length===1?metricColors[key]:r.color,dash:runs.length===1?dashes[key]:patterns[ri*keys.length+ki],points:viewRows.map(x=>({x:x.time*tf,y:x[key]===null?null:(x[key]-(delta?first:0))*factor,segment:x.segment}))});}}
     let xmin=Infinity,xmax=-Infinity;for(const r of runs)for(const row of energyRowsInWindow(r)){xmin=Math.min(xmin,row.time*tf);xmax=Math.max(xmax,row.time*tf);}if(!Number.isFinite(xmin)){xmin=0;xmax=1;}
@@ -170,8 +177,8 @@
     }).join('');
     $('file-details-content').querySelectorAll('[data-ensemble]').forEach(el=>el.addEventListener('change',()=>{const run=state.runs.find(r=>r.id===Number(el.dataset.ensemble));run.ensembleOverride=el.value;renderEnergy();}));
   }
-  function currentTrajectory(){return state.runs.find(r=>r.id===Number($('trajectory-run').value));}
-  function currentDistance(){return state.runs.find(r=>r.id===Number($('distance-run').value));}
+  function currentTrajectory(){return visible().find(r=>r.id===Number($('trajectory-run').value));}
+  function currentDistance(){return visible().find(r=>r.id===Number($('distance-run').value));}
   function isWaterCage(xyz){return xyz.elements.length===63&&xyz.elements.filter(e=>e==='C').length===60&&xyz.elements.filter(e=>e==='O').length===1&&xyz.elements.filter(e=>e==='H').length===2;}
   function stageTarget(stage){
     const numeric=value=>value===null||value===undefined||value===''?NaN:Number(value),start=numeric(stage.targetStartK),end=numeric(stage.targetEndK),single=numeric(stage.targetTemperature);
@@ -221,7 +228,12 @@
   }
   function renderTrajectory(){
     const run=currentTrajectory(),has=!!run?.xyz;$('trajectory-empty').hidden=has;$('trajectory-content').hidden=!has;
-    if(!has){renderStageSummary([],'trajectory-stage-summary');$('trajectory-empty').innerHTML='<strong>O movimento está no arquivo XYZ.</strong>Carregue nome-traj.xyz. O .out e o CSV de energias não contêm necessariamente as coordenadas de todos os passos.';return;}
+    $('reset-view').disabled=!has;
+    if(!has){
+      stop();clearContactShapes();state.viewer?.removeAllModels();state.viewer?.removeAllShapes();state.viewer?.removeAllLabels();state.viewer?.render();state.model=null;state.viewRun=null;state.frame=0;state.selectedAtom=null;
+      $('play-button').disabled=true;$('playback-speed').disabled=true;renderStageSummary([],'trajectory-stage-summary');
+      $('trajectory-empty').innerHTML=!visible().length?'<strong>Marque uma simulação acima.</strong>As caixas selecionam os cálculos disponíveis nas três abas.':'<strong>O movimento está no arquivo XYZ.</strong>Carregue nome-traj.xyz para uma simulação marcada. O .out e o CSV de energias não contêm necessariamente as coordenadas de todos os passos.';return;
+    }
     renderStageSummary([run],'trajectory-stage-summary',run.xyz.frames[state.frame]?.time);
     if(!window.$3Dmol){$('trajectory-content').hidden=true;$('trajectory-empty').hidden=false;$('trajectory-empty').textContent='O visualizador molecular não foi carregado. Mantenha a pasta vendor junto ao aplicativo. As distâncias continuam disponíveis.';return;}
     try{if(!state.viewer){state.viewer=$3Dmol.createViewer($('molecule'),{backgroundColor:'white',orthographic:true,antialias:true});state.viewer.setProjection('orthographic');state.initialView=state.viewer.getView().slice();}
@@ -310,7 +322,7 @@
   }
   function renderDistances(resetControls=false){
     const run=currentDistance(),has=!!run;$('distance-empty').hidden=has;$('distance-content').hidden=!has;$('export-distance').disabled=!has;
-    if(!has){$('geometry-preview-note').hidden=true;$('geometry-preview-note').textContent='';$('distance-empty').innerHTML='<strong>Escolha uma medida geométrica.</strong>Carregue uma trajetória XYZ, ou o CSV de Colvars do ORCA. O aplicativo usa as coordenadas; você não precisa adicionar medidas ao input.';return;}
+    if(!has){state.distanceSeries=[];state.geometrySeries=[];$('distance-chart').replaceChildren();$('distance-stats').replaceChildren();$('geometry-preview-note').hidden=true;$('geometry-preview-note').textContent='';$('distance-empty').innerHTML=!visible().length?'<strong>Marque uma simulação acima.</strong>As caixas selecionam os cálculos disponíveis nas três abas.':'<strong>Escolha uma medida geométrica.</strong>Carregue uma trajetória XYZ, ou o CSV de Colvars do ORCA, para uma simulação marcada.';return;}
     const source=$('distance-source');source.options[0].disabled=!run.xyz;source.options[1].disabled=!run.colvars;
     if(!run.xyz)source.value='colvars';else if(!run.colvars)source.value='xyz';
     const fromXYZ=source.value==='xyz';$('atom-pair-controls').hidden=!fromXYZ;$('colvar-controls').hidden=fromXYZ;$('distance-chips').hidden=!fromXYZ;

@@ -6,7 +6,7 @@
   <title>Laboratório de trajetórias · AIMD com ORCA</title>
   <link rel="stylesheet" href="app.css?v=20260929-chemistry2">
   <script defer src="orca-parser.js?v=20260929-chemistry2"></script><script defer src="charts.js"></script><script defer src="geometry.js?v=20260929-chemistry2"></script>
-  <script defer src="vendor/3Dmol-min.js"></script><script defer src="examples.js?v=20260929-loading1"></script><script defer src="example-loader.js?v=20260929-loading1"></script><script defer src="app.js?v=20260929-loading1"></script>
+  <script defer src="vendor/3Dmol-min.js"></script><script defer src="examples.js?v=20260929-loading1"></script><script defer src="example-loader.js?v=20260929-loading1"></script><script defer src="app.js?v=20260929-selection1"></script>
 </head>
 <body>
 <a class="skip" href="#main">Ir para o conteúdo</a>
@@ -53,6 +53,7 @@
   <section id="workspace" hidden aria-label="Análise dos resultados">
     <div class="workspace-top"><div><span class="eyebrow">SEUS RESULTADOS</span><h2>Uma pergunta de cada vez.</h2></div><button type="button" class="text-button" id="clear-button">Limpar sessão</button></div>
     <div id="runs" class="run-list" aria-label="Simulações carregadas"></div>
+    <p class="small muted">As caixas selecionam os cálculos nas três abas. Com mais de um marcado, escolha no campo <strong>Simulação</strong> qual trajetória ou geometria observar.</p>
     <div class="tabs" role="tablist" aria-label="O que deseja observar?">
       <button type="button" role="tab" id="tab-energy" aria-selected="true" aria-controls="panel-energy" data-tab="energy">01 <span>Energia e temperatura</span></button>
       <button type="button" role="tab" id="tab-trajectory" aria-selected="false" aria-controls="panel-trajectory" tabindex="-1" data-tab="trajectory">02 <span>Trajetória 3D</span></button>

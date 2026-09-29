@@ -9,7 +9,7 @@ O aluno carrega os arquivos e passa diretamente à interpretação. Não precisa
 1. Abra `visualizador/index.html` em um navegador moderno, mantendo as pastas do repositório juntas. Também funciona pelo site estático quando o repositório estiver publicado.
 2. Para ver o movimento, selecione `nome-traj.xyz`: a aba **Trajetória 3D** abre automaticamente, mesmo sem outros arquivos. Junte `nome-md-ener.csv` para energias/temperatura e `nome.out` para as condições do cálculo. Pode carregar todos juntos. Arquivos com o mesmo nome-base são associados. Recarregar uma série que já existe cria outra entrada, preservando a anterior.
 3. Arraste a molécula para girar, use a roda para ampliar e clique em **Reproduzir**. As setas avançam quadro a quadro; a barra e **Ir ao quadro** escolhem um ponto da trajetória. **Velocidade** altera apenas a reprodução. Clique em um átomo para acompanhar suas coordenadas; **Centralizar** restaura a vista inicial.
-4. Explore **Energia e temperatura** e **Geometria**. Para comparar, carregue outro cálculo e marque até quatro simulações. Um XYZ de apenas um quadro pode ser girado e ampliado, mas não contém uma animação.
+4. Explore **Energia e temperatura** e **Geometria**. Para comparar, carregue outro cálculo e marque até quatro simulações. As caixas selecionam os cálculos nas três abas. Ao desmarcar o cálculo exibido, a trajetória passa ao próximo marcado; com vários marcados, use o campo **Simulação** para alternar entre eles. Clique em **Reproduzir** após a troca. Um XYZ de apenas um quadro pode ser girado e ampliado, mas não contém uma animação.
 
 No WSL, use `explorer.exe .` na pasta do cálculo para encontrá-la pelo seletor de arquivos do Windows. O aplicativo não precisa executar dentro do WSL.
 
