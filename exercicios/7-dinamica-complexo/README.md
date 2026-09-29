@@ -4,6 +4,8 @@
 
 **35 min · Zn²⁺–etilenodiamina + águas · 43 átomos**
 
+**Novo ponto de partida:** [veja as águas inicialmente afastadas se coordenarem ao Zn](hidratacao.html), com a en ainda distante. Há uma referência de 250 fs para a hidratação e outra de 5 ps para acompanhar o encontro; a segunda ainda não forma o quelato. A comparação com/sem parede abaixo continua usando o complexo já formado.
+
 > **Pergunta:** como impedir que águas da camada externa se afastem da região simulada?
 
 ## 1. Compare a mesma condição inicial

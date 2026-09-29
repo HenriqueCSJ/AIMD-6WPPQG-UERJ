@@ -6,7 +6,7 @@
   <title>Laboratório de trajetórias · AIMD com ORCA</title>
   <link rel="stylesheet" href="app.css?v=20260929-chemistry2">
   <script defer src="orca-parser.js?v=20260929-chemistry2"></script><script defer src="charts.js"></script><script defer src="geometry.js?v=20260929-chemistry2"></script>
-  <script defer src="vendor/3Dmol-min.js"></script><script defer src="examples.js?v=20260929-loading1"></script><script defer src="example-loader.js?v=20260929-loading1"></script><script defer src="app.js?v=20260929-selection1"></script>
+  <script defer src="vendor/3Dmol-min.js"></script><script defer src="examples.js?v=20260929-hydration1"></script><script defer src="example-loader.js?v=20260929-loading1"></script><script defer src="app.js?v=20260929-hydration1"></script>
 </head>
 <body>
 <a class="skip" href="#main">Ir para o conteúdo</a>
@@ -40,6 +40,7 @@
         <option value="timestep" selected>4 · Timestep: instabilidade e correção</option>
         <option value="timestep_accuracy">4b · Timestep: precisão e custo</option><option value="thermostat">5 · Etanol: aquecer e resfriar</option>
         <option value="solvator">6 · Complexo e SOLVATOR</option>
+        <option value="hydration">7a · Águas afastadas: ver a hidratação</option><option value="hydration_long">7b · Zn hidratado e en: encontro em 5 ps</option>
         <option value="complex">7 · Parede: retenção das águas</option><option value="fullerene">8 · Água dentro de C₆₀ (opcional)</option><option value="complex_short">Apoio · Parede: referência curta</option>
         <option value="water_single">Apoio · Água isolada</option><option value="solvent_single">Apoio · Água isolada: vácuo × CPCM</option><option value="timestep_abrupt">Apoio · Falha abrupta com 5 fs</option><option value="thermostat_compare">Apoio · NVE × termostato</option>
       </select>

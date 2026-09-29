@@ -1,0 +1,20 @@
+# Montagem fora do equilibrio: aguas a 3.1 A; en a pelo menos 6.5 A.
+! MD XTB2 ALPB(water) PAL8
+%maxcore 256
+
+%md
+  Timestep 0.25_fs
+  Randomize 42
+  Initvel 300_K
+  # Contencao distante; sem atracao imposta Zn-O ou Zn-N.
+  Walls Sphere 0, 0, 0, 12.0_A Spring 50.0
+  Dump Position Stride 2 Filename "hidratacao_associacao_31A-traj.xyz"
+  # Dissipar o calor de formacao da primeira camada (0.5 ps).
+  Thermostat CSVR 300_K Timecon 20_fs
+  Run 2000
+  # Observar os encontros com acoplamento mais fraco (4.5 ps).
+  Thermostat CSVR 300_K Timecon 100_fs
+  Run 18000
+end
+
+* xyzfile 2 1 zn_aguas_en_31A.xyz

@@ -38,5 +38,7 @@ for n,(slug,title) in enumerate(LESSONS,1):
     if path.exists():render(path.parent,f'{n}. {title}',path.read_text(encoding='utf-8'),n)
     support=EX/slug/'apoio.md'
     if support.exists():render(support.parent,f'Apoio · {title}',support.read_text(encoding='utf-8'),n,'apoio.html')
+    hydration=EX/slug/'hidratacao.md'
+    if hydration.exists():render(hydration.parent,'Ver a camada de águas se formar',hydration.read_text(encoding='utf-8'),n,'hidratacao.html')
 render(EX,'Percurso dos exercícios',(EX/'README.md').read_text(encoding='utf-8-sig'),0)
 print('Static exercise pages rendered from their README sources.')

@@ -33,7 +33,7 @@ test('startup manifest contains no trajectories and only the requested calculati
 
 test('every exposed preset resolves all retained runs and original download links',async()=>{
   const {store,loader}=bundledLoader();
-  assert.equal(Object.keys(store.presets).length,14);
+  assert.equal(Object.keys(store.presets).length,16);
   for(const [key,preset] of Object.entries(store.presets)){
     const {runs}=await loader.loadPreset(key);
     assert.equal(runs.length,preset.runs.length,key);
@@ -47,7 +47,7 @@ test('every exposed preset resolves all retained runs and original download link
       for(const file of run.files)assert.ok(fs.existsSync(path.join(viewer,'..',file.path)),file.path);
     }
   }
-  assert.equal(Object.keys(store.runs).length,19);
+  assert.equal(Object.keys(store.runs).length,21);
   for(const key of ['zn_parede_longo','zn_sem_parede_longo']){
     assert.equal(store.runs[key].xyz.elements.length,43);
     assert.equal(store.runs[key].xyz.frames.length,1001);
@@ -58,6 +58,16 @@ test('every exposed preset resolves all retained runs and original download link
   assert.equal(store.runs.preparar_complexo.xyz.frames.length,1);
   assert.equal(store.runs.zn_solvator.energy,undefined);
   assert.equal(store.runs.etanol_etapas.xyz.frames.length,10001);
+  for(const key of ['controle_dt025_31A','hidratacao_associacao_31A']){
+    const run=store.runs[key],xyz=run.xyz;
+    assert.equal(xyz.elements.length,43);
+    assert.equal(xyz.elements[31],'N');assert.equal(xyz.elements[34],'N');
+    assert.equal(xyz.frames[0].time,0);
+    assert.equal(xyz.frames.at(-1).time,key==='controle_dt025_31A'?250:5000);
+    assert.equal(run.out.metadata.ensemble,'NVT');assert.equal(run.out.metadata.normal,true);
+    const coords=xyz.frames[0].coords;
+    for(let i=1;i<=28;i+=3)assert.ok(Math.abs(Math.hypot(...coords[i].map((v,k)=>v-coords[0][k]))-3.1)<1e-6);
+  }
 });
 
 test('overlapping preset requests share a pending script and reuse its loaded data',async()=>{

@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Ver a camada de águas se formar · AIMD / ORCA</title><link rel="stylesheet" href="../pagina.css"><script defer src="../pagina.js"></script></head>
+<body><a class="skip" href="#conteudo">Ir para o conteúdo</a><header class="brand"><a href="../index.html"><strong>AIMD com ORCA</strong><small>6º Workshop PPGQ–UERJ · 7 de outubro de 2026</small></a><div class="logos"><img src="../../assets/uerj-logo.png" alt="UERJ"><img src="../../assets/ufrrj-logo-compacto.png" alt="UFRRJ"></div></header><div class="layout"><nav class="course-nav" aria-label="Exercícios"><h2>Do input à interpretação</h2><a class="home" href="../index.html">Visão geral do percurso</a><div class="links"><a href="../1-agua-dft/index.html"><span class="num">01</span><span>Ligação H com DFT</span></a><a href="../2-solvente-implicito/index.html"><span class="num">02</span><span>O papel do contínuo</span></a><a href="../3-xtb2-etanol/index.html"><span class="num">03</span><span>Vibração e torsão</span></a><a href="../4-timestep/index.html"><span class="num">04</span><span>Passo de integração</span></a><a href="../5-termostato/index.html"><span class="num">05</span><span>Aquecer e resfriar</span></a><a href="../6-complexo-solvator/index.html"><span class="num">06</span><span>Zn–en e SOLVATOR</span></a><a href="../7-dinamica-complexo/index.html" aria-current="page"><span class="num">07</span><span>Dinâmica do complexo</span></a><a href="../8-agua-no-fulereno/index.html"><span class="num">08</span><span>Água em C₆₀ · opcional</span></a></div></nav><main id="conteudo"><h1 id="ver-a-camada-de-aguas-se-formar">Ver a camada de águas se formar</h1>
+<p><a href="index.html">← Exercício 7</a> · <a href="../../visualizador/index.html?exemplo=hydration&amp;aba=trajetoria">Abrir o filme curto</a></p>
+<p><strong>Zn + 10 águas + etilenodiamina · 43 átomos · XTB2/ALPB(water)</strong></p>
+<blockquote>
+<p><strong>Pergunta:</strong> as águas se coordenam antes de a en chegar ao metal?</p>
+</blockquote>
+<h2 id="1-comece-com-as-moleculas-afastadas">1. Comece com as moléculas afastadas</h2>
+<p>No quadro inicial, todas as distâncias <strong>Zn–O são 3,1 Å</strong>. Os dois N da en estão a <strong>6,50 e 6,60 Å</strong> do Zn. Nenhuma água começa dentro do corte geométrico de coordenação de 2,6 Å do visualizador.</p>
+<p>Essa é uma montagem deliberadamente fora do equilíbrio. As águas já interagem com o íon a essa distância, mas a primeira camada ainda não está formada. A en começa em uma conformação otimizada isoladamente; não há restrições Zn–N ou Zn–O que determinem quem deve se coordenar.</p>
+<h2 id="2-veja-as-aguas-chegando-250-fs">2. Veja as águas chegando · 250 fs</h2>
+<p><a href="../../visualizador/index.html?exemplo=hydration&amp;aba=trajetoria">Abrir a animação de hidratação</a> · <a href="aula-controle_dt025_31A.zip">Baixar o pacote para executar</a></p>
+<ol>
+<li>Ative <strong>Coordenação</strong>, com corte de <strong>2,6 Å</strong>, e volte ao primeiro quadro.</li>
+<li>Escolha a velocidade <strong>0,25×</strong> e reproduza: as águas aproximam o O do Zn e reorganizam suas orientações.</li>
+<li>Pause perto de <strong>100 fs = 1 × 10⁻¹³ s</strong>. A primeira camada tem seis O próximos; eles não foram colocados já nessa posição.</li>
+<li>Em <strong>Geometria → Distância</strong>, compare <strong>Zn 0–O 10</strong>, <strong>Zn 0–O 1</strong> e <strong>Zn 0–N 31</strong>. O 10 entra na camada; O 1 permanece fora no final deste trecho; a en ainda está distante. Os índices começam em zero.</li>
+</ol>
+<p><strong>O que se observa nesta referência:</strong> o primeiro O cruza 2,6 Å em 36,5 fs. Aos 100 fs, os O 10, 13, 19, 22, 25 e 28 formam a primeira camada geométrica. A evolução dura <strong>250 fs = 0,25 ps = 2,5 × 10⁻¹³ s</strong>. Não use esses tempos como constantes cinéticas de hidratação em solução: a configuração inicial foi construída e o aglomerado é pequeno.</p>
+<details>
+<summary>Input completo e comentado · executar em cerca de 40 s na máquina de referência</summary>
+<pre><code class="language-text"># Aguas inicialmente afastadas: observar a hidratacao do Zn.
+! MD XTB2 ALPB(water) PAL8
+%maxcore 256
+%md
+  Timestep 0.25_fs
+  Randomize 42
+  Initvel 300_K
+  Walls Sphere 0, 0, 0, 12.0_A Spring 50.0
+  Dump Position Stride 1 Filename &quot;controle_dt025_31A-traj.xyz&quot;
+  Thermostat CSVR 300_K Timecon 20_fs
+  # 1000 passos de 0.25 fs = 250 fs.
+  Run 1000
+end
+* xyzfile 2 1 zn_aguas_en_31A.xyz
+</code></pre>
+<p>Extraia o pacote em uma pasta nova. No Ubuntu/WSL, com <code>ORCA_DIR</code> configurado conforme o guia de instalação:</p>
+<pre><code class="language-bash">&quot;$ORCA_DIR/orca&quot; controle_dt025_31A.inp &gt; controle_dt025_31A.out 2&gt;&amp;1
+tail -n 12 controle_dt025_31A.out
+</code></pre>
+<p>No Windows nativo, ajuste o caminho da instalação:</p>
+<pre><code class="language-powershell">&amp; 'C:\ORCA_6.1.1\orca.exe' controle_dt025_31A.inp &gt; controle_dt025_31A.out 2&gt;&amp;1
+</code></pre>
+<p>Execute um cálculo por vez. PAL8 solicita oito threads ao xTB. Tempo medido aqui: <strong>37 s</strong>, incluindo a inicialização, em ORCA 6.1.1 / xTB 6.7.1, WSL2 e Core Ultra 9 185H; outras máquinas podem levar mais tempo.</p>
+</details>
+<h2 id="3-siga-a-en-5-ps">3. Siga a en · 5 ps</h2>
+<p><a href="../../visualizador/index.html?exemplo=hydration_long&amp;aba=trajetoria">Abrir a trajetória de 5 ps</a> · <a href="aula-hidratacao_associacao_31A.zip">Pacote para executar</a></p>
+<p>O caso longo começa da mesma geometria e usa Δt = 0,25 fs. O banho permanece a 300 K: acoplamento de 20 fs nos primeiros 0,5 ps, depois 100 fs. A parede de raio 12 Å contém o aglomerado; ela não puxa a en para o metal, mas interfere quando um átomo atinge a borda.</p>
+<p><strong>A en se aproxima, mas não se coordena neste intervalo.</strong> Em <strong>5 ps = 5 × 10⁻¹² s</strong>, a menor distância Zn–N foi <strong>3,69 Å</strong>. Os dois N nunca entram no corte de 2,6 Å; a en conserva suas ligações C–C e C–N. As seis águas da primeira camada permanecem as mesmas pelo critério com histerese descrito abaixo. Portanto, este filme mostra hidratação e encontro na vizinhança, <strong>ainda sem substituição de duas águas nem formação do quelato</strong>.</p>
+<p>Ative também <strong>Ligações H</strong>. Distinga aproximação à camada de águas, contatos com o solvente e coordenação direta ao metal. A ausência de quelação em uma trajetória curta não demonstra que o complexo seja desfavorável: encontro, orientação e substituição têm de ser amostrados.</p>
+<details>
+<summary>Input de 5 ps · duas etapas no mesmo cálculo</summary>
+<pre><code class="language-text"># Montagem fora do equilibrio: aguas a 3.1 A; en a pelo menos 6.5 A.
+! MD XTB2 ALPB(water) PAL8
+%maxcore 256
+
+%md
+  Timestep 0.25_fs
+  Randomize 42
+  Initvel 300_K
+  # Contencao distante; sem atracao imposta Zn-O ou Zn-N.
+  Walls Sphere 0, 0, 0, 12.0_A Spring 50.0
+  Dump Position Stride 2 Filename &quot;hidratacao_associacao_31A-traj.xyz&quot;
+  # Dissipar o calor de formacao da primeira camada (0.5 ps).
+  Thermostat CSVR 300_K Timecon 20_fs
+  Run 2000
+  # Observar os encontros com acoplamento mais fraco (4.5 ps).
+  Thermostat CSVR 300_K Timecon 100_fs
+  Run 18000
+end
+
+* xyzfile 2 1 zn_aguas_en_31A.xyz
+</code></pre>
+<p>Tempo medido: <strong>8 min 54 s</strong> com PAL8 na máquina de referência. Para a aula ao vivo, execute o caso curto e use o resultado longo já disponível para interpretação.</p>
+</details>
+<h2 id="arquivos-e-interpretacao">Arquivos e interpretação</h2>
+<p><strong>250 fs:</strong> <a href="resultados/controle_dt025_31A/controle_dt025_31A.out">output</a> · <a href="resultados/controle_dt025_31A/controle_dt025_31A-md-ener.csv">energias e temperatura</a> · <a href="resultados/controle_dt025_31A/controle_dt025_31A-traj.xyz">trajetória completa</a>.</p>
+<p><strong>5 ps:</strong> <a href="resultados/hidratacao_associacao_31A/hidratacao_associacao_31A.out">output</a> · <a href="resultados/hidratacao_associacao_31A/hidratacao_associacao_31A-md-ener.csv">energias e temperatura</a> · <a href="resultados/hidratacao_associacao_31A/hidratacao_associacao_31A-traj.xyz">trajetória completa</a> · <a href="estruturas/zn_aguas_en_31A.xyz">estrutura inicial</a>.</p>
+<p>Os traços do visualizador são contatos geométricos instantâneos, não ordens de ligação. Para acompanhar a identidade das águas na análise da referência, usamos entrada abaixo de 2,6 Å e saída acima de 3,0 Å, evitando contar vibrações no limite como trocas repetidas. A carga total +2 do input não fixa cargas formais em átomos ou fragmentos.</p>
+<p><strong>Pergunta para discutir:</strong> por que uma camada de águas pode se formar rapidamente, enquanto a entrada de um ligante quelante demora mais? Use distâncias e a integridade da molécula para responder; não basta ver um N passar perto do Zn.</p>
+<p><a href="https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html">Manual ORCA — dinâmica molecular, termostatos, reinício e paredes</a> · <a href="https://www.faccts.de/docs/orca/6.1/manual/contents/modelchemistries/semiempirical.html">Métodos xTB no ORCA</a>.</p><nav class="endnav" aria-label="Próxima etapa"><a href="../6-complexo-solvator/index.html">← Exercício 6</a><a href="../8-agua-no-fulereno/index.html">Exercício 8 →</a></nav></main></div><footer>Henrique de Castro Silva Junior e Virginia Camila Rufino Ferreira · ORCA 6.1.1 · Materiais e dados locais; links externos levam à documentação oficial.</footer></body></html>

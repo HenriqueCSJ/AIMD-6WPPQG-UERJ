@@ -6,6 +6,8 @@
 
 > **Pergunta da atividade:** Como acrescentar águas explícitas a um complexo já preparado?
 
+Para observar a formação da primeira camada de águas, abra também [Zn, águas e en inicialmente afastados](../7-dinamica-complexo/hidratacao.html). O SOLVATOR desta atividade parte de um complexo preparado; não mostra sua formação por dinâmica.
+
 ## 1. Prepare
 
 O ponto de partida tem Zn, etilenodiamina e quatro águas: **25 átomos**. O SOLVATOR acrescentará seis águas, chegando a **43 átomos**. O banho contínuo ALPB permanece.

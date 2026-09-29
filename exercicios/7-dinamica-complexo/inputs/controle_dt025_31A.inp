@@ -1,0 +1,14 @@
+# Aguas inicialmente afastadas: observar a hidratacao do Zn.
+! MD XTB2 ALPB(water) PAL8
+%maxcore 256
+%md
+  Timestep 0.25_fs
+  Randomize 42
+  Initvel 300_K
+  Walls Sphere 0, 0, 0, 12.0_A Spring 50.0
+  Dump Position Stride 1 Filename "controle_dt025_31A-traj.xyz"
+  Thermostat CSVR 300_K Timecon 20_fs
+  # 1000 passos de 0.25 fs = 250 fs.
+  Run 1000
+end
+* xyzfile 2 1 zn_aguas_en_31A.xyz

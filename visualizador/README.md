@@ -13,7 +13,7 @@ O aluno carrega os arquivos e passa diretamente à interpretação. Não precisa
 
 No WSL, use `explorer.exe .` na pasta do cálculo para encontrá-la pelo seletor de arquivos do Windows. O aplicativo não precisa executar dentro do WSL.
 
-O seletor de exemplos oferece os sete momentos da aula e a extensão H₂O@C₆₀, usando dezenove cálculos reais já preservados neste repositório. **Ver trajetória 3D** abre diretamente a molécula do exemplo escolhido. Os exemplos são identificados como referências dos ministrantes. A cópia local inclui os dados e a biblioteca molecular: a leitura e os exemplos não precisam de internet. Links para o manual do ORCA são externos.
+O seletor de exemplos oferece os sete momentos da aula e a extensão H₂O@C₆₀, usando vinte e um cálculos reais já preservados neste repositório. **Ver trajetória 3D** abre diretamente a molécula do exemplo escolhido. Os exemplos são identificados como referências dos ministrantes. A cópia local inclui os dados e a biblioteca molecular: a leitura e os exemplos não precisam de internet. Links para o manual do ORCA são externos.
 
 Os arquivos são carregados **por exemplo**, com indicação de leitura e botão **Tentar novamente** em caso de falha. Uma comparação só substitui a vista anterior quando todas as suas simulações estiverem disponíveis. Na cópia local, mantenha a pasta `visualizador/examples` junto dos demais arquivos. **Complexo e SOLVATOR** apresenta duas estruturas estáticas; a dinâmica do complexo está em **Parede: retenção das águas**.
 
@@ -86,3 +86,7 @@ O critério visual inicial de ligação H usa D/A = N ou O, H ligado geometricam
 Quando o `.out` contém uma sequência simples de `Run`, o laboratório mostra as etapas programadas e os alvos/rampas de temperatura. O programa não comprova que a dinâmica chegou ao fim de todas as etapas: confira o tempo efetivo dos dados. Reinícios e programas regionais não recebem uma linha do tempo inferida sem suporte. O valor-alvo do termostato não é a temperatura instantânea medida.
 
 O exemplo de timestep permite examinar os primeiros 75 fs antes do aquecimento extremo. O etanol em etapas mostra libração e mudanças de orientação da hidroxila em 5 ps. Nenhum dos dois estima uma barreira ou população de equilíbrio.
+
+### Hidratação antes da associação
+
+[Águas inicialmente afastadas](index.html?exemplo=hydration&aba=trajetoria) mostra a formação da primeira camada em 250 fs. [Encontro em 5 ps](index.html?exemplo=hydration_long&aba=trajetoria) acompanha a en, que permanece intacta e ainda não se coordena nesta referência. [Roteiro e inputs](../exercicios/7-dinamica-complexo/hidratacao.html).
