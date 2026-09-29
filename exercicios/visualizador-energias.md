@@ -6,11 +6,11 @@ O aplicativo está implementado no repositório. Abra `visualizador/index.html`,
 
 1. **Energia e temperatura:** K, U, E e T; comparação entre cálculos, valores absolutos e variações; unidades e escala de tempo explícitas.
 2. **Trajetória:** animação XYZ, seleção de quadro, índices de átomos e leitura do ponto correspondente de energia/temperatura.
-3. **Distâncias:** escolha dois átomos e acompanhe sua separação. O aplicativo calcula a distância diretamente do XYZ; não é necessário adicionar Colvars ao input.
+3. **Geometria:** meça distâncias, ângulos e diedros ao longo da trajetória. O aplicativo calcula a distância diretamente do XYZ; não é necessário adicionar Colvars ao input.
 
 Comece pelo arquivo `nome-md-ener.csv`. Junte `nome.out` para identificar as condições e `nome-traj.xyz` para visualizar o movimento. Arquivos do mesmo cálculo devem manter o mesmo nome-base. O `.out` também pode conter a série energética; o CSV tem prioridade quando ambos são compatíveis.
 
-**Tudo é lido no navegador, sem enviar os arquivos.** A cópia local inclui os exemplos reais dos exercícios e funciona sem internet. Ainda não houve publicação do aplicativo em um endereço público.
+**Tudo é lido no navegador, sem enviar os arquivos.** A cópia local inclui os exemplos reais dos exercícios e funciona sem internet. [Acesse também a versão pública no GitHub Pages](https://henriquecsj.github.io/AIMD-6WPPQG-UERJ/visualizador/).
 
 Para experimentar: [timestep](../visualizador/index.html?exemplo=timestep), [termostato](../visualizador/index.html?exemplo=thermostat) ou [complexo de Zn](../visualizador/index.html?exemplo=complex).
 

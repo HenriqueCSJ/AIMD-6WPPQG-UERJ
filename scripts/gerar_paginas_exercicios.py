@@ -4,7 +4,7 @@ import html,re
 import markdown
 ROOT=Path(__file__).resolve().parents[1]
 EX=ROOT/'exercicios'
-LESSONS=[('1-agua-dft','Água com DFT'),('2-solvente-implicito','Solvente implícito'),('3-xtb2-etanol','XTB2 e etanol'),('4-timestep','Passo de integração'),('5-termostato','Temperatura e termostato'),('6-complexo-solvator','Zn–en e SOLVATOR'),('7-dinamica-complexo','Dinâmica do complexo'),('8-agua-no-fulereno','Água em C₆₀ · opcional')]
+LESSONS=[('1-agua-dft','Ligação H com DFT'),('2-solvente-implicito','O papel do contínuo'),('3-xtb2-etanol','Vibração e torsão'),('4-timestep','Passo de integração'),('5-termostato','Aquecer e resfriar'),('6-complexo-solvator','Zn–en e SOLVATOR'),('7-dinamica-complexo','Dinâmica do complexo'),('8-agua-no-fulereno','Água em C₆₀ · opcional')]
 def render(folder,title,source,index,filename='index.html'):
     inside=folder!=EX; prefix='../' if inside else '';repo_prefix='../../' if inside else '../'
     nav=f'<a class="home" href="{prefix}index.html">Visão geral do percurso</a><div class="links">'

@@ -9,8 +9,8 @@ test('all retained MD outputs agree with CSV values; input metadata recognizes N
   const c=R.parseEnergyCSV(fs.readFileSync(ener,'utf8')),o=R.parseOut(fs.readFileSync(path.join(dir,name+'.out'),'utf8'));
   assert.equal(R.validateEnergySources(c,o),null,name);assert.equal(o.rows.length,c.rows.length,name);
   assert.equal(c.rows[0].total,o.rows[0].total);assert.equal(c.rows.at(-1).total,o.rows.at(-1).total);
-  assert.equal(o.metadata.ensemble,/csvr|parede|termica|agua_c60/.test(name)?'NVT':'NVE',name);checked++;
- }}assert.equal(checked,14);
+  assert.equal(o.metadata.ensemble,name==='etanol_etapas'?'unknown':/csvr|parede|termica|agua_c60/.test(name)?'NVT':'NVE',name);checked++;
+ }}assert.equal(checked,18);
 });
 test('real timestep controls retain the full duration and measured energy amplitudes',()=>{
  for(const [name,lesson,count,span] of [['etanol_dt025','4-timestep',2001,.000038],['etanol_nve','3-xtb2-etanol',1001,.000114],['etanol_dt200','4-timestep',251,.002526]]){
@@ -70,4 +70,24 @@ test('fixed sphere geometry is read without inventing unknown units or elastic b
  assert.deepEqual(parse('Walls Sphere 0, 0, 0, 6.0_A Spring 50.0').wallSphere,{center:{x:0,y:0,z:0},radius:6});
  assert.equal(parse('Walls Sphere 0, 0, 0, 6.0_Bohr Spring 50.0').wallSphere,null);
  assert.equal(parse('Walls Sphere 0, 0, 0, 6.0_A Spring 50.0 Elastic 10, 0.01').wallSphere,null);
+});
+
+test('a sequential thermostat program preserves ramp endpoints and later holds',()=>{
+ const input=['! MD XTB2 PAL8','%md','Initvel 300_K','Timestep 0.5_fs','Thermostat CSVR 300_K Timecon 100_fs','Run 1000','Thermostat CSVR 300_K Timecon 100_fs Ramp 600_K','Run 2000','Run 4000','Thermostat CSVR 600_K Timecon 100_fs Ramp 300_K','Run 2000','Run 1000','end'];
+ const read=lines=>R.parseOut('ORCA\n'+lines.map((line,i)=>`| ${i+1}> ${line}`).join('\n')).metadata;
+ const m=read(input);assert.equal(m.ensemble,'unknown');assert.equal(m.targetTemperature,null);assert.equal(m.changingConditions,true);
+ assert.deepEqual(m.stages.map(s=>[s.startFs,s.endFs,s.targetStartK,s.targetEndK,s.ramp]),[[0,500,300,300,false],[500,1500,300,600,true],[1500,3500,600,600,false],[3500,4500,600,300,true],[4500,5000,300,300,false]]);
+ assert.deepEqual(read([...input.slice(0,-1),'Restart "state.mdrestart"','end']).stages,[]);
+ assert.deepEqual(read(input.map(l=>l.replace('Thermostat CSVR 300_K','Thermostat CSVR 300_C'))).stages,[]);
+ const changed=read(input.map(l=>l==='Run 4000'?'Timestep 2.0_fs\nRun 100':l).flatMap(l=>l.split('\n')));assert.equal(changed.timestep,null);
+});
+
+test('new real failure lasts 325fs and new protocol completes all five stages',()=>{
+ const base=path.join(root,'exercicios/4-timestep/resultados/etanol_instavel/etanol_instavel');
+ const out=R.parseOut(fs.readFileSync(base+'.out','utf8')),e=R.parseEnergyCSV(fs.readFileSync(base+'-md-ener.csv','utf8'));
+ assert.equal(out.metadata.failed,true);assert.equal(e.rows.at(-1).time,325);
+ const early=e.rows.find(r=>r.time===75);assert.equal(early.temperature,269);assert.ok((early.total-e.rows[0].total)*R.HARTREE_TO_KJMOL>40);
+ const b=path.join(root,'exercicios/5-termostato/resultados/etanol_etapas/etanol_etapas');
+ const program=R.parseOut(fs.readFileSync(b+'.out','utf8')),data=R.parseEnergyCSV(fs.readFileSync(b+'-md-ener.csv','utf8'));
+ assert.equal(program.metadata.stages.length,5);assert.equal(program.metadata.normal,true);assert.equal(data.rows.at(-1).time,5000);assert.equal(R.validateEnergySources(data,program),null);
 });

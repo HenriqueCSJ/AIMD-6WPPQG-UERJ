@@ -1,115 +1,104 @@
-# 5. Permitir troca de energia com um banho
+# 5. Aquecer, explorar, resfriar — no mesmo input
 
-[← Percurso](../README.md) · [Aplicativo de análise](../../visualizador/index.html)
+[← Percurso](../README.md) · [Laboratório de trajetórias](../../visualizador/index.html)
 
-**25 min · etanol · 500 fs = 5 × 10⁻¹³ s**
+**25 min · etanol · XTB2 · 5 ps = 5 × 10⁻¹² s**
 
-> **Pergunta da atividade:** Controlar a temperatura significa mantê-la constante em cada instante?
+> **Pergunta:** Como mudar as condições e acompanhar a resposta conformacional?
 
-## 1. Prepare
+## 1. Programe uma história contínua
 
-Reutilizamos o etanol. A mudança principal é **`Thermostat CSVR 300_K Timecon 100_fs`**. O controle NVE é o resultado do exercício 3.
+O ORCA executa o `%md` **linha por linha**. Um `Run` avança a trajetória com as condições correntes; o próximo continua das posições e velocidades deixadas pelo anterior. Aqui **não repetimos `Initvel`**: não sorteamos uma nova trajetória a cada etapa.
 
-[Baixar os arquivos da atividade](aula-etanol_csvr.zip) · [Abrir a estrutura](estruturas/etanol.xyz)
+- **0–0,5 ps:** alvo de 300 K, início da termalização.
+- **0,5–1,5 ps:** rampa do alvo de 300 para 600 K.
+- **1,5–3,5 ps:** manutenção do alvo final, 600 K.
+- **3,5–4,5 ps:** rampa de 600 para 300 K.
+- **4,5–5 ps:** continuação a 300 K.
 
-Extraia o pacote. Ele contém o input e os arquivos que precisam ficar juntos. Use uma pasta para esta atividade.
+**São alvos do termostato.** A temperatura instantânea flutua e não acompanha uma linha perfeita, sobretudo em nove átomos. Durante as rampas, não há um único estado NVT estacionário.
 
-## 2. Execute
+## 2. Execute e acompanhe as etapas
 
-Salve este conteúdo como **`etanol_csvr.inp`**; ele já está no pacote.
-
-[Baixar input](inputs/etanol_csvr.inp) · [Baixar pacote com os arquivos necessários](aula-etanol_csvr.zip)
+[Baixar pacote](aula-etanol_etapas.zip) · [Input](inputs/etanol_etapas.inp) · [Estrutura](estruturas/etanol.xyz)
 
 ```text
-# Mesmo etanol; agora pode trocar energia com um banho.
+# Exemplo didatico; oito processos solicitados.
 ! MD XTB2 PAL8
 %maxcore 256
 
 %md
-  Timestep 0.5_fs
   Randomize 42
-  # Velocidades iniciais; nao mantem a temperatura fixa.
   Initvel 300_K
-  # Banho a 300 K; acoplamento em 100 fs.
+  Dump Position Stride 1 Filename "etanol_etapas-traj.xyz"
+  Timestep 0.5_fs
+  # 0-0.5 ps: inicio a 300 K.
   Thermostat CSVR 300_K Timecon 100_fs
-  Dump Position Stride 1 Filename "etanol_csvr-traj.xyz"
-  # 1000 x 0.5 fs = 500 fs (5e-13 s).
+  Run 1000
+  # 0.5-1.5 ps: aquecer gradualmente ate 600 K.
+  Thermostat CSVR 300_K Timecon 100_fs Ramp 600_K
+  Run 2000
+  # 1.5-3.5 ps: manter o alvo final da rampa.
+  Run 4000
+  # 3.5-4.5 ps: resfriar gradualmente.
+  Thermostat CSVR 600_K Timecon 100_fs Ramp 300_K
+  Run 2000
+  # 4.5-5 ps: continuar a 300 K, sem reiniciar velocidades.
   Run 1000
 end
-
-# Carga 0, multiplicidade 1; XYZ na mesma pasta.
 * xyzfile 0 1 etanol.xyz
 ```
 
-**Repare nestas escolhas:**
+<details markdown="1"><summary>Executar no Ubuntu / WSL2</summary>
 
-- 300 K é a temperatura do banho; 100 fs regula a resposta do acoplamento.
-- K + U pode variar porque o sistema troca energia com o banho.
-
-<details markdown="1"><summary>Executar no Ubuntu / WSL2 — recomendado</summary>
-
-Extraia o pacote em uma pasta e abra o terminal Ubuntu **nessa pasta**, onde estão o input e o XYZ. Com `ORCA_DIR` configurado no tutorial, copie o bloco inteiro. Ele cria uma execução nova e devolve o terminal à pasta inicial.
+Extraia o pacote e abra o Ubuntu nessa pasta. Com `ORCA_DIR` configurado no guia, copie:
 
 ```bash
 (
-  test -x "$ORCA_DIR/orca" || { echo "Configure ORCA_DIR antes de executar."; exit 1; }
+  test -x "$ORCA_DIR/orca" || { echo "Configure ORCA_DIR primeiro."; exit 1; }
   pasta=$(mktemp -d ./execucao-XXXXXX) || exit 1
-  cp etanol_csvr.inp etanol.xyz "$pasta/" || exit 1
+  cp etanol_etapas.inp etanol.xyz "$pasta/" || exit 1
   cd "$pasta" || exit 1
-  "$ORCA_DIR/orca" etanol_csvr.inp > etanol_csvr.out 2>&1
-  tail -n 5 etanol_csvr.out
+  "$ORCA_DIR/orca" etanol_etapas.inp > etanol_etapas.out 2>&1
+  tail -n 12 etanol_etapas.out
   echo "Resultados: $PWD"
 )
 ```
 
-Procure **`ORCA TERMINATED NORMALLY`**. Abra `explorer.exe .` para localizar a nova pasta `execucao-…` e carregar os arquivos no aplicativo. Execute um cálculo por vez; o ORCA gerencia o paralelismo de `PAL8`.
+Abra `explorer.exe .` e localize a pasta `execucao-…`. Carregue **`etanol_etapas.out`**, **`etanol_etapas-md-ener.csv`** e **`etanol_etapas-traj.xyz`** no laboratório. Execute um cálculo por vez.
 
 </details>
 
-<details markdown="1"><summary>Alternativa: executar no Windows nativo</summary>
+<details markdown="1"><summary>Alternativa: Windows nativo</summary>
 
-Extraia o pacote, abra o PowerShell nessa pasta e ajuste o caminho do ORCA. Esta rota exige ORCA/MS-MPI já testados na instalação.
+Extraia o pacote em uma pasta nova. Abra o PowerShell nela e ajuste o caminho:
 
 ```powershell
-& {
-  $orca = 'C:\ORCA_6.1.1\orca.exe'
-  if (-not (Test-Path -LiteralPath $orca)) { throw 'Ajuste o caminho do ORCA.' }
-  $pasta = Join-Path $PWD ('execucao-' + [guid]::NewGuid().ToString('N'))
-  New-Item -ItemType Directory -Path $pasta | Out-Null
-  Copy-Item -LiteralPath 'etanol_csvr.inp', 'etanol.xyz' -Destination $pasta -ErrorAction Stop
-  Push-Location $pasta
-  try {
-    & $orca etanol_csvr.inp > etanol_csvr.out 2>&1
-    Get-Content etanol_csvr.out -Tail 5
-    Get-Location
-  } finally { Pop-Location }
-}
+& 'C:\ORCA_6.1.1\orca.exe' etanol_etapas.inp > etanol_etapas.out 2>&1
+Get-Content etanol_etapas.out -Tail 12
 ```
 
 </details>
 
-## 3. Veja e interprete
+## 3. Relacione temperatura e orientação
 
-[Carregar meus arquivos no aplicativo](../../visualizador/index.html) · [Abrir as referências desta atividade](../../visualizador/index.html?exemplo=thermostat)
+[Abrir a trajetória em etapas](../../visualizador/index.html?exemplo=thermostat&aba=trajetoria)
 
-Na nova pasta de execução, selecione **`etanol_csvr.out`**, **`etanol_csvr-md-ener.csv`** e **`etanol_csvr-traj.xyz`**. Pode carregar os três juntos.
+1. Veja a faixa de etapas no laboratório e acompanhe a marca ativa durante a animação. A programação vem do input; o tempo efetivamente simulado vem dos dados.
+2. Em **Geometria → Diedro**, meça **0–1–2–8**. Compare o controle do exercício 3, que só librava, com esta trajetória: **−55,7° em 0 ps, +52,3° em 1,5 ps e +62,6° em 5 ps**.
+3. Confirme que O 2–H 8 permanece entre **0,917 e 1,022 Å**. O H muda de orientação em torno de C–O; ele não foi transferido para outro átomo.
+4. Na energia, o banho pode fornecer e retirar energia. Agora uma mudança de E não tem o mesmo significado que no teste NVE do timestep.
 
-1. Compare **Temperatura** nos casos NVE e CSVR.
-2. Observe a resposta ao banho e as flutuações; não espere uma reta em 300 K.
-3. Veja E. Por que uma variação em NVT, sozinha, não demonstra erro de integração?
+**O que vimos:** acesso a orientações gauche de sinais opostos e excursões por outras regiões durante um protocolo de aquecimento/resfriamento. Uma passagem de +180° para −180° é a convenção periódica do diedro, não um salto físico de 360°.
 
-> **Para levar:** Esta trajetória curta mostra uma resposta transitória; não comprova equilíbrio.
+**O que não medimos:** barreira de rotação, populações de equilíbrio ou cinética a 300 K. O aquecimento é uma intervenção deliberada para ampliar o movimento na aula; esta única trajetória não demonstra que ele foi necessário ou suficiente para cada transição.
 
-<details markdown="1"><summary>Referências, preparação e explicações adicionais</summary>
+O cálculo levou **150,1 s** com PAL8 nesta máquina. Se atrasar, use a referência e mantenha a discussão. O [controle anterior NVE × CSVR a 300 K](../../visualizador/index.html?exemplo=thermostat_compare) continua disponível para isolar o efeito de ligar um banho com a mesma duração.
 
-Resultados reais já calculados com PAL8. O input completo de cada referência está ao lado da saída; as séries não foram substituídas por simulações novas.
+## Resultados e manual
 
-- **etanol_csvr:** [input completo usado](resultados/etanol_csvr/etanol_csvr.inp) · [saída](resultados/etanol_csvr/etanol_csvr.out) · [energias](resultados/etanol_csvr/etanol_csvr-md-ener.csv) · [trajetória](resultados/etanol_csvr/etanol_csvr-traj.xyz).
+- **etanol_etapas:** [saída](resultados/etanol_etapas/etanol_etapas.out) · [input usado](resultados/etanol_etapas/etanol_etapas.inp) · [energias](resultados/etanol_etapas/etanol_etapas-md-ener.csv) · [trajetória](resultados/etanol_etapas/etanol_etapas-traj.xyz) · [tempo de execução](resultados/etanol_etapas/execucao.json).
 
-[Consultar preparação, números e respostas](apoio.md).
+[Manual ORCA: dinâmica molecular](https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html).
 
-</details>
-
-**Manual:** [Termostatos](https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html#thermostat).
-
-**Antes de avançar:** anote uma mudança no input, uma observação e uma conclusão que esta trajetória ainda não permite.
+[Execução sequencial dos comandos](https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html#input-format) · [Thermostat e Ramp](https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html#thermostat).

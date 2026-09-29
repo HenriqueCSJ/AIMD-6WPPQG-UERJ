@@ -1,114 +1,87 @@
-# 2. Ativar o solvente com uma palavra
+# 2. Um ambiente contínuo não cria vizinhos
 
-[← Percurso](../README.md) · [Aplicativo de análise](../../visualizador/index.html)
+[← Percurso](../README.md) · [Laboratório de trajetórias](../../visualizador/index.html)
 
-**10 min · a mesma água · 20 fs = 2 × 10⁻¹⁴ s**
+**10 min · o mesmo dímero · DFT / CPCM(water)**
 
-> **Pergunta da atividade:** Se ativamos água como solvente, onde estão suas moléculas?
+> **Pergunta:** Ativar água como solvente acrescenta novas ligações de hidrogênio?
 
-## 1. Prepare
+## 1. Mude apenas o ambiente
 
-Usamos a mesma geometria e as mesmas condições do exercício 1. A mudança é **`CPCM(water)` na primeira linha**.
+Reutilize as mesmas seis coordenadas, semente, método e duração. Acrescente `CPCM(water)` à primeira linha. O campo de reação do meio contínuo modifica energia e forças; **as duas águas explícitas continuam sendo as únicas moléculas presentes**.
 
-[Baixar os arquivos da atividade](aula-agua_cpcm.zip) · [Abrir a estrutura](estruturas/agua.xyz)
+## 2. Compare a referência ou execute
 
-Extraia o pacote. Ele contém o input e os arquivos que precisam ficar juntos. Use uma pasta para esta atividade.
+Na aula, abra primeiro o resultado fornecido. A repetição com CPCM é opcional: esta referência levou cerca de 5 min 24 s, e queremos preservar tempo para interpretar.
 
-## 2. Execute
-
-Salve este conteúdo como **`agua_cpcm.inp`**; ele já está no pacote.
-
-[Baixar input](inputs/agua_cpcm.inp) · [Baixar pacote com os arquivos necessários](aula-agua_cpcm.zip)
+[Baixar pacote](aula-dimero_b97_cpcm.zip) · [Input](inputs/dimero_b97_cpcm.inp) · [Estrutura](estruturas/dimero_b97.xyz)
 
 ```text
-# Mesmo teste de agua; CPCM acrescenta o solvente continuo.
-! MD BLYP def2-SVP TightSCF CPCM(water) PAL8
+# Exemplo didatico; oito processos solicitados.
+! MD B97-3c TightSCF CPCM(water) PAL8
 %maxcore 256
 
 %md
-  Timestep 0.5_fs
   Randomize 42
-  # Velocidades iniciais; nao mantem a temperatura fixa.
   Initvel 300_K
+  Dump Position Stride 1 Filename "dimero_b97_cpcm-traj.xyz"
+  Timestep 0.5_fs
   Thermostat None
-  Dump Position Stride 1 Filename "agua_cpcm-traj.xyz"
-  # 40 x 0.5 fs = 20 fs (2e-14 s).
-  Run 40
+  # 60 fs: observar vibracao e geometria da ligacao H.
+  Run 120
 end
-
-# Carga 0, multiplicidade 1; XYZ na mesma pasta.
-* xyzfile 0 1 agua.xyz
+* xyzfile 0 1 dimero_b97.xyz
 ```
 
-**Repare nestas escolhas:**
+<details markdown="1"><summary>Executar no Ubuntu / WSL2</summary>
 
-- `CPCM(water)` muda o ambiente eletrônico sem acrescentar átomos.
-- A semente, o timestep e o número de passos permanecem iguais.
-
-<details markdown="1"><summary>Executar no Ubuntu / WSL2 — recomendado</summary>
-
-Extraia o pacote em uma pasta e abra o terminal Ubuntu **nessa pasta**, onde estão o input e o XYZ. Com `ORCA_DIR` configurado no tutorial, copie o bloco inteiro. Ele cria uma execução nova e devolve o terminal à pasta inicial.
+Extraia o pacote e abra o Ubuntu nessa pasta. Com `ORCA_DIR` configurado no guia, copie:
 
 ```bash
 (
-  test -x "$ORCA_DIR/orca" || { echo "Configure ORCA_DIR antes de executar."; exit 1; }
+  test -x "$ORCA_DIR/orca" || { echo "Configure ORCA_DIR primeiro."; exit 1; }
   pasta=$(mktemp -d ./execucao-XXXXXX) || exit 1
-  cp agua_cpcm.inp agua.xyz "$pasta/" || exit 1
+  cp dimero_b97_cpcm.inp dimero_b97.xyz "$pasta/" || exit 1
   cd "$pasta" || exit 1
-  "$ORCA_DIR/orca" agua_cpcm.inp > agua_cpcm.out 2>&1
-  tail -n 5 agua_cpcm.out
+  "$ORCA_DIR/orca" dimero_b97_cpcm.inp > dimero_b97_cpcm.out 2>&1
+  tail -n 12 dimero_b97_cpcm.out
   echo "Resultados: $PWD"
 )
 ```
 
-Procure **`ORCA TERMINATED NORMALLY`**. Abra `explorer.exe .` para localizar a nova pasta `execucao-…` e carregar os arquivos no aplicativo. Execute um cálculo por vez; o ORCA gerencia o paralelismo de `PAL8`.
+Abra `explorer.exe .` e localize a pasta `execucao-…`. Carregue **`dimero_b97_cpcm.out`**, **`dimero_b97_cpcm-md-ener.csv`** e **`dimero_b97_cpcm-traj.xyz`** no laboratório. Execute um cálculo por vez.
 
 </details>
 
-<details markdown="1"><summary>Alternativa: executar no Windows nativo</summary>
+<details markdown="1"><summary>Alternativa: Windows nativo</summary>
 
-Extraia o pacote, abra o PowerShell nessa pasta e ajuste o caminho do ORCA. Esta rota exige ORCA/MS-MPI já testados na instalação.
+Extraia o pacote em uma pasta nova. Abra o PowerShell nela e ajuste o caminho:
 
 ```powershell
-& {
-  $orca = 'C:\ORCA_6.1.1\orca.exe'
-  if (-not (Test-Path -LiteralPath $orca)) { throw 'Ajuste o caminho do ORCA.' }
-  $pasta = Join-Path $PWD ('execucao-' + [guid]::NewGuid().ToString('N'))
-  New-Item -ItemType Directory -Path $pasta | Out-Null
-  Copy-Item -LiteralPath 'agua_cpcm.inp', 'agua.xyz' -Destination $pasta -ErrorAction Stop
-  Push-Location $pasta
-  try {
-    & $orca agua_cpcm.inp > agua_cpcm.out 2>&1
-    Get-Content agua_cpcm.out -Tail 5
-    Get-Location
-  } finally { Pop-Location }
-}
+& 'C:\ORCA_6.1.1\orca.exe' dimero_b97_cpcm.inp > dimero_b97_cpcm.out 2>&1
+Get-Content dimero_b97_cpcm.out -Tail 12
 ```
 
 </details>
 
-## 3. Veja e interprete
+## 3. Compare a geometria, não apenas o filme
 
-[Carregar meus arquivos no aplicativo](../../visualizador/index.html) · [Abrir as referências desta atividade](../../visualizador/index.html?exemplo=solvent)
+[Abrir vácuo e CPCM](../../visualizador/index.html?exemplo=solvent&aba=trajetoria)
 
-Na nova pasta de execução, selecione **`agua_cpcm.out`**, **`agua_cpcm-md-ener.csv`** e **`agua_cpcm-traj.xyz`**. Pode carregar os três juntos.
+1. Conte os átomos: continuam sendo seis. Ative os contatos H; o programa não desenha moléculas do contínuo.
+2. Em **Geometria**, meça O 0···O 3 e o ângulo 0–1–3 em cada caso. Compare as mesmas marcas de tempo.
+3. Observe as curvas de energia separadamente. O zero de cada curva ΔE é seu próprio primeiro ponto.
 
-1. Carregue também o resultado do exercício 1 para comparar.
-2. Na trajetória, conte os átomos: continuam sendo três.
-3. Observe as energias. Por que subtrair dois valores instantâneos não dá uma energia livre de solvatação?
+**Dado da referência:** no fim dos 60 fs, O 0···O 3 é **2.949 Å no vácuo** e **2.946 Å com CPCM**. A diferença em O···O é pequena: olhar só essa distância esconderia parte da resposta. O ângulo 0–1–3 chega a **97,1° no vácuo**, mas a **130,0° com CPCM**, partindo dos mesmos 178,7°. Essas são amplitudes observadas nesta trajetória curta, não preferências de equilíbrio. Isso mostra uma resposta transitória a duas superfícies de energia diferentes. Não é a distância média de equilíbrio em solução. Tempo de execução desta referência: **324.5 s**.
 
-> **Para levar:** Solvente implícito, termostato e parede têm funções diferentes.
+**Para levar:** o contínuo pode alterar as forças, mas não fornece a rede molecular de ligações H. No exercício 6, o SOLVATOR acrescentará águas explícitas; no 7, a parede controlará o afastamento dessas águas. São três papéis distintos.
 
-<details markdown="1"><summary>Referências, preparação e explicações adicionais</summary>
+**Não concluir:** a diferença entre duas energias instantâneas não é ΔG de solvatação. Começamos da geometria relaxada no vácuo, e a trajetória CPCM curta inclui a resposta inicial à troca de ambiente.
 
-Resultados reais já calculados com PAL8. O input completo de cada referência está ao lado da saída; as séries não foram substituídas por simulações novas.
+## Resultados e manual
 
-- **agua_cpcm:** [input completo usado](resultados/agua_cpcm/agua_cpcm.inp) · [saída](resultados/agua_cpcm/agua_cpcm.out) · [energias](resultados/agua_cpcm/agua_cpcm-md-ener.csv) · [trajetória](resultados/agua_cpcm/agua_cpcm-traj.xyz).
+- **dimero_b97_cpcm:** [saída](resultados/dimero_b97_cpcm/dimero_b97_cpcm.out) · [input usado](resultados/dimero_b97_cpcm/dimero_b97_cpcm.inp) · [energias](resultados/dimero_b97_cpcm/dimero_b97_cpcm-md-ener.csv) · [trajetória](resultados/dimero_b97_cpcm/dimero_b97_cpcm-traj.xyz) · [tempo de execução](resultados/dimero_b97_cpcm/execucao.json).
 
-[Consultar preparação, números e respostas](apoio.md).
+[Manual ORCA: dinâmica molecular](https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html).
 
-</details>
-
-**Manual:** [Modelos de solvatação](https://www.faccts.de/docs/orca/6.1/manual/contents/essentialelements/solvationmodels.html).
-
-**Antes de avançar:** anote uma mudança no input, uma observação e uma conclusão que esta trajetória ainda não permite.
+[Água isolada/CPCM: referência anterior](apoio.md).

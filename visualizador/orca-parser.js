@@ -30,7 +30,7 @@
       }
       r.segment=segment;
     });
-    if(breaks) warnings.push(`${label}: ${breaks} interrupção(ões) ou reinício(s). Os trechos não foram unidos no gráfico.`);
+    if(breaks) warnings.push(`${label}: ${breaks} limite(s) de trecho, por passos repetidos ou descontinuidades. Podem corresponder a novas etapas Run, reinícios ou lacunas; os trechos não foram unidos no gráfico.`);
     return rows;
   }
   function energyRow(header, fields) {
@@ -60,6 +60,37 @@
     segmentRows(rows,warnings);
     return {kind:'energy',name,key:runKey(name),rows,warnings,source:'csv',units:{time:'fs',energy:'Eh',temperature:'K'},metadata:{ensemble:'unknown'}};
   }
+  // Planned stages, relative to a fresh start. Never assign them to a restart
+  // or regional/conditional program whose clock cannot be inferred safely.
+  function stagesFromInput(input) {
+    const blocks=[...input.matchAll(/%md\b([\s\S]*?)^\s*end\s*$/gim)];
+    if(blocks.length!==1)return [];
+    const body=blocks[0][1];
+    if(/\b(?:Restart|Region|Manage_Region|If|Loop)\b/i.test(body))return [];
+    let clock=0,dt=.5,thermostat='None',initialK=null,targetK=null,rampK=null;const stages=[];
+    for(const raw of body.split('\n')){
+      const line=raw.trim();let m;
+      if(/^Timestep\b/i.test(line)){
+        m=line.match(/^Timestep\s+([\d.]+)(?:_(fs|ps))?\s*$/i);
+        if(!m||!Number.isFinite(Number(m[1]))||Number(m[1])<=0)return [];
+        dt=Number(m[1])*(m[2]?.toLowerCase()==='ps'?1000:1);
+      }else if(/^Initvel\b/i.test(line)){
+        m=line.match(/^Initvel\s+([\d.]+)(?:_K|_Kelvin)?\s*$/i);if(!m)return [];initialK=Number(m[1]);
+      }else if(/^Thermostat\b/i.test(line)){
+        m=line.match(/^Thermostat\s+(None|CSVR|NHC|Berendsen)(?:\s+([\d.]+)(?:_K|_Kelvin)?)?(.*)$/i);if(!m)return [];
+        if(/^_\S/.test(m[3]))return [];
+        thermostat=m[1];targetK=/^none$/i.test(thermostat)?null:m[2]?Number(m[2]):initialK;
+        const ramp=m[3].match(/\bRamp\s+([\d.]+)(?:_K|_Kelvin)?(?:\s|$)/i);rampK=ramp?Number(ramp[1]):null;
+        if(/\bRamp\b/i.test(m[3])&&!ramp)return [];
+      }else if(/^Run\b/i.test(line)){
+        m=line.match(/^Run\s+(\d+)\s*(?:CenterCOM)?\s*$/i);if(!m)return [];
+        const steps=Number(m[1]),end=clock+steps*dt;
+        stages.push({index:stages.length+1,startFs:clock,endFs:end,timestep:dt,steps,thermostat,targetStartK:targetK,targetEndK:rampK??targetK,ramp:rampK!==null});
+        clock=end;if(rampK!==null)targetK=rampK;rampK=null;
+      }
+    }
+    return stages.length>1?stages:[];
+  }
   function metadataFromOut(text) {
     const input=text.split('\n').filter(x=>/^\s*\|\s*\d+>/.test(x)).map(x=>x.replace(/^\s*\|\s*\d+>\s*/, '').split('#')[0]).join('\n');
     const thermo=input.match(/Thermostat\s+(\S+)(?:\s+(\d+(?:\.\d+)?)_?K)?/i);
@@ -71,14 +102,16 @@
     const finalE=[...text.matchAll(/FINAL SINGLE POINT ENERGY\s+([+-]?[\d.]+(?:[Ee][+-]?\d+)?)/g)];
     const hasMD=/!.*\bMD\b/i.test(input) || /ORCA ab initio Molecular Dynamics/.test(text);
     const thermostats=[...input.matchAll(/Thermostat\s+(\S+)(?:\s+([\d.]+)_?K)?/ig)].map(m=>m[0].toLowerCase());
-    const changingConditions=new Set(thermostats).size>1;
+    const timesteps=[...input.matchAll(/Timestep\s+([\d.]+)(?:_|\s+)?fs/ig)].map(m=>Number(m[1]));
+    const stages=stagesFromInput(input);
+    const changingConditions=new Set(thermostats).size>1||new Set(timesteps).size>1||/\bThermostat\b[^\n]*\bRamp\b/i.test(input);
     const activeThermostat=thermo&&!/^none$/i.test(thermo[1]);
     // Read only an unambiguous, fixed sphere in Angstrom; other geometries stay undisplayed.
     const sphereLine=(input.match(/^.*\b(?:Cell|Walls)\s+Sphere\b.*$/im)||[])[0]||'';
     const sphere=sphereLine.match(/\b(?:Cell|Walls)\s+Sphere\s+([+-]?[\d.]+)\s*,\s*([+-]?[\d.]+)\s*,\s*([+-]?[\d.]+)\s*,\s*([\d.]+)(?:_A(?:ngstrom)?)?(?=\s*(?:Spring\b|Fixed\b|$))/im);
     const sphereValues=sphere?sphere.slice(1,5).map(Number):null;
     const wallSphere=sphereValues&&sphereValues.every(Number.isFinite)&&sphereValues[3]>0&&!/\b(?:Elastic|Pressure)\b/i.test(sphereLine)?{center:{x:sphereValues[0],y:sphereValues[1],z:sphereValues[2]},radius:sphereValues[3]}:null;
-    return {wallSphere,version:version?.[1]||null,method:(input.match(/^\s*!\s*(.*)$/m)||[])[1]||null,ensemble:changingConditions||/\bBarostat\s+(?!None\b)/i.test(input)?'unknown':activeThermostat?'NVT':hasMD&&input?'NVE':'unknown',thermostat:activeThermostat?thermo[1]:null,targetTemperature:changingConditions?null:thermo?.[2]?Number(thermo[2]):null,timestep:dt?Number(dt[1]):null,charge:charge?Number(charge[1]):null,multiplicity:charge?Number(charge[2]):null,wall:/\b(?:Cell|Walls)\s+(Sphere|Cube|Cuboid)/i.test(input),normal:/ORCA TERMINATED NORMALLY/.test(text),failed:/ORCA finished by error termination|ERROR TERMINATION|orca_md aborted by error|Errors occurred in the MD loop/.test(text),runtime:runtime?Number(runtime[1])*86400+Number(runtime[2])*3600+Number(runtime[3])*60+Number(runtime[4])+Number(runtime[5])/1000:null,colvars:defs,finalEnergy:finalE.length?Number(finalE.at(-1)[1]):null,hasMD,changingConditions};
+    return {stages,wallSphere,version:version?.[1]||null,method:(input.match(/^\s*!\s*(.*)$/m)||[])[1]||null,ensemble:changingConditions||/\bBarostat\s+(?!None\b)/i.test(input)?'unknown':activeThermostat?'NVT':hasMD&&input?'NVE':'unknown',thermostat:activeThermostat?thermo[1]:null,targetTemperature:changingConditions?null:thermo?.[2]?Number(thermo[2]):null,timestep:new Set(timesteps).size>1?null:dt?Number(dt[1]):null,charge:charge?Number(charge[1]):null,multiplicity:charge?Number(charge[2]):null,wall:/\b(?:Cell|Walls)\s+(Sphere|Cube|Cuboid)/i.test(input),normal:/ORCA TERMINATED NORMALLY/.test(text),failed:/ORCA finished by error termination|ERROR TERMINATION|orca_md aborted by error|Errors occurred in the MD loop/.test(text),runtime:runtime?Number(runtime[1])*86400+Number(runtime[2])*3600+Number(runtime[3])*60+Number(runtime[4])+Number(runtime[5])/1000:null,colvars:defs,finalEnergy:finalE.length?Number(finalE.at(-1)[1]):null,hasMD,changingConditions};
   }
   function parseOut(text,name='calculo.out') {
     text=clean(text);if(!/ORCA|O\s+R\s+C\s+A|Program Version/.test(text))throw new Error('O arquivo não foi reconhecido como uma saída ORCA.');
@@ -95,7 +128,7 @@
       segmentRows(rows,warnings,'Saída .out');
       warnings.unshift('O .out pode imprimir apenas parte dos passos. Adicione o arquivo -md-ener.csv para a série completa.');
     }
-    if(metadata.changingConditions)warnings.push('O input contém mudanças de termostato/temperatura. Confira cada trecho antes de atribuir um único ensemble.');
+    if(metadata.changingConditions)warnings.push('O input contém mudanças de timestep, termostato ou temperatura-alvo. Confira cada etapa; a programação não prova que a execução a completou.');
     if(metadata.failed)warnings.push('O ORCA registrou término com erro. Os dados exibidos são parciais.');
     else if(!metadata.normal)warnings.push('O arquivo não contém a mensagem de término normal. Pode estar incompleto ou em andamento.');
     const actualFail=/SCF NOT CONVERGED|SCF DID NOT CONVERGE/.test(text);

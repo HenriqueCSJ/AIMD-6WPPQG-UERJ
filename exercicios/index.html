@@ -1,58 +1,38 @@
 <!doctype html>
 <html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Percurso dos exercícios · AIMD / ORCA</title><link rel="stylesheet" href="pagina.css"><script defer src="pagina.js"></script></head>
-<body><a class="skip" href="#conteudo">Ir para o conteúdo</a><header class="brand"><a href="index.html"><strong>AIMD com ORCA</strong><small>6º Workshop PPGQ–UERJ · 7 de outubro de 2026</small></a><div class="logos"><img src="../assets/uerj-logo.png" alt="UERJ"><img src="../assets/ufrrj-logo-compacto.png" alt="UFRRJ"></div></header><div class="layout"><nav class="course-nav" aria-label="Exercícios"><h2>Do input à interpretação</h2><a class="home" href="index.html">Visão geral do percurso</a><div class="links"><a href="1-agua-dft/index.html"><span class="num">01</span><span>Água com DFT</span></a><a href="2-solvente-implicito/index.html"><span class="num">02</span><span>Solvente implícito</span></a><a href="3-xtb2-etanol/index.html"><span class="num">03</span><span>XTB2 e etanol</span></a><a href="4-timestep/index.html"><span class="num">04</span><span>Passo de integração</span></a><a href="5-termostato/index.html"><span class="num">05</span><span>Temperatura e termostato</span></a><a href="6-complexo-solvator/index.html"><span class="num">06</span><span>Zn–en e SOLVATOR</span></a><a href="7-dinamica-complexo/index.html"><span class="num">07</span><span>Dinâmica do complexo</span></a><a href="8-agua-no-fulereno/index.html"><span class="num">08</span><span>Água em C₆₀ · opcional</span></a></div></nav><main id="conteudo"><h1 id="sete-exercicios-e-uma-extensao-do-input-a-interpretacao">Sete exercícios e uma extensão: do input à interpretação</h1>
-<p><a href="../README.md#materiais-do-minicurso">← Materiais do minicurso</a></p>
-<blockquote>
-<p><strong>A pergunta central:</strong> como escolher as condições da dinâmica e interpretar o que os átomos fazem?</p>
-</blockquote>
-<p><strong>7 de outubro de 2026 · 13h–16h e 17h–18h · remoto</strong><br>
-Henrique de Castro Silva Junior e Virginia Camila Rufino Ferreira</p>
-<p>Começamos com uma molécula de água e DFT. Passamos cedo para <strong>XTB2</strong>, ganhamos tempo para testar integração e termostatos e terminamos acompanhando um complexo de Zn²⁺ com etilenodiamina e águas explícitas. Uma extensão opcional retoma a água dentro de C₆₀.</p>
-<p>Cada atividade segue três etapas: <strong>prepare, execute e interprete</strong>. O input principal tem entre <strong>13 e 20 linhas</strong>, com comentários curtos. Um pacote reúne o input, a estrutura e, quando necessário, o reinício. Nas páginas HTML, use <strong>Copiar</strong> para levar o conteúdo ao editor. Variantes, preparação e explicações extensas ficam em seções opcionais.</p>
-<h2 id="comece-aqui">Comece aqui</h2>
-<ol>
-<li>Conclua o <a href="../tutoriais/03-testar-instalacao.md">teste de instalação do ORCA</a> e o <a href="../tutoriais/05-xtb-solvator.md">teste de XTB2/SOLVATOR</a>. Recomendamos Ubuntu no WSL2.</li>
-<li>Mantenha uma cópia completa do repositório. Abra <code>exercicios/index.html</code> no navegador, ou leia os README no GitHub. Não é preciso instalar um serviço web para ler as páginas.</li>
-<li>Baixe o pacote da atividade e extraia os arquivos. Abra o terminal nessa pasta e copie o bloco de execução da página. Ele cria uma pasta nova a cada execução e mantém o terminal na pasta inicial.</li>
-<li>Abra o <a href="../visualizador/index.html">Laboratório de trajetórias</a> e carregue o <code>.out</code>, o <code>*-md-ener.csv</code> e o <code>*-traj.xyz</code>. Os gráficos, a animação e as distâncias ficam disponíveis nas três abas.</li>
-</ol>
-<p>Os inputs usam <strong>PAL8</strong>: oito processos ORCA ou oito threads na interface XTB2. Se sua máquina tiver menos recursos, ajuste para PAL2 ou PAL4. <code>%maxcore 256</code> indica MB por processo, além da memória adicional do programa. Execute <strong>um cálculo por vez</strong>. <code>Randomize 42</code> mantém a mesma semente dentro do ambiente usado. O <a href="../visualizador/index.html">aplicativo de análise</a> inclui exemplos reais e lê seus arquivos localmente. Consulte o <a href="../visualizador/README.md">guia</a>.</p>
+<body><a class="skip" href="#conteudo">Ir para o conteúdo</a><header class="brand"><a href="index.html"><strong>AIMD com ORCA</strong><small>6º Workshop PPGQ–UERJ · 7 de outubro de 2026</small></a><div class="logos"><img src="../assets/uerj-logo.png" alt="UERJ"><img src="../assets/ufrrj-logo-compacto.png" alt="UFRRJ"></div></header><div class="layout"><nav class="course-nav" aria-label="Exercícios"><h2>Do input à interpretação</h2><a class="home" href="index.html">Visão geral do percurso</a><div class="links"><a href="1-agua-dft/index.html"><span class="num">01</span><span>Ligação H com DFT</span></a><a href="2-solvente-implicito/index.html"><span class="num">02</span><span>O papel do contínuo</span></a><a href="3-xtb2-etanol/index.html"><span class="num">03</span><span>Vibração e torsão</span></a><a href="4-timestep/index.html"><span class="num">04</span><span>Passo de integração</span></a><a href="5-termostato/index.html"><span class="num">05</span><span>Aquecer e resfriar</span></a><a href="6-complexo-solvator/index.html"><span class="num">06</span><span>Zn–en e SOLVATOR</span></a><a href="7-dinamica-complexo/index.html"><span class="num">07</span><span>Dinâmica do complexo</span></a><a href="8-agua-no-fulereno/index.html"><span class="num">08</span><span>Água em C₆₀ · opcional</span></a></div></nav><main id="conteudo"><h1 id="execute-observe-explique">Execute. Observe. Explique.</h1>
+<p><a href="../index.html">← Início do minicurso</a> · <a href="../visualizador/index.html">Abrir o laboratório</a></p>
+<p><strong>7 de outubro · 13h–16h e 17h–18h · remoto</strong><br>
+Henrique de Castro Silva Junior · Virginia Camila Rufino Ferreira</p>
+<h2 id="antes-de-comecar">Antes de começar</h2>
+<p>Conclua os <a href="../tutoriais/03-testar-instalacao.md">testes de instalação</a> e de <a href="../tutoriais/05-xtb-solvator.md">XTB2/SOLVATOR</a>. Baixe o pacote de cada exercício, extraia e execute em uma pasta nova. Os inputs usam <strong>PAL8</strong>; adapte a PAL2/PAL4 se necessário e rode <strong>um cálculo por vez</strong>.</p>
+<p>Para analisar, carregue juntos o <strong><code>.out</code></strong>, o <strong><code>-md-ener.csv</code></strong> e o <strong><code>-traj.xyz</code></strong>. Também é possível abrir a referência fornecida em cada página. O laboratório lê seus arquivos localmente, no navegador.</p>
 <h2 id="percurso-da-aula">Percurso da aula</h2>
-<h3 id="1-agua-com-dft-reconhecer-o-ciclo">1. Água com DFT — reconhecer o ciclo</h3>
-<p><a href="1-agua-dft/index.html">Abrir exercício 1</a> · 20 min de aula<br>
-Três átomos, uma geometria otimizada e 20 fs de dinâmica. Identifique método, forças, posições e velocidades. <strong>Referência calculada em 80,6 s.</strong></p>
-<h3 id="2-solvente-implicito-mudar-uma-escolha">2. Solvente implícito — mudar uma escolha</h3>
-<p><a href="2-solvente-implicito/index.html">Abrir exercício 2</a> · 10 min de aula<br>
-Ative CPCM(water) mantendo as demais condições. O número de átomos continua igual. <strong>Referência calculada em 77,7 s.</strong></p>
-<h3 id="3-xtb2-e-etanol-aumentar-a-duracao">3. XTB2 e etanol — aumentar a duração</h3>
-<p><a href="3-xtb2-etanol/index.html">Abrir exercício 3</a> · 25 min de aula<br>
-Nove átomos e 0,5 ps = 5 × 10⁻¹³ s de NVE. Guarde esse resultado para os dois exercícios seguintes. <strong>Referência calculada em 15,8 s.</strong></p>
-<h3 id="4-timestep-confrontar-custo-e-erro">4. Timestep — confrontar custo e erro</h3>
-<p><a href="4-timestep/index.html">Abrir exercício 4</a> · 25 min de aula<br>
-Provoque uma falha com 5 fs e repita do início com 0,5 fs. O caso ruim para após 15 fs; a correção chega aos 500 fs planejados. <strong>Falha em 2,7 s; correção em 18,8 s.</strong> A comparação fina 0,25/0,5/2 fs fica como apoio.</p>
-<h3 id="5-termostato-permitir-troca-de-energia">5. Termostato — permitir troca de energia</h3>
-<p><a href="5-termostato/index.html">Abrir exercício 5</a> · 25 min de aula<br>
-Reutilize a NVE e acrescente CSVR a 300 K. Compare temperatura e energias; não exija temperatura instantânea constante. <strong>Referência calculada em 13,6 s.</strong></p>
-<h3 id="6-znetilenodiamina-e-solvator-construir-o-ambiente">6. Zn–etilenodiamina e SOLVATOR — construir o ambiente</h3>
-<p><a href="6-complexo-solvator/index.html">Abrir exercício 6</a> · 30 min de aula<br>
-Acrescente seis águas ao complexo preparado: 25 → 43 átomos. <strong>Referência em 3 min 22 s</strong>; a alternativa com duas águas, de 31 átomos, levou <strong>1 min 4 s</strong>. A estrutura de 43 átomos já relaxada fica disponível para a retomada.</p>
-<h3 id="7-dinamica-do-complexo-medir-coordenacao-e-confinamento">7. Dinâmica do complexo — medir coordenação e confinamento</h3>
-<p><a href="7-dinamica-complexo/index.html">Abrir exercício 7</a> · 35 min, após 5 min de retomada<br>
-Execute uma trajetória de 2 ps com parede e compare com o controle fornecido sem parede. Acompanhe Zn 0–O 25: a água se afasta sem confinamento. <strong>Referências em aproximadamente 2 min 19 s cada.</strong></p>
-<h3 id="8-agua-dentro-de-c60-extensao-opcional">8. Água dentro de C₆₀ — extensão opcional</h3>
-<p><a href="8-agua-no-fulereno/index.html">Abrir exercício 8</a> · 10–15 min com referência pronta<br>
-63 átomos, 1 ps = 10⁻¹² s e a água visível dentro da gaiola. Compare confinamento molecular com a parede artificial. Usar apenas se houver folga; caso contrário, fica para depois da aula.</p>
-<h2 id="ritmo-e-referencias">Ritmo e referências</h2>
-<p>O <a href="roteiro-4h.md">roteiro dos ministrantes</a> reserva <strong>200 min de conteúdo/prática + 25 min de margem + 15 min de descanso</strong> dentro dos dois blocos. O descanso é de 14h20–14h35; o intervalo oficial é de 16h–17h. As sete execuções obrigatórias são curtas; otimizações e preparação térmica estão fornecidas como apoio.</p>
-<p>Os tempos acima foram medidos uma vez por caso, com <strong>ORCA 6.1.1, xTB 6.7.1, PAL8 e Open MPI 4.1.6</strong>, no Ubuntu 24.04.4/WSL2 de um Intel Core Ultra 9 185H. São referências deste ambiente, não promessas de desempenho. Ao todo estão preservadas <strong>21 execuções preservadas (20 normais e uma falha deliberada de timestep)</strong>, incluindo controles, otimizações e preparação.</p>
-<p>Se uma execução atrasar, abra o resultado de referência e prossiga, identificando que ele foi fornecido. O aplicativo foi testado localmente com esses arquivos. O ensaio completo da aula e o teste em computador mais modesto ainda precisam ser realizados.</p>
-<p>Os inputs completos usados nos resultados originais permanecem dentro de cada pasta <code>resultados</code>. As versões para a aula mantêm os parâmetros físicos. No exercício 7, retiramos o registro de Colvars, pois as distâncias são obtidas do XYZ no aplicativo, e usamos a grafia <code>Walls</code> do ORCA 6.1.1 para a parede antes escrita como <code>Cell</code>.</p>
-<h3 id="apoio">Apoio</h3>
-<ul>
-<li><a href="complexacao-solvator.md">Modelo químico do complexo</a>.</li>
-<li><a href="https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html">Manual: dinâmica molecular</a>.</li>
-<li><a href="https://www.faccts.de/docs/orca/6.1/manual/contents/modelchemistries/semiempirical.html">Manual: XTB2</a>.</li>
-<li><a href="https://www.faccts.de/docs/orca/6.1/manual/contents/structurereactivity/solvator.html">Manual: SOLVATOR</a>.</li>
-<li><a href="../resultados/pilotos-progressao/README.md">Pilotos operacionais anteriores</a>, preservados separadamente dos exercícios.</li>
-</ul>
-<p><strong>Para sair de cada atividade:</strong> anote o que mudou no input, quanto tempo físico foi simulado, uma observação dos dados e uma conclusão que esses dados ainda não permitem.</p></main></div><footer>Henrique de Castro Silva Junior e Virginia Camila Rufino Ferreira · ORCA 6.1.1 · Materiais e dados locais; links externos levam à documentação oficial.</footer></body></html>
+<h3 id="01-uma-ligacao-de-hidrogenio-em-movimento">01 · Uma ligação de hidrogênio em movimento</h3>
+<p><a href="1-agua-dft/index.html">Abrir atividade</a> · <strong>20 min</strong><br>
+Duas águas com DFT. Meça O–H, H···O e o ângulo do contato. Distinga vibração covalente de movimento intermolecular.</p>
+<h3 id="02-o-que-o-solvente-continuo-representa">02 · O que o solvente contínuo representa?</h3>
+<p><a href="2-solvente-implicito/index.html">Abrir atividade</a> · <strong>10 min</strong><br>
+O mesmo dímero com CPCM. As forças mudam; o número de moléculas não. Relacione o modelo com o que aparece no filme.</p>
+<h3 id="03-o-h-do-etanol-vibra-ou-gira">03 · O H do etanol vibra ou gira?</h3>
+<p><a href="3-xtb2-etanol/index.html">Abrir atividade</a> · <strong>25 min</strong><br>
+Passe para XTB2 e meça o diedro C–C–O–H. O controle curto mostra libração; compare com a trajetória mais longa do exercício 5.</p>
+<h3 id="04-perceber-o-erro-antes-da-explosao">04 · Perceber o erro antes da explosão</h3>
+<p><a href="4-timestep/index.html">Abrir atividade</a> · <strong>25 min</strong><br>
+Com 2,5 fs, a energia se desvia antes do aquecimento extremo. Diagnostique, volte ao início e corrija para 0,5 fs.</p>
+<h3 id="05-aquecer-explorar-resfriar">05 · Aquecer, explorar, resfriar</h3>
+<p><a href="5-termostato/index.html">Abrir atividade</a> · <strong>25 min</strong><br>
+Cinco etapas dentro de um só <code>%md</code>. Veja os alvos do termostato, o tempo real dos dados e a mudança de orientação da hidroxila.</p>
+<h3 id="06-construir-a-vizinhanca-do-complexo">06 · Construir a vizinhança do complexo</h3>
+<p><a href="6-complexo-solvator/index.html">Abrir atividade</a> · <strong>30 min</strong><br>
+Use SOLVATOR no complexo Zn²⁺–etilenodiamina. Diferencie os vizinhos do metal das águas da camada externa.</p>
+<h3 id="07-reter-solvente-nao-e-criar-coordenacao">07 · Reter solvente não é criar coordenação</h3>
+<p><a href="7-dinamica-complexo/index.html">Abrir atividade</a> · <strong>35 min</strong><br>
+Compare a mesma condição inicial com e sem parede. Acompanhe uma água que se afasta e os contatos Zn–N/Zn–O.</p>
+<h3 id="08-agua-dentro-de-c60-opcional">08 · Água dentro de C₆₀ · opcional</h3>
+<p><a href="8-agua-no-fulereno/index.html">Abrir extensão</a> · <strong>10–15 min, somente se houver folga</strong><br>
+A molécula se reorienta dentro de uma gaiola real. Compare esse confinamento com o potencial artificial da atividade 7.</p>
+<h2 id="para-usar-bem-o-tempo">Para usar bem o tempo</h2>
+<p>O <a href="roteiro-4h.md">roteiro de 4 horas</a> preserva <strong>15 min de descanso, 25 min de margem e o intervalo oficial de 16h–17h</strong>. Otimizações e controles já estão fornecidos. Se um cálculo atrasar, abra a referência e prossiga com a interpretação; não é necessário concluir todas as variantes ao vivo.</p>
+<p><strong>Ao terminar cada atividade:</strong> registre uma observação medida, sua interpretação química e algo que a trajetória ainda não permite concluir. Os tempos de execução nas páginas são medições desta máquina, não promessas para outros computadores. O ensaio integral da aula permanece pendente.</p>
+<p><a href="https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html">Manual de MD do ORCA</a> · <a href="complexacao-solvator.md">Modelo químico do complexo</a></p></main></div><footer>Henrique de Castro Silva Junior e Virginia Camila Rufino Ferreira · ORCA 6.1.1 · Materiais e dados locais; links externos levam à documentação oficial.</footer></body></html>

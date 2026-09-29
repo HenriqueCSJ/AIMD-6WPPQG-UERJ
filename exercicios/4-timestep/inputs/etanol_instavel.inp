@@ -1,0 +1,15 @@
+# Exemplo didatico; oito processos solicitados.
+! MD XTB2 PAL8
+%maxcore 256
+
+%md
+  Randomize 42
+  Initvel 300_K
+  Dump Position Stride 1 Filename "etanol_instavel-traj.xyz"
+  # Passo propositadamente excessivo; nao usar em producao.
+  Timestep 2.5_fs
+  Thermostat None
+  Run 200
+end
+* xyzfile 0 1 etanol.xyz
+

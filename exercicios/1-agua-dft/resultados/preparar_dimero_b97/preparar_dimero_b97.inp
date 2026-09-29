@@ -1,0 +1,4 @@
+# Preparacao fornecida: relaxar o par doador-aceptor com DFT.
+! B97-3c TightSCF Opt PAL8
+%maxcore 256
+* xyzfile 0 1 dimero_assimetrico.xyz

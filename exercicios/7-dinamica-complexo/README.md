@@ -77,8 +77,12 @@ O pacote inclui o reinício. **Raio 6 Å**, centro fixo na origem e `Spring 50.0
 
 1. Reproduza a referência **sem parede** até o fim. Uma água da camada externa se afasta.
 2. Troque para **com parede**. O contorno mostra onde começa a repulsão.
-3. Em **Distâncias**, compare **Zn 0 — O 25**. Os índices começam em zero.
+3. Em **Geometria → Distância**, compare **Zn 0 — O 25**. Os índices começam em zero.
 4. Confira também **Zn 0 — N 1** e **Zn 0 — N 4**: retenção espacial e coordenação são observações diferentes.
+
+**Ative os dois tipos de contato no 3D.** Os traços de coordenação ligam geometricamente Zn a N/O próximos (corte inicial 2,6 Å); os tracejados de ligação H mostram contatos O/N–H···O/N que atendem aos cortes de distância e ângulo. Eles ajudam a distinguir **primeira esfera de coordenação** de **águas externas conectadas por ligações H**. São sugestões geométricas; o XYZ não contém ordens de ligação ou informação completa sobre caráter aceptor.
+
+**Previsão para testar:** reter O 25 a cerca de 4 Å não o transforma em ligante diretamente coordenado ao Zn. Se a água fica perto, mas fora do corte de coordenação, a parede preservou a vizinhança de solvente, não criou uma ligação Zn–O. Confira isso no filme e na curva.
 
 Nesta execução, a distância final Zn 0–O 25 foi **9.13 Å sem parede** e **4.19 Å com parede**. O maior raio atômico em relação à origem atingiu **9.28 Å sem parede** e **6.30 Å com parede**. Esses números descrevem estas trajetórias; não são limites universais de evaporação.
 

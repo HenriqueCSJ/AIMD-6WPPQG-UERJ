@@ -1,18 +1,16 @@
 <!doctype html>
-<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>3. XTB2 e etanol · AIMD / ORCA</title><link rel="stylesheet" href="../pagina.css"><script defer src="../pagina.js"></script></head>
-<body><a class="skip" href="#conteudo">Ir para o conteúdo</a><header class="brand"><a href="../index.html"><strong>AIMD com ORCA</strong><small>6º Workshop PPGQ–UERJ · 7 de outubro de 2026</small></a><div class="logos"><img src="../../assets/uerj-logo.png" alt="UERJ"><img src="../../assets/ufrrj-logo-compacto.png" alt="UFRRJ"></div></header><div class="layout"><nav class="course-nav" aria-label="Exercícios"><h2>Do input à interpretação</h2><a class="home" href="../index.html">Visão geral do percurso</a><div class="links"><a href="../1-agua-dft/index.html"><span class="num">01</span><span>Água com DFT</span></a><a href="../2-solvente-implicito/index.html"><span class="num">02</span><span>Solvente implícito</span></a><a href="../3-xtb2-etanol/index.html" aria-current="page"><span class="num">03</span><span>XTB2 e etanol</span></a><a href="../4-timestep/index.html"><span class="num">04</span><span>Passo de integração</span></a><a href="../5-termostato/index.html"><span class="num">05</span><span>Temperatura e termostato</span></a><a href="../6-complexo-solvator/index.html"><span class="num">06</span><span>Zn–en e SOLVATOR</span></a><a href="../7-dinamica-complexo/index.html"><span class="num">07</span><span>Dinâmica do complexo</span></a><a href="../8-agua-no-fulereno/index.html"><span class="num">08</span><span>Água em C₆₀ · opcional</span></a></div></nav><main id="conteudo"><h1 id="3-ganhar-velocidade-com-xtb2">3. Ganhar velocidade com XTB2</h1>
-<p><a href="../index.html">← Percurso</a> · <a href="../../visualizador/index.html">Aplicativo de análise</a></p>
-<p><strong>25 min · 9 átomos · NVE</strong></p>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>3. Vibração e torsão · AIMD / ORCA</title><link rel="stylesheet" href="../pagina.css"><script defer src="../pagina.js"></script></head>
+<body><a class="skip" href="#conteudo">Ir para o conteúdo</a><header class="brand"><a href="../index.html"><strong>AIMD com ORCA</strong><small>6º Workshop PPGQ–UERJ · 7 de outubro de 2026</small></a><div class="logos"><img src="../../assets/uerj-logo.png" alt="UERJ"><img src="../../assets/ufrrj-logo-compacto.png" alt="UFRRJ"></div></header><div class="layout"><nav class="course-nav" aria-label="Exercícios"><h2>Do input à interpretação</h2><a class="home" href="../index.html">Visão geral do percurso</a><div class="links"><a href="../1-agua-dft/index.html"><span class="num">01</span><span>Ligação H com DFT</span></a><a href="../2-solvente-implicito/index.html"><span class="num">02</span><span>O papel do contínuo</span></a><a href="../3-xtb2-etanol/index.html" aria-current="page"><span class="num">03</span><span>Vibração e torsão</span></a><a href="../4-timestep/index.html"><span class="num">04</span><span>Passo de integração</span></a><a href="../5-termostato/index.html"><span class="num">05</span><span>Aquecer e resfriar</span></a><a href="../6-complexo-solvator/index.html"><span class="num">06</span><span>Zn–en e SOLVATOR</span></a><a href="../7-dinamica-complexo/index.html"><span class="num">07</span><span>Dinâmica do complexo</span></a><a href="../8-agua-no-fulereno/index.html"><span class="num">08</span><span>Água em C₆₀ · opcional</span></a></div></nav><main id="conteudo"><h1 id="3-o-h-do-etanol-vibra-ou-muda-de-orientacao">3. O H do etanol vibra ou muda de orientação?</h1>
+<p><a href="../index.html">← Percurso</a> · <a href="../../visualizador/index.html">Laboratório de trajetórias</a></p>
+<p><strong>25 min · etanol · XTB2 · 0,5 ps = 5 × 10⁻¹³ s</strong></p>
 <blockquote>
-<p><strong>Pergunta da atividade:</strong> O que muda quando trocamos o método eletrônico?</p>
+<p><strong>Pergunta:</strong> Uma trajetória sem troca de conformação ensina alguma coisa?</p>
 </blockquote>
-<h2 id="1-prepare">1. Prepare</h2>
-<p>O etanol já está otimizado. Com <strong>XTB2 (GFN2-xTB)</strong>, faremos <strong>500 fs = 0,5 ps = 5 × 10⁻¹³ s</strong>. Guarde este resultado: ele será o controle dos exercícios 4 e 5.</p>
-<p><a href="aula-etanol_nve.zip">Baixar os arquivos da atividade</a> · <a href="estruturas/etanol.xyz">Abrir a estrutura</a></p>
-<p>Extraia o pacote. Ele contém o input e os arquivos que precisam ficar juntos. Use uma pasta para esta atividade.</p>
+<h2 id="1-escolha-a-medida-certa">1. Escolha a medida certa</h2>
+<p>Uma animação pode esconder a diferença entre a molécula inteira girar e uma rotação <strong>interna</strong>. Para o H da hidroxila, acompanhe o diedro <strong>C 0–C 1–O 2–H 8</strong>, em graus. Ele não muda se girarmos apenas a câmera ou a molécula como um corpo rígido.</p>
+<p>Vamos começar com uma trajetória curta, sem termostato: ela será o controle para os exercícios 4 e 5. <code>Initvel 300_K</code> inicializa velocidades; não mantém o sistema a 300 K.</p>
 <h2 id="2-execute">2. Execute</h2>
-<p>Salve este conteúdo como <strong><code>etanol_nve.inp</code></strong>; ele já está no pacote.</p>
-<p><a href="inputs/etanol_nve.inp">Baixar input</a> · <a href="aula-etanol_nve.zip">Baixar pacote com os arquivos necessários</a></p>
+<p><a href="aula-etanol_nve.zip">Baixar pacote</a> · <a href="inputs/etanol_nve.inp">Input</a> · <a href="estruturas/etanol.xyz">Estrutura</a></p>
 <pre><code class="language-text"># Etanol com GFN2-xTB, sem banho termico (NVE).
 ! MD XTB2 PAL8
 %maxcore 256
@@ -31,62 +29,40 @@ end
 # Carga 0, multiplicidade 1; XYZ na mesma pasta.
 * xyzfile 0 1 etanol.xyz
 </code></pre>
-<p><strong>Repare nestas escolhas:</strong></p>
-<ul>
-<li><code>XTB2</code> escolhe o método eletrônico; o bloco <code>%md</code> mantém a lógica conhecida.</li>
-<li><code>Run 1000</code> com passo de 0,5 fs cobre 500 fs.</li>
-</ul>
 <details>
-<summary>Executar no Ubuntu / WSL2 — recomendado</summary>
-<p>Extraia o pacote em uma pasta e abra o terminal Ubuntu <strong>nessa pasta</strong>, onde estão o input e o XYZ. Com <code>ORCA_DIR</code> configurado no tutorial, copie o bloco inteiro. Ele cria uma execução nova e devolve o terminal à pasta inicial.</p>
+<summary>Executar no Ubuntu / WSL2</summary>
+<p>Extraia o pacote e abra o Ubuntu nessa pasta. Com <code>ORCA_DIR</code> configurado no guia, copie:</p>
 <pre><code class="language-bash">(
-  test -x &quot;$ORCA_DIR/orca&quot; || { echo &quot;Configure ORCA_DIR antes de executar.&quot;; exit 1; }
+  test -x &quot;$ORCA_DIR/orca&quot; || { echo &quot;Configure ORCA_DIR primeiro.&quot;; exit 1; }
   pasta=$(mktemp -d ./execucao-XXXXXX) || exit 1
   cp etanol_nve.inp etanol.xyz &quot;$pasta/&quot; || exit 1
   cd &quot;$pasta&quot; || exit 1
   &quot;$ORCA_DIR/orca&quot; etanol_nve.inp &gt; etanol_nve.out 2&gt;&amp;1
-  tail -n 5 etanol_nve.out
+  tail -n 12 etanol_nve.out
   echo &quot;Resultados: $PWD&quot;
 )
 </code></pre>
-<p>Procure <strong><code>ORCA TERMINATED NORMALLY</code></strong>. Abra <code>explorer.exe .</code> para localizar a nova pasta <code>execucao-…</code> e carregar os arquivos no aplicativo. Execute um cálculo por vez; o ORCA gerencia o paralelismo de <code>PAL8</code>.</p>
+<p>Abra <code>explorer.exe .</code> e localize a pasta <code>execucao-…</code>. Carregue <strong><code>etanol_nve.out</code></strong>, <strong><code>etanol_nve-md-ener.csv</code></strong> e <strong><code>etanol_nve-traj.xyz</code></strong> no laboratório. Execute um cálculo por vez.</p>
 </details>
 <details>
-<summary>Alternativa: executar no Windows nativo</summary>
-<p>Extraia o pacote, abra o PowerShell nessa pasta e ajuste o caminho do ORCA. Esta rota exige ORCA/MS-MPI já testados na instalação.</p>
-<pre><code class="language-powershell">&amp; {
-  $orca = 'C:\ORCA_6.1.1\orca.exe'
-  if (-not (Test-Path -LiteralPath $orca)) { throw 'Ajuste o caminho do ORCA.' }
-  $pasta = Join-Path $PWD ('execucao-' + [guid]::NewGuid().ToString('N'))
-  New-Item -ItemType Directory -Path $pasta | Out-Null
-  Copy-Item -LiteralPath 'etanol_nve.inp', 'etanol.xyz' -Destination $pasta -ErrorAction Stop
-  Push-Location $pasta
-  try {
-    &amp; $orca etanol_nve.inp &gt; etanol_nve.out 2&gt;&amp;1
-    Get-Content etanol_nve.out -Tail 5
-    Get-Location
-  } finally { Pop-Location }
-}
+<summary>Alternativa: Windows nativo</summary>
+<p>Extraia o pacote em uma pasta nova. Abra o PowerShell nela e ajuste o caminho:</p>
+<pre><code class="language-powershell">&amp; 'C:\ORCA_6.1.1\orca.exe' etanol_nve.inp &gt; etanol_nve.out 2&gt;&amp;1
+Get-Content etanol_nve.out -Tail 12
 </code></pre>
 </details>
-<h2 id="3-veja-e-interprete">3. Veja e interprete</h2>
-<p><a href="../../visualizador/index.html">Carregar meus arquivos no aplicativo</a> · <a href="../../visualizador/index.html?exemplo=ethanol">Abrir as referências desta atividade</a></p>
-<p>Na nova pasta de execução, selecione <strong><code>etanol_nve.out</code></strong>, <strong><code>etanol_nve-md-ener.csv</code></strong> e <strong><code>etanol_nve-traj.xyz</code></strong>. Pode carregar os três juntos.</p>
+<h2 id="3-distinga-os-dois-movimentos">3. Distinga os dois movimentos</h2>
+<p><a href="../../visualizador/index.html?exemplo=ethanol&amp;aba=distancias">Abrir o controle curto</a> · <a href="../../visualizador/index.html?exemplo=thermostat&amp;aba=distancias">Comparar com o etanol em etapas</a></p>
 <ol>
-<li>Veja K, U e E. A energia total oscila menos que as outras duas?</li>
-<li>Observe vibrações e mudanças de orientação na animação.</li>
-<li>Anote a amplitude de E e o tempo físico. Guarde os arquivos para comparar depois.</li>
+<li>Em <strong>Geometria</strong>, use o atalho para a torsão do etanol ou selecione <strong>Diedro</strong>, com índices <strong>0, 1, 2, 8</strong>.</li>
+<li>No controle NVE, o diedro vai de <strong>−73,9° a −33,7°</strong> em 0,5 ps: oscila em torno de uma orientação gauche. Isso é <strong>libração</strong>, sem troca de região conformacional observada.</li>
+<li>Selecione <strong>Distância</strong>, O 2–H 8. A ligação vibra entre <strong>0,939 e 0,992 Å</strong>. Esse movimento não é rotação da hidroxila nem transferência de próton.</li>
+<li>Abra a referência <strong>em etapas</strong>: a 1,5 ps o diedro é <strong>+52,3°</strong>, enquanto no início era <strong>−55,7°</strong>. Há acesso a outra orientação; o O–H continua ligado. No exercício 5 vamos executar e explicar o programa que produziu isso.</li>
 </ol>
-<blockquote>
-<p><strong>Para levar:</strong> O ciclo energia → forças → movimento continua; o método eletrônico e o custo mudam.</p>
-</blockquote>
-<details>
-<summary>Referências, preparação e explicações adicionais</summary>
-<p>Resultados reais já calculados com PAL8. O input completo de cada referência está ao lado da saída; as séries não foram substituídas por simulações novas.</p>
+<p><strong>Interpretação:</strong> uma molécula pode vibrar e permanecer na mesma região conformacional durante toda uma trajetória curta. Ausência de troca em 0,5 ps não mede a barreira nem prova que outra conformação seja inacessível. A faixa angular, o tempo passado em cada região e a integridade das ligações respondem a perguntas diferentes.</p>
+<p><strong>Por que XTB2 aqui?</strong> O custo baixo permite repetir e prolongar o cálculo durante a aula. É GFN2-xTB, um modelo semiempírico de estrutura eletrônica; não devemos interpretar sua energia como uma energia DFT.</p>
+<h2 id="resultados-e-manual">Resultados e manual</h2>
 <ul>
-<li><strong>etanol_nve:</strong> <a href="resultados/etanol_nve/etanol_nve.inp">input completo usado</a> · <a href="resultados/etanol_nve/etanol_nve.out">saída</a> · <a href="resultados/etanol_nve/etanol_nve-md-ener.csv">energias</a> · <a href="resultados/etanol_nve/etanol_nve-traj.xyz">trajetória</a>.</li>
+<li><strong>etanol_nve:</strong> <a href="resultados/etanol_nve/etanol_nve.out">saída</a> · <a href="resultados/etanol_nve/etanol_nve.inp">input usado</a> · <a href="resultados/etanol_nve/etanol_nve-md-ener.csv">energias</a> · <a href="resultados/etanol_nve/etanol_nve-traj.xyz">trajetória</a> · <a href="resultados/etanol_nve/execucao.json">tempo de execução</a>.</li>
 </ul>
-<p><a href="apoio.html">Consultar preparação, números e respostas</a>.</p>
-</details>
-<p><strong>Manual:</strong> <a href="https://www.faccts.de/docs/orca/6.1/manual/contents/modelchemistries/semiempirical.html">XTB2</a> · <a href="https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html">Dinâmica molecular</a>.</p>
-<p><strong>Antes de avançar:</strong> anote uma mudança no input, uma observação e uma conclusão que esta trajetória ainda não permite.</p><nav class="endnav" aria-label="Próxima etapa"><a href="../2-solvente-implicito/index.html">← Exercício 2</a><a href="../4-timestep/index.html">Exercício 4 →</a></nav></main></div><footer>Henrique de Castro Silva Junior e Virginia Camila Rufino Ferreira · ORCA 6.1.1 · Materiais e dados locais; links externos levam à documentação oficial.</footer></body></html>
+<p><a href="https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html">Manual ORCA: dinâmica molecular</a>.</p><nav class="endnav" aria-label="Próxima etapa"><a href="../2-solvente-implicito/index.html">← Exercício 2</a><a href="../4-timestep/index.html">Exercício 4 →</a></nav></main></div><footer>Henrique de Castro Silva Junior e Virginia Camila Rufino Ferreira · ORCA 6.1.1 · Materiais e dados locais; links externos levam à documentação oficial.</footer></body></html>

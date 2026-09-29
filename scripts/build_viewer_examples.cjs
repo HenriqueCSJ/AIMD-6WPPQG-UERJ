@@ -2,14 +2,18 @@
 const fs=require('node:fs'),path=require('node:path');
 const root=path.resolve(__dirname,'..'),R=require('../visualizador/orca-parser.js');
 const specs=[
+ ['dimero_b97','Dímero de água · DFT','1-agua-dft'],
+ ['dimero_b97_cpcm','Dímero de água · DFT/CPCM','2-solvente-implicito'],
  ['agua_dft','Água · DFT','1-agua-dft'],
  ['agua_cpcm','Água · CPCM','2-solvente-implicito'],
  ['etanol_nve','Etanol · 0,5 fs · NVE','3-xtb2-etanol'],
  ['etanol_dt025','Etanol · 0,25 fs','4-timestep'],
  ['etanol_dt200','Etanol · 2 fs','4-timestep'],
  ['etanol_dt500','Etanol · 5 fs · FALHOU','4-timestep'],
+ ['etanol_instavel','Etanol · 2,5 fs · instabilidade gradual','4-timestep'],
  ['etanol_corrigido','Etanol · 0,5 fs · corrigido','4-timestep'],
  ['etanol_csvr','Etanol · CSVR · NVT','5-termostato'],
+ ['etanol_etapas','Etanol · aquecer e resfriar · 5 ps','5-termostato'],
  ['zn_parede','Zn–en · com parede','7-dinamica-complexo'],
  ['zn_sem_parede','Zn–en · sem parede','7-dinamica-complexo'],
  ['zn_parede_longo','Zn–en · com parede · 2 ps','7-dinamica-complexo'],
@@ -30,7 +34,9 @@ for(const [key,label,lesson] of specs){
   if(parsed.frames){
    parsed.frames.forEach(f=>delete f.comment);
    // Keep bundled examples small. Original XYZ downloads retain every frame.
-   const stride=Math.ceil(parsed.frames.length/1001);
+   // Keep the small ethanol molecule complete so geometric extrema and the
+   // fast O-H vibration are not aliased by the teaching reference preview.
+   const stride=key==='etanol_etapas'?1:Math.ceil(parsed.frames.length/1001);
    if(stride>1){const all=parsed.frames;parsed.previewStride=stride;parsed.originalFrameCount=all.length;parsed.frames=all.filter((f,i)=>i%stride===0||i===all.length-1);parsed.warnings.push(`Prévia da referência: 1 a cada ${stride} quadros, mais o último. Baixe/carregue o XYZ original para examinar todos. Tempos e coordenadas preservados, sem interpolação.`);}
   }
   run[slot]=parsed;run.files.push({name:file,path:rel,kind:parsed.kind});
@@ -39,8 +45,9 @@ for(const [key,label,lesson] of specs){
  runs[key]=run;
 }
 const presets={
- water:{runs:['agua_dft']},solvent:{runs:['agua_dft','agua_cpcm']},ethanol:{runs:['etanol_nve']},
- timestep:{runs:['etanol_dt500','etanol_corrigido']},timestep_accuracy:{runs:['etanol_dt025','etanol_nve','etanol_dt200']},thermostat:{runs:['etanol_nve','etanol_csvr']},
+ water:{runs:['dimero_b97']},solvent:{runs:['dimero_b97','dimero_b97_cpcm']},ethanol:{runs:['etanol_nve']},
+ water_single:{runs:['agua_dft']},solvent_single:{runs:['agua_dft','agua_cpcm']},
+ timestep:{runs:['etanol_instavel','etanol_corrigido']},timestep_abrupt:{runs:['etanol_dt500','etanol_corrigido']},timestep_accuracy:{runs:['etanol_dt025','etanol_nve','etanol_dt200']},thermostat:{runs:['etanol_etapas']},thermostat_compare:{runs:['etanol_nve','etanol_csvr']},
  solvator:{runs:['zn_solvator','preparar_complexo'],tab:'trajectory'},complex:{runs:['zn_parede_longo','zn_sem_parede_longo']},
  complex_short:{runs:['zn_parede','zn_sem_parede']},fullerene:{runs:['agua_c60'],tab:'trajectory'}
 };

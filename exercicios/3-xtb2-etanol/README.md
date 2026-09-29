@@ -1,24 +1,20 @@
-# 3. Ganhar velocidade com XTB2
+# 3. O H do etanol vibra ou muda de orientação?
 
-[← Percurso](../README.md) · [Aplicativo de análise](../../visualizador/index.html)
+[← Percurso](../README.md) · [Laboratório de trajetórias](../../visualizador/index.html)
 
-**25 min · 9 átomos · NVE**
+**25 min · etanol · XTB2 · 0,5 ps = 5 × 10⁻¹³ s**
 
-> **Pergunta da atividade:** O que muda quando trocamos o método eletrônico?
+> **Pergunta:** Uma trajetória sem troca de conformação ensina alguma coisa?
 
-## 1. Prepare
+## 1. Escolha a medida certa
 
-O etanol já está otimizado. Com **XTB2 (GFN2-xTB)**, faremos **500 fs = 0,5 ps = 5 × 10⁻¹³ s**. Guarde este resultado: ele será o controle dos exercícios 4 e 5.
+Uma animação pode esconder a diferença entre a molécula inteira girar e uma rotação **interna**. Para o H da hidroxila, acompanhe o diedro **C 0–C 1–O 2–H 8**, em graus. Ele não muda se girarmos apenas a câmera ou a molécula como um corpo rígido.
 
-[Baixar os arquivos da atividade](aula-etanol_nve.zip) · [Abrir a estrutura](estruturas/etanol.xyz)
-
-Extraia o pacote. Ele contém o input e os arquivos que precisam ficar juntos. Use uma pasta para esta atividade.
+Vamos começar com uma trajetória curta, sem termostato: ela será o controle para os exercícios 4 e 5. `Initvel 300_K` inicializa velocidades; não mantém o sistema a 300 K.
 
 ## 2. Execute
 
-Salve este conteúdo como **`etanol_nve.inp`**; ele já está no pacote.
-
-[Baixar input](inputs/etanol_nve.inp) · [Baixar pacote com os arquivos necessários](aula-etanol_nve.zip)
+[Baixar pacote](aula-etanol_nve.zip) · [Input](inputs/etanol_nve.inp) · [Estrutura](estruturas/etanol.xyz)
 
 ```text
 # Etanol com GFN2-xTB, sem banho termico (NVE).
@@ -40,75 +36,52 @@ end
 * xyzfile 0 1 etanol.xyz
 ```
 
-**Repare nestas escolhas:**
+<details markdown="1"><summary>Executar no Ubuntu / WSL2</summary>
 
-- `XTB2` escolhe o método eletrônico; o bloco `%md` mantém a lógica conhecida.
-- `Run 1000` com passo de 0,5 fs cobre 500 fs.
-
-<details markdown="1"><summary>Executar no Ubuntu / WSL2 — recomendado</summary>
-
-Extraia o pacote em uma pasta e abra o terminal Ubuntu **nessa pasta**, onde estão o input e o XYZ. Com `ORCA_DIR` configurado no tutorial, copie o bloco inteiro. Ele cria uma execução nova e devolve o terminal à pasta inicial.
+Extraia o pacote e abra o Ubuntu nessa pasta. Com `ORCA_DIR` configurado no guia, copie:
 
 ```bash
 (
-  test -x "$ORCA_DIR/orca" || { echo "Configure ORCA_DIR antes de executar."; exit 1; }
+  test -x "$ORCA_DIR/orca" || { echo "Configure ORCA_DIR primeiro."; exit 1; }
   pasta=$(mktemp -d ./execucao-XXXXXX) || exit 1
   cp etanol_nve.inp etanol.xyz "$pasta/" || exit 1
   cd "$pasta" || exit 1
   "$ORCA_DIR/orca" etanol_nve.inp > etanol_nve.out 2>&1
-  tail -n 5 etanol_nve.out
+  tail -n 12 etanol_nve.out
   echo "Resultados: $PWD"
 )
 ```
 
-Procure **`ORCA TERMINATED NORMALLY`**. Abra `explorer.exe .` para localizar a nova pasta `execucao-…` e carregar os arquivos no aplicativo. Execute um cálculo por vez; o ORCA gerencia o paralelismo de `PAL8`.
+Abra `explorer.exe .` e localize a pasta `execucao-…`. Carregue **`etanol_nve.out`**, **`etanol_nve-md-ener.csv`** e **`etanol_nve-traj.xyz`** no laboratório. Execute um cálculo por vez.
 
 </details>
 
-<details markdown="1"><summary>Alternativa: executar no Windows nativo</summary>
+<details markdown="1"><summary>Alternativa: Windows nativo</summary>
 
-Extraia o pacote, abra o PowerShell nessa pasta e ajuste o caminho do ORCA. Esta rota exige ORCA/MS-MPI já testados na instalação.
+Extraia o pacote em uma pasta nova. Abra o PowerShell nela e ajuste o caminho:
 
 ```powershell
-& {
-  $orca = 'C:\ORCA_6.1.1\orca.exe'
-  if (-not (Test-Path -LiteralPath $orca)) { throw 'Ajuste o caminho do ORCA.' }
-  $pasta = Join-Path $PWD ('execucao-' + [guid]::NewGuid().ToString('N'))
-  New-Item -ItemType Directory -Path $pasta | Out-Null
-  Copy-Item -LiteralPath 'etanol_nve.inp', 'etanol.xyz' -Destination $pasta -ErrorAction Stop
-  Push-Location $pasta
-  try {
-    & $orca etanol_nve.inp > etanol_nve.out 2>&1
-    Get-Content etanol_nve.out -Tail 5
-    Get-Location
-  } finally { Pop-Location }
-}
+& 'C:\ORCA_6.1.1\orca.exe' etanol_nve.inp > etanol_nve.out 2>&1
+Get-Content etanol_nve.out -Tail 12
 ```
 
 </details>
 
-## 3. Veja e interprete
+## 3. Distinga os dois movimentos
 
-[Carregar meus arquivos no aplicativo](../../visualizador/index.html) · [Abrir as referências desta atividade](../../visualizador/index.html?exemplo=ethanol)
+[Abrir o controle curto](../../visualizador/index.html?exemplo=ethanol&aba=distancias) · [Comparar com o etanol em etapas](../../visualizador/index.html?exemplo=thermostat&aba=distancias)
 
-Na nova pasta de execução, selecione **`etanol_nve.out`**, **`etanol_nve-md-ener.csv`** e **`etanol_nve-traj.xyz`**. Pode carregar os três juntos.
+1. Em **Geometria**, use o atalho para a torsão do etanol ou selecione **Diedro**, com índices **0, 1, 2, 8**.
+2. No controle NVE, o diedro vai de **−73,9° a −33,7°** em 0,5 ps: oscila em torno de uma orientação gauche. Isso é **libração**, sem troca de região conformacional observada.
+3. Selecione **Distância**, O 2–H 8. A ligação vibra entre **0,939 e 0,992 Å**. Esse movimento não é rotação da hidroxila nem transferência de próton.
+4. Abra a referência **em etapas**: a 1,5 ps o diedro é **+52,3°**, enquanto no início era **−55,7°**. Há acesso a outra orientação; o O–H continua ligado. No exercício 5 vamos executar e explicar o programa que produziu isso.
 
-1. Veja K, U e E. A energia total oscila menos que as outras duas?
-2. Observe vibrações e mudanças de orientação na animação.
-3. Anote a amplitude de E e o tempo físico. Guarde os arquivos para comparar depois.
+**Interpretação:** uma molécula pode vibrar e permanecer na mesma região conformacional durante toda uma trajetória curta. Ausência de troca em 0,5 ps não mede a barreira nem prova que outra conformação seja inacessível. A faixa angular, o tempo passado em cada região e a integridade das ligações respondem a perguntas diferentes.
 
-> **Para levar:** O ciclo energia → forças → movimento continua; o método eletrônico e o custo mudam.
+**Por que XTB2 aqui?** O custo baixo permite repetir e prolongar o cálculo durante a aula. É GFN2-xTB, um modelo semiempírico de estrutura eletrônica; não devemos interpretar sua energia como uma energia DFT.
 
-<details markdown="1"><summary>Referências, preparação e explicações adicionais</summary>
+## Resultados e manual
 
-Resultados reais já calculados com PAL8. O input completo de cada referência está ao lado da saída; as séries não foram substituídas por simulações novas.
+- **etanol_nve:** [saída](resultados/etanol_nve/etanol_nve.out) · [input usado](resultados/etanol_nve/etanol_nve.inp) · [energias](resultados/etanol_nve/etanol_nve-md-ener.csv) · [trajetória](resultados/etanol_nve/etanol_nve-traj.xyz) · [tempo de execução](resultados/etanol_nve/execucao.json).
 
-- **etanol_nve:** [input completo usado](resultados/etanol_nve/etanol_nve.inp) · [saída](resultados/etanol_nve/etanol_nve.out) · [energias](resultados/etanol_nve/etanol_nve-md-ener.csv) · [trajetória](resultados/etanol_nve/etanol_nve-traj.xyz).
-
-[Consultar preparação, números e respostas](apoio.md).
-
-</details>
-
-**Manual:** [XTB2](https://www.faccts.de/docs/orca/6.1/manual/contents/modelchemistries/semiempirical.html) · [Dinâmica molecular](https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html).
-
-**Antes de avançar:** anote uma mudança no input, uma observação e uma conclusão que esta trajetória ainda não permite.
+[Manual ORCA: dinâmica molecular](https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html).

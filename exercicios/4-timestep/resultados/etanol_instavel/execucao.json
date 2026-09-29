@@ -1,0 +1,13 @@
+{
+  "case": "etanol_instavel",
+  "elapsed_seconds": 10.2,
+  "returncode": 0,
+  "status": "finished",
+  "normal_termination": false,
+  "optimization_converged": false,
+  "pal_requested": 8,
+  "environment": "ORCA 6.1.1; xTB 6.7.1; Open MPI 4.1.6; Ubuntu 24.04.4 / WSL2; Intel Core Ultra 9 185H",
+  "omp_parent_threads": 1,
+  "parallel_note": "PAL8 requested; external xTB thread behavior is checked separately; timing includes program startup.",
+  "run_directory": "/home/henrique/aimd-workshop/exercicios-pal8-20260928/etanol_instavel_quimica_20260929"
+}

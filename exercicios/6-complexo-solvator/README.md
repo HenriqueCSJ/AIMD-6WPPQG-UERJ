@@ -85,6 +85,9 @@ Extraia o pacote, abra o PowerShell nessa pasta e ajuste o caminho do ORCA. Esta
 
 ## 3. Veja e interprete
 
+Ative **Coordenação** e **Ligações H** no visualizador. Identifique os dois N da etilenodiamina ligados geometricamente ao Zn e compare águas próximas do metal com as acrescentadas ao redor. **SOLVATOR constrói um arranjo de solvatação**; não é uma trajetória de associação do ligante nem demonstra uma constante de formação. O exercício seguinte pergunta se essa camada externa permanece por perto.
+
+
 [Carregar meus arquivos no aplicativo](../../visualizador/index.html) · [Abrir as referências desta atividade](../../visualizador/index.html?exemplo=solvator)
 
 1. Carregue `zn_solvator.out` e **`zn_solvator.solvator.xyz`** no aplicativo.

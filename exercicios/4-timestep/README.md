@@ -1,87 +1,83 @@
-# 4. Fazer a dinâmica falhar — e corrigir
+# 4. A instabilidade aparece antes da explosão
 
-[← Percurso](../README.md) · [Aplicativo de análise](../../visualizador/index.html)
+[← Percurso](../README.md) · [Laboratório de trajetórias](../../visualizador/index.html)
 
-**25 min · etanol · XTB2 · sem termostato**
+**25 min · etanol · XTB2 · NVE**
 
-> **Pergunta:** o que acontece quando tentamos avançar rápido demais no tempo?
+> **Pergunta:** A temperatura parecer razoável significa que a integração está boa?
 
-## 1. Provoque o erro
+## 1. Aumente o passo — de propósito
 
-Use a mesma estrutura do exercício 3, mas aumente o timestep para **5 fs**. O alvo seria 100 passos = 500 fs = 5 × 10⁻¹³ s. Nesta referência, a execução **falhou após o registro de 15 fs**: ela não completou os 500 fs.
+Use **2,5 fs**, mantendo a geometria inicial, a semente e o alvo de **500 fs = 5 × 10⁻¹³ s**. A referência registra **131 quadros, até 325 fs**, e termina com erro. Não chegamos ao alvo.
 
-[Pacote para executar](aula-etanol_dt500.zip) · [Input](inputs/etanol_dt500.inp)
+[Baixar pacote](aula-etanol_instavel.zip) · [Input](inputs/etanol_instavel.inp) · [Estrutura](estruturas/etanol.xyz)
 
 ```text
-# Passo grande de proposito: observe o erro de integracao.
+# Exemplo didatico; oito processos solicitados.
 ! MD XTB2 PAL8
 %maxcore 256
 
 %md
-  Timestep 5.0_fs
   Randomize 42
-  # Velocidades iniciais; nao mantem a temperatura fixa.
   Initvel 300_K
+  Dump Position Stride 1 Filename "etanol_instavel-traj.xyz"
+  # Passo propositadamente excessivo; nao usar em producao.
+  Timestep 2.5_fs
   Thermostat None
-  Dump Position Stride 1 Filename "etanol_dt500-traj.xyz"
-  # 100 x 5 fs = 500 fs (5e-13 s).
-  Run 100
+  Run 200
 end
-
-# Carga 0, multiplicidade 1; XYZ na mesma pasta.
 * xyzfile 0 1 etanol.xyz
 ```
+
 <details markdown="1"><summary>Executar no Ubuntu / WSL2</summary>
 
-Extraia o pacote em uma pasta nova. Abra o Ubuntu nessa pasta, com `ORCA_DIR` configurado no tutorial, e copie:
+Extraia o pacote e abra o Ubuntu nessa pasta. Com `ORCA_DIR` configurado no guia, copie:
 
 ```bash
 (
-  test -x "$ORCA_DIR/orca" || { echo "Configure ORCA_DIR antes de executar."; exit 1; }
+  test -x "$ORCA_DIR/orca" || { echo "Configure ORCA_DIR primeiro."; exit 1; }
   pasta=$(mktemp -d ./execucao-XXXXXX) || exit 1
-  cp etanol_dt500.inp etanol.xyz "$pasta/" || exit 1
+  cp etanol_instavel.inp etanol.xyz "$pasta/" || exit 1
   cd "$pasta" || exit 1
-  "$ORCA_DIR/orca" etanol_dt500.inp > etanol_dt500.out 2>&1
-  tail -n 12 etanol_dt500.out
+  "$ORCA_DIR/orca" etanol_instavel.inp > etanol_instavel.out 2>&1
+  tail -n 12 etanol_instavel.out
   echo "Resultados: $PWD"
 )
 ```
 
-Abra `explorer.exe .` para localizar os resultados. Execute um cálculo por vez.
+Abra `explorer.exe .` e localize a pasta `execucao-…`. Carregue **`etanol_instavel.out`**, **`etanol_instavel-md-ener.csv`** e **`etanol_instavel-traj.xyz`** no laboratório. Execute um cálculo por vez.
 
 </details>
 
-<details markdown="1"><summary>Alternativa no Windows nativo</summary>
+<details markdown="1"><summary>Alternativa: Windows nativo</summary>
 
-Com ORCA/MS-MPI instalados, extraia o pacote numa pasta nova, abra o PowerShell nela e ajuste o caminho:
+Extraia o pacote em uma pasta nova. Abra o PowerShell nela e ajuste o caminho:
 
 ```powershell
-& 'C:\ORCA_6.1.1\orca.exe' etanol_dt500.inp > etanol_dt500.out 2>&1
-Get-Content etanol_dt500.out -Tail 12
+& 'C:\ORCA_6.1.1\orca.exe' etanol_instavel.inp > etanol_instavel.out 2>&1
+Get-Content etanol_instavel.out -Tail 12
 ```
 
 </details>
 
-Aqui o término com erro é esperado. Abra o `.out`, o `-md-ener.csv` e o `-traj.xyz`; mesmo um cálculo interrompido deixa dados úteis para o diagnóstico.
+## 2. Leia os avisos da própria trajetória
 
-## 2. Observe antes de corrigir
+No filme, use **0,25×** ou avance quadro a quadro para examinar a degradação; o quadro 31 corresponde a 75 fs. A velocidade de reprodução não altera a simulação.
 
-[Abrir falha e correção no aplicativo](../../visualizador/index.html?exemplo=timestep) · [Ver a trajetória que falhou](../../visualizador/index.html?exemplo=timestep&aba=trajetoria)
+[Abrir falha e correção](../../visualizador/index.html?exemplo=timestep)
 
-1. Veja a temperatura: **300 K → 3.409,97 K em 5 fs → cerca de 1,37 milhão K em 15 fs**.
-2. Em **Total · E**, selecione **Variação desde o início**. A energia cresce violentamente.
-3. Avance quadro a quadro na trajetória. As distorções acompanham a perda de estabilidade.
-4. No `.out`, procure `unreasonably large`, `Could not compute the energy` e `orca_md aborted by error`.
+1. Selecione **Total · E**, em ΔE, e examine **os primeiros 75 fs**. A energia não precisa esperar o cálculo abortar para revelar o erro.
+2. A 25 fs, T é **127 K**, mas ΔE já é **+23,2 kJ/mol**. A 75 fs, T é **269 K** e ΔE chega a **+43,6 kJ/mol**. Temperatura aparentemente plausível não garante boa integração.
+3. Volte à trajetória completa. A 100 fs, T já é aproximadamente **69 mil K**. Em Geometria, O 2–H 8 está a **19,8 Å**: o modelo numérico perdeu o sentido químico muito antes da última linha do output.
+4. O último registro é de **325 fs**, seguido de erro de avaliação eletrônica. O `.scf.log` preservado permite conferir o diagnóstico. O instante exato da falha pode mudar entre ambientes.
 
-**Isto é uma falha numérica, não uma reação química confiável.** Os movimentos mais rápidos, especialmente os estiramentos envolvendo H, exigem passos pequenos. Com 5 fs, o integrador avança demais antes de atualizar a força: o erro altera as posições, gera forças exageradas e se amplifica. A avaliação da energia acaba falhando depois da explosão de energia e temperatura.
+**Por que ocorre?** As forças mudam rapidamente quando ligações envolvendo H esticam. Um passo grande atualiza as posições usando informação que já não descreve bem a força no novo ponto. O erro de integração aumenta as distorções e pode alimentar ainda mais energia. A ruptura neste cálculo não é evidência de uma reação física.
 
-O [registro eletrônico da falha](resultados/etanol_dt500/etanol_dt500.scf.log) confirma que a autoconsistência de cargas do xTB deixou de convergir. Isso aconteceu depois da perda de estabilidade mostrada nos dados.
+## 3. Corrija a causa e repita
 
-## 3. Corrija e repita do começo
+Volte à **estrutura inicial intacta**, sem usar o restart defeituoso. Reduza para **0,5 fs** e use **1000 passos** para conservar o alvo de 500 fs. O resultado corrigido abaixo já está calculado e pode ser reutilizado do exercício 3.
 
-Volte à **estrutura inicial intacta** e à mesma inicialização de velocidades. Não reinicie da geometria que explodiu. Reduza `Timestep` para **0.5_fs** e aumente `Run` para **1000**: o alvo continua sendo **500 fs**.
-
-[Pacote para executar](aula-etanol_corrigido.zip) · [Input](inputs/etanol_corrigido.inp)
+[Baixar pacote](aula-etanol_corrigido.zip) · [Input](inputs/etanol_corrigido.inp) · [Estrutura](estruturas/etanol.xyz)
 
 ```text
 # Etanol com GFN2-xTB, sem banho termico (NVE).
@@ -102,13 +98,14 @@ end
 # Carga 0, multiplicidade 1; XYZ na mesma pasta.
 * xyzfile 0 1 etanol.xyz
 ```
+
 <details markdown="1"><summary>Executar no Ubuntu / WSL2</summary>
 
-Extraia o pacote em uma pasta nova. Abra o Ubuntu nessa pasta, com `ORCA_DIR` configurado no tutorial, e copie:
+Extraia o pacote e abra o Ubuntu nessa pasta. Com `ORCA_DIR` configurado no guia, copie:
 
 ```bash
 (
-  test -x "$ORCA_DIR/orca" || { echo "Configure ORCA_DIR antes de executar."; exit 1; }
+  test -x "$ORCA_DIR/orca" || { echo "Configure ORCA_DIR primeiro."; exit 1; }
   pasta=$(mktemp -d ./execucao-XXXXXX) || exit 1
   cp etanol_corrigido.inp etanol.xyz "$pasta/" || exit 1
   cd "$pasta" || exit 1
@@ -118,13 +115,13 @@ Extraia o pacote em uma pasta nova. Abra o Ubuntu nessa pasta, com `ORCA_DIR` co
 )
 ```
 
-Abra `explorer.exe .` para localizar os resultados. Execute um cálculo por vez.
+Abra `explorer.exe .` e localize a pasta `execucao-…`. Carregue **`etanol_corrigido.out`**, **`etanol_corrigido-md-ener.csv`** e **`etanol_corrigido-traj.xyz`** no laboratório. Execute um cálculo por vez.
 
 </details>
 
-<details markdown="1"><summary>Alternativa no Windows nativo</summary>
+<details markdown="1"><summary>Alternativa: Windows nativo</summary>
 
-Com ORCA/MS-MPI instalados, extraia o pacote numa pasta nova, abra o PowerShell nela e ajuste o caminho:
+Extraia o pacote em uma pasta nova. Abra o PowerShell nela e ajuste o caminho:
 
 ```powershell
 & 'C:\ORCA_6.1.1\orca.exe' etanol_corrigido.inp > etanol_corrigido.out 2>&1
@@ -133,20 +130,23 @@ Get-Content etanol_corrigido.out -Tail 12
 
 </details>
 
-Agora procure `ORCA TERMINATED NORMALLY`. No aplicativo, desmarque temporariamente a curva de 5 fs para enxergar a escala pequena das oscilações do caso corrigido. Confirme que a trajetória chegou a 500 fs e que as ligações se mantêm razoáveis.
+Na correção, o ORCA termina normalmente e a amplitude máximo–mínimo de E é cerca de **0,30 kJ/mol**, em vez do crescimento da execução instável. Desmarque a falha para enxergar essa escala pequena. Verifique também a duração e as distâncias; término normal sozinho não basta.
 
-**Não acrescente um termostato para esconder o aquecimento.** Primeiro corrija a integração. Aumentar apenas o número máximo de ciclos eletrônicos também não resolve a causa demonstrada aqui. O próprio ORCA recomenda até 0,5 fs para sistemas com H sem restrições; esse é um ponto de partida, que ainda deve ser verificado.
+**Não use um termostato para esconder o erro de integração.** Reduzir o timestep e repetir de um estado íntegro é a correção demonstrada. Aumentar somente o limite de ciclos SCF não resolve a causa deste caso.
 
-<details markdown="1"><summary>Depois da falha: comparar precisão e custo</summary>
+<details markdown="1"><summary>Controles adicionais: precisão e falha abrupta</summary>
 
-[Comparar 0,25, 0,5 e 2 fs](../../visualizador/index.html?exemplo=timestep_accuracy).
-Os três casos anteriores completam 500 fs. O caso de 2 fs termina normalmente, mas sua amplitude de energia é maior; ele mostra por que término normal não basta. A referência de 0,25 fs continua em [input](inputs/etanol_dt025.inp) e [pacote](aula-etanol_dt025.zip); a de 2 fs em [input](inputs/etanol_dt200.inp) e [pacote](aula-etanol_dt200.zip).
+[Comparar 0,25 / 0,5 / 2 fs](../../visualizador/index.html?exemplo=timestep_accuracy). Todos completaram 500 fs, mas o passo de 2 fs tem amplitude de energia de aproximadamente 6,63 kJ/mol. Há erro relevante mesmo sem abortar.
+
+O [exemplo anterior de 5 fs](../../visualizador/index.html?exemplo=timestep_abrupt) fica como apoio: ele falha em apenas 15 fs. A nova atividade usa 2,5 fs para permitir observar a degradação durante mais tempo.
 
 </details>
 
-## Resultados reais
+## Resultados e manual
 
-- **etanol_dt500:** [input usado](resultados/etanol_dt500/etanol_dt500.inp) · [saída](resultados/etanol_dt500/etanol_dt500.out) · [energias](resultados/etanol_dt500/etanol_dt500-md-ener.csv) · [trajetória](resultados/etanol_dt500/etanol_dt500-traj.xyz).
-- **etanol_corrigido:** [input usado](resultados/etanol_corrigido/etanol_corrigido.inp) · [saída](resultados/etanol_corrigido/etanol_corrigido.out) · [energias](resultados/etanol_corrigido/etanol_corrigido-md-ener.csv) · [trajetória](resultados/etanol_corrigido/etanol_corrigido-traj.xyz).
+- **etanol_instavel:** [saída](resultados/etanol_instavel/etanol_instavel.out) · [input usado](resultados/etanol_instavel/etanol_instavel.inp) · [energias](resultados/etanol_instavel/etanol_instavel-md-ener.csv) · [trajetória](resultados/etanol_instavel/etanol_instavel-traj.xyz) · [tempo de execução](resultados/etanol_instavel/execucao.json).
+- **etanol_corrigido:** [saída](resultados/etanol_corrigido/etanol_corrigido.out) · [input usado](resultados/etanol_corrigido/etanol_corrigido.inp) · [energias](resultados/etanol_corrigido/etanol_corrigido-md-ener.csv) · [trajetória](resultados/etanol_corrigido/etanol_corrigido-traj.xyz) · [tempo de execução](resultados/etanol_corrigido/execucao.json).
 
-**Manual:** [Timestep](https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html#timestep) · [Integração temporal](https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html#time-integration).
+[Manual ORCA: dinâmica molecular](https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html).
+
+[Registro eletrônico da falha](resultados/etanol_instavel/etanol_instavel.scf.log).

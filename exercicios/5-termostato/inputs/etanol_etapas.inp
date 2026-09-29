@@ -1,0 +1,24 @@
+# Exemplo didatico; oito processos solicitados.
+! MD XTB2 PAL8
+%maxcore 256
+
+%md
+  Randomize 42
+  Initvel 300_K
+  Dump Position Stride 1 Filename "etanol_etapas-traj.xyz"
+  Timestep 0.5_fs
+  # 0-0.5 ps: inicio a 300 K.
+  Thermostat CSVR 300_K Timecon 100_fs
+  Run 1000
+  # 0.5-1.5 ps: aquecer gradualmente ate 600 K.
+  Thermostat CSVR 300_K Timecon 100_fs Ramp 600_K
+  Run 2000
+  # 1.5-3.5 ps: manter o alvo final da rampa.
+  Run 4000
+  # 3.5-4.5 ps: resfriar gradualmente.
+  Thermostat CSVR 600_K Timecon 100_fs Ramp 300_K
+  Run 2000
+  # 4.5-5 ps: continuar a 300 K, sem reiniciar velocidades.
+  Run 1000
+end
+* xyzfile 0 1 etanol.xyz

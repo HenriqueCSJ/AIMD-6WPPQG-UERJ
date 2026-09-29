@@ -9,11 +9,11 @@ O aluno carrega os arquivos e passa diretamente à interpretação. Não precisa
 1. Abra `visualizador/index.html` em um navegador moderno, mantendo as pastas do repositório juntas. Também funciona pelo site estático quando o repositório estiver publicado.
 2. Para ver o movimento, selecione `nome-traj.xyz`: a aba **Trajetória 3D** abre automaticamente, mesmo sem outros arquivos. Junte `nome-md-ener.csv` para energias/temperatura e `nome.out` para as condições do cálculo. Pode carregar todos juntos. Arquivos com o mesmo nome-base são associados. Recarregar uma série que já existe cria outra entrada, preservando a anterior.
 3. Arraste a molécula para girar, use a roda para ampliar e clique em **Reproduzir**. As setas avançam quadro a quadro; a barra e **Ir ao quadro** escolhem um ponto da trajetória. **Velocidade** altera apenas a reprodução. Clique em um átomo para acompanhar suas coordenadas; **Centralizar** restaura a vista inicial.
-4. Explore **Energia e temperatura** e **Distâncias**. Para comparar, carregue outro cálculo e marque até quatro simulações. Um XYZ de apenas um quadro pode ser girado e ampliado, mas não contém uma animação.
+4. Explore **Energia e temperatura** e **Geometria**. Para comparar, carregue outro cálculo e marque até quatro simulações. Um XYZ de apenas um quadro pode ser girado e ampliado, mas não contém uma animação.
 
 No WSL, use `explorer.exe .` na pasta do cálculo para encontrá-la pelo seletor de arquivos do Windows. O aplicativo não precisa executar dentro do WSL.
 
-O seletor de exemplos oferece os sete momentos da aula e a extensão H₂O@C₆₀, usando quinze cálculos reais já preservados neste repositório. **Ver trajetória 3D** abre diretamente a molécula do exemplo escolhido. Os exemplos são identificados como referências dos ministrantes. A cópia local inclui os dados e a biblioteca molecular: a leitura e os exemplos não precisam de internet. Links para o manual do ORCA são externos.
+O seletor de exemplos oferece os sete momentos da aula e a extensão H₂O@C₆₀, usando dezenove cálculos reais já preservados neste repositório. **Ver trajetória 3D** abre diretamente a molécula do exemplo escolhido. Os exemplos são identificados como referências dos ministrantes. A cópia local inclui os dados e a biblioteca molecular: a leitura e os exemplos não precisam de internet. Links para o manual do ORCA são externos.
 
 ## O que pode ser observado
 
@@ -21,10 +21,10 @@ O seletor de exemplos oferece os sete momentos da aula e a extensão H₂O@C₆�
 - **Temperatura em K**, em um gráfico separado. Condições NVE/NVT são lidas do input reproduzido no `.out`, quando reconhecíveis, ou informadas pelo aluno; não são inferidas da aparência dos números.
 - **Tempo em fs, ps ou s**, com duração física explícita, preservando o relógio de um reinício.
 - **Animação XYZ**, reprodução/pausa, velocidade de 0,25× a 4×, avanço/retorno de um quadro, escolha direta pelo número, rotação, ampliação, índices dos átomos e energias/temperatura do ponto correspondente. A câmera permanece na orientação escolhida durante a animação. As coordenadas do átomo selecionado acompanham o quadro atual. A sincronização exige tempo e, quando presente, passo compatíveis; não é feita pela posição da linha.
-- **Distância entre quaisquer dois átomos**, calculada diretamente de cada quadro XYZ, sem `Manage_Colvar` no input. Índices começam em zero. Também lê Colvars de distância em Angstrom; forças e ângulos não viram distâncias.
-- **Exportação CSV** das séries de energia originais e das distâncias selecionadas. A exportação energética mantém Hartree/fs/K, independentemente da transformação usada no gráfico.
+- **Distâncias, ângulos e diedros**, calculada diretamente de cada quadro XYZ, sem `Manage_Colvar` no input. Índices começam em zero. Também lê Colvars de distância em Angstrom; forças e ângulos não viram distâncias.
+- **Exportação CSV** das séries de energia originais e das medidas geométricas selecionadas. A exportação energética mantém Hartree/fs/K, independentemente da transformação usada no gráfico.
 
-Os traços moleculares são apenas uma ajuda visual por proximidade, entre átomos não metálicos; podem ser desligados. Não codificam ordem de ligação nem comprovam coordenação. O XYZ contém posições, não uma topologia química. Para examinar o Zn, use as distâncias.
+Os traços covalentes são estimados por proximidade. As ligações H aparecem tracejadas e os contatos de coordenação podem ser ligados/desligados separadamente. São sugestões geométricas, não ordens de ligação obtidas de uma análise eletrônica. O XYZ não define protonação ou caráter aceptor completo: examine o contexto químico antes de interpretar um traço.
 
 ## Leitura e limites
 
@@ -51,7 +51,7 @@ O aplicativo usa HTML/CSS/JavaScript locais, gráficos SVG e [3Dmol.js](https://
 Para repetir as verificações do leitor, na raiz do repositório:
 
 ```text
-node --test visualizador/tests/parser.test.cjs
+node --test visualizador/tests/*.test.cjs
 ```
 
 Para reconstruir os exemplos a partir dos arquivos originais preservados:
@@ -62,7 +62,7 @@ node scripts/build_viewer_examples.cjs
 
 Nenhum desses comandos executa ORCA. O aluno não precisa de Node; ele apenas abre o aplicativo. A implementação é uma versão de trabalho para o curso, com verificação funcional e visual local. O site está publicado no GitHub Pages, com abertura, carregamento do exemplo de timestep e reprodução da trajetória conferidos no endereço público. O ensaio integral com a turma permanece pendente.
 
-Verificação desta versão: 11 testes automatizados aprovados; leitura comparada com nove séries MD reais; doze distâncias do complexo conferidas contra os Colvars originais. Upload, exemplos, animação, seleção de distâncias, conversões de unidades e exportação foram exercitados no navegador, incluindo uma tela de 390 px. A abertura foi verificada por HTTP local. A abertura direta de `index.html` pelo sistema de arquivos não foi verificada, pois esse protocolo é bloqueado no navegador integrado usado para os testes.
+Os testes automatizados conferem parsing, unidades, falhas, reinícios, programas de temperatura e geometria. Os doze pares de distâncias do complexo são comparados aos Colvars originais. A abertura direta por file:// não foi verificada, pois esse protocolo é bloqueado no navegador integrado; a verificação usa HTTP local e GitHub Pages.
 
 
 ## Reprodução e novos exemplos
@@ -71,6 +71,16 @@ O tempo físico usa campos estáveis em fs, ps e segundos, com precisão fixa du
 
 As referências maiores usam uma prévia amostrada para reduzir a transferência, sempre identificada sob a animação. Cada coordenada e tempo mostrado vem de um quadro real; não há interpolação. Os links para os XYZ originais mantêm todos os quadros e os uploads são lidos integralmente. Energias não são reduzidas.
 
-- Timestep: 5 fs causa uma falha real, identificada como dados parciais; 0,5 fs demonstra a correção.
+- Timestep: 2,5 fs causa uma falha progressiva, com registros até 325 fs, identificada como dados parciais; 0,5 fs demonstra a correção.
 - Parede: comparação de 2 ps; a esfera indica uma parede fixa reconhecida no input do `.out`. XYZ sozinho não define uma parede.
 - H₂O@C₆₀: carbonos em armação fina para permitir ver a água interna; nenhuma posição é alterada.
+
+## Medidas químicas e protocolos
+
+Em **Geometria**, escolha distância (2 átomos, Å), ângulo (3 átomos, graus) ou diedro (4 átomos, graus). O atalho do etanol usa C 0–C 1–O 2–H 8. O gráfico interrompe a linha ao cruzar a convenção +180°/−180° para não desenhar uma rotação fictícia de 360°. Não misture graus e Å no mesmo eixo.
+
+O critério visual inicial de ligação H usa D/A = N ou O, H ligado geometricamente ao doador, H···A ≤ 2,5 Å, D···A ≤ 3,5 Å e D–H···A ≥ 150°. É um filtro de visualização para estes exercícios, não a definição universal de ligação H. Coordenação usa um corte geométrico editável, inicialmente 2,6 Å para Zn···N/O; sua adequação depende do metal e do ligante.
+
+Quando o `.out` contém uma sequência simples de `Run`, o laboratório mostra as etapas programadas e os alvos/rampas de temperatura. O programa não comprova que a dinâmica chegou ao fim de todas as etapas: confira o tempo efetivo dos dados. Reinícios e programas regionais não recebem uma linha do tempo inferida sem suporte. O valor-alvo do termostato não é a temperatura instantânea medida.
+
+O exemplo de timestep permite examinar os primeiros 75 fs antes do aquecimento extremo. O etanol em etapas mostra libração e mudanças de orientação da hidroxila em 5 ps. Nenhum dos dois estima uma barreira ou população de equilíbrio.

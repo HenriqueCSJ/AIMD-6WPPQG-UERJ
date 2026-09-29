@@ -2,11 +2,11 @@
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="description" content="Leia resultados de dinâmica molecular do ORCA: energias, temperatura, trajetórias e distâncias. Tudo no seu navegador.">
+  <meta name="description" content="Leia resultados de dinâmica molecular do ORCA: energias, temperatura, trajetórias e medidas geométricas. Tudo no seu navegador.">
   <title>Laboratório de trajetórias · AIMD com ORCA</title>
-  <link rel="stylesheet" href="app.css?v=20260928-workshop4">
-  <script defer src="orca-parser.js?v=20260928-workshop4"></script><script defer src="charts.js"></script>
-  <script defer src="vendor/3Dmol-min.js"></script><script defer src="examples.js?v=20260928-workshop4"></script><script defer src="app.js?v=20260928-workshop4"></script>
+  <link rel="stylesheet" href="app.css?v=20260929-chemistry2">
+  <script defer src="orca-parser.js?v=20260929-chemistry2"></script><script defer src="charts.js"></script><script defer src="geometry.js?v=20260929-chemistry2"></script>
+  <script defer src="vendor/3Dmol-min.js"></script><script defer src="examples.js?v=20260929-chemistry2"></script><script defer src="app.js?v=20260929-chemistry2"></script>
 </head>
 <body>
 <a class="skip" href="#main">Ir para o conteúdo</a>
@@ -34,13 +34,14 @@
       <h2>Abra um resultado pronto</h2>
       <label class="sr-only" for="example-select">Exemplo do minicurso</label>
       <select id="example-select">
-        <option value="water">1 · Água com DFT</option>
-        <option value="solvent">2 · Água: vácuo × CPCM</option>
-        <option value="ethanol">3 · Etanol com XTB2</option>
-        <option value="timestep" selected>4 · Timestep: falha e correção</option>
-        <option value="timestep_accuracy">4b · Timestep: precisão e custo</option><option value="thermostat">5 · NVE × termostato</option>
+        <option value="water">1 · Dímero de água: ligação H com DFT</option>
+        <option value="solvent">2 · Dímero: vácuo × CPCM</option>
+        <option value="ethanol">3 · Etanol: oscilação da torsão</option>
+        <option value="timestep" selected>4 · Timestep: instabilidade e correção</option>
+        <option value="timestep_accuracy">4b · Timestep: precisão e custo</option><option value="thermostat">5 · Etanol: aquecer e resfriar</option>
         <option value="solvator">6 · Complexo e SOLVATOR</option>
         <option value="complex">7 · Parede: retenção das águas</option><option value="fullerene">8 · Água dentro de C₆₀ (opcional)</option><option value="complex_short">Apoio · Parede: referência curta</option>
+        <option value="water_single">Apoio · Água isolada</option><option value="solvent_single">Apoio · Água isolada: vácuo × CPCM</option><option value="timestep_abrupt">Apoio · Falha abrupta com 5 fs</option><option value="thermostat_compare">Apoio · NVE × termostato</option>
       </select>
       <div class="example-actions"><button class="button secondary" id="example-button" type="button">Explorar exemplo <span aria-hidden="true">→</span></button><button class="button" id="example-trajectory-button" type="button">Ver trajetória 3D</button></div>
       <p class="muted small">Resultados reais do minicurso, identificados como referência.</p>
@@ -54,17 +55,19 @@
     <div class="tabs" role="tablist" aria-label="O que deseja observar?">
       <button type="button" role="tab" id="tab-energy" aria-selected="true" aria-controls="panel-energy" data-tab="energy">01 <span>Energia e temperatura</span></button>
       <button type="button" role="tab" id="tab-trajectory" aria-selected="false" aria-controls="panel-trajectory" tabindex="-1" data-tab="trajectory">02 <span>Trajetória 3D</span></button>
-      <button type="button" role="tab" id="tab-distance" aria-selected="false" aria-controls="panel-distance" tabindex="-1" data-tab="distance">03 <span>Distâncias</span></button>
+      <button type="button" role="tab" id="tab-distance" aria-selected="false" aria-controls="panel-distance" tabindex="-1" data-tab="distance">03 <span>Geometria</span></button>
     </div>
 
     <section id="panel-energy" role="tabpanel" aria-labelledby="tab-energy">
       <div class="toolbar">
         <label>Mostrar energia como<select id="energy-mode"><option value="delta">Variação desde o início (Δ)</option><option value="absolute">Valor absoluto</option></select></label>
         <label>Unidade de energia<select id="energy-unit"><option value="kj">kJ/mol</option><option value="eh">Hartree (Eh)</option></select></label>
-        <label>Tempo no eixo<select id="time-unit"><option value="fs">fs</option><option value="ps">ps</option><option value="s">s</option></select></label>
+      <label>Tempo no eixo<select id="time-unit"><option value="fs">fs</option><option value="ps">ps</option><option value="s">s</option></select></label>
+        <label>Janela inicial (fs)<input id="energy-window-from" class="energy-window-input" type="number" step="any" placeholder="início"></label><label>Janela final (fs)<input id="energy-window-to" class="energy-window-input" type="number" step="any" placeholder="fim"></label><button type="button" class="button small-button" id="energy-first-window" hidden>Primeiros 75 fs</button><button type="button" class="button small-button" id="energy-window-full">Trajetória completa</button>
         <button type="button" class="button small-button" id="export-energy">Baixar dados CSV</button>
       </div>
       <fieldset class="series-controls"><legend class="sr-only">Energias visíveis</legend><label><input type="checkbox" name="energy-series" value="total" checked> Total · E</label><label><input type="checkbox" name="energy-series" value="potential" checked> Potencial · U</label><label><input type="checkbox" name="energy-series" value="kinetic" checked> Cinética · K</label><span id="delta-note">ΔX = X(t) − X(primeiro ponto), para cada curva.</span></fieldset>
+      <div id="energy-stage-summary" class="stage-summary" hidden></div>
       <div id="energy-empty" class="empty" hidden></div>
       <div id="energy-content">
         <div id="time-summary" class="time-summary"></div>
@@ -76,8 +79,9 @@
     </section>
 
     <section id="panel-trajectory" role="tabpanel" aria-labelledby="tab-trajectory" hidden>
-      <div class="toolbar"><label>Simulação<select id="trajectory-run"></select></label><button type="button" class="button small-button" id="reset-view">Centralizar</button><label class="check-label"><input id="proximity-lines" type="checkbox" checked> Traços de proximidade</label><label class="check-label"><input id="atom-labels" type="checkbox"> Mostrar índices</label></div>
-      <p id="trajectory-status" class="trajectory-status" hidden></p><div id="trajectory-empty" class="empty" hidden></div>
+      <div class="toolbar"><label>Simulação<select id="trajectory-run"></select></label><button type="button" class="button small-button" id="reset-view">Centralizar</button><label class="check-label"><input id="proximity-lines" type="checkbox" checked> Traços de proximidade</label><label class="check-label"><input id="atom-labels" type="checkbox"> Mostrar índices</label><label class="check-label"><input id="hydrogen-bonds" type="checkbox" checked> Ligações H</label><label class="check-label"><input id="coordination-contacts" type="checkbox" checked> Coordenação</label><label class="contact-cutoff-control">Corte metal–N/O (Å)<input id="coordination-cutoff" type="number" min="2" max="3.5" step="0.1" value="2.6" inputmode="decimal"></label></div>
+      <p class="contact-heuristic">Contatos tracejados são sugestões geométricas por quadro: não inferem ordem de ligação, protonação nem a química de aceitador/coordenação a partir do XYZ. O corte metal–N/O é genérico e ajustável.</p>
+      <p id="trajectory-status" class="trajectory-status" hidden></p><div id="trajectory-stage-summary" class="stage-summary" hidden></div><div id="trajectory-empty" class="empty" hidden></div>
       <div id="trajectory-content" class="trajectory-layout">
         <div class="molecule-card">
           <div id="molecule" aria-label="Estrutura molecular interativa. Arraste para girar e use a roda para ampliar." role="img"></div>
@@ -93,21 +97,22 @@
             <div class="timeline-control"><label class="sr-only" for="frame-slider">Quadro da trajetória</label><input id="frame-slider" type="range" min="0" max="0" value="0"><output id="frame-time"></output></div>
           </div>
           <p class="small muted playback-note">A velocidade altera apenas a reprodução. O tempo físico é o registrado no XYZ.</p>
-          <p class="small muted molecule-note">Arraste para girar · Roda para ampliar · Clique para identificar um átomo. Os traços entre átomos não metálicos são estimados por proximidade; não representam ordens de ligação. Use Distâncias para examinar a coordenação do metal.</p>
+          <p class="small muted molecule-note">Arraste para girar · Roda para ampliar · Clique para identificar um átomo. Os traços entre átomos não metálicos são estimados por proximidade; não representam ordens de ligação. Use Geometria para medir distâncias, ângulos e diedros.</p>
         </div>
-        <aside class="trajectory-aside"><span class="eyebrow">NO QUADRO ATUAL</span><div id="frame-values"></div><div id="atom-info" class="atom-info">Selecione um átomo para ver seu índice e suas coordenadas.</div><div class="interpret"><h3>Observe o movimento</h3><p>O que vibra? O que gira? O solvente se reorganiza?</p><p>A velocidade da animação é uma escolha de reprodução; o tempo físico aparece abaixo da molécula.</p><button class="text-button" type="button" id="goto-distances">Medir uma distância →</button></div></aside>
+        <aside class="trajectory-aside"><span class="eyebrow">NO QUADRO ATUAL</span><div id="frame-values"></div><div id="atom-info" class="atom-info">Selecione um átomo para ver seu índice e suas coordenadas.</div><div class="interpret"><h3>Observe o movimento</h3><p>O que vibra? O que gira? O solvente se reorganiza?</p><p>A velocidade da animação é uma escolha de reprodução; o tempo físico aparece abaixo da molécula.</p><button class="text-button" type="button" id="goto-distances">Medir uma geometria →</button></div></aside>
       </div>
     </section>
 
     <section id="panel-distance" role="tabpanel" aria-labelledby="tab-distance" hidden>
-      <div class="toolbar"><label>Simulação<select id="distance-run"></select></label><label>Origem das distâncias<select id="distance-source"><option value="xyz">Coordenadas XYZ</option><option value="colvars">CSV de Colvars</option></select></label><button class="button small-button" id="export-distance" type="button">Baixar distâncias CSV</button></div>
+      <div class="toolbar"><label>Simulação<select id="distance-run"></select></label><label>Origem dos dados<select id="distance-source"><option value="xyz">Coordenadas XYZ</option><option value="colvars">CSV de Colvars</option></select></label><button class="button small-button" id="export-distance" type="button">Baixar dados CSV</button></div>
       <div id="distance-empty" class="empty" hidden></div>
       <div id="distance-content">
-        <div id="atom-pair-controls" class="pair-controls"><label>Primeiro átomo<select id="atom-a"></select></label><span class="pair-dash" aria-hidden="true">—</span><label>Segundo átomo<select id="atom-b"></select></label><button type="button" class="button secondary" id="add-distance">Adicionar distância</button><p class="small muted">Índices começam em 0, como no ORCA. Não precisa alterar o input.</p></div>
+        <div id="atom-pair-controls" class="pair-controls"><label>Medida<select id="geometry-type"><option value="distance">Distância · 2 átomos</option><option value="angle">Ângulo · 3 átomos</option><option value="dihedral">Diedro assinado · 4 átomos</option></select></label><div id="geometry-atom-a"><label>Átomo 1<select id="atom-a"></select></label></div><span class="pair-dash" aria-hidden="true">—</span><div id="geometry-atom-b"><label>Átomo 2<select id="atom-b"></select></label></div><div id="geometry-atom-c" hidden><span class="pair-dash" aria-hidden="true">—</span><label>Átomo 3<select id="atom-c"></select></label></div><div id="geometry-atom-d" hidden><span class="pair-dash" aria-hidden="true">—</span><label>Átomo 4<select id="atom-d"></select></label></div><button type="button" class="button secondary" id="add-distance">Adicionar medida</button><button type="button" class="button" id="ethanol-preset" hidden>Etanol C–C–O–H</button><p id="geometry-help" class="small muted">Índices começam em 0, como no ORCA. Medidas usam as coordenadas de cada quadro.</p></div>
+        <p id="geometry-preview-note" class="preview-note small muted" hidden></p>
         <div id="colvar-controls" class="series-controls" hidden></div><div id="distance-chips" class="distance-chips"></div>
-        <div class="chart-card"><div class="chart-heading"><h3>Distância entre átomos</h3><span class="muted small">Coordenadas em Å</span></div><div id="distance-chart" class="chart"></div></div><div id="distance-stats" class="stats-row"></div>
+        <div class="chart-card"><div class="chart-heading"><h3 id="distance-chart-title">Medidas geométricas</h3><span id="distance-chart-unit-note" class="muted small">Distâncias em Å</span></div><div id="distance-chart" class="chart"></div></div><div id="distance-stats" class="stats-row"></div>
       </div>
-      <aside class="interpret"><h3>Proximidade é uma observação. Ligação é uma interpretação.</h3><p>A distância oscila em uma faixa ou muda de maneira persistente? Compare a curva com a trajetória. A ausência de troca de ligantes em poucos femtossegundos não determina estabilidade termodinâmica ou velocidade de reação.</p></aside>
+      <aside class="interpret"><h3>Uma medida é uma observação. A interpretação precisa do contexto.</h3><p>A curva oscila em uma faixa ou muda de maneira persistente? Compare a medida com a trajetória. Ângulos e diedros estão em graus; distâncias estão em Å e não são misturados no mesmo gráfico.</p><p>Um diedro assinado pode cruzar −180/180°. O gráfico abre uma lacuna nesse salto para não desenhar uma rotação falsa.</p></aside>
     </section>
 
     <details class="details" id="file-details"><summary>Arquivos, condições do cálculo e observações de leitura</summary><div id="file-details-content"></div></details>
