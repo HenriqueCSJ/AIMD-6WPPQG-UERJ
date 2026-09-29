@@ -1,0 +1,245 @@
+% !TEX program = xelatex
+% Fonte principal da apresentacao. Compile a partir desta pasta.
+% WORK: introducao didatica para o minicurso pratico, em revisao pelos ministrantes.
+\documentclass[aspectratio=169,11pt]{beamer}
+\usepackage[T1]{fontenc}
+\usepackage[brazil]{babel}
+\usepackage{lmodern}
+\usepackage{textcomp}
+\usepackage{amsmath,amssymb,graphicx}
+
+% Sistema visual centralizado: papel claro, texto escuro, acentos da arte do evento.
+\definecolor{Ink}{HTML}{202B35}
+\definecolor{Teal}{HTML}{205B6C}
+\definecolor{Plum}{HTML}{4A2058}
+\definecolor{Muted}{HTML}{53606A}
+\definecolor{Rule}{HTML}{DCE4E6}
+\setbeamercolor{normal text}{fg=Ink,bg=white}
+\setbeamercolor{structure}{fg=Teal}
+\setbeamercolor{frametitle}{fg=Plum}
+\setbeamercolor{footline}{fg=Ink,bg=white}
+\setbeamerfont{normal text}{size=\fontsize{13}{16}\selectfont}
+\setbeamerfont{frametitle}{size=\fontsize{21}{25}\selectfont,series=\bfseries}
+\setbeamerfont{footline}{size=\fontsize{9}{11}\selectfont}
+\setbeamerfont{title}{size=\fontsize{26}{30}\selectfont,series=\bfseries}
+\setbeamerfont{subtitle}{size=\fontsize{13}{16}\selectfont}
+\setbeamerfont{capability heading}{size=\fontsize{15}{18}\selectfont,series=\bfseries}
+\setbeamerfont{capability body}{size=\fontsize{13}{16}\selectfont}
+\setbeamerfont{capability number}{size=\fontsize{22}{26}\selectfont}
+\setbeamerfont{capability caption}{size=\fontsize{11}{14}\selectfont}
+\setbeamersize{text margin left=9mm,text margin right=9mm}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{itemize item}{\color{Teal}\small\textbullet}
+\setbeamertemplate{frametitle}{%
+  \vspace{3.5mm}\insertframetitle\par\vspace{1.5mm}%
+}
+\setbeamertemplate{footline}{%
+  \hspace{9mm}\begin{minipage}{\dimexpr\paperwidth-18mm\relax}
+  {\color{Rule}\hrule height 0.4pt}\vspace{1.5mm}
+  \usebeamerfont{footline}AIMD com ORCA\hfill 6\textordmasculine{} Workshop PPGQ--UERJ\hfill\insertframenumber/\inserttotalframenumber
+  \vspace{2.5mm}
+  \end{minipage}%
+}
+\usefonttheme[onlymath]{serif}
+\AtBeginDocument{\usebeamerfont{normal text}}
+\setlength{\parskip}{0.7mm}
+\setlength{\parindent}{0pt}
+\setlength{\jot}{0pt}
+\everydisplay{%
+  \setlength{\abovedisplayskip}{5pt}%
+  \setlength{\belowdisplayskip}{5pt}%
+  \setlength{\abovedisplayshortskip}{3pt}%
+  \setlength{\belowdisplayshortskip}{3pt}%
+}
+\newcommand{\lead}[1]{{\color{Muted}#1\par}}
+\newcommand{\takeaway}[1]{\par\vfill{\color{Teal}\bfseries #1\par}}
+\newcommand{\source}[2]{{\fontsize{9}{11}\selectfont\color{Muted}\href{#1}{#2}\par}}
+\newcommand{\capabilityheading}[1]{{\usebeamerfont{capability heading}\color{Teal}#1\par}\vspace{1mm}}
+\newcommand{\capabilitynumber}[2]{{\usebeamerfont{capability number}\color{Plum}#1\par}{\usebeamerfont{capability caption}\color{Muted}#2\par}}
+\newcommand{\capabilityseparator}{\par\vspace{3mm}{\color{Rule}\hrule height 0.4pt}\vspace{3mm}}
+\newcommand{\R}{\mathbf R}
+\newcommand{\F}{\mathbf F}
+\DeclareMathSizes{15}{15}{10.5}{8}
+% Espacamento comum das equacoes; preserva o corpo matematico de 15 pt.
+\newenvironment{conceptmath}{\vspace{-3mm}\begingroup\fontsize{15}{17}\selectfont}{\endgroup\ignorespacesafterend}
+
+\title{Dinâmica Molecular Ab Initio com ORCA}
+\subtitle{Fundamentos, simulação e análise de trajetórias}
+\author{Henrique de Castro Silva Junior \and Virginia Camila Rufino Ferreira}
+\date{7 de outubro de 2026}
+\hypersetup{%
+  unicode=true,pdfencoding=unicode,pdflang={pt-BR},
+  pdftitle={Dinâmica Molecular Ab Initio com ORCA},
+  pdfauthor={Henrique de Castro Silva Junior; Virginia Camila Rufino Ferreira},
+  pdfsubject={Minicurso 4 do 6º Workshop do PPGQ-UERJ},
+  pdfkeywords={ORCA, dinâmica molecular, AIMD, Born-Oppenheimer},
+  colorlinks=true,urlcolor=Teal,linkcolor=Teal
+}
+
+\begin{document}
+
+% S01 -- Capa: autoria, identidade institucional e encontro.
+\begingroup
+\setbeamertemplate{frametitle}{}
+\begin{frame}[plain,t,label=capa]{Capa: Dinâmica Molecular Ab Initio com ORCA}
+\vspace*{3mm}
+\begin{minipage}[c][20mm][c]{0.45\textwidth}
+  \includegraphics[width=\linewidth]{../../assets/workshop-ppgq-uerj-2026.jpeg}
+\end{minipage}\hfill
+\begin{minipage}[c][20mm][c]{0.15\textwidth}
+  \centering\includegraphics[height=17mm]{../../assets/uerj-logo.png}
+\end{minipage}\hfill
+\begin{minipage}[c][20mm][c]{0.18\textwidth}
+  \centering\includegraphics[height=21mm]{../../assets/ufrrj-logo-compacto.png}
+\end{minipage}
+\par\vspace{3mm}
+{\fontsize{10}{12}\selectfont\color{Teal}\bfseries MINICURSO 4\par}
+\vspace{1mm}
+{\usebeamerfont{title}\color{Plum}Dinâmica Molecular\par
+\emph{Ab Initio} com ORCA\par}
+\vspace{2mm}
+{\usebeamerfont{subtitle}\color{Muted}\insertsubtitle\par}
+\vfill
+\begin{minipage}[t]{0.49\textwidth}
+  \fontsize{12}{14}\selectfont\bfseries Henrique de Castro\\Silva Junior
+\end{minipage}\hfill
+\begin{minipage}[t]{0.49\textwidth}
+  \fontsize{12}{14}\selectfont\bfseries Virginia Camila\\Rufino Ferreira
+\end{minipage}
+\par\vspace{2mm}
+{\fontsize{10}{13}\selectfont\color{Muted}
+\textbf{7 de outubro de 2026}\quad\textbar\quad 13h--16h e 17h--18h\par
+Encontro remoto\quad\textbar\quad Horário de Brasília (UTC$-$3)\par}
+\vspace{2mm}
+\end{frame}
+\endgroup
+
+% S02 -- Das interacoes parametrizadas a energia, as forcas e ao movimento.
+% Decomposicao ilustrativa de um campo de forca molecular convencional.
+% U_FF e uma notacao generica; nao especifica o modelo Universal Force Field.
+\begin{frame}[t,label=md-classica]{Dinâmica molecular clássica}
+\lead{Um campo de força associa uma energia a cada geometria.}
+\begin{conceptmath}
+\[
+ U_{\mathrm{FF}}=
+ \underbrace{U_{\mathrm{lig}}+U_{\mathrm{ang}}+U_{\mathrm{tor}}}_{\text{interações ligadas}}
+ +\underbrace{U_{\mathrm{vdW}}+U_{\mathrm{eletrost}}}_{\text{interações não ligadas}}
+\]
+\end{conceptmath}
+{\fontsize{11}{14}\selectfont\color{Muted}
+Ligações: alongar; ângulos: dobrar; torções: girar.\par
+Não ligadas: van der Waals e eletrostática.\par}
+\begin{conceptmath}
+\[
+ \F_I=-\nabla_I U_{\mathrm{FF}}(\R)
+ \qquad
+ M_I\,\mathbf a_I=\F_I
+\]
+\end{conceptmath}
+{\fontsize{11}{14}\selectfont\color{Muted}
+$\R$: posições; $\F_I$: força; $M_I$: massa; $\mathbf a_I$: aceleração do átomo $I$.\par}
+\takeaway{Atualizar posições e velocidades; repetir para obter a trajetória.}
+\source{https://www.faccts.de/docs/orca/6.1/manual/contents/modelchemistries/mm.html}{Referência: manual ORCA 6.1, seção 3.23 (Molecular Mechanics).}
+\end{frame}
+
+% S03 -- BOMD: o ciclo pratico do calculo eletronico e da propagacao nuclear.
+% E_el exclui V_NN; E_BO inclui ambas as parcelas, sem dupla contagem.
+% Energia e gradiente aproximados pelo metodo escolhido. Nucleos classicos.
+\begin{frame}[t,label=aimd]{Dinâmica molecular \textit{ab initio}}
+\lead{No ORCA: dinâmica de Born--Oppenheimer (BOMD).}
+\begin{conceptmath}
+\begin{gather*}
+ E_{\mathrm{BO}}(\R)=
+ \underbrace{E_{\mathrm{el}}(\R)}_{\text{energia eletrônica}}
+ +\underbrace{V_{\mathrm{NN}}(\R)}_{\text{repulsão entre núcleos}}
+ \\[2mm]
+ \F_I=-\nabla_I E_{\mathrm{BO}}(\R)
+ \qquad
+ M_I\,\mathbf a_I=\F_I
+\end{gather*}
+\end{conceptmath}
+\vspace{-7mm}
+\begin{enumerate}
+ \setlength{\itemsep}{1mm}
+ \item Calcular energia e forças (ex.: DFT), com núcleos fixos.
+ \item Atualizar posições e velocidades pelas forças obtidas.
+ \item Repetir o cálculo para a nova geometria.
+\end{enumerate}
+\takeaway{Os núcleos seguem Newton; muda o cálculo das forças.}
+\source{https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html}{Referência: manual ORCA 6.1, seção 7.1 (Ab initio Molecular Dynamics).}
+\end{frame}
+
+% S04 -- MD classica: escalas indicativas e benchmark publicado identificado.
+\begin{frame}[t,label=capacidades-md]{MD clássica: escala e custo}
+\begin{columns}[T,onlytextwidth]
+ \begin{column}{0.48\textwidth}
+  \capabilitynumber{$10^3$--$10^6$ átomos}{Escala indicativa de sistemas.}
+ \end{column}
+ \begin{column}{0.48\textwidth}
+  \capabilitynumber{$\approx31$ ns/dia}{1,4 milhão de átomos; 1 GH200.\par
+  GROMACS 2024.1, benchmark CSCS.}
+ \end{column}
+\end{columns}
+\capabilityseparator
+\begin{columns}[T,onlytextwidth]
+ \begin{column}{0.48\textwidth}
+  \capabilityheading{Vantagens}
+  \usebeamerfont{capability body}
+  Menor custo por passo.\par
+  Trajetórias de ns ou mais.\par
+  Mais amostragem por orçamento.\par
+ \end{column}
+ \begin{column}{0.48\textwidth}
+  \capabilityheading{Limitações}
+  \usebeamerfont{capability body}
+  Depende dos parâmetros.\par
+  Reações exigem um campo reativo.\par
+ \end{column}
+\end{columns}
+\takeaway{Muitos átomos e trajetórias longas com menor custo.}
+{\usebeamerfont{capability caption}\color{Muted}
+$1\ \mathrm{ns}=10^{-9}\ \mathrm{s}$; ns/dia: tempo simulado por dia de execução.\par}
+{\fontsize{9}{11}\selectfont\color{Muted}
+Fontes: \href{https://docs.cscs.ch/software/sciapps/gromacs/}{CSCS / GROMACS};
+\href{https://docs.lammps.org/pair_reaxff.html}{LAMMPS / ReaxFF}.\par}
+\end{frame}
+
+% S05 -- AIMD: capacidades quimicas, custo e amostragem de eventos raros.
+\begin{frame}[t,label=capacidades-aimd]{AIMD: química, custo e amostragem}
+\begin{columns}[T,onlytextwidth]
+ \begin{column}{0.48\textwidth}
+  \capabilitynumber{$\sim10^2$ átomos}{Escala indicativa com DFT;\par
+  trajetórias usualmente de ps.}
+ \end{column}
+ \begin{column}{0.48\textwidth}
+  \capabilitynumber{$10\ \mathrm{ps}=10^{-11}\ \mathrm{s}$}{Exemplo: 20 mil passos de 0,5 fs.\par
+  Se 10 s/passo: $\approx56$ h de execução.}
+ \end{column}
+\end{columns}
+\capabilityseparator
+\begin{columns}[T,onlytextwidth]
+ \begin{column}{0.48\textwidth}
+  \capabilityheading{Vantagens}
+  \usebeamerfont{capability body}
+  Pode descrever reações.\par
+  Redistribuição eletrônica.\par
+ \end{column}
+ \begin{column}{0.48\textwidth}
+  \capabilityheading{Limitações}
+  \usebeamerfont{capability body}
+  Segundos a minutos por passo.\par
+  Depende do método eletrônico.\par
+  Eventos raros: pouca amostragem.\par
+ \end{column}
+\end{columns}
+\takeaway{A reação pode ser rápida; a espera até ela ocorrer, longa.}
+{\usebeamerfont{capability caption}\color{Muted}
+$1\ \mathrm{fs}=10^{-15}\ \mathrm{s}$\qquad $1\ \mathrm{ps}=10^{-12}\ \mathrm{s}$.\par}
+{\fontsize{9}{11}\selectfont\color{Muted}
+Fontes:
+\href{https://doi.org/10.1016/j.cpc.2020.107624}{Lu et al.};
+\href{https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html}{ORCA 6.1};
+\href{https://doi.org/10.1039/D1CY01329G}{Piccini et al.}\par}
+\end{frame}
+
+\end{document}

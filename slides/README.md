@@ -2,10 +2,9 @@
 
 [← Materiais](../README.md#materiais-do-minicurso)
 
-Apresentações do minicurso. Os arquivos serão adicionados pelos ministrantes.
+Apresentações do minicurso em LaTeX/Beamer, com PDF para consulta.
 
-- [Henrique](henrique/README.md): slides da exposição.
+- [Apresentação principal](henrique/README.md): capa e introdução curta à dinâmica molecular clássica e à AIMD, com Henrique e Virginia como ministrantes.
 - [Virginia](virginia/README.md): materiais de sua participação e apoio às atividades.
 
-Quando disponíveis, cada apresentação terá um PDF para consulta e, quando autorizado pelos autores, o arquivo editável. Os tutoriais de instalação já estão em [tutoriais/](../tutoriais/README.md).
-
+Esta é uma primeira versão de trabalho; as próximas partes serão acrescentadas ao mesmo fonte. Os tutoriais de instalação estão em [tutoriais/](../tutoriais/README.md).
