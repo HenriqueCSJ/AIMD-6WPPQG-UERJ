@@ -77,7 +77,7 @@ O [roteiro de 4 horas](exercicios/roteiro-4h.md) parte de água com DFT e solvat
 
 O [Laboratório de trajetórias](visualizador/README.md) lê os outputs e mostra energias, temperatura, animação e distâncias entre átomos. Carregue os arquivos ou abra um dos exemplos reais. Os arquivos escolhidos são processados no navegador, sem envio a um servidor de análise.
 
-**Acesso por um link:** depois de ativar o GitHub Pages, o aplicativo ficará em [Laboratório de trajetórias online](https://henriquecsj.github.io/AIMD-6WPPQG-UERJ/visualizador/) e o percurso em [Exercícios online](https://henriquecsj.github.io/AIMD-6WPPQG-UERJ/exercicios/). Os alunos não precisarão instalar o visualizador nem ter conta no GitHub. [Ativação da hospedagem](PUBLICACAO.md). Abrir um arquivo HTML na interface de código do GitHub mostra o arquivo; para usar o aplicativo, use o endereço do Pages.
+**Acesse pelo navegador:** [Laboratório de trajetórias online](https://henriquecsj.github.io/AIMD-6WPPQG-UERJ/visualizador/) e [Exercícios online](https://henriquecsj.github.io/AIMD-6WPPQG-UERJ/exercicios/). Os alunos não precisam instalar o visualizador nem ter conta no GitHub. [Configuração da hospedagem](PUBLICACAO.md). Abrir um arquivo HTML na interface de código do GitHub mostra o arquivo; para usar o aplicativo, use o endereço do Pages.
 
 ## Materiais do minicurso
 
@@ -94,7 +94,7 @@ O [Laboratório de trajetórias](visualizador/README.md) lê os outputs e mostra
 | [`tutoriais/`](tutoriais/README.md) | Guias de instalação, preparação e primeiro teste. |
 | [`assets/`](assets/README.md) | Identidade visual e créditos do workshop. |
 
-**Disponível nesta etapa:** [sete exercícios numerados](exercicios/README.md), organizados em preparar, executar e interpretar. Os inputs principais têm 13–20 linhas, com comentários essenciais; os pacotes incluem os arquivos necessários, e as referências preservam os inputs completos originais. Também estão disponíveis guias de instalação e roteiro. Os slides ainda não fazem parte desta entrega. Para ler como site local, abra `exercicios/index.html`. O aplicativo está em `visualizador/index.html`, com leitura de outputs e exemplos dos sete exercícios. A ativação do GitHub Pages e o ensaio integral do curso permanecem pendentes.
+**Disponível nesta etapa:** [sete exercícios numerados](exercicios/README.md), organizados em preparar, executar e interpretar. Os inputs principais têm 13–20 linhas, com comentários essenciais; os pacotes incluem os arquivos necessários, e as referências preservam os inputs completos originais. Também estão disponíveis guias de instalação e roteiro. Os slides ainda não fazem parte desta entrega. Para ler como site local, abra `exercicios/index.html`. O aplicativo está em `visualizador/index.html`, com leitura de outputs e exemplos dos sete exercícios. O site está publicado no GitHub Pages; o ensaio integral do curso permanece pendente.
 
 ### Baixar os materiais
 

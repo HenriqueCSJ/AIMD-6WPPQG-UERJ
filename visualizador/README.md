@@ -41,7 +41,7 @@ Os arquivos são lidos em memória neste navegador. Não há servidor de cálcul
 
 ### Usar pelo GitHub Pages
 
-Depois de enviar os arquivos e ativar o Pages, os alunos acessarão [o aplicativo online](https://henriquecsj.github.io/AIMD-6WPPQG-UERJ/visualizador/) diretamente, sem instalar programas ou fazer login. A configuração necessária está em [PUBLICACAO.md](../PUBLICACAO.md). O site serve HTML/CSS/JavaScript; o ORCA continua sendo executado no computador do participante. Selecionar outputs no aplicativo não os envia ao GitHub.
+Os alunos acessam [o aplicativo online](https://henriquecsj.github.io/AIMD-6WPPQG-UERJ/visualizador/) diretamente, sem instalar programas ou fazer login. A configuração utilizada está em [PUBLICACAO.md](../PUBLICACAO.md). O site serve HTML/CSS/JavaScript; o ORCA continua sendo executado no computador do participante. Selecionar outputs no aplicativo não os envia ao GitHub.
 
 ### Arquivos e verificações
 
@@ -59,6 +59,6 @@ Para reconstruir os exemplos a partir dos arquivos originais preservados:
 node scripts/build_viewer_examples.cjs
 ```
 
-Nenhum desses comandos executa ORCA. O aluno não precisa de Node; ele apenas abre o aplicativo. A implementação é uma versão de trabalho para o curso, com verificação funcional e visual local; o ensaio integral com a turma e a publicação ainda são etapas separadas.
+Nenhum desses comandos executa ORCA. O aluno não precisa de Node; ele apenas abre o aplicativo. A implementação é uma versão de trabalho para o curso, com verificação funcional e visual local. O site está publicado no GitHub Pages, com abertura, carregamento do exemplo de timestep e reprodução da trajetória conferidos no endereço público. O ensaio integral com a turma permanece pendente.
 
 Verificação desta versão: 11 testes automatizados aprovados; leitura comparada com nove séries MD reais; doze distâncias do complexo conferidas contra os Colvars originais. Upload, exemplos, animação, seleção de distâncias, conversões de unidades e exportação foram exercitados no navegador, incluindo uma tela de 390 px. A abertura foi verificada por HTTP local. A abertura direta de `index.html` pelo sistema de arquivos não foi verificada, pois esse protocolo é bloqueado no navegador integrado usado para os testes.
