@@ -77,6 +77,8 @@ O [roteiro de 4 horas](exercicios/roteiro-4h.md) parte de água com DFT e solvat
 
 O [Laboratório de trajetórias](visualizador/README.md) lê os outputs e mostra energias, temperatura, animação e distâncias entre átomos. Carregue os arquivos ou abra um dos exemplos reais. Os arquivos escolhidos são processados no navegador, sem envio a um servidor de análise.
 
+**[Experimente a trajetória 3D do complexo de Zn²⁺](https://henriquecsj.github.io/AIMD-6WPPQG-UERJ/visualizador/?exemplo=complex&aba=trajetoria):** gire, amplie, reproduza e escolha qualquer quadro. Para ver sua própria dinâmica, carregue o arquivo `-traj.xyz`.
+
 **Acesse pelo navegador:** [Laboratório de trajetórias online](https://henriquecsj.github.io/AIMD-6WPPQG-UERJ/visualizador/) e [Exercícios online](https://henriquecsj.github.io/AIMD-6WPPQG-UERJ/exercicios/). Os alunos não precisam instalar o visualizador nem ter conta no GitHub. [Configuração da hospedagem](PUBLICACAO.md). Abrir um arquivo HTML na interface de código do GitHub mostra o arquivo; para usar o aplicativo, use o endereço do Pages.
 
 ## Materiais do minicurso

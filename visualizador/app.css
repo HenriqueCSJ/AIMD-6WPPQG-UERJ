@@ -2,3 +2,21 @@
 @media(max-width:900px){.topbar nav{gap:18px}.privacy{display:none}.start-grid{grid-template-columns:1.25fr 1fr}.drop-zone{padding:22px;grid-template-columns:1fr}.upload-icon{display:none}.drop-zone .button,.drop-zone .drop-note{grid-column:1}.trajectory-layout{grid-template-columns:1fr}.trajectory-aside{display:grid;grid-template-columns:1fr 1fr;gap:14px}.trajectory-aside>.eyebrow{grid-column:1/-1}.trajectory-aside .interpret{margin:0}.tabs{gap:20px}.welcome-guide{gap:18px}.chart-heading .small{display:none}}
 @media(max-width:600px){body{font-size:15px}.topbar{height:75px;padding:0 18px}.brand-icon{width:35px;height:35px;font-size:26px}.brand{font-size:14px}.brand small{font-size:9px}.topbar nav>a{display:none}.topbar nav{gap:0}.text-button{font-size:12px}main{padding:28px 16px 36px}.intro>p:last-child{font-size:15px}.start-grid{grid-template-columns:1fr;gap:14px}.drop-zone,.example-card{padding:22px}.example-card h2{font-size:18px}.welcome-guide{grid-template-columns:1fr;gap:23px}.workspace-top h2{font-size:22px}.tabs{gap:0;justify-content:space-between}.tabs button{font-size:10px;padding-top:10px;white-space:normal;flex:1;text-align:left}.tabs button span{display:block;margin:3px 0 0;font-size:12px;max-width:90px}.toolbar{gap:10px}.toolbar label{flex:1;min-width:130px}.toolbar select{width:100%;font-size:12px}.toolbar .small-button{margin-left:0}.series-controls{gap:10px 16px;font-size:12px}.series-controls>span{margin-left:0;width:100%}.chart-card{padding:18px 12px 5px}.chart-heading h3{font-size:16px}.chart-legend{font-size:11px;gap:3px 12px}.chart{min-height:250px}.stats-row{grid-template-columns:1fr}.interpret{padding:19px}.interpret p{font-size:13px}.run-card{min-width:0;flex:1 1 145px;padding:9px}.run-card strong{font-size:12px}.trajectory-aside{display:block}.trajectory-aside .interpret{margin-top:16px}.playback{padding:17px 15px 5px;gap:10px}.playback output{width:100%;text-align:left}#molecule{height:310px}.pair-controls{gap:8px}.pair-controls label{flex:1;min-width:100px}.pair-controls .button{margin-top:5px}.pair-dash{display:none}.pair-controls select{font-size:12px}.molecule-note{padding:9px 15px}footer{display:block;padding:20px 18px}footer span{display:block;margin:5px 0}dialog{padding:27px 24px}dialog h2{font-size:23px}}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}@media print{.topbar,.start-grid,.toolbar,.tabs,.series-controls,.details,.welcome-guide,footer{display:none}main{padding:0}body{background:white}.chart-card,.interpret{break-inside:avoid}.chart-tip{display:none}}
+
+/* Trajectory controls remain usable with a mouse, keyboard or touch. */
+.example-actions{display:flex;flex-wrap:wrap;gap:10px}
+.example-actions .button{flex:1 1 150px}
+.playback{align-items:flex-end;gap:14px 20px}
+.transport-buttons{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.transport-buttons .button{min-height:44px}
+.transport-buttons>button:not(#play-button){min-width:44px;font-size:17px}
+.playback-setting{display:flex;flex-direction:column;gap:5px;font-size:11px;font-weight:600;color:var(--muted)}
+.playback-setting select{min-width:90px}
+.playback #frame-number{flex:none;min-width:0;width:96px;min-height:41px;border:1px solid #bccdc8;border-radius:8px;padding:9px 10px;color:var(--ink);background:white;font:inherit;font-size:14px}
+.timeline-control{display:flex;align-items:center;gap:14px;flex:1 0 100%;min-width:0}
+.timeline-control input{width:100%;min-width:0;min-height:32px;cursor:pointer}
+.timeline-control output{min-width:150px;flex-shrink:0}
+.playback-note{padding:5px 22px 0;margin:0}
+#molecule{touch-action:none;cursor:grab}
+#molecule:active{cursor:grabbing}
+@media(max-width:600px){.playback{gap:12px}.transport-buttons{width:100%}.playback-setting{flex:1}.playback-setting select,.playback #frame-number{width:100%}.timeline-control{flex-wrap:wrap;gap:2px}.timeline-control output{width:100%;text-align:left}.playback-note{padding:5px 15px 0}}

@@ -6,7 +6,7 @@
   const patterns=['','7 3','2 3','9 3 2 3','12 3','4 2 1 2','1 4','10 2 3 2','5 5','12 3 2 3 2 3','3 2','8 5'];
   const elementColors={H:'#d9e0e3',C:'#465563',N:'#386ea8',O:'#c45448',Zn:'#8b71a8',S:'#b99425',P:'#bc7538',Cl:'#5f9548',F:'#75a56f',Na:'#8675b8',Mg:'#7caa61',Fe:'#b57545',Cu:'#a66e4e'};
   const elementRadii={H:.23,C:.37,N:.35,O:.34,Zn:.53,S:.44,P:.44};
-  const state={runs:[],nextId:1,tab:'energy',viewer:null,model:null,viewRun:null,frame:0,playing:false,timer:null,pairs:{},colvars:{},distanceSeries:[],busy:false};
+  const state={runs:[],nextId:1,tab:'energy',viewer:null,initialView:null,model:null,viewRun:null,frame:0,selectedAtom:null,playing:false,timer:null,pairs:{},colvars:{},distanceSeries:[],busy:false};
   const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const energy=run=>run.energy||run.out;
   const metadata=run=>run.out?.metadata||{};
@@ -26,7 +26,7 @@
   }
   async function importFiles(files){
     if(state.busy)return;state.busy=true;document.body.classList.add('busy');stop();message('Lendo os arquivos…',true);
-    const warnings=[],groups=new Map();let accepted=0;
+    const warnings=[],groups=new Map();let accepted=0,trajectoryRun=null;
     for(const file of files){
       if(file.size>80*1024*1024){warnings.push(`${file.name}: limite de 80 MB por arquivo.`);continue;}
       try{const parsed=R.parseFile(await file.text(),file.name);warnings.push(...parsed.warnings.filter(w=>!w.startsWith('O .out pode')&&!w.startsWith('XYZ convencional')).map(w=>`${file.name}: ${w}`));if(!groups.has(parsed.key))groups.set(parsed.key,[]);groups.get(parsed.key).push(parsed);}
@@ -35,22 +35,23 @@
     for(const [key,parts] of groups){
       let run=state.runs.find(r=>!r.reference&&r.key===key&&!parts.some(p=>r[p.kind==='xyz'?'xyz':p.kind==='colvars'?'colvars':p.kind==='out'?'out':'energy']));
       if(!run){run=makeRun(key);const n=state.runs.filter(r=>r.key===key).length;if(n)run.label=`${key} (${n+1})`;state.runs.push(run);}
-      for(const part of parts){try{addParsed(run,part);accepted++;}catch(error){const separate=makeRun(key,`${key} · ${part.kind==='out'?'.out':'CSV'} separado`);addParsed(separate,part);state.runs.push(separate);warnings.push(error.message);accepted++;}}
+      for(const part of parts){try{addParsed(run,part);accepted++;if(part.kind==='xyz'&&!trajectoryRun)trajectoryRun=run;}catch(error){const separate=makeRun(key,`${key} · ${part.kind==='out'?'.out':'CSV'} separado`);addParsed(separate,part);state.runs.push(separate);warnings.push(error.message);accepted++;if(part.kind==='xyz'&&!trajectoryRun)trajectoryRun=separate;}}
     }
     const selected=visible();if(selected.length>4){selected.slice(4).forEach(r=>r.visible=false);warnings.push('Quatro simulações selecionadas para comparação. Use as caixas para escolher outras.');}
     state.busy=false;document.body.classList.remove('busy');$('file-input').value='';
-    renderAll();message([accepted?`${accepted} arquivo(s) carregado(s).`:'Nenhum arquivo foi carregado.',...warnings].join('\n'),warnings.length===0);
-    if(accepted)$('workspace').scrollIntoView({block:'start',behavior:'smooth'});
+    if(trajectoryRun)state.tab='trajectory';
+    renderAll(trajectoryRun?.id);message([accepted?`${accepted} arquivo(s) carregado(s).`:'Nenhum arquivo foi carregado.',accepted&&!state.runs.some(r=>r.xyz)?'Para ver o movimento em 3D, carregue também o arquivo -traj.xyz.':'',...warnings].filter(Boolean).join('\n'),warnings.length===0);
+    if(accepted)$(trajectoryRun?'tab-trajectory':'workspace').scrollIntoView({block:'start',behavior:'smooth'});
   }
-  function loadExample(key){
+  function loadExample(key,preferredTab){
     const config=window.AIMD_EXAMPLES?.presets[key];if(!config){message('O pacote de exemplos não foi encontrado. Você pode carregar seus próprios arquivos.');return;}
     stop();state.runs=state.runs.filter(r=>!r.reference);state.runs.forEach(r=>r.visible=false);
     for(const sourceKey of config.runs){let run=state.runs.find(r=>r.exampleKey===sourceKey);if(!run){const src=structuredClone(AIMD_EXAMPLES.runs[sourceKey]);run=Object.assign(makeRun(sourceKey,src.label,true),src,{exampleKey:sourceKey,visible:true});run.color=referenceColors[sourceKey]||run.color;state.runs.push(run);}run.visible=true;}
     document.querySelectorAll('[name="energy-series"]').forEach(c=>c.checked=config.runs.length>1?c.value==='total':true);
-    $('energy-mode').value='delta';$('time-unit').value='fs';state.tab=config.tab||'energy';renderAll();
+    $('energy-mode').value='delta';$('time-unit').value='fs';state.tab=preferredTab||config.tab||'energy';renderAll();
     const current=visible()[0];if(current){$('trajectory-run').value=current.id;$('distance-run').value=current.id;}
     changeTab(state.tab);message('Exemplo de referência carregado. São dados reais calculados pelos ministrantes; não são uma execução feita por você.',true);
-    $('workspace').scrollIntoView({block:'start',behavior:'smooth'});
+    $(state.tab==='trajectory'?'tab-trajectory':'workspace').scrollIntoView({block:'start',behavior:'smooth'});
   }
   function renderRuns(){
     $('runs').innerHTML=state.runs.map(r=>{const n=energy(r)?.rows.length||0;return `<div class="run-card" style="--run-color:${r.color}"><label><input type="checkbox" data-run="${r.id}" ${r.visible?'checked':''}><span><strong>${esc(r.label)}</strong><small>${r.reference?'Referência da aula':'Seu arquivo'} · ${n?n+' pontos':r.xyz?r.xyz.elements.length+' átomos':'sem série MD'}</small></span></label><button type="button" class="remove-run" data-remove="${r.id}" aria-label="Remover ${esc(r.label)}">×</button></div>`;}).join('');
@@ -58,9 +59,9 @@
     $('runs').querySelectorAll('[data-remove]').forEach(b=>b.addEventListener('click',()=>{stop();state.runs=state.runs.filter(r=>r.id!==Number(b.dataset.remove));state.viewRun=null;renderAll();}));
   }
   function updateSelect(id,runs){const selected=$(id).value;$(id).replaceChildren();runs.forEach(r=>{const opt=document.createElement('option');opt.value=r.id;opt.textContent=r.label;$(id).append(opt);});if(runs.some(r=>String(r.id)===selected))$(id).value=selected;}
-  function renderAll(){
+  function renderAll(preferredTrajectory){
     const loaded=state.runs.length>0;$('workspace').hidden=!loaded;$('welcome-guide').hidden=loaded;document.body.classList.toggle('loaded',loaded);if(!loaded){stop();return;}
-    renderRuns();updateSelect('trajectory-run',state.runs.filter(r=>r.xyz));updateSelect('distance-run',state.runs.filter(r=>r.xyz||r.colvars));renderDetails();changeTab(state.tab);
+    renderRuns();updateSelect('trajectory-run',state.runs.filter(r=>r.xyz));updateSelect('distance-run',state.runs.filter(r=>r.xyz||r.colvars));if(preferredTrajectory){$('trajectory-run').value=preferredTrajectory;$('distance-run').value=preferredTrajectory;}renderDetails();changeTab(state.tab);
   }
   function changeTab(tab){stop();state.tab=tab;for(const name of ['energy','trajectory','distance']){$('panel-'+name).hidden=name!==tab;$('tab-'+name).setAttribute('aria-selected',name===tab);$('tab-'+name).tabIndex=name===tab?0:-1;}
     if(tab==='energy')renderEnergy();if(tab==='trajectory')renderTrajectory();if(tab==='distance')renderDistances(true);
@@ -97,13 +98,14 @@
   function renderTrajectory(){
     const run=currentTrajectory(),has=!!run?.xyz;$('trajectory-empty').hidden=has;$('trajectory-content').hidden=!has;
     if(!has){$('trajectory-empty').innerHTML='<strong>O movimento está no arquivo XYZ.</strong>Carregue nome-traj.xyz. O .out e o CSV de energias não contêm necessariamente as coordenadas de todos os passos.';return;}
-    if(!window.$3Dmol){$('trajectory-empty').hidden=false;$('trajectory-empty').textContent='O visualizador molecular não foi carregado. Mantenha a pasta vendor junto ao aplicativo. As distâncias continuam disponíveis.';return;}
-    try{if(!state.viewer){state.viewer=$3Dmol.createViewer($('molecule'),{backgroundColor:'white',orthographic:true,antialias:true});state.viewer.setProjection('orthographic');}
-      if(state.viewRun!==run.id){state.frame=0;state.viewRun=run.id;$('frame-slider').value='0';state.viewer.removeAllModels();state.viewer.removeAllLabels();state.model=state.viewer.addModel();}
-      $('frame-slider').max=run.xyz.frames.length-1;$('play-button').disabled=run.xyz.frames.length<2;
+    if(!window.$3Dmol){$('trajectory-content').hidden=true;$('trajectory-empty').hidden=false;$('trajectory-empty').textContent='O visualizador molecular não foi carregado. Mantenha a pasta vendor junto ao aplicativo. As distâncias continuam disponíveis.';return;}
+    try{if(!state.viewer){state.viewer=$3Dmol.createViewer($('molecule'),{backgroundColor:'white',orthographic:true,antialias:true});state.viewer.setProjection('orthographic');state.initialView=state.viewer.getView().slice();}
+      const changedRun=state.viewRun!==run.id;
+      if(changedRun){state.frame=0;state.selectedAtom=null;state.viewRun=run.id;$('frame-slider').value='0';state.viewer.removeAllModels();state.viewer.removeAllLabels();state.model=state.viewer.addModel();}
+      $('frame-slider').max=run.xyz.frames.length-1;$('frame-number').max=run.xyz.frames.length;$('play-button').disabled=run.xyz.frames.length<2;$('playback-speed').disabled=run.xyz.frames.length<2;
       $('molecule-legend').innerHTML=[...new Set(run.xyz.elements)].map(e=>`<span class="element-key"><i style="background:${elementColors[e]||'#8a8990'}"></i>${esc(e)}</span>`).join('');
-      state.viewer.resize();drawFrame(true);
-    }catch(error){$('trajectory-empty').hidden=false;$('trajectory-empty').textContent='Este navegador não conseguiu abrir a visualização 3D. Use um navegador com WebGL; gráficos e distâncias continuam disponíveis.';}
+      state.viewer.resize();drawFrame(changedRun);
+    }catch(error){$('trajectory-content').hidden=true;$('trajectory-empty').hidden=false;$('trajectory-empty').textContent='Este navegador não conseguiu abrir a visualização 3D. Use um navegador com WebGL; gráficos e distâncias continuam disponíveis.';}
   }
   function drawFrame(fit=false){
     const run=currentTrajectory();if(!run?.xyz||!state.viewer||!state.model)return;const xyz=run.xyz,frame=xyz.frames[state.frame];
@@ -118,13 +120,16 @@
     for(const element of new Set(xyz.elements)){const color=elementColors[element]||'#8a8990',style={sphere:{radius:elementRadii[element]||.42,color}};if($('proximity-lines').checked)style.stick={radius:.075,color};state.model.setStyle({elem:element},style);}
     state.viewer.removeAllLabels();
     if($('atom-labels').checked)atoms.forEach((a,i)=>state.viewer.addLabel(`${a.elem} ${i}`,{position:a,fontColor:'#17313e',backgroundColor:'white',backgroundOpacity:.7,fontSize:11,borderThickness:0,inFront:true}));
-    state.viewer.setClickable({},true,atom=>{$('atom-info').textContent=`${atom.elem} · índice ${atom.serial}: x = ${num(atom.x,7)}, y = ${num(atom.y,7)}, z = ${num(atom.z,7)} Å.`;});
-    if(fit){state.viewer.zoomTo();state.viewer.zoom(1.35);}state.viewer.render();
-    $('frame-slider').value=state.frame;$('frame-time').textContent=`Quadro ${state.frame+1}/${xyz.frames.length}${frame.time!==null?' · '+num(frame.time,6)+' fs':' · tempo não informado'}`;
+    state.viewer.setClickable({},true,atom=>{state.selectedAtom=atom.serial;renderAtomInfo();});renderAtomInfo();
+    if(fit)resetView();else state.viewer.render();
+    $('frame-slider').value=state.frame;$('frame-number').value=state.frame+1;$('previous-frame').disabled=state.frame===0;$('next-frame').disabled=state.frame===xyz.frames.length-1;$('frame-time').textContent=`Quadro ${state.frame+1}/${xyz.frames.length}${frame.time!==null?' · '+num(frame.time,6)+' fs':' · tempo não informado'}`;
     const rows=energy(run)?.rows||[],row=frame.time===null?null:rows.find(r=>Math.abs(r.time-frame.time)<.051&&(frame.step===null||r.step===frame.step));
     $('frame-values').innerHTML=[['Tempo físico',frame.time===null?'Não informado':`${num(frame.time)} fs = ${num(frame.time*1e-15)} s`],['Temperatura',row?.temperature!==null&&row?.temperature!==undefined?`${num(row.temperature)} K`:'Sem ponto correspondente'],['Energia potencial',row?.potential!==null&&row?.potential!==undefined?`${num(row.potential,9)} Eh`:'Sem ponto correspondente'],['Átomos',xyz.elements.length]].map(([label,value])=>`<div class="frame-value"><span>${esc(label)}</span><strong>${esc(value)}</strong></div>`).join('');
   }
-  function play(){if(state.playing){stop();return;}const run=currentTrajectory();if(!run?.xyz||run.xyz.frames.length<2)return;state.playing=true;$('play-button').textContent='Ⅱ Pausar';const tick=()=>{if(!state.playing)return;state.frame=(state.frame+1)%run.xyz.frames.length;drawFrame();state.timer=setTimeout(tick,65);};tick();}
+  function resetView(){if(!state.viewer||!state.model)return;state.viewer.setView(state.initialView);state.viewer.rotate(60,'x');state.viewer.rotate(-20,'y');state.viewer.zoomTo();state.viewer.zoom(currentTrajectory()?.xyz.elements.length<=3?2.2:1.35);state.viewer.render();}
+  function renderAtomInfo(){const run=currentTrajectory(),index=state.selectedAtom,coords=run?.xyz?.frames[state.frame]?.coords[index];$('atom-info').textContent=index===null||!coords?'Selecione um átomo para ver seu índice e suas coordenadas.':`${run.xyz.elements[index]} · índice ${index}: x = ${num(coords[0],7)}, y = ${num(coords[1],7)}, z = ${num(coords[2],7)} Å.`;}
+  function seekFrame(index){stop();const run=currentTrajectory();if(!run?.xyz)return;if(!Number.isFinite(index)){$('frame-number').value=state.frame+1;return;}state.frame=Math.max(0,Math.min(run.xyz.frames.length-1,Math.round(index)));drawFrame();}
+  function play(){if(state.playing){stop();return;}const run=currentTrajectory();if(!run?.xyz||run.xyz.frames.length<2)return;state.playing=true;$('play-button').textContent='Ⅱ Pausar';const tick=()=>{if(!state.playing)return;state.frame=(state.frame+1)%run.xyz.frames.length;drawFrame();const speed=Number($('playback-speed').value)||1;state.timer=setTimeout(tick,65/speed);};tick();}
   function initialPairs(run){if(state.pairs[run.id])return;const els=run.xyz.elements,zn=els.indexOf('Zn'),ns=els.map((e,i)=>e==='N'?i:null).filter(x=>x!==null);state.pairs[run.id]=zn>=0&&ns.length?ns.slice(0,2).map(n=>[zn,n]):els.length>1?[[0,1]]:[];}
   function renderDistances(resetControls=false){
     const run=currentDistance(),has=!!run;$('distance-empty').hidden=has;$('distance-content').hidden=!has;$('export-distance').disabled=!has;
@@ -159,12 +164,15 @@
   for(const event of ['dragleave','drop'])$('drop-zone').addEventListener(event,e=>{e.preventDefault();$('drop-zone').classList.remove('drag');});
   $('drop-zone').addEventListener('drop',e=>importFiles([...e.dataTransfer.files]));
   $('example-button').addEventListener('click',()=>loadExample($('example-select').value));
+  $('example-trajectory-button').addEventListener('click',()=>loadExample($('example-select').value,'trajectory'));
   $('clear-button').addEventListener('click',()=>{stop();state.runs=[];state.viewRun=null;state.pairs={};state.colvars={};renderAll();message('Sessão limpa. Seus arquivos originais continuam intactos.',true);});
   document.querySelectorAll('[data-tab]').forEach(b=>{b.addEventListener('click',()=>changeTab(b.dataset.tab));b.addEventListener('keydown',e=>{if(!['ArrowLeft','ArrowRight'].includes(e.key))return;e.preventDefault();const names=['energy','trajectory','distance'],i=names.indexOf(state.tab),next=names[(i+(e.key==='ArrowRight'?1:2))%3];changeTab(next);$('tab-'+next).focus();});});
   for(const id of ['energy-mode','energy-unit','time-unit'])$(id).addEventListener('change',renderEnergy);
   document.querySelectorAll('[name="energy-series"]').forEach(c=>c.addEventListener('change',renderEnergy));
-  $('trajectory-run').addEventListener('change',()=>{stop();renderTrajectory();});$('reset-view').addEventListener('click',()=>{state.viewer?.zoomTo();state.viewer?.zoom(1.35);state.viewer?.render();});for(const id of ['atom-labels','proximity-lines'])$(id).addEventListener('change',()=>drawFrame());
-  $('frame-slider').addEventListener('input',()=>{stop();state.frame=Number($('frame-slider').value);drawFrame();});$('play-button').addEventListener('click',play);
+  $('trajectory-run').addEventListener('change',()=>{stop();renderTrajectory();});$('reset-view').addEventListener('click',resetView);for(const id of ['atom-labels','proximity-lines'])$(id).addEventListener('change',()=>drawFrame());
+  $('frame-slider').addEventListener('input',()=>seekFrame(Number($('frame-slider').value)));$('play-button').addEventListener('click',play);
+  $('previous-frame').addEventListener('click',()=>seekFrame(state.frame-1));$('next-frame').addEventListener('click',()=>seekFrame(state.frame+1));
+  $('frame-number').addEventListener('change',()=>seekFrame($('frame-number').valueAsNumber-1));$('frame-number').addEventListener('keydown',event=>{if(event.key==='Enter'){event.preventDefault();seekFrame($('frame-number').valueAsNumber-1);}});
   $('goto-distances').addEventListener('click',()=>{const run=currentTrajectory();if(run)$('distance-run').value=run.id;changeTab('distance');});
   $('distance-run').addEventListener('change',()=>renderDistances(true));$('distance-source').addEventListener('change',()=>renderDistances(true));
   $('add-distance').addEventListener('click',()=>{const run=currentDistance(),a=Number($('atom-a').value),b=Number($('atom-b').value);if(a===b){message('Escolha dois átomos diferentes.');return;}if(state.pairs[run.id].some(p=>p.includes(a)&&p.includes(b))){message('Essa distância já está no gráfico.');return;}if(state.pairs[run.id].length>=6){message('Mostre até seis distâncias por vez para manter o gráfico legível.');return;}state.pairs[run.id].push([a,b]);renderDistances();message('Distância calculada a partir dos quadros XYZ.',true);});
@@ -172,5 +180,5 @@
   $('help-button').addEventListener('click',()=>$('help-dialog').showModal());for(const id of ['close-help','help-done'])$(id).addEventListener('click',()=>$('help-dialog').close());
   let resizeTimer;window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(()=>{if(state.tab==='energy'&&state.runs.length)renderEnergy();else if(state.tab==='distance'&&state.runs.length)renderDistances();state.viewer?.resize();},150);});
   document.addEventListener('visibilitychange',()=>{if(document.hidden)stop();});
-  const requested=new URLSearchParams(location.search).get('exemplo');if(requested&&window.AIMD_EXAMPLES?.presets[requested]){$('example-select').value=requested;loadExample(requested);}
+  const query=new URLSearchParams(location.search),requested=query.get('exemplo'),requestedTab=new Map([['energias','energy'],['trajetoria','trajectory'],['distancias','distance']]).get(query.get('aba'));if(requestedTab)state.tab=requestedTab;if(requested&&window.AIMD_EXAMPLES?.presets[requested]){$('example-select').value=requested;loadExample(requested,requestedTab);}
 })();

@@ -1,25 +1,26 @@
 # Laboratório de trajetórias
 
-[Abrir o aplicativo](index.html) · [Exemplo de timestep](index.html?exemplo=timestep) · [Exemplo do complexo](index.html?exemplo=complex)
+[Abrir o aplicativo](index.html) · [Trajetória 3D do complexo](index.html?exemplo=complex&aba=trajetoria) · [Exemplo de timestep](index.html?exemplo=timestep)
 
 O aluno carrega os arquivos e passa diretamente à interpretação. Não precisa importar colunas em uma planilha, instalar Python ou escrever comandos para medir distâncias.
 
 ## Para usar na aula
 
 1. Abra `visualizador/index.html` em um navegador moderno, mantendo as pastas do repositório juntas. Também funciona pelo site estático quando o repositório estiver publicado.
-2. Selecione `nome-md-ener.csv` e, se disponíveis, `nome.out` e `nome-traj.xyz`. Pode carregar todos juntos. Arquivos com o mesmo nome-base são associados. Recarregar uma série que já existe cria outra entrada, preservando a anterior.
-3. Explore **Energia e temperatura**, **Trajetória** e **Distâncias**. Para comparar, carregue outro cálculo e marque até quatro simulações.
+2. Para ver o movimento, selecione `nome-traj.xyz`: a aba **Trajetória 3D** abre automaticamente, mesmo sem outros arquivos. Junte `nome-md-ener.csv` para energias/temperatura e `nome.out` para as condições do cálculo. Pode carregar todos juntos. Arquivos com o mesmo nome-base são associados. Recarregar uma série que já existe cria outra entrada, preservando a anterior.
+3. Arraste a molécula para girar, use a roda para ampliar e clique em **Reproduzir**. As setas avançam quadro a quadro; a barra e **Ir ao quadro** escolhem um ponto da trajetória. **Velocidade** altera apenas a reprodução. Clique em um átomo para acompanhar suas coordenadas; **Centralizar** restaura a vista inicial.
+4. Explore **Energia e temperatura** e **Distâncias**. Para comparar, carregue outro cálculo e marque até quatro simulações. Um XYZ de apenas um quadro pode ser girado e ampliado, mas não contém uma animação.
 
 No WSL, use `explorer.exe .` na pasta do cálculo para encontrá-la pelo seletor de arquivos do Windows. O aplicativo não precisa executar dentro do WSL.
 
-O botão de exemplos oferece os sete momentos da aula, usando dez cálculos reais já preservados neste repositório. Os exemplos são identificados como referências dos ministrantes. A cópia local inclui os dados e a biblioteca molecular: a leitura e os exemplos não precisam de internet. Links para o manual do ORCA são externos.
+O seletor de exemplos oferece os sete momentos da aula, usando dez cálculos reais já preservados neste repositório. **Ver trajetória 3D** abre diretamente a molécula do exemplo escolhido. Os exemplos são identificados como referências dos ministrantes. A cópia local inclui os dados e a biblioteca molecular: a leitura e os exemplos não precisam de internet. Links para o manual do ORCA são externos.
 
 ## O que pode ser observado
 
 - **Energias cinética, potencial e total**, em Hartree ou kJ/mol; valores absolutos ou variações desde o primeiro valor disponível de cada curva.
 - **Temperatura em K**, em um gráfico separado. Condições NVE/NVT são lidas do input reproduzido no `.out`, quando reconhecíveis, ou informadas pelo aluno; não são inferidas da aparência dos números.
 - **Tempo em fs, ps ou s**, com duração física explícita, preservando o relógio de um reinício.
-- **Animação XYZ**, controle de quadro, rotação, ampliação, índices dos átomos e energias/temperatura do ponto correspondente. A sincronização exige tempo e, quando presente, passo compatíveis; não é feita pela posição da linha.
+- **Animação XYZ**, reprodução/pausa, velocidade de 0,25× a 4×, avanço/retorno de um quadro, escolha direta pelo número, rotação, ampliação, índices dos átomos e energias/temperatura do ponto correspondente. A câmera permanece na orientação escolhida durante a animação. As coordenadas do átomo selecionado acompanham o quadro atual. A sincronização exige tempo e, quando presente, passo compatíveis; não é feita pela posição da linha.
 - **Distância entre quaisquer dois átomos**, calculada diretamente de cada quadro XYZ, sem `Manage_Colvar` no input. Índices começam em zero. Também lê Colvars de distância em Angstrom; forças e ângulos não viram distâncias.
 - **Exportação CSV** das séries de energia originais e das distâncias selecionadas. A exportação energética mantém Hartree/fs/K, independentemente da transformação usada no gráfico.
 
