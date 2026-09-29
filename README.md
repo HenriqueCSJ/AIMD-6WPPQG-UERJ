@@ -1,33 +1,49 @@
-# Dinâmica molecular com ORCA
+<p align="center">
+  <img src="assets/workshop-ppgq-uerj-2026.jpeg" width="680" alt="6º Workshop do Programa de Pós-Graduação em Química — UERJ">
+</p>
 
-**6º Workshop PPGQ–UERJ · Minicurso prático**<br>
-7 de outubro de 2026 · remoto · **13h–16h e 17h–18h** (Brasília)
-
-Henrique de Castro Silva Junior · Virginia Camila Rufino Ferreira
+<h1 align="center">Dinâmica molecular com ORCA</h1>
+<p align="center"><strong>Do input à interpretação. Química em movimento.</strong><br>
+7 de outubro de 2026 · remoto · 13h–16h e 17h–18h · Brasília</p>
+<p align="center">Henrique de Castro Silva Junior · Virginia Camila Rufino Ferreira</p>
 
 <a id="materiais-do-minicurso"></a>
 <a id="comece-por-aqui"></a>
 
-### Entre na aula
+<p align="center">
+  <a href="https://henriquecsj.github.io/AIMD-6WPPQG-UERJ/"><img src="assets/botao-site.svg" width="200" alt="Abrir o site do curso"></a>
+  <a href="https://henriquecsj.github.io/AIMD-6WPPQG-UERJ/exercicios/"><img src="assets/botao-exercicios.svg" width="200" alt="Começar os exercícios"></a>
+  <a href="https://henriquecsj.github.io/AIMD-6WPPQG-UERJ/visualizador/"><img src="assets/botao-laboratorio.svg" width="200" alt="Explorar os resultados"></a>
+</p>
 
-**[Abrir o site do minicurso →](https://henriquecsj.github.io/AIMD-6WPPQG-UERJ/)**
+### Seu ponto de partida
 
-- **Antes do encontro:** [instale e teste o ORCA](tutoriais/README.md). Recomendamos **WSL2 + Ubuntu**, inclusive para quem ainda não tem WSL.
-- **Durante a aula:** [abra os exercícios](https://henriquecsj.github.io/AIMD-6WPPQG-UERJ/exercicios/). Cada página tem input para copiar, pacote para baixar e resultados de referência.
-- **Para analisar:** [abra o Laboratório de trajetórias](https://henriquecsj.github.io/AIMD-6WPPQG-UERJ/visualizador/). Carregue `.out`, `-md-ener.csv` e `-traj.xyz`; tudo é lido no navegador, sem instalação.
+**Antes da aula:** [prepare e teste o ORCA](tutoriais/README.md). Recomendamos **WSL2 + Ubuntu**, com instruções desde a instalação do WSL. Há também uma rota para Windows nativo.
 
-### O que vamos investigar
+**Durante a aula:** [abra os exercícios](https://henriquecsj.github.io/AIMD-6WPPQG-UERJ/exercicios/). Cada atividade traz uma pergunta química, input comentado para copiar, estruturas e resultados de referência.
 
-Uma ligação de hidrogênio em movimento. A orientação do H no etanol. Uma integração que perde estabilidade — e sua correção. O efeito de aquecer e resfriar a mesma trajetória. A coordenação de Zn²⁺ e o papel da parede em reter águas ao redor do complexo.
+### Um laboratório no seu navegador
 
-Começamos com DFT e passamos para **GFN2-xTB (`XTB2`)**. Água dentro de C₆₀ fica como extensão opcional.
+Veja a trajetória, acompanhe energia e temperatura, meça distâncias, ângulos e diedros. Abra um exemplo pronto ou carregue `.out`, `-md-ener.csv` e `-traj.xyz`. **Seus arquivos são lidos localmente**, sem conta e sem instalação.
 
-**[Baixar todos os materiais (.zip)](https://github.com/HenriqueCSJ/AIMD-6WPPQG-UERJ/archive/refs/heads/main.zip)** · [Roteiro e horários](exercicios/roteiro-4h.md) · [Downloads oficiais](tutoriais/04-links-e-referencias.md)
+<a href="https://henriquecsj.github.io/AIMD-6WPPQG-UERJ/visualizador/?exemplo=complex&amp;aba=trajetoria"><img src="assets/laboratorio-preview.png" width="960" alt="Prévia real do laboratório de trajetórias: complexo de zinco, águas, parede e contatos tracejados. Clique para abrir o exemplo interativo."></a>
+
+**[Explorar o complexo de Zn²⁺ →](https://henriquecsj.github.io/AIMD-6WPPQG-UERJ/visualizador/?exemplo=complex&aba=trajetoria)**
+
+### O percurso da aula
+
+- **[01–02 · Ligação de hidrogênio](https://henriquecsj.github.io/AIMD-6WPPQG-UERJ/exercicios/1-agua-dft/)** — um dímero de água com DFT e o efeito do solvente implícito.
+- **[03–05 · Etanol em movimento](https://henriquecsj.github.io/AIMD-6WPPQG-UERJ/exercicios/3-xtb2-etanol/)** — torsão, instabilidade do timestep, correção e aquecimento por etapas.
+- **[06–07 · Complexação e solvente](https://henriquecsj.github.io/AIMD-6WPPQG-UERJ/exercicios/6-complexo-solvator/)** — Zn²⁺, SOLVATOR, contatos de coordenação e parede.
+- **[08 · Água dentro de C₆₀](https://henriquecsj.github.io/AIMD-6WPPQG-UERJ/exercicios/8-agua-no-fulereno/)** — extensão opcional sobre confinamento.
+
+Começamos com **DFT** e passamos a **GFN2-xTB (`XTB2`)** para explorar mais movimento. Os resultados fornecidos permitem acompanhar a aula mesmo quando uma execução local demora.
+
+**[Baixar os materiais (.zip)](https://github.com/HenriqueCSJ/AIMD-6WPPQG-UERJ/archive/refs/heads/main.zip)** · [Roteiro e horários](exercicios/roteiro-4h.md) · [Downloads oficiais](tutoriais/04-links-e-referencias.md)
 
 ---
 
-<p><img src="assets/uerj-logo.png" height="55" alt="UERJ"> &nbsp; <img src="assets/ufrrj-logo-compacto.png" height="55" alt="UFRRJ"></p>
-
-[Programação e organização do evento](https://www.ppgq-iq.uerj.br/6o-workshop-do-programa-de-pos-graduacao-em-quimica-uerj) · Moderação: Prof. Haroldo Candal. O acesso à sala é enviado pela organização.
+<p align="center"><img src="assets/uerj-logo.png" height="64" alt="UERJ"> &nbsp;&nbsp;&nbsp; <img src="assets/ufrrj-logo-compacto.png" height="64" alt="UFRRJ"></p>
+<p align="center">Moderação: Prof. Haroldo Candal · <a href="https://www.ppgq-iq.uerj.br/6o-workshop-do-programa-de-pos-graduacao-em-quimica-uerj">Programação do evento</a><br>O acesso à sala é enviado pela organização.</p>
 
 [Licença dos materiais](LICENSE) · [Créditos das marcas](assets/README.md). O ORCA é obtido separadamente, sob seus próprios termos.

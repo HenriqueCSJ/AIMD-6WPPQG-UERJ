@@ -6,7 +6,7 @@
   <title>Laboratório de trajetórias · AIMD com ORCA</title>
   <link rel="stylesheet" href="app.css?v=20260929-chemistry2">
   <script defer src="orca-parser.js?v=20260929-chemistry2"></script><script defer src="charts.js"></script><script defer src="geometry.js?v=20260929-chemistry2"></script>
-  <script defer src="vendor/3Dmol-min.js"></script><script defer src="examples.js?v=20260929-chemistry2"></script><script defer src="app.js?v=20260929-chemistry2"></script>
+  <script defer src="vendor/3Dmol-min.js"></script><script defer src="examples.js?v=20260929-loading1"></script><script defer src="example-loader.js?v=20260929-loading1"></script><script defer src="app.js?v=20260929-loading1"></script>
 </head>
 <body>
 <a class="skip" href="#main">Ir para o conteúdo</a>
@@ -44,6 +44,7 @@
         <option value="water_single">Apoio · Água isolada</option><option value="solvent_single">Apoio · Água isolada: vácuo × CPCM</option><option value="timestep_abrupt">Apoio · Falha abrupta com 5 fs</option><option value="thermostat_compare">Apoio · NVE × termostato</option>
       </select>
       <div class="example-actions"><button class="button secondary" id="example-button" type="button">Explorar exemplo <span aria-hidden="true">→</span></button><button class="button" id="example-trajectory-button" type="button">Ver trajetória 3D</button></div>
+      <p id="example-load-status" class="muted small" role="status" aria-live="polite" hidden></p><button class="button small-button" id="example-retry" type="button" hidden>Tentar novamente</button>
       <p class="muted small">Resultados reais do minicurso, identificados como referência.</p>
     </div>
   </section>

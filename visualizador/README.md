@@ -15,13 +15,15 @@ No WSL, use `explorer.exe .` na pasta do cálculo para encontrá-la pelo seletor
 
 O seletor de exemplos oferece os sete momentos da aula e a extensão H₂O@C₆₀, usando dezenove cálculos reais já preservados neste repositório. **Ver trajetória 3D** abre diretamente a molécula do exemplo escolhido. Os exemplos são identificados como referências dos ministrantes. A cópia local inclui os dados e a biblioteca molecular: a leitura e os exemplos não precisam de internet. Links para o manual do ORCA são externos.
 
+Os arquivos são carregados **por exemplo**, com indicação de leitura e botão **Tentar novamente** em caso de falha. Uma comparação só substitui a vista anterior quando todas as suas simulações estiverem disponíveis. Na cópia local, mantenha a pasta `visualizador/examples` junto dos demais arquivos. **Complexo e SOLVATOR** apresenta duas estruturas estáticas; a dinâmica do complexo está em **Parede: retenção das águas**.
+
 ## O que pode ser observado
 
 - **Energias cinética, potencial e total**, em Hartree ou kJ/mol; valores absolutos ou variações desde o primeiro valor disponível de cada curva.
 - **Temperatura em K**, em um gráfico separado. Condições NVE/NVT são lidas do input reproduzido no `.out`, quando reconhecíveis, ou informadas pelo aluno; não são inferidas da aparência dos números.
 - **Tempo em fs, ps ou s**, com duração física explícita, preservando o relógio de um reinício.
 - **Animação XYZ**, reprodução/pausa, velocidade de 0,25× a 4×, avanço/retorno de um quadro, escolha direta pelo número, rotação, ampliação, índices dos átomos e energias/temperatura do ponto correspondente. A câmera permanece na orientação escolhida durante a animação. As coordenadas do átomo selecionado acompanham o quadro atual. A sincronização exige tempo e, quando presente, passo compatíveis; não é feita pela posição da linha.
-- **Distâncias, ângulos e diedros**, calculada diretamente de cada quadro XYZ, sem `Manage_Colvar` no input. Índices começam em zero. Também lê Colvars de distância em Angstrom; forças e ângulos não viram distâncias.
+- **Distâncias, ângulos e diedros**, calculados diretamente de cada quadro XYZ, sem `Manage_Colvar` no input. Índices começam em zero. Também lê Colvars de distância em Angstrom; forças e ângulos não viram distâncias.
 - **Exportação CSV** das séries de energia originais e das medidas geométricas selecionadas. A exportação energética mantém Hartree/fs/K, independentemente da transformação usada no gráfico.
 
 Os traços covalentes são estimados por proximidade. As ligações H aparecem tracejadas e os contatos de coordenação podem ser ligados/desligados separadamente. São sugestões geométricas, não ordens de ligação obtidas de uma análise eletrônica. O XYZ não define protonação ou caráter aceptor completo: examine o contexto químico antes de interpretar um traço.

@@ -15,3 +15,7 @@ A arte `workshop-ppgq-uerj-2026.jpeg` é a imagem original disponibilizada na [p
 - `ufrrj-logo-compacto.png`: [Logomarca 2 em PNG](https://institucional.ufrrj.br/ccs/files/2019/06/rural_logo02.png), variante oficial compacta da mesma instituição, usada na capa para melhorar a legibilidade junto à marca UERJ.
 
 Arquivos oficiais obtidos em 28/09/2026, preservados sem redesenho, recorte ou recoloração. Na capa, a escala mantém a proporção original. Os direitos sobre as marcas permanecem com as respectivas instituições.
+
+## Prévia do aplicativo e acessos
+
+`laboratorio-preview.png` é uma captura do Laboratório de trajetórias deste repositório, mostrando a referência de Zn–en com parede. É uma prévia da interface, preservada sem editar as coordenadas ou os valores exibidos; o link abre o resultado interativo. Os arquivos `botao-*.svg` são elementos de navegação autorais do README, sem dados científicos.
