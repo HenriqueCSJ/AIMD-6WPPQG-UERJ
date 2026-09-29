@@ -8,6 +8,18 @@ __pycache__/
 .DS_Store
 Thumbs.db
 
+# Arquivos auxiliares do LaTeX; fonte e PDF permanecem versionaveis
+*.aux
+*.log
+*.nav
+*.snm
+*.toc
+*.vrb
+*.synctex.gz
+*.fls
+*.fdb_latexmk
+/slides/**/*.out
+
 # Arquivos volumosos/reiniciaveis gerados pelo ORCA
 *.gbw
 *.ges
@@ -31,3 +43,5 @@ Thumbs.db
 *.tar.bz2
 *.zip
 
+# Pacotes didaticos: apenas inputs, XYZ e estados de reinicio da aula
+!exercicios/*/aula-*.zip

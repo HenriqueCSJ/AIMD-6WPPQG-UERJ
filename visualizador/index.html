@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Leia resultados de dinâmica molecular do ORCA: energias, temperatura, trajetórias e distâncias. Tudo no seu navegador.">
+  <title>Laboratório de trajetórias · AIMD com ORCA</title>
+  <link rel="stylesheet" href="app.css">
+  <script defer src="orca-parser.js"></script><script defer src="charts.js"></script>
+  <script defer src="vendor/3Dmol-min.js"></script><script defer src="examples.js"></script><script defer src="app.js"></script>
+</head>
+<body>
+<a class="skip" href="#main">Ir para o conteúdo</a>
+<header class="topbar">
+  <a class="brand" href="../exercicios/index.html"><span class="brand-icon" aria-hidden="true">◈</span><span>AIMD com ORCA<small>6º Workshop PPGQ–UERJ · 2026</small></span></a>
+  <nav aria-label="Apoio"><a href="../exercicios/index.html">Exercícios <span aria-hidden="true">↗</span></a><button type="button" class="text-button" id="help-button">Como usar</button><span class="privacy"><span aria-hidden="true">●</span> Seus arquivos ficam aqui</span></nav>
+</header>
+<main id="main">
+  <section class="intro" aria-labelledby="app-title">
+    <p class="eyebrow">LABORATÓRIO DE TRAJETÓRIAS</p>
+    <h1 id="app-title">Do cálculo à interpretação.</h1>
+    <p>Carregue os resultados. Veja o movimento, acompanhe a energia e faça perguntas à sua simulação.</p>
+  </section>
+
+  <section class="start-grid" aria-label="Carregar uma simulação">
+    <div class="drop-zone" id="drop-zone">
+      <span class="upload-icon" aria-hidden="true">↑</span>
+      <div><h2>Traga seus arquivos do ORCA</h2><p>Arraste o <strong>.out</strong>, os <strong>.csv</strong> e o <strong>.xyz</strong> para cá. Pode selecionar vários de uma vez.</p></div>
+      <button type="button" class="button primary" id="upload-button">Selecionar arquivos</button>
+      <input id="file-input" type="file" multiple accept=".csv,.out,.log,.xyz" hidden>
+      <p class="drop-note">Leitura local, sem conta e sem instalação. Até 80 MB por arquivo.</p>
+    </div>
+    <div class="example-card">
+      <span class="eyebrow">EXPERIMENTE COM A AULA</span>
+      <h2>Abra um resultado pronto</h2>
+      <label class="sr-only" for="example-select">Exemplo do minicurso</label>
+      <select id="example-select">
+        <option value="water">1 · Água com DFT</option>
+        <option value="solvent">2 · Água: vácuo × CPCM</option>
+        <option value="ethanol">3 · Etanol com XTB2</option>
+        <option value="timestep" selected>4 · O efeito do timestep</option>
+        <option value="thermostat">5 · NVE × termostato</option>
+        <option value="solvator">6 · Complexo e SOLVATOR</option>
+        <option value="complex">7 · Complexo: com × sem parede</option>
+      </select>
+      <button class="button secondary" id="example-button" type="button">Explorar exemplo <span aria-hidden="true">→</span></button>
+      <p class="muted small">Resultados reais do minicurso, identificados como referência.</p>
+    </div>
+  </section>
+
+  <div id="message" class="message" role="status" aria-live="polite" hidden></div>
+  <section id="workspace" hidden aria-label="Análise dos resultados">
+    <div class="workspace-top"><div><span class="eyebrow">SEUS RESULTADOS</span><h2>Uma pergunta de cada vez.</h2></div><button type="button" class="text-button" id="clear-button">Limpar sessão</button></div>
+    <div id="runs" class="run-list" aria-label="Simulações carregadas"></div>
+    <div class="tabs" role="tablist" aria-label="O que deseja observar?">
+      <button type="button" role="tab" id="tab-energy" aria-selected="true" aria-controls="panel-energy" data-tab="energy">01 <span>Energia e temperatura</span></button>
+      <button type="button" role="tab" id="tab-trajectory" aria-selected="false" aria-controls="panel-trajectory" tabindex="-1" data-tab="trajectory">02 <span>Trajetória</span></button>
+      <button type="button" role="tab" id="tab-distance" aria-selected="false" aria-controls="panel-distance" tabindex="-1" data-tab="distance">03 <span>Distâncias</span></button>
+    </div>
+
+    <section id="panel-energy" role="tabpanel" aria-labelledby="tab-energy">
+      <div class="toolbar">
+        <label>Mostrar energia como<select id="energy-mode"><option value="delta">Variação desde o início (Δ)</option><option value="absolute">Valor absoluto</option></select></label>
+        <label>Unidade de energia<select id="energy-unit"><option value="kj">kJ/mol</option><option value="eh">Hartree (Eh)</option></select></label>
+        <label>Tempo no eixo<select id="time-unit"><option value="fs">fs</option><option value="ps">ps</option><option value="s">s</option></select></label>
+        <button type="button" class="button small-button" id="export-energy">Baixar dados CSV</button>
+      </div>
+      <fieldset class="series-controls"><legend class="sr-only">Energias visíveis</legend><label><input type="checkbox" name="energy-series" value="total" checked> Total · E</label><label><input type="checkbox" name="energy-series" value="potential" checked> Potencial · U</label><label><input type="checkbox" name="energy-series" value="kinetic" checked> Cinética · K</label><span id="delta-note">ΔX = X(t) − X(primeiro ponto), para cada curva.</span></fieldset>
+      <div id="energy-empty" class="empty" hidden></div>
+      <div id="energy-content">
+        <div id="time-summary" class="time-summary"></div>
+        <div class="chart-card"><div class="chart-heading"><h3 id="energy-title">Variação das energias</h3><span class="muted small">Passe o cursor ou use ← → sobre o gráfico</span></div><div id="energy-chart" class="chart"></div></div>
+        <div class="chart-card"><div class="chart-heading"><h3>Temperatura</h3><span class="muted small">A temperatura instantânea flutua</span></div><div id="temperature-chart" class="chart"></div></div>
+        <div id="energy-stats" class="stats-row"></div>
+      </div>
+      <aside class="interpret" id="energy-guide"></aside>
+    </section>
+
+    <section id="panel-trajectory" role="tabpanel" aria-labelledby="tab-trajectory" hidden>
+      <div class="toolbar"><label>Simulação<select id="trajectory-run"></select></label><button type="button" class="button small-button" id="reset-view">Centralizar</button><label class="check-label"><input id="proximity-lines" type="checkbox" checked> Traços de proximidade</label><label class="check-label"><input id="atom-labels" type="checkbox"> Mostrar índices</label></div>
+      <div id="trajectory-empty" class="empty" hidden></div>
+      <div id="trajectory-content" class="trajectory-layout">
+        <div class="molecule-card"><div id="molecule" aria-label="Estrutura molecular interativa. Arraste para girar e use a roda para ampliar." role="img"></div><div class="molecule-legend" id="molecule-legend"></div><div class="playback"><button type="button" class="button primary" id="play-button">▶ Reproduzir</button><label class="sr-only" for="frame-slider">Quadro da trajetória</label><input id="frame-slider" type="range" min="0" max="0" value="0"><output id="frame-time"></output></div><p class="small muted molecule-note">Arraste para girar · Roda para ampliar · Clique para identificar um átomo. Os traços entre átomos não metálicos são estimados por proximidade; não representam ordens de ligação. Use Distâncias para examinar a coordenação do metal.</p></div>
+        <aside class="trajectory-aside"><span class="eyebrow">NO QUADRO ATUAL</span><div id="frame-values"></div><div id="atom-info" class="atom-info">Selecione um átomo para ver seu índice e suas coordenadas.</div><div class="interpret"><h3>Observe o movimento</h3><p>O que vibra? O que gira? O solvente se reorganiza?</p><p>A velocidade da animação é uma escolha de reprodução; o tempo físico aparece abaixo da molécula.</p><button class="text-button" type="button" id="goto-distances">Medir uma distância →</button></div></aside>
+      </div>
+    </section>
+
+    <section id="panel-distance" role="tabpanel" aria-labelledby="tab-distance" hidden>
+      <div class="toolbar"><label>Simulação<select id="distance-run"></select></label><label>Origem das distâncias<select id="distance-source"><option value="xyz">Coordenadas XYZ</option><option value="colvars">CSV de Colvars</option></select></label><button class="button small-button" id="export-distance" type="button">Baixar distâncias CSV</button></div>
+      <div id="distance-empty" class="empty" hidden></div>
+      <div id="distance-content">
+        <div id="atom-pair-controls" class="pair-controls"><label>Primeiro átomo<select id="atom-a"></select></label><span class="pair-dash" aria-hidden="true">—</span><label>Segundo átomo<select id="atom-b"></select></label><button type="button" class="button secondary" id="add-distance">Adicionar distância</button><p class="small muted">Índices começam em 0, como no ORCA. Não precisa alterar o input.</p></div>
+        <div id="colvar-controls" class="series-controls" hidden></div><div id="distance-chips" class="distance-chips"></div>
+        <div class="chart-card"><div class="chart-heading"><h3>Distância entre átomos</h3><span class="muted small">Coordenadas em Å</span></div><div id="distance-chart" class="chart"></div></div><div id="distance-stats" class="stats-row"></div>
+      </div>
+      <aside class="interpret"><h3>Proximidade é uma observação. Ligação é uma interpretação.</h3><p>A distância oscila em uma faixa ou muda de maneira persistente? Compare a curva com a trajetória. A ausência de troca de ligantes em poucos femtossegundos não determina estabilidade termodinâmica ou velocidade de reação.</p></aside>
+    </section>
+
+    <details class="details" id="file-details"><summary>Arquivos, condições do cálculo e observações de leitura</summary><div id="file-details-content"></div></details>
+  </section>
+
+  <section id="welcome-guide" class="welcome-guide"><div><span>01</span><h3>Carregue</h3><p>O CSV traz a série completa. O .out acrescenta as condições do cálculo. O XYZ traz o movimento.</p></div><div><span>02</span><h3>Compare</h3><p>Sobreponha simulações para observar o timestep, o termostato ou a presença de solvente.</p></div><div><span>03</span><h3>Interprete</h3><p>Use uma curva e uma observação da trajetória para responder à pergunta do exercício.</p></div></section>
+</main>
+<footer><span>Henrique de Castro Silva Junior · Virginia Camila Rufino Ferreira</span><span>ORCA 6.1 · <a href="https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html" target="_blank" rel="noopener noreferrer">Manual de dinâmica ↗</a></span></footer>
+<dialog id="help-dialog"><button type="button" class="dialog-close text-button" id="close-help" aria-label="Fechar ajuda">✕</button><p class="eyebrow">COMECE AQUI</p><h2>Do arquivo ao gráfico, em três passos.</h2><ol><li>Ao terminar o cálculo, selecione <strong>nome-md-ener.csv</strong>. Ele contém as energias e a temperatura.</li><li>Junte <strong>nome.out</strong> para reconhecer método e termostato, e <strong>nome-traj.xyz</strong> para animar e medir distâncias. Arquivos com o mesmo nome-base são associados.</li><li>Abra as abas e compare as curvas. Para comparar cálculos, carregue os arquivos de cada um.</li></ol><p>No WSL, abra a pasta do cálculo no Explorador do Windows com <code>explorer.exe .</code> e selecione os arquivos nessa pasta.</p><p>Arquivos são processados neste navegador e não são enviados a um servidor. Fechar ou recarregar a página limpa a sessão. Os exemplos também funcionam na cópia local, sem internet.</p><p class="small muted">O .out pode omitir passos intermediários. Um arquivo com término normal não comprova equilíbrio ou qualidade do método. O aplicativo não executa ORCA e não estima energias livres.</p><button class="button primary" type="button" id="help-done">Entendi</button></dialog>
+<noscript><p class="message">Ative JavaScript neste navegador para ler os arquivos e desenhar os gráficos.</p></noscript>
+</body></html>

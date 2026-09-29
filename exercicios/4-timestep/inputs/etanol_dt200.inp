@@ -1,0 +1,17 @@
+# Passo grande de proposito: observe o erro de integracao.
+! MD XTB2 PAL8
+%maxcore 256
+
+%md
+  Timestep 2.0_fs
+  Randomize 42
+  # Velocidades iniciais; nao mantem a temperatura fixa.
+  Initvel 300_K
+  Thermostat None
+  Dump Position Stride 1 Filename "etanol_dt200-traj.xyz"
+  # 250 x 2 fs = 500 fs (5e-13 s).
+  Run 250
+end
+
+# Carga 0, multiplicidade 1; XYZ na mesma pasta.
+* xyzfile 0 1 etanol.xyz

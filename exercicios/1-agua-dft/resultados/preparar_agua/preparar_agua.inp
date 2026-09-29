@@ -1,0 +1,15 @@
+# Minicurso AIMD / ORCA 6.1.1 - preparar_agua
+# Estas linhas de comentario explicam as escolhas e nao alteram o calculo.
+# Execute um caso por vez; mantenha o arquivo XYZ na pasta de execucao.
+
+# Relaxa a geometria. PAL8 solicita oito recursos. BLYP/def2-SVP e o nivel
+# DFT; TightSCF aperta a convergencia eletronica.
+! BLYP def2-SVP TightSCF Opt PAL8
+
+# Memoria em MB por processo. 256 x 8 = 2048 MB de orcamento, alem de memoria
+# adicional.
+%maxcore 256
+
+# Le o XYZ: carga total 0, multiplicidade 1. O nome do arquivo deve coincidir
+# exatamente.
+* xyzfile 0 1 agua_inicial.xyz

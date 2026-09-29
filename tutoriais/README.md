@@ -11,5 +11,6 @@
 3. **Rota alternativa:** [Windows nativo + ORCA 6.1.1 + MS-MPI](02-windows-orca-msmpi.md)
 4. [Testes serial e paralelo](03-testar-instalacao.md)
 5. [Downloads e referências oficiais](04-links-e-referencias.md)
+6. [Confira XTB2 e SOLVATOR](05-xtb-solvator.md) — teste primeiro; instale o xTB externo somente se necessário.
 
 **Ambiente da aula:** no Ubuntu 24.04, instalamos Open MPI **4.1.6 via apt**; no Windows nativo, MS-MPI **10.1.12498.52**. O pacote Linux informa compilação com MPI 4.1.8; o guia registra essa diferença e orienta a conferir o funcionamento com testes serial e paralelo. Cada participante deve baixar o ORCA com sua própria conta e aceitar os termos aplicáveis.

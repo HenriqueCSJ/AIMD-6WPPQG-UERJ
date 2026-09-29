@@ -1,0 +1,45 @@
+Indices ORCA comecam em zero. Linhas do XYZ: duas linhas de cabecalho antes dos atomos.
+
+ 0 Zn metal
+ 1 N  etilenodiamina
+ 2 C  etilenodiamina
+ 3 C  etilenodiamina
+ 4 N  etilenodiamina
+ 5 H  etilenodiamina
+ 6 H  etilenodiamina
+ 7 H  etilenodiamina
+ 8 H  etilenodiamina
+ 9 H  etilenodiamina
+10 H  etilenodiamina
+11 H  etilenodiamina
+12 H  etilenodiamina
+13 O  agua inicialmente coordenada
+14 H  agua inicialmente coordenada
+15 H  agua inicialmente coordenada
+16 O  agua inicialmente coordenada
+17 H  agua inicialmente coordenada
+18 H  agua inicialmente coordenada
+19 O  agua inicialmente coordenada
+20 H  agua inicialmente coordenada
+21 H  agua inicialmente coordenada
+22 O  agua inicialmente coordenada
+23 H  agua inicialmente coordenada
+24 H  agua inicialmente coordenada
+25 O  agua adicionada pelo SOLVATOR
+26 H  agua adicionada pelo SOLVATOR
+27 H  agua adicionada pelo SOLVATOR
+28 O  agua adicionada pelo SOLVATOR
+29 H  agua adicionada pelo SOLVATOR
+30 H  agua adicionada pelo SOLVATOR
+31 O  agua adicionada pelo SOLVATOR
+32 H  agua adicionada pelo SOLVATOR
+33 H  agua adicionada pelo SOLVATOR
+34 O  agua adicionada pelo SOLVATOR
+35 H  agua adicionada pelo SOLVATOR
+36 H  agua adicionada pelo SOLVATOR
+37 O  agua adicionada pelo SOLVATOR
+38 H  agua adicionada pelo SOLVATOR
+39 H  agua adicionada pelo SOLVATOR
+40 O  agua adicionada pelo SOLVATOR
+41 H  agua adicionada pelo SOLVATOR
+42 H  agua adicionada pelo SOLVATOR

@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>4. Passo de integração · AIMD / ORCA</title><link rel="stylesheet" href="../pagina.css"><script defer src="../pagina.js"></script></head>
+<body><a class="skip" href="#conteudo">Ir para o conteúdo</a><header class="brand"><a href="../index.html"><strong>AIMD com ORCA</strong><small>6º Workshop PPGQ–UERJ · 7 de outubro de 2026</small></a><div class="logos"><img src="../../assets/uerj-logo.png" alt="UERJ"><img src="../../assets/ufrrj-logo-compacto.png" alt="UFRRJ"></div></header><div class="layout"><nav class="course-nav" aria-label="Exercícios"><h2>Do input à interpretação</h2><a class="home" href="../index.html">Visão geral do percurso</a><div class="links"><a href="../1-agua-dft/index.html"><span class="num">01</span><span>Água com DFT</span></a><a href="../2-solvente-implicito/index.html"><span class="num">02</span><span>Solvente implícito</span></a><a href="../3-xtb2-etanol/index.html"><span class="num">03</span><span>XTB2 e etanol</span></a><a href="../4-timestep/index.html" aria-current="page"><span class="num">04</span><span>Passo de integração</span></a><a href="../5-termostato/index.html"><span class="num">05</span><span>Temperatura e termostato</span></a><a href="../6-complexo-solvator/index.html"><span class="num">06</span><span>Zn–en e SOLVATOR</span></a><a href="../7-dinamica-complexo/index.html"><span class="num">07</span><span>Dinâmica do complexo</span></a></div></nav><main id="conteudo"><h1 id="4-testar-um-passo-grande-demais">4. Testar um passo grande demais</h1>
+<p><a href="../index.html">← Percurso</a> · <a href="../../visualizador/index.html">Aplicativo de análise</a></p>
+<p><strong>25 min · etanol · o mesmo tempo físico</strong></p>
+<blockquote>
+<p><strong>Pergunta da atividade:</strong> Terminar normalmente significa que o timestep foi adequado?</p>
+</blockquote>
+<h2 id="1-prepare">1. Prepare</h2>
+<p>Vamos usar <strong>2 fs por passo</strong>, de propósito. Para manter os mesmos <strong>500 fs = 5 × 10⁻¹³ s</strong>, reduzimos <code>Run</code> para 250. Compare com os 0,5 fs do exercício 3.</p>
+<p><a href="aula-etanol_dt200.zip">Baixar os arquivos da atividade</a> · <a href="estruturas/etanol.xyz">Abrir a estrutura</a></p>
+<p>Extraia o pacote. Ele contém o input e os arquivos que precisam ficar juntos. Use uma pasta para esta atividade.</p>
+<h2 id="2-execute">2. Execute</h2>
+<p>Salve este conteúdo como <strong><code>etanol_dt200.inp</code></strong>; ele já está no pacote.</p>
+<p><a href="inputs/etanol_dt200.inp">Baixar input</a> · <a href="aula-etanol_dt200.zip">Baixar pacote com os arquivos necessários</a></p>
+<pre><code class="language-text"># Passo grande de proposito: observe o erro de integracao.
+! MD XTB2 PAL8
+%maxcore 256
+
+%md
+  Timestep 2.0_fs
+  Randomize 42
+  # Velocidades iniciais; nao mantem a temperatura fixa.
+  Initvel 300_K
+  Thermostat None
+  Dump Position Stride 1 Filename &quot;etanol_dt200-traj.xyz&quot;
+  # 250 x 2 fs = 500 fs (5e-13 s).
+  Run 250
+end
+
+# Carga 0, multiplicidade 1; XYZ na mesma pasta.
+* xyzfile 0 1 etanol.xyz
+</code></pre>
+<p><strong>Repare nestas escolhas:</strong></p>
+<ul>
+<li>Mude timestep e número de passos juntos: <strong>2 × 250 = 0,5 × 1000 = 500 fs</strong>.</li>
+<li>O sistema e a inicialização são os mesmos; o teste é da integração.</li>
+</ul>
+<details>
+<summary>Executar no Ubuntu / WSL2 — recomendado</summary>
+<p>Extraia o pacote em uma pasta e abra o terminal Ubuntu <strong>nessa pasta</strong>, onde estão o input e o XYZ. Com <code>ORCA_DIR</code> configurado no tutorial, copie o bloco inteiro. Ele cria uma execução nova e devolve o terminal à pasta inicial.</p>
+<pre><code class="language-bash">(
+  test -x &quot;$ORCA_DIR/orca&quot; || { echo &quot;Configure ORCA_DIR antes de executar.&quot;; exit 1; }
+  pasta=$(mktemp -d ./execucao-XXXXXX) || exit 1
+  cp etanol_dt200.inp etanol.xyz &quot;$pasta/&quot; || exit 1
+  cd &quot;$pasta&quot; || exit 1
+  &quot;$ORCA_DIR/orca&quot; etanol_dt200.inp &gt; etanol_dt200.out 2&gt;&amp;1
+  tail -n 5 etanol_dt200.out
+  echo &quot;Resultados: $PWD&quot;
+)
+</code></pre>
+<p>Procure <strong><code>ORCA TERMINATED NORMALLY</code></strong>. Abra <code>explorer.exe .</code> para localizar a nova pasta <code>execucao-…</code> e carregar os arquivos no aplicativo. Execute um cálculo por vez; o ORCA gerencia o paralelismo de <code>PAL8</code>.</p>
+</details>
+<details>
+<summary>Alternativa: executar no Windows nativo</summary>
+<p>Extraia o pacote, abra o PowerShell nessa pasta e ajuste o caminho do ORCA. Esta rota exige ORCA/MS-MPI já testados na instalação.</p>
+<pre><code class="language-powershell">&amp; {
+  $orca = 'C:\ORCA_6.1.1\orca.exe'
+  if (-not (Test-Path -LiteralPath $orca)) { throw 'Ajuste o caminho do ORCA.' }
+  $pasta = Join-Path $PWD ('execucao-' + [guid]::NewGuid().ToString('N'))
+  New-Item -ItemType Directory -Path $pasta | Out-Null
+  Copy-Item -LiteralPath 'etanol_dt200.inp', 'etanol.xyz' -Destination $pasta -ErrorAction Stop
+  Push-Location $pasta
+  try {
+    &amp; $orca etanol_dt200.inp &gt; etanol_dt200.out 2&gt;&amp;1
+    Get-Content etanol_dt200.out -Tail 5
+    Get-Location
+  } finally { Pop-Location }
+}
+</code></pre>
+</details>
+<h2 id="3-veja-e-interprete">3. Veja e interprete</h2>
+<p><a href="../../visualizador/index.html">Carregar meus arquivos no aplicativo</a> · <a href="../../visualizador/index.html?exemplo=timestep">Abrir as referências desta atividade</a></p>
+<p>Na nova pasta de execução, selecione <strong><code>etanol_dt200.out</code></strong>, <strong><code>etanol_dt200-md-ener.csv</code></strong> e <strong><code>etanol_dt200-traj.xyz</code></strong>. Pode carregar os três juntos.</p>
+<ol>
+<li>Compare as referências de 0,25, 0,5 e 2 fs no aplicativo.</li>
+<li>Selecione <strong>Total · E</strong> e <strong>Variação desde o início</strong>. Qual curva oscila mais?</li>
+<li>Compare a amplitude de E. Depois veja o custo de usar um passo menor.</li>
+</ol>
+<blockquote>
+<p><strong>Para levar:</strong> Escolha o timestep pela qualidade da integração, não apenas pelo término normal.</p>
+</blockquote>
+<details>
+<summary>Opcional: repetir com passo menor</summary>
+<p>O caso de 0,25 fs usa 2.000 passos para manter os mesmos 500 fs. Durante a aula, você pode apenas abrir sua referência.</p>
+<p><a href="inputs/etanol_dt025.inp">Baixar input</a> · <a href="aula-etanol_dt025.zip">Baixar pacote com os arquivos necessários</a></p>
+<pre><code class="language-text"># Passo menor: compare com o mesmo tempo fisico de NVE.
+! MD XTB2 PAL8
+%maxcore 256
+
+%md
+  Timestep 0.25_fs
+  Randomize 42
+  # Velocidades iniciais; nao mantem a temperatura fixa.
+  Initvel 300_K
+  Thermostat None
+  Dump Position Stride 1 Filename &quot;etanol_dt025-traj.xyz&quot;
+  # 2000 x 0.25 fs = 500 fs (5e-13 s).
+  Run 2000
+end
+
+# Carga 0, multiplicidade 1; XYZ na mesma pasta.
+* xyzfile 0 1 etanol.xyz
+</code></pre>
+<details>
+<summary>Executar no Ubuntu / WSL2 — recomendado</summary>
+<p>Extraia o pacote em uma pasta e abra o terminal Ubuntu <strong>nessa pasta</strong>, onde estão o input e o XYZ. Com <code>ORCA_DIR</code> configurado no tutorial, copie o bloco inteiro. Ele cria uma execução nova e devolve o terminal à pasta inicial.</p>
+<pre><code class="language-bash">(
+  test -x &quot;$ORCA_DIR/orca&quot; || { echo &quot;Configure ORCA_DIR antes de executar.&quot;; exit 1; }
+  pasta=$(mktemp -d ./execucao-XXXXXX) || exit 1
+  cp etanol_dt025.inp etanol.xyz &quot;$pasta/&quot; || exit 1
+  cd &quot;$pasta&quot; || exit 1
+  &quot;$ORCA_DIR/orca&quot; etanol_dt025.inp &gt; etanol_dt025.out 2&gt;&amp;1
+  tail -n 5 etanol_dt025.out
+  echo &quot;Resultados: $PWD&quot;
+)
+</code></pre>
+<p>Procure <strong><code>ORCA TERMINATED NORMALLY</code></strong>. Abra <code>explorer.exe .</code> para localizar a nova pasta <code>execucao-…</code> e carregar os arquivos no aplicativo. Execute um cálculo por vez; o ORCA gerencia o paralelismo de <code>PAL8</code>.</p>
+</details>
+<details>
+<summary>Alternativa: executar no Windows nativo</summary>
+<p>Extraia o pacote, abra o PowerShell nessa pasta e ajuste o caminho do ORCA. Esta rota exige ORCA/MS-MPI já testados na instalação.</p>
+<pre><code class="language-powershell">&amp; {
+  $orca = 'C:\ORCA_6.1.1\orca.exe'
+  if (-not (Test-Path -LiteralPath $orca)) { throw 'Ajuste o caminho do ORCA.' }
+  $pasta = Join-Path $PWD ('execucao-' + [guid]::NewGuid().ToString('N'))
+  New-Item -ItemType Directory -Path $pasta | Out-Null
+  Copy-Item -LiteralPath 'etanol_dt025.inp', 'etanol.xyz' -Destination $pasta -ErrorAction Stop
+  Push-Location $pasta
+  try {
+    &amp; $orca etanol_dt025.inp &gt; etanol_dt025.out 2&gt;&amp;1
+    Get-Content etanol_dt025.out -Tail 5
+    Get-Location
+  } finally { Pop-Location }
+}
+</code></pre>
+</details>
+</details>
+<details>
+<summary>Referências, preparação e explicações adicionais</summary>
+<p>Resultados reais já calculados com PAL8. O input completo de cada referência está ao lado da saída; as séries não foram substituídas por simulações novas.</p>
+<ul>
+<li><strong>etanol_dt200:</strong> <a href="resultados/etanol_dt200/etanol_dt200.inp">input completo usado</a> · <a href="resultados/etanol_dt200/etanol_dt200.out">saída</a> · <a href="resultados/etanol_dt200/etanol_dt200-md-ener.csv">energias</a> · <a href="resultados/etanol_dt200/etanol_dt200-traj.xyz">trajetória</a>.</li>
+<li><strong>etanol_dt025:</strong> <a href="resultados/etanol_dt025/etanol_dt025.inp">input completo usado</a> · <a href="resultados/etanol_dt025/etanol_dt025.out">saída</a> · <a href="resultados/etanol_dt025/etanol_dt025-md-ener.csv">energias</a> · <a href="resultados/etanol_dt025/etanol_dt025-traj.xyz">trajetória</a>.</li>
+</ul>
+<p><a href="apoio.html">Consultar preparação, números e respostas</a>.</p>
+</details>
+<p><strong>Manual:</strong> <a href="https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html#timestep">Timestep</a>.</p>
+<p><strong>Antes de avançar:</strong> anote uma mudança no input, uma observação e uma conclusão que esta trajetória ainda não permite.</p><nav class="endnav" aria-label="Próxima etapa"><a href="../3-xtb2-etanol/index.html">← Exercício 3</a><a href="../5-termostato/index.html">Exercício 5 →</a></nav></main></div><footer>Henrique de Castro Silva Junior e Virginia Camila Rufino Ferreira · ORCA 6.1.1 · Materiais e dados locais; links externos levam à documentação oficial.</footer></body></html>

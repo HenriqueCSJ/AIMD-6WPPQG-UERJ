@@ -1,0 +1,16 @@
+# Piloto operacional curto: nao mede convergencia nem propriedades de equilibrio.
+! MD BLYP def2-SVP TightSCF CPCM(water)
+%maxcore 256
+%md
+  Timestep 0.5_fs
+  Randomize 42
+  Initvel 300_K
+  Thermostat None
+  Dump Position Stride 1 Filename "trajetoria.xyz"
+  Run 40
+end
+* xyz 0 1
+O 0.0 0.0 0.0
+H 0.758602 0.0 0.504284
+H -0.758602 0.0 0.504284
+*

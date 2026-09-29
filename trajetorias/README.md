@@ -1,8 +1,7 @@
-# Trajetórias
+# Trajetórias de referência
 
 [← Materiais](../README.md#materiais-do-minicurso)
 
-Espaço para trajetórias de referência, incluindo exemplos pequenos que permitam acompanhar a aula sem executar toda a simulação. Ainda não há trajetórias nesta versão.
+Os XYZ com múltiplos quadros estão junto dos [sete exercícios](../exercicios/README.md), em `resultados/nome-do-caso/nome-do-caso-traj.xyz`. As páginas identificam duração, timestep e condições usadas.
 
-Cada arquivo deverá indicar origem, input correspondente, unidade de tempo e intervalo entre frames. Uma sequência XYZ não informa necessariamente esses dados por conta própria.
-
+O histórico `.solvator.solventbuild.xyz` do exercício 6 mostra a montagem do solvente; ele não representa uma trajetória temporal de dinâmica.

@@ -1,0 +1,132 @@
+{
+  "energy": {
+    "records": 1001,
+    "first_step": 200,
+    "last_step": 1200,
+    "start_time_fs": 100.0,
+    "time_fs": 600.0,
+    "elapsed_simulation_fs": 500.0,
+    "dt_fs": 0.5,
+    "E_initial_Eh": -65.080066,
+    "E_final_Eh": -65.035452,
+    "delta_E_final_Eh": 0.04461399999999571,
+    "E_span_Eh": 0.045783999999997604,
+    "max_abs_delta_E_Eh": 0.044668000000001484,
+    "linear_slope_Eh_per_ps": 0.06769475274426194,
+    "T_initial_K": 167.02,
+    "T_final_K": 306.02,
+    "T_min_K": 142.38,
+    "T_max_K": 329.93,
+    "T_mean_second_half_K": 270.5579241516966,
+    "energy_sum_max_error_Eh": 1.0000000116860974e-06,
+    "note": "Finite trajectory diagnostics, not equilibrium estimates. CSV energy rounded to 6 decimals and time to 0.1 fs; dt read from input, not inferred from rounded timestamps."
+  },
+  "trajectory_frames": 1000,
+  "atoms": 43,
+  "trajectory_start_fs": 100.5,
+  "trajectory_end_fs": 600.0,
+  "distances_A": {
+    "1": {
+      "element": "N",
+      "initial": 2.11833293966,
+      "final": 1.9968379827505336,
+      "min": 1.9372453217104997,
+      "max": 2.156816753560896
+    },
+    "4": {
+      "element": "N",
+      "initial": 2.0393429775510805,
+      "final": 2.1106982044125946,
+      "min": 1.8985805908761255,
+      "max": 2.1633436385301366
+    },
+    "13": {
+      "element": "O",
+      "initial": 1.9656148332877201,
+      "final": 2.109675377595577,
+      "min": 1.8728148264861915,
+      "max": 2.1154016795542177
+    },
+    "16": {
+      "element": "O",
+      "initial": 2.0047514142040717,
+      "final": 2.0338737160862537,
+      "min": 1.953242553973354,
+      "max": 2.2357157946874584
+    },
+    "19": {
+      "element": "O",
+      "initial": 2.2266170750324905,
+      "final": 1.9811618975083922,
+      "min": 1.9278474871189255,
+      "max": 2.308253250478085
+    },
+    "22": {
+      "element": "O",
+      "initial": 2.0891846888566463,
+      "final": 2.1249344119645905,
+      "min": 1.98397997143851,
+      "max": 2.213446293200553
+    },
+    "25": {
+      "element": "O",
+      "initial": 4.841888307418602,
+      "final": 6.869881846073889,
+      "min": 4.841888307418602,
+      "max": 6.869881846073889
+    },
+    "28": {
+      "element": "O",
+      "initial": 4.432032127360975,
+      "final": 4.1140946980043624,
+      "min": 3.70848367648965,
+      "max": 4.801690362323513
+    },
+    "31": {
+      "element": "O",
+      "initial": 4.237293956244713,
+      "final": 4.665542093417836,
+      "min": 4.1936220287320936,
+      "max": 4.672453679835673
+    },
+    "34": {
+      "element": "O",
+      "initial": 3.6819194600310237,
+      "final": 4.081956682932933,
+      "min": 3.611694328469787,
+      "max": 4.158208872686544
+    },
+    "37": {
+      "element": "O",
+      "initial": 4.524530678579755,
+      "final": 4.171117824390461,
+      "min": 4.104151251734436,
+      "max": 4.621857173935618
+    },
+    "40": {
+      "element": "O",
+      "initial": 4.015537581239341,
+      "final": 4.08661472159521,
+      "min": 3.934551779122014,
+      "max": 4.288218423313379
+    }
+  },
+  "max_radius_from_origin_A": 7.28340584519935,
+  "sphere_6A": {
+    "origin": [
+      0,
+      0,
+      0
+    ],
+    "outside_atom_frame_count": 1737,
+    "first_crossing_fs": 166.5,
+    "first_atom_index": 26,
+    "interpretation": "Spring is a soft repulsive wall, not an impenetrable boundary. Without Cell, this is only a geometric reference radius."
+  },
+  "colvars": {
+    "records": 1001,
+    "distance_columns": 12,
+    "max_distance_difference_vs_XYZ_A": 1.6445556028088504e-10,
+    "trajectory_alignment": "Matched by simulation time, not row number."
+  }
+}

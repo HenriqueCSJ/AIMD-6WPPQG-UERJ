@@ -19,6 +19,13 @@
 
 O fórum pode exigir cadastro e login para exibir os arquivos. As especificações dos pacotes 275 e 267 foram fornecidas pelo ministrante para esta edição. A descrição Linux recebida menciona um nome 6.1.0 apesar do título 6.1.1; por isso, o guia exige conferir a versão no programa. A versão de compilação informada pelo download é preservada acima; a escolha do runtime do Ubuntu é uma orientação do minicurso, acompanhada de [verificação local](03-testar-instalacao.md#verificação-desta-versão-dos-materiais).
 
+## XTB2 e SOLVATOR
+
+- [Preparação e teste para a aula](05-xtb-solvator.md) — usar `XTB2` nos inputs; verificar antes de instalar.
+- [Interface xTB no ORCA 6.1](https://www.faccts.de/docs/orca/6.1/manual/contents/modelchemistries/semiempirical.html)
+- [SOLVATOR no ORCA 6.1](https://www.faccts.de/docs/orca/6.1/manual/contents/structurereactivity/solvator.html)
+- [Distribuição oficial xTB 6.7.1](https://github.com/grimme-lab/xtb/releases/tag/v6.7.1)
+
 ## MPI
 
 - [Open MPI 4.1 — downloads oficiais](https://www.open-mpi.org/software/ompi/v4.1/)

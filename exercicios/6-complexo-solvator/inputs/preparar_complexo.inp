@@ -1,0 +1,8 @@
+# Apoio: relaxa o complexo em solvente continuo.
+! XTB2 ALPB(water) Opt TightOpt PAL8
+%maxcore 256
+
+%geom MaxIter 300 end
+
+# Carga 2, multiplicidade 1; XYZ na mesma pasta.
+* xyzfile 2 1 zn_en_inicial.xyz

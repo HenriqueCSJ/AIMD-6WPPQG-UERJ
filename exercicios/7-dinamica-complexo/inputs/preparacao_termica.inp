@@ -1,0 +1,20 @@
+# Apoio: prepara o estado comum para os dois controles.
+! MD XTB2 ALPB(water) PAL8
+%maxcore 256
+
+%md
+  Timestep 0.5_fs
+  Randomize 42
+  # Velocidades iniciais; nao mantem a temperatura fixa.
+  Initvel 300_K
+  # Banho a 300 K; acoplamento em 100 fs.
+  Thermostat CSVR 300_K Timecon 100_fs
+  # Parede suave: centro (0,0,0), raio 6 A.
+  Walls Sphere 0, 0, 0, 6.0_A Spring 10.0
+  Dump Position Stride 1 Filename "preparacao_termica-traj.xyz"
+  # 200 x 0.5 fs = 100 fs (1e-13 s).
+  Run 200
+end
+
+# Carga 2, multiplicidade 1; XYZ na mesma pasta.
+* xyzfile 2 1 zn_solvato.xyz

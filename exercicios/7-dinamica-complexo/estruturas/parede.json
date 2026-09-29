@@ -1,0 +1,11 @@
+{
+  "center_A": [
+    0,
+    0,
+    0
+  ],
+  "radius_A": 6.0,
+  "spring_kJ_mol_A2": 10,
+  "initial_max_radius_A": 5.0873779252357005,
+  "choice": "Measured initial extent plus at least 0.75 A, rounded upward to 0.5 A; no initial compression."
+}

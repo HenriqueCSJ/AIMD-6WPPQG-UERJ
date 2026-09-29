@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>6. Zn–en e SOLVATOR · AIMD / ORCA</title><link rel="stylesheet" href="../pagina.css"><script defer src="../pagina.js"></script></head>
+<body><a class="skip" href="#conteudo">Ir para o conteúdo</a><header class="brand"><a href="../index.html"><strong>AIMD com ORCA</strong><small>6º Workshop PPGQ–UERJ · 7 de outubro de 2026</small></a><div class="logos"><img src="../../assets/uerj-logo.png" alt="UERJ"><img src="../../assets/ufrrj-logo-compacto.png" alt="UFRRJ"></div></header><div class="layout"><nav class="course-nav" aria-label="Exercícios"><h2>Do input à interpretação</h2><a class="home" href="../index.html">Visão geral do percurso</a><div class="links"><a href="../1-agua-dft/index.html"><span class="num">01</span><span>Água com DFT</span></a><a href="../2-solvente-implicito/index.html"><span class="num">02</span><span>Solvente implícito</span></a><a href="../3-xtb2-etanol/index.html"><span class="num">03</span><span>XTB2 e etanol</span></a><a href="../4-timestep/index.html"><span class="num">04</span><span>Passo de integração</span></a><a href="../5-termostato/index.html"><span class="num">05</span><span>Temperatura e termostato</span></a><a href="../6-complexo-solvator/index.html" aria-current="page"><span class="num">06</span><span>Zn–en e SOLVATOR</span></a><a href="../7-dinamica-complexo/index.html"><span class="num">07</span><span>Dinâmica do complexo</span></a></div></nav><main id="conteudo"><h1 id="6-construir-o-ambiente-com-solvator">6. Construir o ambiente com SOLVATOR</h1>
+<p><a href="../index.html">← Percurso</a> · <a href="../../visualizador/index.html">Aplicativo de análise</a></p>
+<p><strong>30 min · Zn²⁺–etilenodiamina · carga +2 · singlete</strong></p>
+<blockquote>
+<p><strong>Pergunta da atividade:</strong> Como acrescentar águas explícitas a um complexo já preparado?</p>
+</blockquote>
+<h2 id="1-prepare">1. Prepare</h2>
+<p>O ponto de partida tem Zn, etilenodiamina e quatro águas: <strong>25 átomos</strong>. O SOLVATOR acrescentará seis águas, chegando a <strong>43 átomos</strong>. O banho contínuo ALPB permanece.</p>
+<p><a href="aula-zn_solvator.zip">Baixar os arquivos da atividade</a> · <a href="estruturas/zn_en.xyz">Abrir a estrutura</a></p>
+<p>Extraia o pacote. Ele contém o input e os arquivos que precisam ficar juntos. Use uma pasta para esta atividade.</p>
+<h2 id="2-execute">2. Execute</h2>
+<p>Salve este conteúdo como <strong><code>zn_solvator.inp</code></strong>; ele já está no pacote.</p>
+<p><a href="inputs/zn_solvator.inp">Baixar input</a> · <a href="aula-zn_solvator.zip">Baixar pacote com os arquivos necessários</a></p>
+<pre><code class="language-text"># SOLVATOR: acrescenta aguas explicitas ao complexo.
+! XTB2 ALPB(water) PAL8
+%maxcore 256
+
+%solvator
+  # Numero de novas aguas; o soluto fica fixo na montagem.
+  nsolv 6
+  clustermode docking
+  fixsolute true
+end
+
+# Carga 2, multiplicidade 1; XYZ na mesma pasta.
+* xyzfile 2 1 zn_en.xyz
+</code></pre>
+<p><strong>Repare nestas escolhas:</strong></p>
+<ul>
+<li><code>nsolv 6</code> significa seis águas novas, além das quatro já presentes.</li>
+<li><code>fixsolute true</code> mantém o conjunto inicial fixo durante a montagem.</li>
+</ul>
+<details>
+<summary>Executar no Ubuntu / WSL2 — recomendado</summary>
+<p>Extraia o pacote em uma pasta e abra o terminal Ubuntu <strong>nessa pasta</strong>, onde estão o input e o XYZ. Com <code>ORCA_DIR</code> configurado no tutorial, copie o bloco inteiro. Ele cria uma execução nova e devolve o terminal à pasta inicial.</p>
+<pre><code class="language-bash">(
+  test -x &quot;$ORCA_DIR/orca&quot; || { echo &quot;Configure ORCA_DIR antes de executar.&quot;; exit 1; }
+  pasta=$(mktemp -d ./execucao-XXXXXX) || exit 1
+  cp zn_solvator.inp zn_en.xyz &quot;$pasta/&quot; || exit 1
+  cd &quot;$pasta&quot; || exit 1
+  &quot;$ORCA_DIR/orca&quot; zn_solvator.inp &gt; zn_solvator.out 2&gt;&amp;1
+  tail -n 5 zn_solvator.out
+  echo &quot;Resultados: $PWD&quot;
+)
+</code></pre>
+<p>Procure <strong><code>ORCA TERMINATED NORMALLY</code></strong>. Abra <code>explorer.exe .</code> para localizar a nova pasta <code>execucao-…</code> e carregar os arquivos no aplicativo. Execute um cálculo por vez; o ORCA gerencia o paralelismo de <code>PAL8</code>.</p>
+</details>
+<details>
+<summary>Alternativa: executar no Windows nativo</summary>
+<p>Extraia o pacote, abra o PowerShell nessa pasta e ajuste o caminho do ORCA. Esta rota exige ORCA/MS-MPI já testados na instalação.</p>
+<pre><code class="language-powershell">&amp; {
+  $orca = 'C:\ORCA_6.1.1\orca.exe'
+  if (-not (Test-Path -LiteralPath $orca)) { throw 'Ajuste o caminho do ORCA.' }
+  $pasta = Join-Path $PWD ('execucao-' + [guid]::NewGuid().ToString('N'))
+  New-Item -ItemType Directory -Path $pasta | Out-Null
+  Copy-Item -LiteralPath 'zn_solvator.inp', 'zn_en.xyz' -Destination $pasta -ErrorAction Stop
+  Push-Location $pasta
+  try {
+    &amp; $orca zn_solvator.inp &gt; zn_solvator.out 2&gt;&amp;1
+    Get-Content zn_solvator.out -Tail 5
+    Get-Location
+  } finally { Pop-Location }
+}
+</code></pre>
+</details>
+<h2 id="3-veja-e-interprete">3. Veja e interprete</h2>
+<p><a href="../../visualizador/index.html">Carregar meus arquivos no aplicativo</a> · <a href="../../visualizador/index.html?exemplo=solvator">Abrir as referências desta atividade</a></p>
+<ol>
+<li>Carregue <code>zn_solvator.out</code> e <strong><code>zn_solvator.solvator.xyz</code></strong> no aplicativo.</li>
+<li>Na aba <strong>Trajetória</strong>, compare as estruturas antes e depois. O número de átomos mudou como esperado?</li>
+<li>As seis novas águas estão todas coordenadas ao Zn? Inspecione as posições e distâncias.</li>
+</ol>
+<blockquote>
+<p><strong>Para levar:</strong> SOLVATOR constrói uma estrutura candidata. Seu histórico de montagem não é uma trajetória de MD.</p>
+</blockquote>
+<details>
+<summary>Opcional: montagem mais curta</summary>
+<p>Troque seis por duas águas para praticar em menos tempo: o resultado tem 31 átomos. Execute somente uma versão. No exercício 7 todos usarão o sistema fornecido de 43 átomos.</p>
+<p><a href="inputs/zn_solvator_2aguas.inp">Baixar input</a> · <a href="aula-zn_solvator_2aguas.zip">Baixar pacote com os arquivos necessários</a></p>
+<pre><code class="language-text"># Alternativa curta: acrescenta somente duas aguas.
+! XTB2 ALPB(water) PAL8
+%maxcore 256
+
+%solvator
+  # Numero de novas aguas; o soluto fica fixo na montagem.
+  nsolv 2
+  clustermode docking
+  fixsolute true
+end
+
+# Carga 2, multiplicidade 1; XYZ na mesma pasta.
+* xyzfile 2 1 zn_en.xyz
+</code></pre>
+<details>
+<summary>Executar no Ubuntu / WSL2 — recomendado</summary>
+<p>Extraia o pacote em uma pasta e abra o terminal Ubuntu <strong>nessa pasta</strong>, onde estão o input e o XYZ. Com <code>ORCA_DIR</code> configurado no tutorial, copie o bloco inteiro. Ele cria uma execução nova e devolve o terminal à pasta inicial.</p>
+<pre><code class="language-bash">(
+  test -x &quot;$ORCA_DIR/orca&quot; || { echo &quot;Configure ORCA_DIR antes de executar.&quot;; exit 1; }
+  pasta=$(mktemp -d ./execucao-XXXXXX) || exit 1
+  cp zn_solvator_2aguas.inp zn_en.xyz &quot;$pasta/&quot; || exit 1
+  cd &quot;$pasta&quot; || exit 1
+  &quot;$ORCA_DIR/orca&quot; zn_solvator_2aguas.inp &gt; zn_solvator_2aguas.out 2&gt;&amp;1
+  tail -n 5 zn_solvator_2aguas.out
+  echo &quot;Resultados: $PWD&quot;
+)
+</code></pre>
+<p>Procure <strong><code>ORCA TERMINATED NORMALLY</code></strong>. Abra <code>explorer.exe .</code> para localizar a nova pasta <code>execucao-…</code> e carregar os arquivos no aplicativo. Execute um cálculo por vez; o ORCA gerencia o paralelismo de <code>PAL8</code>.</p>
+</details>
+<details>
+<summary>Alternativa: executar no Windows nativo</summary>
+<p>Extraia o pacote, abra o PowerShell nessa pasta e ajuste o caminho do ORCA. Esta rota exige ORCA/MS-MPI já testados na instalação.</p>
+<pre><code class="language-powershell">&amp; {
+  $orca = 'C:\ORCA_6.1.1\orca.exe'
+  if (-not (Test-Path -LiteralPath $orca)) { throw 'Ajuste o caminho do ORCA.' }
+  $pasta = Join-Path $PWD ('execucao-' + [guid]::NewGuid().ToString('N'))
+  New-Item -ItemType Directory -Path $pasta | Out-Null
+  Copy-Item -LiteralPath 'zn_solvator_2aguas.inp', 'zn_en.xyz' -Destination $pasta -ErrorAction Stop
+  Push-Location $pasta
+  try {
+    &amp; $orca zn_solvator_2aguas.inp &gt; zn_solvator_2aguas.out 2&gt;&amp;1
+    Get-Content zn_solvator_2aguas.out -Tail 5
+    Get-Location
+  } finally { Pop-Location }
+}
+</code></pre>
+</details>
+</details>
+<p><strong>Na próxima atividade</strong>, use a estrutura relaxada e o reinício fornecidos. Não é preciso executar otimização e preparação térmica durante a aula.</p>
+<details>
+<summary>Referências, preparação e explicações adicionais</summary>
+<p>Resultados reais já calculados com PAL8. O input completo de cada referência está ao lado da saída; as séries não foram substituídas por simulações novas.</p>
+<ul>
+<li><strong>zn_solvator:</strong> <a href="resultados/zn_solvator/zn_solvator.inp">input completo usado</a> · <a href="resultados/zn_solvator/zn_solvator.out">saída</a> · <a href="resultados/zn_solvator/zn_solvator.solvator.xyz">estrutura</a>.</li>
+<li><strong>zn_solvator_2aguas:</strong> <a href="resultados/zn_solvator_2aguas/zn_solvator_2aguas.inp">input completo usado</a> · <a href="resultados/zn_solvator_2aguas/zn_solvator_2aguas.out">saída</a> · <a href="resultados/zn_solvator_2aguas/zn_solvator_2aguas.solvator.xyz">estrutura</a>.</li>
+</ul>
+<p><a href="apoio.html">Consultar preparação, números e respostas</a>.</p>
+</details>
+<p><strong>Manual:</strong> <a href="https://www.faccts.de/docs/orca/6.1/manual/contents/structurereactivity/solvator.html">SOLVATOR</a>.</p>
+<p><strong>Antes de avançar:</strong> anote uma mudança no input, uma observação e uma conclusão que esta trajetória ainda não permite.</p><nav class="endnav" aria-label="Próxima etapa"><a href="../5-termostato/index.html">← Exercício 5</a><a href="../7-dinamica-complexo/index.html">Exercício 7 →</a></nav></main></div><footer>Henrique de Castro Silva Junior e Virginia Camila Rufino Ferreira · ORCA 6.1.1 · Materiais e dados locais; links externos levam à documentação oficial.</footer></body></html>

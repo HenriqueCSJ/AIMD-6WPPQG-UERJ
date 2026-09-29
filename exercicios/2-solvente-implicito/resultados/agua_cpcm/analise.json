@@ -1,0 +1,28 @@
+{
+  "energy": {
+    "records": 41,
+    "first_step": 0,
+    "last_step": 40,
+    "start_time_fs": 0.0,
+    "time_fs": 20.0,
+    "elapsed_simulation_fs": 20.0,
+    "dt_fs": 0.5,
+    "E_initial_Eh": -76.341872,
+    "E_final_Eh": -76.34183,
+    "delta_E_final_Eh": 4.199999999343618e-05,
+    "E_span_Eh": 6.499999999221018e-05,
+    "max_abs_delta_E_Eh": 6.499999999221018e-05,
+    "linear_slope_Eh_per_ps": 0.000364459930279738,
+    "T_initial_K": 300.0,
+    "T_final_K": 273.75,
+    "T_min_K": 3.84,
+    "T_max_K": 300.0,
+    "T_mean_second_half_K": 158.42190476190476,
+    "energy_sum_max_error_Eh": 1.0000000116860974e-06,
+    "note": "Finite trajectory diagnostics, not equilibrium estimates. CSV energy rounded to 6 decimals and time to 0.1 fs; dt read from input, not inferred from rounded timestamps."
+  },
+  "trajectory_frames": 41,
+  "atoms": 3,
+  "trajectory_start_fs": 0.0,
+  "trajectory_end_fs": 20.0
+}

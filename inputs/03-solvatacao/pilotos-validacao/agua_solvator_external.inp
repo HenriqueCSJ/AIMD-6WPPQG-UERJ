@@ -1,0 +1,13 @@
+# Piloto SOLVATOR: interface externa XTB2; agua + duas aguas.
+! XTB2 ALPB(water)
+%maxcore 256
+%solvator
+  nsolv 2
+  clustermode docking
+  fixsolute true
+end
+* xyz 0 1
+O 0.0 0.0 0.0
+H 0.758602 0.0 0.504284
+H -0.758602 0.0 0.504284
+*

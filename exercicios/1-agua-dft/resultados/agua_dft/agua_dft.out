@@ -1,0 +1,787 @@
+
+                                 *****************
+                                 * O   R   C   A *
+                                 *****************
+
+                                            #,                                       
+                                            ###                                      
+                                            ####                                     
+                                            #####                                    
+                                            ######                                   
+                                           ########,                                 
+                                     ,,################,,,,,                         
+                               ,,#################################,,                 
+                          ,,##########################################,,             
+                       ,#########################################, ''#####,          
+                    ,#############################################,,   '####,        
+                  ,##################################################,,,,####,       
+                ,###########''''           ''''###############################       
+              ,#####''   ,,,,##########,,,,          '''####'''          '####       
+            ,##' ,,,,###########################,,,                        '##       
+           ' ,,###''''                  '''############,,,                           
+         ,,##''                                '''############,,,,        ,,,,,,###''
+      ,#''                                            '''#######################'''  
+     '                                                          ''''####''''         
+             ,#######,   #######,   ,#######,      ##                                
+            ,#'     '#,  ##    ##  ,#'     '#,    #''#        ,####,    ,#,          
+            ##       ##  ##   ,#'  ##            #'  '#       #'       ,# #          
+            ##       ##  #######   ##           ,######,      #####,      #          
+            '#,     ,#'  ##    ##  '#,     ,#' ,#      #,     #,   #      #          
+             '#######'   ##     ##  '#######'  #'      '#     '####' #    #          
+
+
+
+                #########################################################
+                #                        -***-                          #
+                #          Department of theory and spectroscopy        #
+                #                                                       #
+                #                      Frank Neese                      #
+                #                                                       #
+                #     Directorship, Architecture, Infrastructure        #
+                #                    SHARK, DRIVERS                     #
+                #        Core code/Algorithms in most modules           #
+                #                                                       #
+                #        Max Planck Institute fuer Kohlenforschung      #
+                #                Kaiser Wilhelm Platz 1                 #
+                #                 D-45470 Muelheim/Ruhr                 #
+                #                      Germany                          #
+                #                                                       #
+                #                  All rights reserved                  #
+                #                        -***-                          #
+                #########################################################
+
+
+                         Program Version 6.1.1  -  RELEASE   -
+                                (GIT: $487d211c$)
+                          ($2025-11-21 10:33:24 +0100$)
+
+
+ With contributions from (in alphabetic order):
+[Max-Planck-Institut fuer Kohlenforschung]                               
+  Daniel Aravena         : Magnetic Suceptibility                        
+  Michael Atanasov       : Ab Initio Ligand Field Theory (pilot matlab implementation)
+  Alexander A. Auer      : GIAO ZORA, VPT2 properties, NMR spectrum      
+  Ute Becker             : All parallelization in ORCA, NUMFREQ, NUMCALC 
+  Giovanni Bistoni       : ED, misc. LED, open-shell LED, HFLD           
+  Dmytro Bykov           : pre 5.0 version of the SCF Hessian            
+  Marcos Casanova-Páez   : Triplet and SCS-CIS(D). UHF-(DLPNO)-IP/EA/STEOM-CCSD. UHF-CVS-IP/STEOM-CCSD   
+  Vijay G. Chilkuri      : MRCI spin determinant printing, contributions to CSF-ICE 
+  Pauline Colinet        : FMM embedding                                 
+  Dipayan Datta          : RHF DLPNO-CCSD density                        
+  Achintya Kumar Dutta   : EOM-CC, STEOM-CC                              
+  Nicolas Foglia         : Exact transition moments, OPA infrastructure, MCD improvements    
+  Dmitry Ganyushin       : Spin-Orbit,Spin-Spin,Magnetic field MRCI      
+  Miquel Garcia-Rates    : C-PCM and meta-GGA Hessian, CCSD/C-PCM, Gaussian charge scheme 
+  Tiago L. C. Gouveia    : GS-ROHF, GS-ROCIS                             
+  Yang Guo               : DLPNO-NEVPT2, F12-NEVPT2, CIM, IAO-localization        
+  Andreas Hansen         : Spin unrestricted coupled pair/coupled cluster methods 
+  Ingolf Harden          : AUTO-CI MPn and infrastructure                
+  Benjamin Helmich-Paris : MC-RPA, TRAH-(SCF,CASSCF), AVAS, COSX integrals, SCF dyn. polar., MC-PDFT, srDFT 
+  Lee Huntington         : MR-EOM, pCC                                   
+  Robert Izsak           : Overlap fitted RIJCOSX, COSX-SCS-MP3, EOM     
+  Riya Kayal             : Wick's Theorem for AUTO-CI, AUTO-CI UHF-CCSDT 
+  Emily Kempfer          : AUTO-CI RHF CISDT and CCSDT, approximate NEVPT4
+  Christian Kollmar      : KDIIS, OOCD, Brueckner-CCSD(T), CCSD density, CASPT2, CASPT2-K, improved NEVPT2 
+  Axel Koslowski         : Symmetry handling                             
+  Simone Kossmann        : meta-GGA functionals, TD-DFT gradient, OOMP2, (MP2 Hessian; deprecated post 5.0) 
+  Lucas Lang             : DCDCAS, Hyperfine gauge corrections, ICE-SOC+SSC
+  Marvin Lechner         : AUTO-CI (C++ implementation), FIC-MRCC        
+  Spencer Leger          : CASSCF response                               
+  Dagmar Lenk            : GEPOL surface, SMD, ORCA-2-JSON               
+  Dimitrios Liakos       : Extrapolation schemes; Compound Job, Property file
+  Dimitrios Manganas     : Further ROCIS development; embedding schemes. LFT, Crystal Embedding 
+  Dimitrios Pantazis     : SARC Basis sets                               
+  Anastasios Papadopoulos: AUTO-CI, single reference methods and gradients 
+  Taras Petrenko         : pre 6.0 DFT Hessian and TD-DFT gradient,  ECA, NRVS 
+  Petra Pikulova         : Analytic Raman intensities                    
+  Peter Pinski           : DLPNO-MP2, DLPNO-MP2 Gradient                 
+  Shashank Vittal Rao    : ES-AILFT, MagRelax                            
+  Christoph Reimann      : Effective Core Potentials                     
+  Marius Retegan         : Local ZFS, SOC                                
+  Christoph Riplinger    : Optimizer, TS searches, QM/MM, DLPNO-CCSD(T), (RO)-DLPNO pert. Triples 
+  Michael Roemelt        : Original ROCIS implementation, recursive CI coupling coefficients
+  Masaaki Saitow         : Open-shell DLPNO-CCSD energy and density      
+  Barbara Sandhoefer     : DKH picture change effects                    
+  Yorick L. A. Schmerwitz: GMF and freeze-and-release deltaSCF, NEB S-IDPP initial path                    
+  Kantharuban Sivalingam : CASSCF convergence/infrastructure, NEVPT2, NEVPT3, NEVPT4(SD), FIC-MRCI and CEPA variants
+  Bernardo de Souza      : ESD, SOC TD-DFT                               
+  Georgi L. Stoychev     : AutoAux, RI-MP2 NMR, DLPNO-MP2 response, X2C  
+  Van Anh Tran           : RI-MP2 g-tensors                              
+  Willem Van den Heuvel  : Paramagnetic NMR                              
+  Zikuan Wang            : NOTCH, Electric field optimization            
+  Frank Wennmohs         : Technical directorship and infrastructure     
+  Hang Xu                : AUTO-CI-Response properties                   
+                                                                         
+[FACCTs GmbH]                                                            
+  Markus Bursch, Nicolas Foglia, Miquel Garcia-Rates, Ingolf Harden, Hagen Neugebauer, Anastasios Papadopoulos, 
+  Christoph Riplinger, Bernardo de Souza, Georgi L. Stoychev                                                    
+                                                                 
+  APM, various basis sets, CI-OPT, improved COSX, DLPNO-Multilevel,           
+  DOCKER, DRACO, updates on ESD, Fragmentator, GOAT, IRC, LR-CPCM, L-BFGS, MBIS, meta-GGA TD-DFT gradient, ML-optimized integration grids, 
+  MM, NACMEs, nearIR, NEB, NEB-TS, NL-DFT gradient (VV10), 2- and 3-layer-ONIOM, interface openCOSMO-RS, QMMM,   
+  Crystal-QMMM, RESP, rigid body optimization, SF, symmetry and pop. for TD-DFT, various functionals, SOLVATOR                                   
+                                                                         
+[Other institutions]                                                     
+  V. Asgeirsson          : NEB                                           
+  Christoph Bannwarth    : sTDA-DFT, sTD-DFT, PBEh-3c, B97-3c, D3        
+  Giovanni Bistoni       : ETS/NOCV, ADLD/ADEX, COVALED                  
+  Martin Brehm           : Molecular dynamics                            
+  Ronald Cardenas        : ETS/NOCV                                      
+  Martina Colucci        : COVALED                                       
+  Sebastian Ehlert       : rSCAN, r2SCAN, r2SCAN-3c, D4, dhf basis sets  
+  Marvin Friede          : D4 for Fr, Ra, Ac-Lr                          
+  Lars Goerigk           : TD-DFT with DH, B97 family of functionals     
+  Stefan Grimme          : VdW corrections, initial TS optimization, DFT functionals, gCP, sTDA/sTD-DF 
+  Waldemar Hujo          : DFT-NL                                        
+  H. Jonsson             : NEB                                           
+  Holger Kruse           : gCP                                           
+  Marcel Mueller         : wB97X-3c, vDZP basis set                      
+  Hagen Neugebauer       : wr2SCAN, Native XTB                           
+  Gianluca Regni         : ADLD/ADEX                                     
+  Tobias Risthaus        : pre 6.0 range-separated hybrid DFT and stability analysis
+  Lukas Wittmann         : regularized MP2, r2SCAN double-hybrids, wr2SCAN        
+                                                                         
+We gratefully acknowledge several colleagues who have allowed us to      
+interface, adapt or use parts of their codes:                            
+  Ed Valeev, F. Pavosevic, A. Kumar             : LibInt (2-el integral package), F12 methods 
+  Garnet Chan, S. Sharma, J. Yang, R. Olivares  : DMRG                   
+  Ulf Ekstrom                                   : XCFun DFT Library      
+  Mihaly Kallay                                 : mrcc  (arbitrary order and MRCC methods)
+  Frank Weinhold                                : gennbo (NPA and NBO analysis)           
+  Simon Mueller                                 : openCOSMO-RS                            
+  Christopher J. Cramer and Donald G. Truhlar   : smd solvation model                     
+  S Lehtola, MJT Oliveira, MAL Marques          : LibXC Library                           
+  Liviu Ungur et al                             : ANISO software                          
+
+
+ Your calculation uses the libint2 library for the computation of 2-el integrals
+ For citations please refer to: http://libint.valeyev.net
+
+ Your ORCA version has been built with support for libXC version: 7.0.0
+ For citations please refer to: https://libxc.gitlab.io
+
+ This ORCA versions uses:
+   CBLAS   interface :  Fast vector & matrix operations
+   LAPACKE interface :  Fast linear algebra routines
+   SCALAPACK package :  Parallel linear algebra routines
+   Shared memory     :  Shared parallel matrices
+   BLAS/LAPACK       :  OpenBLAS 0.3.29  USE64BITINT DYNAMIC_ARCH NO_AFFINITY Haswell SINGLE_THREADED
+        Core in use  :  Haswell
+   Copyright (c) 2011-2014, The OpenBLAS Project
+
+
+  ***********************************
+  * Starting time: Mon Sep 28 12:24:55 2026
+  * Host name:     NotebookAW
+  * Process ID:    8444
+  * Working dir.:  /home/henrique/aimd-workshop/exercicios-pal8-20260928/agua_dft
+  ***********************************
+
+NOTE: MaxCore=256 MB was set to SCF,MP2,MDCI,CIPSI,MRCI,RASCI and CIS
+      => If you want to overwrite this, your respective input block should be placed after the MaxCore statement
+
+
+***************************************
+The coordinates will be read from file: agua.xyz
+***************************************
+
+
+Warning: RI is on but no J-basis has been assigned. Assigning Def2/J (nothing to worry about!)
+================================================================================
+
+----- Orbital basis set information -----
+Your calculation utilizes the basis: def2-SVP
+   F. Weigend and R. Ahlrichs, Phys. Chem. Chem. Phys. 7, 3297 (2005).
+
+----- AuxJ basis set information -----
+Your calculation utilizes the auxiliary basis: def2/J
+   H-Rn: F. Weigend, Phys. Chem. Chem. Phys. 8, 1057 (2006).
+   Fr-Lr: K. Eichkorn, F. Weigend, O. Treutler, R. Ahlrichs; Theor. Chem. Acc. 97, 119 (1997).
+
+================================================================================
+                                        WARNINGS
+                       Please study these warnings very carefully!
+================================================================================
+
+
+WARNING: Found SCFConvIgnored == true
+  ===> : Will try to continue after any unconverged SCF -
+         no matter how far from convergence the wavefunction might be.
+
+         Please be very careful with your results!
+
+
+================================================================================
+                                       INPUT FILE
+================================================================================
+NAME = agua_dft.inp
+|  1> ! MD BLYP def2-SVP TightSCF PAL8
+|  2> %maxcore 256
+|  3> %md
+|  4>   Timestep 0.5_fs
+|  5>   Randomize 42
+|  6>   Initvel 300_K
+|  7>   Thermostat None
+|  8>   Dump Position Stride 1 Filename "agua_dft-traj.xyz"
+|  9>   Run 40
+| 10> end
+| 11> * xyzfile 0 1 agua.xyz
+| 12> 
+| 13>                          ****END OF INPUT****
+================================================================================
+
+-------------------------------------------------------------------------------------------
+
+MD module early startup:
+  Installed signal handlers.
+  Extracted executable name.
+  Initialized library credit list.
+  Parsed command line without errors.
+  Initialized console color.
+Done.
+
+Will write log file to "agua_dft.md.log".
+
+Command line:  /home/henrique/bin/orca611/orca_md -orca agua_dft
+
+-------------------------------------------------------------------------------------------
+
+
+     _____    ___    _   _       _                  ______ ______  _____   ___  
+    /  ___|  / _ \  | \ | |     | |           _    /  __  \| ___ \/  __ \ / _ \ 
+    \ `--.  / /_\ \ |  \| |   __| | _   _   _| |_  | |  | || |_/ /| /  \// /_\ \
+     `--. \ |  _  | | . ` |  / _` || | | | |_   _| | |  | ||    / | |    |  _  |
+    /\__/ / | | | | | |\  | | (_| || |_| |   |_|   | \__/ || |\ \ | \__/\| | | |
+    \____/  \_| |_/ \_| \_/  \__,_| \__, |          \____/ \_| \_| \____/\_| |_/
+                                     __/ |                                      
+                                    |___/                                       
+
+
+    ####################################################################
+    ########     Scriptable Nuclear Dynamics (SANdy) + ORCA     ########
+    ########           (c) Martin Brehm, 2016 - 2025            ########
+    ########           Paderborn University, Germany            ########
+    ########           https://sanscript.org/orcamd             ########
+    ####################################################################
+
+
+  * Compiled as ORCA module. Called from ORCA.
+  * ORCA base name: "agua_dft"
+  * Source code version: Jun 07 2025, compiled at Nov 24 2025 07:23:22.
+  * Enabled features: SAN_MD, SAN_INTERPRETER
+  * Libraries: KISS_FFT, LBFGSBC
+  * Executable name: "/home/henrique/bin/orca611/orca_md"
+  * Messages are redirected, Errors are redirected, Output is redirected, Input is redirected
+  * Running on NotebookAW at Mon Sep 28 12:24:55 2026 (PID 8446)
+  * Running in /home/henrique/aimd-workshop/exercicios-pal8-20260928/agua_dft
+
+    -----------------------------------------------
+
+    Technical information:
+
+  * Compiler:      LLVM, CLANG 20.1.6, "Clang 20.1.6 (/home/frankw/CompEnv/src/llvm2016/llvm-project/clang 47addd4540b4c393e478ba92bea2589e330c57fb)", Linux, __cplusplus=201103L
+  * Compile host:  x86_64, Little Endian, char=8bits, int=4b, long=8b, ll=8b, addr=8b, 0x01020304=4,3,2,1.
+  * Class sizes:   InputElem=248, ValuePair=112, Type=96, Value=8, VMToken=8, VMInst=8
+  * Compile flags: MMX, SSE, SSE2, SSE3, SSSE3, SSE4.1, SSE4.2, POPCNT, FMA3, AVX, AVX2
+  * Local machine: Intel(R) Core(TM) Ultra 9 185H (GenuineIntel), Family 6, Model 170, Stepping 4
+                   1 CPU, 11 cores, 22 threads,  Uptime 30m 40s
+                   MMX, SSE, SSE2, SSE3, SSSE3, SSE4.1, SSE4.2, POPCNT, AES, FMA3, AVX, AVX2, SHA
+                   Caches: 11x L1d (528 KiB), 11x L1i (704 KiB), 11x L2 (22 MiB), 1x L3 (24 MiB)
+  * Op. System:    Ubuntu 24.04.4 LTS, Linux version 6.18.33.2-microsoft-standard-WSL2 
+  * Phys. Memory:  15.38 GiB total,  6.38 GiB free
+  * Stack size:    8.00 MiB
+
+
+The following libraries are included:
+
+  * KISS FFT,   Version 131.1.0 (02/2021), License: BSD 3-clause
+      (c) 2003-2010 Mark Borgerding, see https://github.com/mborgerding/kissfft
+
+  * L-BFGS-B-C, Version 3.0 (04/2011),     License: BSD 3-clause
+      (c) Stephen Becker, see https://github.com/stephenbeckr/L-BFGS-B-C
+
+  * MT19937 Pseudo Random Number Gen.,     License: Custom (permissive)
+      (c) 1997-2005 Makoto Matsumoto, Takuji Nishimura, Mutsuo Saito, see https://github.com/clibs/mt19937ar
+
+
+Initializing SAN engine...
+  24 physical quantities and 49 units added.
+  Initialized SAN language:
+    97 operators, 57 keywords, 4 namespaces, 35 types, 183 flags
+Done.
+
+
+>>> Reading Input File >>>
+
+Reading input file "agua_dft.mdinput" ...
+  137 bytes read.
+  7 lines.
+Tokenizing input...
+Found 18 tokens in file.
+  ( 12 identifiers,  5 numeric literals,  1 string literals )
+
+Warning: Line endings are non-uniform: 1 x \n, 6 x \r\n
+
+<<< Finished Reading Input File (took 0.000 seconds) <<<
+
+
+Using the following settings:
+  Interpret:              true
+  Execution:              SAN-VM
+  Parser verbose level:   1
+  Execute verbose level:  2
+  Syntax highlighting:    0
+  Static vars:            false
+  Dynamic types:          true
+  Max. recursion depth:   200
+  Max. nesting depth:     1000
+  Max. argument count:    100
+  Only parse:             false
+
+
+>>> Parsing Input Script >>>
+
+Handled 2 underscore identifiers.
+Handling module imports...
+  Importing module "Math" to global namespace.
+  Importing module "MD" to global namespace.
+Handled 2 module imports.
+Assigned 1 types.
+Parsed 1 types.
+Handled 6 variable occurrences.
+Assigned 7 identifiers.
+Handling functions,      iteration  1...
+                         iteration  2...
+                         iteration  3...
+Handling "FOR" loops...
+Handling AutoDecl,       iteration  1...
+No auto declarations.
+Assigned 2 flags, re-doing function handling...
+Handling functions ( 2), iteration  1...
+Handling "FOR" loops...
+Handling AutoDecl,       iteration  1...
+No auto declarations.
+Handling functions, final pass...
+  Moving "Void" argument 2 ("Thermostat") and 1 subsequent arguments of function "Initvel" up 1 levels to "ROOT".
+Function handling done (2 macro-iterations, 0.001 seconds).
+Handling keywords,       iteration  1...
+Prepared 6 argument lists.
+Assigned 10 read-only flags.
+Assigned 18 simple VP flags.
+Assigned 17 tree IDs.
+
+<<< Finished Parsing Input Script (took 0.001 seconds) <<<
+
+
+SAN-VM: Compiling...
+  Optimization level: Not specified. Using default ("-O2").
+Done (took 0.000 seconds).
+
+
+  Part              # Tokens    # Registers    # Shortcuts    # Optimizations
+  ---------------------------------------------------------------------------
+  Main Program            48              0              0                  0
+
+
+-------------------------------------------------------------------------------------------
+
+>>> Initializing MD engine with interface "ORCA" >>>
+
+
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+>>>   Output of System Information (from ORCA)   >>>
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+---------------------------------
+CARTESIAN COORDINATES (ANGSTROEM)
+---------------------------------
+  O     -0.000000    0.000000   -0.073510
+  H      0.760328    0.000000    0.541039
+  H     -0.760328    0.000000    0.541039
+
+----------------------------
+CARTESIAN COORDINATES (A.U.)
+----------------------------
+  NO LB      ZA    FRAG     MASS         X           Y           Z
+   0 O     8.0000    0    15.999   -0.000000    0.000000   -0.138913
+   1 H     1.0000    0     1.008    1.436812    0.000000    1.022415
+   2 H     1.0000    0     1.008   -1.436812    0.000000    1.022415
+
+---------------------
+BASIS SET INFORMATION
+---------------------
+There are 2 groups of distinct atoms
+
+ Group   1 Type O   : 7s4p1d contracted to 3s2p1d pattern {511/31/1}
+ Group   2 Type H   : 4s1p contracted to 2s1p pattern {31/1}
+
+Atom   0O    basis set group =>   1
+Atom   1H    basis set group =>   2
+Atom   2H    basis set group =>   2
+---------------------------------
+AUXILIARY/J BASIS SET INFORMATION
+---------------------------------
+There are 2 groups of distinct atoms
+
+ Group   1 Type O   : 12s5p4d2f1g contracted to 6s4p3d1f1g pattern {711111/2111/211/2/1}
+ Group   2 Type H   : 5s2p1d contracted to 3s1p1d pattern {311/2/1}
+
+Atom   0O    basis set group =>   1
+Atom   1H    basis set group =>   2
+Atom   2H    basis set group =>   2
+
+############################################
+   Total Atom Count:               3
+   Total System Mass:         18.015 a.m.u.
+   Total Basis Dimension:         24
+   Total Electron Number:         10
+   Total Charge:                   0
+   Total Multiplicity:             1
+   Spin Treatment:        Restricted
+  ------------------------------------------
+   ReducePrint:                 true
+   Print Mulliken Pop:             1
+   Print Loewdin Pop:              1
+   Print Mayer Pop:                1
+   Print Orbital Energies:         1
+############################################
+
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+<<<          End of System Information           <<<
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+Initializing regions...
+
+Defined regions:
+         All:     3 atoms,     18.015 a.m.u.
+          QM:   All
+      Active:   All
+
+
+
+### System Geometry ###
+
+  * Region "All" = "Active" = "QM":
+      Bounding box: from (   -0.760 |    0.000 |   -0.074 )
+                      to (    0.760 |    0.000 |    0.541 ) Angstrom
+      System extent:     (    1.521 |    0.000 |    0.615 ) Angstrom
+      Center of mass:    (   -0.000 |    0.000 |   -0.005 ) Angstrom
+      Total mass:            18.015 a.m.u.
+
+      Moment of inertia: (         0.68 |         0.00 |        -0.00 )
+                         (         0.00 |         1.84 |         0.00 ) a.m.u. Angstrom^2
+                         (        -0.00 |         0.00 |         1.17 )
+      Singular values:   (         0.68 |         1.17 |         1.84 ) a.m.u. Angstrom^2
+
+
+
+Smallest interatomic distance from active region: 0.977634 Angstrom (atoms 0 - 2).
+
+
+<<< MD engine initialization done (took 0.418 seconds) <<<
+
+
+###############################################################
+########        Executing Input Script (SAN-VM)        ########
+###############################################################
+
+Execution verbose level is 2.
+
+-------------------------------------------------------------------------------------------
+
+
+
+>>>>>> Timestep( 0.5_fs )
+
+Setting integration time step to 0.50 fs.
+
+The lightest element in the active region has an atomic mass of 1.008 a.m.u.
+Recommending time step not larger than 0.50 .. 1.00 fs.
+  --> choice seems reasonable
+
+
+>>>>>> Randomize( 42 )
+
+Initialized random number generator seed to 42.
+
+
+>>>>>> Initvel( 300_K )
+
+Old temperature of the total system is     0.000 K.
+
+Initializing atom velocities for region "all" to 300.000 K:
+  Creating Maxwell-Boltzmann distribution...
+  Temperature after random initialization is 233.894 K.
+  Rescaling velocities to match desired initial temperature (factor 1.132533)...
+  Removing initial center of mass movement...
+  Temperature after center of mass movement removal is 207.037 K.
+  Removing initial angular velocity...
+    Angular momentum before:  (  -0.00236315 |  -0.02149759 |   0.00990719 ) a.m.u. Angstrom^2 fs^-1
+    Angular velocity before:  (  -0.00349487 |  -0.01167316 |   0.00850076 ) fs^-1
+    Angular momentum after:   (   0.00000000 |   0.00000000 |   0.00000000 ) a.m.u. Angstrom^2 fs^-1
+    Angular velocity after:   (   0.00000000 |   0.00000000 |   0.00000000 ) fs^-1
+  Temperature after angular velocity removal is 161.143 K.
+  Rescaling velocities to match desired initial temperature (factor 1.364440)...
+Done.
+
+New temperature of the total system is   300.000 K.
+
+
+>>>>>> Thermostat( None )
+
+
+
+>>>>>> Dump( Position, Stride, 1, Filename, "agua_dft-traj.xyz" )
+
+Modified writing position trajectory for region "all": Format XYZ, stride 1, filename "agua_dft-traj.xyz", append.
+
+
+>>>>>> Run( 40 )
+
+
+***************************************************
+****    Starting MD loop for       40 steps    ****
+***************************************************
+
+
+Defined regions:
+         All:     3 atoms,     18.015 a.m.u.
+          QM:   All
+      Active:   All
+
+
+Dump: Will write Position data of region "All" in XYZ format with stride 1 to "agua_dft-traj.xyz" (append).
+
+Hint: To compute properties (dipole, etc.) in each step, specify "dump properties" before run.
+
+Will write restart file to "agua_dft.mdrestart" after each step.
+Will write energy statistics to "agua_dft-md-ener.csv" after each step.
+
+The system contains 9 active degrees of freedom (3 active atoms * 3).
+
+Smallest interatomic distance from active region: 0.977634 Angstrom (atoms 0 - 2).
+
+
+
+       Step |  Sim. Time | Iter |  t_Ener |  t_Grad |     Temp |     E_Kin |         E_Pot |         E_Tot |      Cons.Qty | E.Drift
+            |       [fs] |      |     [s] |     [s] |      [K] | [Hartree] |     [Hartree] |     [Hartree] |     [Hartree] |     [K]
+------------|------------|------|---------|---------|----------|-----------|---------------|---------------|---------------|-----------
+          0          0.0     11      1.67               300.00    0.004275      -76.337342      -76.333067                          
+          1          0.5      7      1.46      0.45     292.09    0.004162      -76.337227      -76.333065      -76.333065      0.00
+          2          1.0      7      1.44      0.48     269.95    0.003847      -76.336908      -76.333061      -76.333061      0.14
+          3          1.5      6      1.40      0.48     237.50    0.003384      -76.336441      -76.333057      -76.333057      0.29
+          4          2.0      6      1.43      0.49     199.39    0.002841      -76.335894      -76.333053      -76.333053      0.43
+          5          2.5      6      1.40      0.48     159.75    0.002276      -76.335327      -76.333050      -76.333050      0.52
+          6          3.0      6      1.51      0.48     121.43    0.001730      -76.334779      -76.333049      -76.333049      0.57
+          7          3.5      6      1.44      0.49      86.12    0.001227      -76.334275      -76.333048      -76.333048      0.60
+          8          4.0      5      1.41      0.48      55.02    0.000784      -76.333831      -76.333047      -76.333047      0.65
+          9          4.5      5      1.51      0.47      29.54    0.000421      -76.333466      -76.333045      -76.333045      0.71
+         10          5.0      5      1.47      0.46      11.67    0.000166      -76.333209      -76.333043      -76.333043      0.78
+         11          5.5      5      1.47      0.50       3.66    0.000052      -76.333093      -76.333041      -76.333041      0.85
+         12          6.0      5      1.50      0.49       7.38    0.000105      -76.333145      -76.333040      -76.333040      0.87
+         13          6.5      4      1.47      0.47      23.58    0.000336      -76.333377      -76.333041      -76.333041      0.85
+         14          7.0      4      1.42      0.51      51.43    0.000733      -76.333776      -76.333043      -76.333043      0.76
+         15          7.5      6      1.52      0.49      88.41    0.001260      -76.334307      -76.333047      -76.333047      0.64
+         16          8.0      6      1.52      0.48     130.75    0.001863      -76.334914      -76.333051      -76.333051      0.50
+         17          8.5      6      1.46      0.47     174.15    0.002482      -76.335536      -76.333054      -76.333054      0.37
+         18          9.0      6      1.44      0.50     214.52    0.003057      -76.336114      -76.333057      -76.333057      0.27
+         19          9.5      5      1.48      0.48     248.62    0.003543      -76.336602      -76.333059      -76.333059      0.20
+         20         10.0      5      1.52      0.49     274.19    0.003907      -76.336968      -76.333061      -76.333061      0.16
+         21         10.5      6      1.49      0.49     289.75    0.004129      -76.337191      -76.333062      -76.333062      0.12
+         22         11.0      6      1.46      0.48     294.15    0.004192      -76.337255      -76.333063      -76.333063      0.08
+         23         11.5      6      1.44      0.47     286.50    0.004083      -76.337146      -76.333063      -76.333063      0.06
+         24         12.0      6      1.41      0.51     266.35    0.003796      -76.336859      -76.333063      -76.333063      0.07
+         25         12.5      6      2.98      0.55     234.31    0.003339      -76.336400      -76.333061      -76.333061      0.13
+         26         13.0      6      1.43      0.49     192.59    0.002745      -76.335802      -76.333058      -76.333058      0.26
+         27         13.5      6      1.42      0.45     145.15    0.002068      -76.335121      -76.333053      -76.333053      0.42
+         28         14.0      6      1.46      0.47      97.26    0.001386      -76.334434      -76.333048      -76.333048      0.61
+         29         14.5      6      1.43      0.46      54.68    0.000779      -76.333822      -76.333043      -76.333043      0.77
+         30         15.0      6      1.35      0.46      22.64    0.000323      -76.333362      -76.333040      -76.333040      0.89
+         31         15.5      5      1.29      0.44       4.89    0.000070      -76.333108      -76.333038      -76.333038      0.95
+         32         16.0      5      1.33      0.44       3.15    0.000045      -76.333083      -76.333038      -76.333038      0.93
+         33         16.5      5      1.33      0.45      16.94    0.000241      -76.333282      -76.333041      -76.333041      0.86
+         34         17.0      6      1.35      0.48      43.93    0.000626      -76.333670      -76.333044      -76.333044      0.74
+         35         17.5      6      1.38      0.45      80.50    0.001147      -76.334195      -76.333048      -76.333048      0.61
+         36         18.0      6      1.39      0.46     122.55    0.001746      -76.334798      -76.333051      -76.333051      0.49
+         37         18.5      6      1.45      0.49     166.11    0.002367      -76.335421      -76.333054      -76.333054      0.38
+         38         19.0      6      1.41      0.47     207.72    0.002960      -76.336017      -76.333057      -76.333057      0.29
+         39         19.5      6      1.38      0.46     244.39    0.003483      -76.336542      -76.333059      -76.333059      0.21
+         40         20.0      6      1.38      0.45     273.31    0.003895      -76.336956      -76.333062      -76.333062      0.12
+------------|------------|------|---------|---------|----------|-----------|---------------|---------------|---------------|-----------
+       Step |  Sim. Time | Iter |  t_Ener |  t_Grad |     Temp |     E_Kin |         E_Pot |         E_Tot |      Cons.Qty | E.Drift
+            |       [fs] |      |     [s] |     [s] |      [K] | [Hartree] |     [Hartree] |     [Hartree] |     [Hartree] |     [K]
+
+
+Finished MD run of 40 steps.
+
+
+The average temperature during this run was 146.97523 K.
+
+
+Smallest interatomic distance from active region: 0.970824 Angstrom (atoms 0 - 2).
+
+
+>>> Invariance Statistics >>>
+
+    The maximal deviation of the gradient from translational invariance was 3.442e-10 kJ mol^-1 Angstrom^-1.
+    This would introduce a center of mass drift of 0.000 Kelvin within 1.0 ps.
+
+    The maximal deviation of the gradient from rotational invariance (torque) was 4.187e-03 kJ mol^-1 rad^-1.
+    This would introduce an overall rotation of 0.006 Kelvin within 1.0 ps.
+
+<<< Invariance Statistics <<<
+
+
+### System Geometry ###
+
+  * Region "All" = "Active" = "QM":
+      Bounding box: from (   -0.737 |   -0.000 |   -0.076 )
+                      to (    0.739 |    0.000 |    0.558 ) Angstrom
+      System extent:     (    1.475 |    0.000 |    0.634 ) Angstrom
+      Center of mass:    (   -0.000 |   -0.000 |   -0.005 ) Angstrom
+
+      Angular momentum:  (   0.00000000 |   0.00000132 |   0.00000000 ) a.m.u. Angstrom^2 fs^-1
+      Angular velocity:  (   0.00000000 |   0.00000073 |   0.00000000 ) fs^-1
+      Moment of inertia: (         0.72 |        -0.00 |        -0.00 )
+                         (        -0.00 |         1.81 |         0.00 ) a.m.u. Angstrom^2
+                         (        -0.00 |         0.00 |         1.10 )
+      Singular values:   (         0.72 |         1.10 |         1.81 ) a.m.u. Angstrom^2
+
+
+
+>>> Timing data >>>
+    MD loop was running for 79.569 seconds (1m 19.569s)
+    Performance: 1.989 seconds/step, 904.879 fs/hour.
+    Average SCF iterations/step: 5.829
+    Time spent within the MD module (overhead): 0.007 seconds (0.0090 % of total time).
+<<< Timing data <<<
+
+
+Finished MD loop.
+
+-------------------------------------------------------------------------------------------
+
+#######################################################################
+########        Finished Executing Input Script (SAN-VM)       ########
+#######################################################################
+
+    Total execution time: 79.569 seconds (1m 19.569s)
+
+            24 instructions executed
+             6 function calls
+
+
+Timings for individual modules during the MD run:
+
+Startup calculation               ...       18.983 sec (=   0.316 min)  23.8 %
+SCF iterations                    ...       41.455 sec (=   0.691 min)  51.9 %
+SCF gradient evaluation           ...       19.054 sec (=   0.318 min)  23.8 %
+ORCA initialization               ...        0.417 sec (=   0.007 min)   0.5 %
+Self time inside of MD module     ...        0.013 sec (=   0.000 min)   0.0 %
+------------------------------------------------------------------------------
+Sum of individual times           ...       79.923 sec (=   1.332 min) 100.0 %
+
+Total wall time of MD module      ...       79.986 sec (=   1.333 min)
+             --> "dark time"      ...        0.064 sec (=   0.001 min)   0.1 %
+
+( The "dark time" is spent in the ORCA-internal routines for energy and gradient calculation,
+  but not inside of the sub-programs which do so. It contains operating system overhead for
+  spawning new processes in each MD step and some file I/O time. )
+
+
+
+    ###########################################################
+    ####     ORCA ab initio Molecular Dynamics leaving     ####
+    ####     Scriptable Nuclear Dynamics (SANdy) + ORCA    ####
+    ####           (c) Martin Brehm, 2016 - 2025           ####
+    ####           https://sanscript.org/orcamd            ####
+    ###########################################################
+
+
+-------------------------------------------------------------------------------------------
+
+
+--------------------------------
+SUGGESTED CITATIONS FOR THIS RUN
+--------------------------------
+
+Below you find a list of papers that are relevant to this ORCA run
+We neither can nor want to force you to cite these papers, but we appreciate if you do
+You receive ORCA, which is the product of decades of hard work by many enthusiastic individuals, for free
+The only thing we kindly ask in return is that you cite our papers,
+We deeply appreciate it, if you show your appreciation for ORCA by not just citing the generic ORCA reference.
+
+Please note that relegating all ORCA citations to the supporting information does *not* help us.
+SI sections are not indexed - citations you put there will not count into any citation statistics
+But we need these citations in order to attract the funding resources that allow us to do what we are doing
+
+Therefore, if you are a happy ORCA user, please consider citing a few of the papers listed below in the main body of your paper
+
+In addition to the list printed below, the program has created the file agua_dft.bibtex that contains the list in bibtex format
+You can import this file easily into all common literature databanks and citation aid programs
+
+It goes without saying that in many instances, there are alternative algorithms to achieve similar
+results as the ones you have gotten from ORCA. It is, of course, also the case that in some instances
+ORCA just re-implements algorithms worked out by others. We are fully aware of that and we are also
+fully appreciative of our colleagues work. Hence this citation list should not be read as indicating
+that the listed papers, which are focused on our own work, are the only ones worth citing. It simply
+meant to make it easier for users to cite ORCA specific papers. It is not a substitute for doing your
+own literature research and citing the relevant literature in a scientifically appropriate manner.
+
+List of essential papers. We consider these as the minimum necessary citations
+
+  1. Neese, F.
+     Software update: the ORCA program system, version 6.0
+     WIRES Comput. Molec. Sci. 2025 15(1), e70019
+     doi.org/10.1002/wcms.70019
+
+List of papers to cite with high priority. The work reported in these papers was absolutely
+necessary for this run to complete.
+Our perspective: the developers of density functionals and basis sets usually get cited in chemistry papers
+Good! But without the algorithms to do something with them, the functionals or basis sets would not do anything.
+Hence, in our opinion, the algorithm design and method developments papers are equally worthy of getting cited
+
+  1. Neese, F.
+     An improvement of the resolution of the identity approximation for the formation of the Coulomb matrix
+     J. Comp. Chem. 2003 24(14), 1740-1747
+     doi.org/10.1002/jcc.10318
+  2. Neese, F.
+     The SHARK Integral Generation and Digestion System
+     J. Comp. Chem. 2022 44(3), 381
+     doi.org/10.1002/jcc.26942
+
+List of suggested additional citations. These are papers that are important in the 'surrounding' of 
+of this run, or papers that preceded the highly important papers. If you like your results we are grateful for a citation.
+
+  1. Neese, F.
+     The ORCA program system
+     WIRES Comput. Molec. Sci. 2012 2(1), 73-78
+     doi.org/10.1002/wcms.81
+  2. Neese, F.
+     Software update: the ORCA program system, version 4.0
+     WIRES Comput. Molec. Sci. 2018 8(1), 1-6
+     doi.org/10.1002/wcms.1327
+  3. Neese, F.; Wennmohs, F.; Becker, U.; Riplinger, C.
+     The ORCA quantum chemistry program package
+     J. Chem. Phys. 2020 152(22), 224108
+     doi.org/10.1063/5.0004608
+  4. Neese, F.
+     Software update: The ORCA program system—Version 5.0
+     WIRES Comput. Molec. Sci. 2022 12(1), e1606
+     doi.org/10.1002/wcms.1606
+
+List of optional additional citations
+
+  1. Neese, F.
+     Approximate second-order SCF convergence for spin unrestricted wavefunctions
+     Chem. Phys. Lett. 2000 325(1-3), 93-98
+     doi.org/10.1016/s0009-2614(00)00662-x
+
+Timings for individual modules:
+
+Sum of individual times          ...       80.112 sec (=   1.335 min)
+Molecular Dynamics run           ...       80.112 sec (=   1.335 min) 100.0 %
+                             ****ORCA TERMINATED NORMALLY****
+TOTAL RUN TIME: 0 days 0 hours 1 minutes 20 seconds 585 msec

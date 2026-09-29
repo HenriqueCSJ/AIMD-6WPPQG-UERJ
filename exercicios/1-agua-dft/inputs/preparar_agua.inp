@@ -1,0 +1,6 @@
+# Apoio: otimiza a agua no nivel DFT usado na dinamica.
+! BLYP def2-SVP TightSCF Opt PAL8
+%maxcore 256
+
+# Carga 0, multiplicidade 1; XYZ na mesma pasta.
+* xyzfile 0 1 agua_inicial.xyz

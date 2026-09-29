@@ -1,0 +1,18 @@
+# Mesmo etanol; agora pode trocar energia com um banho.
+! MD XTB2 PAL8
+%maxcore 256
+
+%md
+  Timestep 0.5_fs
+  Randomize 42
+  # Velocidades iniciais; nao mantem a temperatura fixa.
+  Initvel 300_K
+  # Banho a 300 K; acoplamento em 100 fs.
+  Thermostat CSVR 300_K Timecon 100_fs
+  Dump Position Stride 1 Filename "etanol_csvr-traj.xyz"
+  # 1000 x 0.5 fs = 500 fs (5e-13 s).
+  Run 1000
+end
+
+# Carga 0, multiplicidade 1; XYZ na mesma pasta.
+* xyzfile 0 1 etanol.xyz

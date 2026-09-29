@@ -1,0 +1,19 @@
+# Minicurso AIMD / ORCA 6.1.1 - preparar_complexo
+# Estas linhas de comentario explicam as escolhas e nao alteram o calculo.
+# Execute um caso por vez; mantenha o arquivo XYZ na pasta de execucao.
+
+# Relaxa a geometria. PAL8 solicita oito recursos. XTB2 chama GFN2-xTB
+# externo; PAL8 tambem define suas threads. ALPB(water) representa o ambiente
+# continuo.
+! XTB2 ALPB(water) Opt TightOpt PAL8
+
+# Memoria em MB por processo. 256 x 8 = 2048 MB de orcamento, alem de memoria
+# adicional.
+%maxcore 256
+
+# Limite de ciclos da otimizacao; conferir se o criterio de convergencia foi
+# realmente atingido.
+%geom MaxIter 300 end
+# Le o XYZ: carga total 2, multiplicidade 1. O nome do arquivo deve coincidir
+# exatamente.
+* xyzfile 2 1 zn_en_inicial.xyz

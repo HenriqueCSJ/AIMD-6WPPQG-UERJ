@@ -1,0 +1,17 @@
+# Agua com DFT, sem banho termico (NVE); PAL8 = 8 processos.
+! MD BLYP def2-SVP TightSCF PAL8
+%maxcore 256
+
+%md
+  Timestep 0.5_fs
+  Randomize 42
+  # Velocidades iniciais; nao mantem a temperatura fixa.
+  Initvel 300_K
+  Thermostat None
+  Dump Position Stride 1 Filename "agua_dft-traj.xyz"
+  # 40 x 0.5 fs = 20 fs (2e-14 s).
+  Run 40
+end
+
+# Carga 0, multiplicidade 1; XYZ na mesma pasta.
+* xyzfile 0 1 agua.xyz

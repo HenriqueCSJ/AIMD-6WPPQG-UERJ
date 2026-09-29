@@ -1,0 +1,6 @@
+# Apoio: otimiza o etanol com GFN2-xTB.
+! XTB2 Opt TightOpt PAL8
+%maxcore 256
+
+# Carga 0, multiplicidade 1; XYZ na mesma pasta.
+* xyzfile 0 1 etanol_inicial.xyz

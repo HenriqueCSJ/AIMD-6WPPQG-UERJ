@@ -1,0 +1,13 @@
+# Alternativa curta: acrescenta somente duas aguas.
+! XTB2 ALPB(water) PAL8
+%maxcore 256
+
+%solvator
+  # Numero de novas aguas; o soluto fica fixo na montagem.
+  nsolv 2
+  clustermode docking
+  fixsolute true
+end
+
+# Carga 2, multiplicidade 1; XYZ na mesma pasta.
+* xyzfile 2 1 zn_en.xyz

@@ -1,0 +1,29 @@
+# Minicurso AIMD / ORCA 6.1.1 - zn_solvator
+# Estas linhas de comentario explicam as escolhas e nao alteram o calculo.
+# Execute um caso por vez; mantenha o arquivo XYZ na pasta de execucao.
+
+# Calcula energias e forcas para a montagem do solvente. PAL8 solicita oito
+# recursos. XTB2 chama GFN2-xTB externo; PAL8 tambem define suas threads.
+# ALPB(water) representa o ambiente continuo.
+! XTB2 ALPB(water) PAL8
+
+# Memoria em MB por processo. 256 x 8 = 2048 MB de orcamento, alem de memoria
+# adicional.
+%maxcore 256
+
+# Monta um candidato com solvente explicito; nao e uma simulacao temporal de
+# MD.
+%solvator
+  # Numero de novas moleculas de agua, definido por ALPB(water). Cada agua
+  # acrescenta 3 atomos.
+  nsolv 6
+  # DOCKING procura posicoes para cada nova molecula de solvente.
+  clustermode docking
+  # Mantem o soluto fixo somente durante a montagem. A relaxacao posterior
+  # libera todos os atomos.
+  fixsolute true
+end
+
+# Le o XYZ: carga total 2, multiplicidade 1. O nome do arquivo deve coincidir
+# exatamente.
+* xyzfile 2 1 zn_en.xyz

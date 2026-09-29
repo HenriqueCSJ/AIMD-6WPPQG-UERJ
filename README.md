@@ -27,7 +27,7 @@
 
 Como transformar uma estrutura molecular em uma simulação e interpretar o movimento dos átomos? Neste minicurso, vamos construir esse caminho com o **ORCA 6.1.1**, combinando fundamentos de dinâmica molecular *ab initio* (AIMD), preparação de inputs, termostatos, modelos de solvatação e análise de trajetórias.
 
-O encontro se destina a estudantes de iniciação científica, mestrado e doutorado. Este repositório reúne as instruções de preparação e receberá os materiais usados nas atividades práticas.
+O encontro se destina a estudantes de iniciação científica, mestrado e doutorado. Este repositório reúne as instruções de preparação e os materiais das atividades práticas.
 
 ### Ministrantes
 
@@ -56,7 +56,8 @@ O workshop acontece de **5 a 8 de outubro de 2026**, no âmbito do Programa de P
 1. **Siga o guia recomendado:** [WSL2 + Ubuntu + ORCA](tutoriais/01-wsl2-ubuntu-orca.md).
 2. **Cadastre-se no fórum do ORCA** e obtenha o pacote **6.1.1** indicado no guia escolhido.
 3. **Faça os testes serial e paralelo** antes do encontro. Eles verificam a instalação com um cálculo pequeno.
-4. **Confira a preparação** e mantenha uma cópia deste repositório no seu computador.
+4. **Confira XTB2 e SOLVATOR** com o [teste curto](tutoriais/05-xtb-solvator.md). Se já funcionam, não reinstale nada.
+5. **Confira a preparação** e mantenha uma cópia deste repositório no seu computador.
 
 | Rota recomendada | Alternativa |
 | :--- | :--- |
@@ -70,22 +71,30 @@ O workshop acontece de **5 a 8 de outubro de 2026**, no âmbito do Programa de P
 
 > **Preparação simplificada:** usamos o Open MPI **4.1.6 do Ubuntu via apt**, testado localmente com ORCA **6.1.1**. O download Linux informa compilação com MPI **4.1.8**; o [tutorial Linux](tutoriais/01-wsl2-ubuntu-orca.md) explica a escolha e os testes para conferir seu ambiente.
 
+## Sequência das atividades
+
+O [roteiro de 4 horas](exercicios/roteiro-4h.md) parte de água com DFT e solvatação implícita e passa cedo para **GFN2-xTB**, com exercícios de timestep, termostato, ALPB, complexação Zn²⁺–etilenodiamina, SOLVATOR e confinamento. A proposta revisada reserva **200 min de conteúdo/prática e 25 min de margem**, com descanso de 14h20–14h35 e intervalo oficial de 16h–17h. Reutilizamos trajetórias para reduzir repetições e preservar tempo de interpretação. Os [sete exercícios completos](exercicios/README.md) já incluem páginas HTML, inputs comentados, estruturas e 15 execuções reais com PAL8. O ensaio completo da aula e o teste em computador mais modesto ainda precisam ser feitos.
+
+O [Laboratório de trajetórias](visualizador/README.md) lê os outputs e mostra energias, temperatura, animação e distâncias entre átomos. Carregue os arquivos ou abra um dos exemplos reais. Os arquivos escolhidos são processados no navegador, sem envio a um servidor de análise.
+
+**Acesso por um link:** depois de ativar o GitHub Pages, o aplicativo ficará em [Laboratório de trajetórias online](https://henriquecsj.github.io/AIMD-6WPPQG-UERJ/visualizador/) e o percurso em [Exercícios online](https://henriquecsj.github.io/AIMD-6WPPQG-UERJ/exercicios/). Os alunos não precisarão instalar o visualizador nem ter conta no GitHub. [Ativação da hospedagem](PUBLICACAO.md). Abrir um arquivo HTML na interface de código do GitHub mostra o arquivo; para usar o aplicativo, use o endereço do Pages.
+
 ## Materiais do minicurso
 
 | Pasta | O que você encontra |
 | :--- | :--- |
-| [`slides/`](slides/README.md) | Apresentações de Henrique e Virginia; diretórios preparados para os arquivos. |
+| Slides | Serão disponibilizados em uma etapa posterior. |
 | [`estruturas/`](estruturas/README.md) | Geometrias em XYZ; inclui uma molécula de água para o teste de instalação. |
 | [`inputs/`](inputs/README.md) | Inputs ORCA organizados por etapa; testes serial e paralelo já disponíveis. |
-| [`exercicios/`](exercicios/README.md) | Roteiros das atividades e questões para discussão. |
-| [`trajetorias/`](trajetorias/README.md) | Trajetórias de exemplo para visualização, a adicionar com as aulas. |
-| [`resultados/`](resultados/README.md) | Saídas de referência e orientações de comparação, a adicionar. |
+| [`exercicios/`](exercicios/README.md) | Sete páginas com inputs comentados, XYZ, trajetórias, resultados e questões. |
+| [`trajetorias/`](trajetorias/README.md) | Orientações e links para as trajetórias nos exercícios. |
+| [`resultados/`](resultados/README.md) | Acesso às 15 execuções de referência dos exercícios e aos pilotos anteriores. |
 | [`notebooks/`](notebooks/README.md) | Cadernos de análise, a adicionar. |
 | [`scripts/`](scripts/README.md) | Diagnóstico do ambiente Linux e Windows. |
 | [`tutoriais/`](tutoriais/README.md) | Guias de instalação, preparação e primeiro teste. |
 | [`assets/`](assets/README.md) | Identidade visual e créditos do workshop. |
 
-**Disponível nesta primeira etapa:** guias de instalação, diagnóstico e testes pequenos de funcionamento. Os slides e os exemplos de AIMD serão incorporados nas próximas etapas.
+**Disponível nesta etapa:** [sete exercícios numerados](exercicios/README.md), organizados em preparar, executar e interpretar. Os inputs principais têm 13–20 linhas, com comentários essenciais; os pacotes incluem os arquivos necessários, e as referências preservam os inputs completos originais. Também estão disponíveis guias de instalação e roteiro. Os slides ainda não fazem parte desta entrega. Para ler como site local, abra `exercicios/index.html`. O aplicativo está em `visualizador/index.html`, com leitura de outputs e exemplos dos sete exercícios. A ativação do GitHub Pages e o ensaio integral do curso permanecem pendentes.
 
 ### Baixar os materiais
 

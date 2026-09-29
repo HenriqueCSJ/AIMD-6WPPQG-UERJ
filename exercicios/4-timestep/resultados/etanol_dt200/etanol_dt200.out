@@ -1,0 +1,998 @@
+
+                                 *****************
+                                 * O   R   C   A *
+                                 *****************
+
+                                            #,                                       
+                                            ###                                      
+                                            ####                                     
+                                            #####                                    
+                                            ######                                   
+                                           ########,                                 
+                                     ,,################,,,,,                         
+                               ,,#################################,,                 
+                          ,,##########################################,,             
+                       ,#########################################, ''#####,          
+                    ,#############################################,,   '####,        
+                  ,##################################################,,,,####,       
+                ,###########''''           ''''###############################       
+              ,#####''   ,,,,##########,,,,          '''####'''          '####       
+            ,##' ,,,,###########################,,,                        '##       
+           ' ,,###''''                  '''############,,,                           
+         ,,##''                                '''############,,,,        ,,,,,,###''
+      ,#''                                            '''#######################'''  
+     '                                                          ''''####''''         
+             ,#######,   #######,   ,#######,      ##                                
+            ,#'     '#,  ##    ##  ,#'     '#,    #''#        ,####,    ,#,          
+            ##       ##  ##   ,#'  ##            #'  '#       #'       ,# #          
+            ##       ##  #######   ##           ,######,      #####,      #          
+            '#,     ,#'  ##    ##  '#,     ,#' ,#      #,     #,   #      #          
+             '#######'   ##     ##  '#######'  #'      '#     '####' #    #          
+
+
+
+                #########################################################
+                #                        -***-                          #
+                #          Department of theory and spectroscopy        #
+                #                                                       #
+                #                      Frank Neese                      #
+                #                                                       #
+                #     Directorship, Architecture, Infrastructure        #
+                #                    SHARK, DRIVERS                     #
+                #        Core code/Algorithms in most modules           #
+                #                                                       #
+                #        Max Planck Institute fuer Kohlenforschung      #
+                #                Kaiser Wilhelm Platz 1                 #
+                #                 D-45470 Muelheim/Ruhr                 #
+                #                      Germany                          #
+                #                                                       #
+                #                  All rights reserved                  #
+                #                        -***-                          #
+                #########################################################
+
+
+                         Program Version 6.1.1  -  RELEASE   -
+                                (GIT: $487d211c$)
+                          ($2025-11-21 10:33:24 +0100$)
+
+
+ With contributions from (in alphabetic order):
+[Max-Planck-Institut fuer Kohlenforschung]                               
+  Daniel Aravena         : Magnetic Suceptibility                        
+  Michael Atanasov       : Ab Initio Ligand Field Theory (pilot matlab implementation)
+  Alexander A. Auer      : GIAO ZORA, VPT2 properties, NMR spectrum      
+  Ute Becker             : All parallelization in ORCA, NUMFREQ, NUMCALC 
+  Giovanni Bistoni       : ED, misc. LED, open-shell LED, HFLD           
+  Dmytro Bykov           : pre 5.0 version of the SCF Hessian            
+  Marcos Casanova-Páez   : Triplet and SCS-CIS(D). UHF-(DLPNO)-IP/EA/STEOM-CCSD. UHF-CVS-IP/STEOM-CCSD   
+  Vijay G. Chilkuri      : MRCI spin determinant printing, contributions to CSF-ICE 
+  Pauline Colinet        : FMM embedding                                 
+  Dipayan Datta          : RHF DLPNO-CCSD density                        
+  Achintya Kumar Dutta   : EOM-CC, STEOM-CC                              
+  Nicolas Foglia         : Exact transition moments, OPA infrastructure, MCD improvements    
+  Dmitry Ganyushin       : Spin-Orbit,Spin-Spin,Magnetic field MRCI      
+  Miquel Garcia-Rates    : C-PCM and meta-GGA Hessian, CCSD/C-PCM, Gaussian charge scheme 
+  Tiago L. C. Gouveia    : GS-ROHF, GS-ROCIS                             
+  Yang Guo               : DLPNO-NEVPT2, F12-NEVPT2, CIM, IAO-localization        
+  Andreas Hansen         : Spin unrestricted coupled pair/coupled cluster methods 
+  Ingolf Harden          : AUTO-CI MPn and infrastructure                
+  Benjamin Helmich-Paris : MC-RPA, TRAH-(SCF,CASSCF), AVAS, COSX integrals, SCF dyn. polar., MC-PDFT, srDFT 
+  Lee Huntington         : MR-EOM, pCC                                   
+  Robert Izsak           : Overlap fitted RIJCOSX, COSX-SCS-MP3, EOM     
+  Riya Kayal             : Wick's Theorem for AUTO-CI, AUTO-CI UHF-CCSDT 
+  Emily Kempfer          : AUTO-CI RHF CISDT and CCSDT, approximate NEVPT4
+  Christian Kollmar      : KDIIS, OOCD, Brueckner-CCSD(T), CCSD density, CASPT2, CASPT2-K, improved NEVPT2 
+  Axel Koslowski         : Symmetry handling                             
+  Simone Kossmann        : meta-GGA functionals, TD-DFT gradient, OOMP2, (MP2 Hessian; deprecated post 5.0) 
+  Lucas Lang             : DCDCAS, Hyperfine gauge corrections, ICE-SOC+SSC
+  Marvin Lechner         : AUTO-CI (C++ implementation), FIC-MRCC        
+  Spencer Leger          : CASSCF response                               
+  Dagmar Lenk            : GEPOL surface, SMD, ORCA-2-JSON               
+  Dimitrios Liakos       : Extrapolation schemes; Compound Job, Property file
+  Dimitrios Manganas     : Further ROCIS development; embedding schemes. LFT, Crystal Embedding 
+  Dimitrios Pantazis     : SARC Basis sets                               
+  Anastasios Papadopoulos: AUTO-CI, single reference methods and gradients 
+  Taras Petrenko         : pre 6.0 DFT Hessian and TD-DFT gradient,  ECA, NRVS 
+  Petra Pikulova         : Analytic Raman intensities                    
+  Peter Pinski           : DLPNO-MP2, DLPNO-MP2 Gradient                 
+  Shashank Vittal Rao    : ES-AILFT, MagRelax                            
+  Christoph Reimann      : Effective Core Potentials                     
+  Marius Retegan         : Local ZFS, SOC                                
+  Christoph Riplinger    : Optimizer, TS searches, QM/MM, DLPNO-CCSD(T), (RO)-DLPNO pert. Triples 
+  Michael Roemelt        : Original ROCIS implementation, recursive CI coupling coefficients
+  Masaaki Saitow         : Open-shell DLPNO-CCSD energy and density      
+  Barbara Sandhoefer     : DKH picture change effects                    
+  Yorick L. A. Schmerwitz: GMF and freeze-and-release deltaSCF, NEB S-IDPP initial path                    
+  Kantharuban Sivalingam : CASSCF convergence/infrastructure, NEVPT2, NEVPT3, NEVPT4(SD), FIC-MRCI and CEPA variants
+  Bernardo de Souza      : ESD, SOC TD-DFT                               
+  Georgi L. Stoychev     : AutoAux, RI-MP2 NMR, DLPNO-MP2 response, X2C  
+  Van Anh Tran           : RI-MP2 g-tensors                              
+  Willem Van den Heuvel  : Paramagnetic NMR                              
+  Zikuan Wang            : NOTCH, Electric field optimization            
+  Frank Wennmohs         : Technical directorship and infrastructure     
+  Hang Xu                : AUTO-CI-Response properties                   
+                                                                         
+[FACCTs GmbH]                                                            
+  Markus Bursch, Nicolas Foglia, Miquel Garcia-Rates, Ingolf Harden, Hagen Neugebauer, Anastasios Papadopoulos, 
+  Christoph Riplinger, Bernardo de Souza, Georgi L. Stoychev                                                    
+                                                                 
+  APM, various basis sets, CI-OPT, improved COSX, DLPNO-Multilevel,           
+  DOCKER, DRACO, updates on ESD, Fragmentator, GOAT, IRC, LR-CPCM, L-BFGS, MBIS, meta-GGA TD-DFT gradient, ML-optimized integration grids, 
+  MM, NACMEs, nearIR, NEB, NEB-TS, NL-DFT gradient (VV10), 2- and 3-layer-ONIOM, interface openCOSMO-RS, QMMM,   
+  Crystal-QMMM, RESP, rigid body optimization, SF, symmetry and pop. for TD-DFT, various functionals, SOLVATOR                                   
+                                                                         
+[Other institutions]                                                     
+  V. Asgeirsson          : NEB                                           
+  Christoph Bannwarth    : sTDA-DFT, sTD-DFT, PBEh-3c, B97-3c, D3        
+  Giovanni Bistoni       : ETS/NOCV, ADLD/ADEX, COVALED                  
+  Martin Brehm           : Molecular dynamics                            
+  Ronald Cardenas        : ETS/NOCV                                      
+  Martina Colucci        : COVALED                                       
+  Sebastian Ehlert       : rSCAN, r2SCAN, r2SCAN-3c, D4, dhf basis sets  
+  Marvin Friede          : D4 for Fr, Ra, Ac-Lr                          
+  Lars Goerigk           : TD-DFT with DH, B97 family of functionals     
+  Stefan Grimme          : VdW corrections, initial TS optimization, DFT functionals, gCP, sTDA/sTD-DF 
+  Waldemar Hujo          : DFT-NL                                        
+  H. Jonsson             : NEB                                           
+  Holger Kruse           : gCP                                           
+  Marcel Mueller         : wB97X-3c, vDZP basis set                      
+  Hagen Neugebauer       : wr2SCAN, Native XTB                           
+  Gianluca Regni         : ADLD/ADEX                                     
+  Tobias Risthaus        : pre 6.0 range-separated hybrid DFT and stability analysis
+  Lukas Wittmann         : regularized MP2, r2SCAN double-hybrids, wr2SCAN        
+                                                                         
+We gratefully acknowledge several colleagues who have allowed us to      
+interface, adapt or use parts of their codes:                            
+  Ed Valeev, F. Pavosevic, A. Kumar             : LibInt (2-el integral package), F12 methods 
+  Garnet Chan, S. Sharma, J. Yang, R. Olivares  : DMRG                   
+  Ulf Ekstrom                                   : XCFun DFT Library      
+  Mihaly Kallay                                 : mrcc  (arbitrary order and MRCC methods)
+  Frank Weinhold                                : gennbo (NPA and NBO analysis)           
+  Simon Mueller                                 : openCOSMO-RS                            
+  Christopher J. Cramer and Donald G. Truhlar   : smd solvation model                     
+  S Lehtola, MJT Oliveira, MAL Marques          : LibXC Library                           
+  Liviu Ungur et al                             : ANISO software                          
+
+
+ Your calculation uses the libint2 library for the computation of 2-el integrals
+ For citations please refer to: http://libint.valeyev.net
+
+ Your ORCA version has been built with support for libXC version: 7.0.0
+ For citations please refer to: https://libxc.gitlab.io
+
+ This ORCA versions uses:
+   CBLAS   interface :  Fast vector & matrix operations
+   LAPACKE interface :  Fast linear algebra routines
+   SCALAPACK package :  Parallel linear algebra routines
+   Shared memory     :  Shared parallel matrices
+   BLAS/LAPACK       :  OpenBLAS 0.3.29  USE64BITINT DYNAMIC_ARCH NO_AFFINITY Haswell SINGLE_THREADED
+        Core in use  :  Haswell
+   Copyright (c) 2011-2014, The OpenBLAS Project
+
+
+  ***********************************
+  * Starting time: Mon Sep 28 12:37:25 2026
+  * Host name:     NotebookAW
+  * Process ID:    12
+  * Working dir.:  /home/henrique/aimd-workshop/exercicios-pal8-20260928/etanol_dt200_comentarios
+  ***********************************
+
+NOTE: MaxCore=256 MB was set to SCF,MP2,MDCI,CIPSI,MRCI,RASCI and CIS
+      => If you want to overwrite this, your respective input block should be placed after the MaxCore statement
+
+
+***************************************
+The coordinates will be read from file: etanol.xyz
+***************************************
+
+
+Your calculation utilizes the semiempirical GFN2-xTB method
+Please cite in your paper:
+Bannwarth, C.; Ehlert S.; Grimme, S. J. Chem. Theory Comput. 2019, 15, 1652.
+   
+
+================================================================================
+
+================================================================================
+                                        WARNINGS
+                       Please study these warnings very carefully!
+================================================================================
+
+
+WARNING: Gradients are needed
+  ===> : At least TightSCF should be used for SCF convergence
+
+WARNING: Found dipole moment calculation with XTB calculation
+  ===> : Switching off dipole moment calculation
+
+
+================================================================================
+                                       INPUT FILE
+================================================================================
+NAME = etanol_dt200.inp
+|  1> # Minicurso AIMD / ORCA 6.1.1 - etanol_dt200
+|  2> # Estas linhas de comentario explicam as escolhas e nao alteram o calculo.
+|  3> # Execute um caso por vez; mantenha o arquivo XYZ na pasta de execucao.
+|  4> 
+|  5> # MD integra o movimento; Opt relaxa a geometria (quando presente). PAL8 solicita oito recursos. XTB2 chama GFN2-xTB externo; PAL8 tambem define suas threads.
+|  6> ! MD XTB2 PAL8
+|  7> 
+|  8> # Memoria em MB por processo. 256 x 8 = 2048 MB de orcamento, alem de memoria adicional.
+|  9> %maxcore 256
+| 10> 
+| 11> # Parametros da dinamica: as unidades sao explicitas em cada linha.
+| 12> %md
+| 13> # Passo de integracao em femtossegundos. 1 fs = 1e-15 s.
+| 14> Timestep 2.0_fs
+| 15> # Semente fixa para repetir a preparacao aleatoria no mesmo ambiente.
+| 16> Randomize 42
+| 17> # Inicializa velocidades na temperatura indicada; nao substitui um termostato.
+| 18> Initvel 300_K
+| 19> # Sem troca de energia com banho: controle NVE para examinar a integracao.
+| 20> Thermostat None
+| 21> # Grava um quadro XYZ por passo. O nome identifica esta trajetoria.
+| 22> Dump Position Stride 1 Filename "etanol_dt200-traj.xyz"
+| 23> # Numero de passos desta etapa. Duracao fisica = numero de passos x timestep.
+| 24> Run 250
+| 25> end
+| 26> 
+| 27> # Le o XYZ: carga total 0, multiplicidade 1. O nome do arquivo deve coincidir exatamente.
+| 28> * xyzfile 0 1 etanol.xyz
+| 29> 
+| 30>                          ****END OF INPUT****
+================================================================================
+
+-------------------------------------------------------------------------------------------
+
+MD module early startup:
+  Installed signal handlers.
+  Extracted executable name.
+  Initialized library credit list.
+  Parsed command line without errors.
+  Initialized console color.
+Done.
+
+Will write log file to "etanol_dt200.md.log".
+
+Command line:  /home/henrique/bin/orca611/orca_md -orca etanol_dt200
+
+-------------------------------------------------------------------------------------------
+
+
+     _____    ___    _   _       _                  ______ ______  _____   ___  
+    /  ___|  / _ \  | \ | |     | |           _    /  __  \| ___ \/  __ \ / _ \ 
+    \ `--.  / /_\ \ |  \| |   __| | _   _   _| |_  | |  | || |_/ /| /  \// /_\ \
+     `--. \ |  _  | | . ` |  / _` || | | | |_   _| | |  | ||    / | |    |  _  |
+    /\__/ / | | | | | |\  | | (_| || |_| |   |_|   | \__/ || |\ \ | \__/\| | | |
+    \____/  \_| |_/ \_| \_/  \__,_| \__, |          \____/ \_| \_| \____/\_| |_/
+                                     __/ |                                      
+                                    |___/                                       
+
+
+    ####################################################################
+    ########     Scriptable Nuclear Dynamics (SANdy) + ORCA     ########
+    ########           (c) Martin Brehm, 2016 - 2025            ########
+    ########           Paderborn University, Germany            ########
+    ########           https://sanscript.org/orcamd             ########
+    ####################################################################
+
+
+  * Compiled as ORCA module. Called from ORCA.
+  * ORCA base name: "etanol_dt200"
+  * Source code version: Jun 07 2025, compiled at Nov 24 2025 07:23:22.
+  * Enabled features: SAN_MD, SAN_INTERPRETER
+  * Libraries: KISS_FFT, LBFGSBC
+  * Executable name: "/home/henrique/bin/orca611/orca_md"
+  * Messages are redirected, Errors are redirected, Output is redirected, Input is redirected
+  * Running on NotebookAW at Mon Sep 28 12:37:26 2026 (PID 44)
+  * Running in /home/henrique/aimd-workshop/exercicios-pal8-20260928/etanol_dt200_comentarios
+
+    -----------------------------------------------
+
+    Technical information:
+
+  * Compiler:      LLVM, CLANG 20.1.6, "Clang 20.1.6 (/home/frankw/CompEnv/src/llvm2016/llvm-project/clang 47addd4540b4c393e478ba92bea2589e330c57fb)", Linux, __cplusplus=201103L
+  * Compile host:  x86_64, Little Endian, char=8bits, int=4b, long=8b, ll=8b, addr=8b, 0x01020304=4,3,2,1.
+  * Class sizes:   InputElem=248, ValuePair=112, Type=96, Value=8, VMToken=8, VMInst=8
+  * Compile flags: MMX, SSE, SSE2, SSE3, SSSE3, SSE4.1, SSE4.2, POPCNT, FMA3, AVX, AVX2
+  * Local machine: Intel(R) Core(TM) Ultra 9 185H (GenuineIntel), Family 6, Model 170, Stepping 4
+                   1 CPU, 11 cores, 22 threads,  Uptime 9m 26s
+                   MMX, SSE, SSE2, SSE3, SSSE3, SSE4.1, SSE4.2, POPCNT, AES, FMA3, AVX, AVX2, SHA
+                   Caches: 11x L1d (528 KiB), 11x L1i (704 KiB), 11x L2 (22 MiB), 1x L3 (24 MiB)
+  * Op. System:    Ubuntu 24.04.4 LTS, Linux version 6.18.33.2-microsoft-standard-WSL2 
+  * Phys. Memory:  15.38 GiB total,  13.72 GiB free
+  * Stack size:    8.00 MiB
+
+
+The following libraries are included:
+
+  * KISS FFT,   Version 131.1.0 (02/2021), License: BSD 3-clause
+      (c) 2003-2010 Mark Borgerding, see https://github.com/mborgerding/kissfft
+
+  * L-BFGS-B-C, Version 3.0 (04/2011),     License: BSD 3-clause
+      (c) Stephen Becker, see https://github.com/stephenbeckr/L-BFGS-B-C
+
+  * MT19937 Pseudo Random Number Gen.,     License: Custom (permissive)
+      (c) 1997-2005 Makoto Matsumoto, Takuji Nishimura, Mutsuo Saito, see https://github.com/clibs/mt19937ar
+
+
+Initializing SAN engine...
+  24 physical quantities and 49 units added.
+  Initialized SAN language:
+    97 operators, 57 keywords, 4 namespaces, 35 types, 183 flags
+Done.
+
+
+>>> Reading Input File >>>
+
+Reading input file "etanol_dt200.mdinput" ...
+  563 bytes read.
+  13 lines.
+Tokenizing input...
+Found 18 tokens in file.
+  ( 12 identifiers,      6 comments,  5 numeric literals,  
+     1 string literals )
+
+Warning: Line endings are non-uniform: 1 x \n, 12 x \r\n
+
+<<< Finished Reading Input File (took 0.000 seconds) <<<
+
+
+Using the following settings:
+  Interpret:              true
+  Execution:              SAN-VM
+  Parser verbose level:   1
+  Execute verbose level:  2
+  Syntax highlighting:    0
+  Static vars:            false
+  Dynamic types:          true
+  Max. recursion depth:   200
+  Max. nesting depth:     1000
+  Max. argument count:    100
+  Only parse:             false
+
+
+>>> Parsing Input Script >>>
+
+Handled 2 underscore identifiers.
+Handling module imports...
+  Importing module "Math" to global namespace.
+  Importing module "MD" to global namespace.
+Handled 2 module imports.
+Assigned 1 types.
+Parsed 1 types.
+Handled 6 variable occurrences.
+Assigned 7 identifiers.
+Handling functions,      iteration  1...
+                         iteration  2...
+                         iteration  3...
+Handling "FOR" loops...
+Handling AutoDecl,       iteration  1...
+No auto declarations.
+Assigned 2 flags, re-doing function handling...
+Handling functions ( 2), iteration  1...
+Handling "FOR" loops...
+Handling AutoDecl,       iteration  1...
+No auto declarations.
+Handling functions, final pass...
+  Moving "Void" argument 2 ("Thermostat") and 1 subsequent arguments of function "Initvel" up 1 levels to "ROOT".
+Function handling done (2 macro-iterations, 0.001 seconds).
+Handling keywords,       iteration  1...
+Prepared 6 argument lists.
+Assigned 10 read-only flags.
+Assigned 18 simple VP flags.
+Assigned 17 tree IDs.
+
+<<< Finished Parsing Input Script (took 0.001 seconds) <<<
+
+
+SAN-VM: Compiling...
+  Optimization level: Not specified. Using default ("-O2").
+Done (took 0.000 seconds).
+
+
+  Part              # Tokens    # Registers    # Shortcuts    # Optimizations
+  ---------------------------------------------------------------------------
+  Main Program            48              0              0                  0
+
+
+-------------------------------------------------------------------------------------------
+
+>>> Initializing MD engine with interface "ORCA" >>>
+
+
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+>>>   Output of System Information (from ORCA)   >>>
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+---------------------------------
+CARTESIAN COORDINATES (ANGSTROEM)
+---------------------------------
+  C     -0.901441    0.176251   -0.032972
+  C      0.469361   -0.492090   -0.045964
+  O      1.462563    0.288439    0.577170
+  H     -0.881485    1.099907   -0.610065
+  H     -1.643612   -0.487893   -0.466928
+  H     -1.192334    0.411110    0.988100
+  H      0.760689   -0.723180   -1.081823
+  H      0.440816   -1.426189    0.519536
+  H      1.485442    1.153645    0.152945
+
+----------------------------
+CARTESIAN COORDINATES (A.U.)
+----------------------------
+  NO LB      ZA    FRAG     MASS         X           Y           Z
+   0 C     6.0000    0    12.011   -1.703477    0.333067   -0.062307
+   1 C     6.0000    0    12.011    0.886964   -0.929916   -0.086859
+   2 O     8.0000    0    15.999    2.763843    0.545071    1.090694
+   3 H     1.0000    0     1.008   -1.665765    2.078522   -1.152856
+   4 H     1.0000    0     1.008   -3.105976   -0.921985   -0.882366
+   5 H     1.0000    0     1.008   -2.253184    0.776885    1.867239
+   6 H     1.0000    0     1.008    1.437494   -1.366612   -2.044349
+   7 H     1.0000    0     1.008    0.833022   -2.695106    0.981781
+   8 H     1.0000    0     1.008    2.807078    2.180073    0.289024
+
+Doing XTB calculation. Basis set is not printed.
+
+############################################
+   Total Atom Count:               9
+   Total System Mass:         46.069 a.m.u.
+   Total Basis Dimension:          0
+   Total Electron Number:          0
+   Total Charge:                   0
+   Total Multiplicity:             1
+  ------------------------------------------
+   ReducePrint:                 true
+   Print Mulliken Pop:             1
+   Print Loewdin Pop:              1
+   Print Mayer Pop:                1
+   Print Orbital Energies:         1
+############################################
+
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+<<<          End of System Information           <<<
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+Initializing regions...
+
+Defined regions:
+         All:     9 atoms,     46.069 a.m.u.
+          QM:   All
+      Active:   All
+
+
+
+### System Geometry ###
+
+  * Region "All" = "Active" = "QM":
+      Bounding box: from (   -1.644 |   -1.426 |   -1.082 )
+                      to (    1.485 |    1.154 |    0.988 ) Angstrom
+      System extent:     (    3.129 |    2.580 |    2.070 ) Angstrom
+      Center of mass:    (    0.373 |    0.018 |    0.169 ) Angstrom
+      Total mass:            46.069 a.m.u.
+
+      Moment of inertia: (        17.25 |        -1.63 |       -10.46 )
+                         (        -1.63 |        55.28 |        -2.90 ) a.m.u. Angstrom^2
+                         (       -10.46 |        -2.90 |        58.32 )
+      Singular values:   (        14.62 |        61.77 |        54.47 ) a.m.u. Angstrom^2
+
+
+
+Smallest interatomic distance from active region: 0.963884 Angstrom (atoms 2 - 8).
+
+
+<<< MD engine initialization done (took 0.412 seconds) <<<
+
+
+###############################################################
+########        Executing Input Script (SAN-VM)        ########
+###############################################################
+
+Execution verbose level is 2.
+
+-------------------------------------------------------------------------------------------
+
+
+
+>>>>>> Timestep( 2_fs )
+
+Setting integration time step to 2.00 fs.
+
+The lightest element in the active region has an atomic mass of 1.008 a.m.u.
+Recommending time step not larger than 0.50 .. 1.00 fs.
+
+Warning: This time step is probably too large (unless you have constraints on bonds or angles).
+
+
+>>>>>> Randomize( 42 )
+
+Initialized random number generator seed to 42.
+
+
+>>>>>> Initvel( 300_K )
+
+Old temperature of the total system is     0.000 K.
+
+Initializing atom velocities for region "all" to 300.000 K:
+  Creating Maxwell-Boltzmann distribution...
+  Temperature after random initialization is 334.750 K.
+  Rescaling velocities to match desired initial temperature (factor 0.946673)...
+  Removing initial center of mass movement...
+  Temperature after center of mass movement removal is 292.200 K.
+  Removing initial angular velocity...
+    Angular momentum before:  (   0.02901431 |   0.12468310 |  -0.02551976 ) a.m.u. Angstrom^2 fs^-1
+    Angular velocity before:  (   0.00191220 |   0.00231286 |   0.00002058 ) fs^-1
+    Angular momentum after:   (   0.00000000 |   0.00000000 |   0.00000000 ) a.m.u. Angstrom^2 fs^-1
+    Angular velocity after:   (   0.00000000 |   0.00000000 |   0.00000000 ) fs^-1
+  Temperature after angular velocity removal is 276.906 K.
+  Rescaling velocities to match desired initial temperature (factor 1.040864)...
+Done.
+
+New temperature of the total system is   300.000 K.
+
+
+>>>>>> Thermostat( None )
+
+
+
+>>>>>> Dump( Position, Stride, 1, Filename, "etanol_dt200-traj.xyz" )
+
+Modified writing position trajectory for region "all": Format XYZ, stride 1, filename "etanol_dt200-traj.xyz", append.
+
+
+>>>>>> Run( 250 )
+
+
+***************************************************
+****    Starting MD loop for      250 steps    ****
+***************************************************
+
+
+Defined regions:
+         All:     9 atoms,     46.069 a.m.u.
+          QM:   All
+      Active:   All
+
+
+Dump: Will write Position data of region "All" in XYZ format with stride 1 to "etanol_dt200-traj.xyz" (append).
+
+Hint: To compute properties (dipole, etc.) in each step, specify "dump properties" before run.
+
+Will write restart file to "etanol_dt200.mdrestart" after each step.
+Will write energy statistics to "etanol_dt200-md-ener.csv" after each step.
+
+The system contains 27 active degrees of freedom (9 active atoms * 3).
+
+Smallest interatomic distance from active region: 0.963884 Angstrom (atoms 2 - 8).
+
+
+
+       Step |  Sim. Time | Iter |  t_Ener |  t_Grad |     Temp |     E_Kin |         E_Pot |         E_Tot |      Cons.Qty | E.Drift
+            |       [fs] |      |     [s] |     [s] |      [K] | [Hartree] |     [Hartree] |     [Hartree] |     [Hartree] |     [K]
+------------|------------|------|---------|---------|----------|-----------|---------------|---------------|---------------|-----------
+          0          0.0             0.03               300.00    0.012826      -11.394339      -11.381514                          
+          1          2.0             0.01               162.91    0.006965      -11.385953      -11.378988      -11.378988      0.00
+          2          4.0             0.01               161.90    0.006922      -11.387764      -11.380842      -11.380842    -21.68
+          3          6.0             0.01               118.99    0.005087      -11.385459      -11.380372      -11.380372    -16.18
+          4          8.0             0.01                46.86    0.002003      -11.381422      -11.379419      -11.379419     -5.03
+          5         10.0             0.01               154.42    0.006602      -11.387079      -11.380478      -11.380478    -17.42
+          6         12.0             0.02               186.15    0.007958      -11.388998      -11.381040      -11.381040    -24.00
+          7         14.0             0.01               137.07    0.005860      -11.384958      -11.379098      -11.379098     -1.28
+          8         16.0             0.01               231.77    0.009909      -11.391040      -11.381132      -11.381132    -25.07
+          9         18.0             0.02               134.43    0.005747      -11.385380      -11.379632      -11.379632     -7.53
+         10         20.0             0.01               121.47    0.005193      -11.385100      -11.379907      -11.379907    -10.74
+         11         22.0             0.01               163.30    0.006981      -11.387746      -11.380765      -11.380765    -20.78
+         12         24.0             0.01                59.29    0.002535      -11.381751      -11.379216      -11.379216     -2.66
+         13         26.0             0.01               131.90    0.005639      -11.386684      -11.381045      -11.381045    -24.05
+         14         28.0             0.02               146.56    0.006266      -11.386234      -11.379968      -11.379968    -11.46
+         15         30.0             0.02               144.88    0.006194      -11.386301      -11.380107      -11.380107    -13.09
+         16         32.0             0.03               198.88    0.008502      -11.388763      -11.380261      -11.380261    -14.88
+         17         34.0             0.02               199.19    0.008516      -11.389331      -11.380815      -11.380815    -21.36
+         18         36.0             0.02               116.78    0.004993      -11.384246      -11.379253      -11.379253     -3.10
+         19         38.0             0.02               142.67    0.006099      -11.387109      -11.381010      -11.381010    -23.65
+         20         40.0             0.03                99.88    0.004270      -11.384144      -11.379874      -11.379874    -10.36
+         21         42.0             0.02               120.07    0.005133      -11.385229      -11.380096      -11.380096    -12.95
+         22         44.0             0.02               191.98    0.008208      -11.388642      -11.380434      -11.380434    -16.91
+         23         46.0             0.03               196.71    0.008410      -11.389066      -11.380656      -11.380656    -19.51
+         24         48.0             0.02               169.75    0.007257      -11.387430      -11.380173      -11.380173    -13.85
+         25         50.0             0.02               171.90    0.007349      -11.387587      -11.380237      -11.380237    -14.61
+         26         52.0             0.02               116.72    0.004990      -11.385232      -11.380242      -11.380242    -14.66
+         27         54.0             0.02                86.30    0.003689      -11.383081      -11.379392      -11.379392     -4.72
+         28         56.0             0.02               173.55    0.007419      -11.388340      -11.380920      -11.380920    -22.59
+         29         58.0             0.02               120.41    0.005148      -11.384606      -11.379458      -11.379458     -5.50
+         30         60.0             0.02               166.81    0.007132      -11.387784      -11.380652      -11.380652    -19.46
+         31         62.0             0.02               190.04    0.008125      -11.388578      -11.380454      -11.380454    -17.14
+         32         64.0             0.02               129.44    0.005534      -11.385509      -11.379975      -11.379975    -11.54
+         33         66.0             0.02               159.17    0.006805      -11.386973      -11.380168      -11.380168    -13.80
+         34         68.0             0.02               168.72    0.007213      -11.388353      -11.381140      -11.381140    -25.16
+         35         70.0             0.03                73.74    0.003152      -11.382286      -11.379134      -11.379134     -1.70
+         36         72.0             0.02               155.61    0.006653      -11.387571      -11.380918      -11.380918    -22.57
+         37         74.0             0.02               130.97    0.005599      -11.385596      -11.379997      -11.379997    -11.80
+         38         76.0             0.02               134.04    0.005730      -11.385335      -11.379605      -11.379605     -7.21
+         39         78.0             0.02               241.91    0.010342      -11.391507      -11.381164      -11.381164    -25.45
+         40         80.0             0.02               150.20    0.006421      -11.385998      -11.379577      -11.379577     -6.89
+         41         82.0             0.02               152.80    0.006532      -11.387265      -11.380733      -11.380733    -20.40
+         42         84.0             0.02               137.07    0.005860      -11.386162      -11.380302      -11.380302    -15.36
+         43         86.0             0.02                82.26    0.003517      -11.383242      -11.379726      -11.379726     -8.62
+         44         88.0             0.02               160.30    0.006853      -11.387137      -11.380284      -11.380284    -15.15
+         45         90.0             0.01               182.23    0.007791      -11.388659      -11.380869      -11.380869    -21.99
+         46         92.0             0.02               135.16    0.005779      -11.385204      -11.379426      -11.379426     -5.12
+         47         94.0             0.01               199.76    0.008540      -11.389463      -11.380924      -11.380924    -22.63
+         48         96.0             0.01               134.76    0.005761      -11.385486      -11.379724      -11.379724     -8.61
+         49         98.0             0.01               149.14    0.006376      -11.386559      -11.380183      -11.380183    -13.97
+         50        100.0             0.01               185.28    0.007921      -11.388456      -11.380535      -11.380535    -18.09
+         51        102.0             0.01               122.16    0.005222      -11.385319      -11.380096      -11.380096    -12.96
+         52        104.0             0.01               123.83    0.005294      -11.385736      -11.380442      -11.380442    -17.01
+         53        106.0             0.01               137.37    0.005873      -11.385931      -11.380058      -11.380058    -12.51
+         54        108.0             0.01               141.10    0.006032      -11.386049      -11.380017      -11.380017    -12.03
+         55        110.0             0.01               183.06    0.007826      -11.387942      -11.380116      -11.380116    -13.18
+         56        112.0             0.01               208.76    0.008925      -11.389754      -11.380830      -11.380830    -21.53
+         57        114.0             0.01               125.92    0.005383      -11.384667      -11.379284      -11.379284     -3.45
+         58        116.0             0.01               130.26    0.005569      -11.386254      -11.380685      -11.380685    -19.84
+         59        118.0             0.01               101.31    0.004331      -11.384177      -11.379846      -11.379846    -10.03
+         60        120.0             0.01               116.92    0.004999      -11.385118      -11.380119      -11.380119    -13.23
+         61        122.0             0.01               174.98    0.007481      -11.387603      -11.380122      -11.380122    -13.26
+         62        124.0             0.01               184.47    0.007886      -11.388787      -11.380901      -11.380901    -22.37
+         63        126.0             0.01               131.16    0.005607      -11.385272      -11.379664      -11.379664     -7.90
+         64        128.0             0.01               171.91    0.007349      -11.387732      -11.380383      -11.380383    -16.31
+         65        130.0             0.01               139.92    0.005982      -11.386169      -11.380187      -11.380187    -14.02
+         66        132.0             0.02               128.23    0.005482      -11.385019      -11.379537      -11.379537     -6.42
+         67        134.0             0.01               192.04    0.008210      -11.389142      -11.380932      -11.380932    -22.74
+         68        136.0             0.01                94.37    0.004035      -11.383350      -11.379315      -11.379315     -3.82
+         69        138.0             0.01               128.10    0.005476      -11.386032      -11.380555      -11.380555    -18.33
+         70        140.0             0.01               166.21    0.007106      -11.387312      -11.380207      -11.380207    -14.25
+         71        142.0             0.01               148.66    0.006356      -11.386233      -11.379877      -11.379877    -10.40
+         72        144.0             0.01               205.50    0.008786      -11.389014      -11.380228      -11.380228    -14.50
+         73        146.0             0.01               213.53    0.009129      -11.390106      -11.380977      -11.380977    -23.26
+         74        148.0             0.01                98.49    0.004211      -11.383206      -11.378995      -11.378995     -0.08
+         75        150.0             0.01               142.65    0.006099      -11.387030      -11.380931      -11.380931    -22.72
+         76        152.0             0.02                96.16    0.004111      -11.383816      -11.379704      -11.379704     -8.37
+         77        154.0             0.01               125.04    0.005346      -11.385251      -11.379905      -11.379905    -10.72
+         78        156.0             0.01               216.03    0.009236      -11.389988      -11.380752      -11.380752    -20.63
+         79        158.0             0.01               173.57    0.007420      -11.387310      -11.379890      -11.379890    -10.54
+         80        160.0             0.01               176.53    0.007547      -11.387895      -11.380348      -11.380348    -15.90
+         81        162.0             0.01               168.43    0.007201      -11.387354      -11.380153      -11.380153    -13.62
+         82        164.0             0.01               135.12    0.005776      -11.385880      -11.380104      -11.380104    -13.05
+         83        166.0             0.01               143.96    0.006154      -11.386092      -11.379937      -11.379937    -11.10
+         84        168.0             0.01               145.58    0.006224      -11.386878      -11.380654      -11.380654    -19.48
+         85        170.0             0.01                92.58    0.003958      -11.383260      -11.379302      -11.379302     -3.66
+         86        172.0             0.01               154.08    0.006587      -11.387267      -11.380680      -11.380680    -19.78
+         87        174.0             0.02               152.68    0.006527      -11.386357      -11.379829      -11.379829     -9.84
+         88        176.0             0.02               184.71    0.007897      -11.388212      -11.380316      -11.380316    -15.53
+         89        178.0             0.02               199.35    0.008523      -11.388909      -11.380387      -11.380387    -16.35
+         90        180.0             0.01               135.37    0.005787      -11.385906      -11.380119      -11.380119    -13.22
+         91        182.0             0.02                89.03    0.003806      -11.384059      -11.380253      -11.380253    -14.78
+         92        184.0             0.01                98.48    0.004210      -11.384362      -11.380152      -11.380152    -13.60
+         93        186.0             0.02               117.51    0.005024      -11.385108      -11.380084      -11.380084    -12.81
+         94        188.0             0.01               168.87    0.007220      -11.387156      -11.379936      -11.379936    -11.08
+         95        190.0             0.01               236.46    0.010109      -11.391086      -11.380977      -11.380977    -23.26
+         96        192.0             0.01               161.39    0.006900      -11.386370      -11.379470      -11.379470     -5.63
+         97        194.0             0.01               156.30    0.006682      -11.387253      -11.380571      -11.380571    -18.51
+         98        196.0             0.02               124.21    0.005310      -11.385367      -11.380057      -11.380057    -12.50
+         99        198.0             0.01               112.15    0.004795      -11.384731      -11.379937      -11.379937    -11.09
+        100        200.0             0.01               176.87    0.007562      -11.387733      -11.380171      -11.380171    -13.83
+        101        202.0             0.01               191.19    0.008174      -11.388973      -11.380799      -11.380799    -21.18
+        102        204.0             0.01               141.38    0.006044      -11.385722      -11.379677      -11.379677     -8.06
+        103        206.0             0.01               184.06    0.007869      -11.388490      -11.380621      -11.380621    -19.09
+        104        208.0             0.01               140.38    0.006002      -11.385989      -11.379987      -11.379987    -11.68
+        105        210.0             0.01               144.55    0.006180      -11.386131      -11.379952      -11.379952    -11.26
+        106        212.0             0.01               187.37    0.008010      -11.388829      -11.380818      -11.380818    -21.40
+        107        214.0             0.01               101.25    0.004328      -11.383908      -11.379580      -11.379580     -6.91
+        108        216.0             0.01               115.34    0.004931      -11.385531      -11.380600      -11.380600    -18.85
+        109        218.0             0.01               133.32    0.005700      -11.385828      -11.380128      -11.380128    -13.33
+        110        220.0             0.01               140.00    0.005985      -11.385932      -11.379947      -11.379947    -11.21
+        111        222.0             0.01               208.09    0.008896      -11.389281      -11.380384      -11.380384    -16.33
+        112        224.0             0.01               205.04    0.008766      -11.389486      -11.380721      -11.380721    -20.26
+        113        226.0             0.01               113.51    0.004853      -11.384424      -11.379571      -11.379571     -6.82
+        114        228.0             0.01               112.15    0.004794      -11.385395      -11.380600      -11.380600    -18.85
+        115        230.0             0.01                73.63    0.003148      -11.382875      -11.379727      -11.379727     -8.64
+        116        232.0             0.01               133.44    0.005705      -11.385839      -11.380134      -11.380134    -13.40
+        117        234.0             0.01               213.37    0.009122      -11.389573      -11.380451      -11.380451    -17.11
+        118        236.0             0.01               208.94    0.008932      -11.389399      -11.380467      -11.380467    -17.29
+        119        238.0             0.01               171.77    0.007343      -11.387514      -11.380171      -11.380171    -13.83
+        120        240.0             0.01               143.22    0.006123      -11.386283      -11.380160      -11.380160    -13.71
+        121        242.0             0.01               122.56    0.005240      -11.385360      -11.380120      -11.380120    -13.24
+        122        244.0             0.01               145.28    0.006211      -11.386220      -11.380009      -11.380009    -11.93
+        123        246.0             0.01               179.91    0.007691      -11.388360      -11.380669      -11.380669    -19.65
+        124        248.0             0.01               128.27    0.005484      -11.385189      -11.379706      -11.379706     -8.39
+        125        250.0             0.02               139.69    0.005972      -11.386350      -11.380378      -11.380378    -16.25
+        126        252.0             0.01               153.72    0.006572      -11.386493      -11.379921      -11.379921    -10.91
+        127        254.0             0.01               182.83    0.007816      -11.388100      -11.380284      -11.380284    -15.15
+        128        256.0             0.01               212.24    0.009074      -11.389347      -11.380274      -11.380274    -15.03
+        129        258.0             0.01               176.67    0.007553      -11.388073      -11.380520      -11.380520    -17.91
+        130        260.0             0.01                88.99    0.003805      -11.383538      -11.379734      -11.379734     -8.72
+        131        262.0             0.01               100.72    0.004306      -11.384677      -11.380371      -11.380371    -16.17
+        132        264.0             0.02               101.56    0.004342      -11.384287      -11.379945      -11.379945    -11.19
+        133        266.0             0.01               168.53    0.007205      -11.387205      -11.380000      -11.380000    -11.83
+        134        268.0             0.01               232.21    0.009928      -11.390911      -11.380983      -11.380983    -23.33
+        135        270.0             0.01               154.48    0.006604      -11.386219      -11.379615      -11.379615     -7.32
+        136        272.0             0.01               145.31    0.006212      -11.386620      -11.380407      -11.380407    -16.60
+        137        274.0             0.01               108.88    0.004655      -11.384692      -11.380037      -11.380037    -12.27
+        138        276.0             0.01               107.80    0.004609      -11.384436      -11.379828      -11.379828     -9.82
+        139        278.0             0.01               179.35    0.007668      -11.388036      -11.380368      -11.380368    -16.14
+        140        280.0             0.01               168.57    0.007207      -11.387623      -11.380416      -11.380416    -16.70
+        141        282.0             0.01               131.25    0.005611      -11.385274      -11.379663      -11.379663     -7.89
+        142        284.0             0.01               175.44    0.007501      -11.388171      -11.380670      -11.380670    -19.67
+        143        286.0             0.01               128.98    0.005514      -11.384994      -11.379480      -11.379480     -5.75
+        144        288.0             0.01               185.94    0.007949      -11.388427      -11.380478      -11.380478    -17.42
+        145        290.0             0.01               198.89    0.008503      -11.388954      -11.380451      -11.380451    -17.10
+        146        292.0             0.01               135.20    0.005780      -11.385458      -11.379678      -11.379678     -8.06
+        147        294.0             0.01               137.88    0.005895      -11.386448      -11.380553      -11.380553    -18.30
+        148        296.0             0.01               106.80    0.004566      -11.384347      -11.379782      -11.379782     -9.28
+        149        298.0             0.01               143.12    0.006119      -11.386243      -11.380124      -11.380124    -13.28
+        150        300.0             0.01               207.30    0.008863      -11.389073      -11.380211      -11.380211    -14.30
+        151        302.0             0.01               217.34    0.009292      -11.389800      -11.380508      -11.380508    -17.78
+        152        304.0             0.01               165.55    0.007077      -11.386859      -11.379781      -11.379781     -9.27
+        153        306.0             0.01               130.38    0.005574      -11.385876      -11.380302      -11.380302    -15.36
+        154        308.0             0.02                92.53    0.003956      -11.383711      -11.379755      -11.379755     -8.96
+        155        310.0             0.01               134.52    0.005751      -11.385973      -11.380222      -11.380222    -14.43
+        156        312.0             0.01               162.73    0.006957      -11.386967      -11.380010      -11.380010    -11.94
+        157        314.0             0.02               186.75    0.007984      -11.388367      -11.380384      -11.380384    -16.32
+        158        316.0             0.02               156.20    0.006678      -11.386779      -11.380101      -11.380101    -13.02
+        159        318.0             0.01               146.61    0.006268      -11.386237      -11.379969      -11.379969    -11.47
+        160        320.0             0.01               162.90    0.006964      -11.387255      -11.380290      -11.380290    -15.22
+        161        322.0             0.01               166.59    0.007122      -11.387182      -11.380060      -11.380060    -12.54
+        162        324.0             0.01               175.56    0.007505      -11.387915      -11.380410      -11.380410    -16.63
+        163        326.0             0.01               121.78    0.005206      -11.385183      -11.379976      -11.379976    -11.55
+        164        328.0             0.02               100.48    0.004296      -11.384336      -11.380040      -11.380040    -12.30
+        165        330.0             0.02               121.86    0.005210      -11.385205      -11.379996      -11.379996    -11.78
+        166        332.0             0.01               162.91    0.006965      -11.387039      -11.380074      -11.380074    -12.70
+        167        334.0             0.02               206.33    0.008821      -11.389023      -11.380202      -11.380202    -14.19
+        168        336.0             0.01               204.22    0.008731      -11.389194      -11.380464      -11.380464    -17.26
+        169        338.0             0.01               128.22    0.005482      -11.385123      -11.379641      -11.379641     -7.64
+        170        340.0             0.01               115.31    0.004930      -11.385356      -11.380426      -11.380426    -16.82
+        171        342.0             0.01                94.23    0.004028      -11.383726      -11.379698      -11.379698     -8.30
+        172        344.0             0.01               162.38    0.006942      -11.387094      -11.380152      -11.380152    -13.61
+        173        346.0             0.01               212.36    0.009079      -11.389690      -11.380611      -11.380611    -18.98
+        174        348.0             0.01               169.83    0.007261      -11.387033      -11.379772      -11.379772     -9.16
+        175        350.0             0.01               170.98    0.007310      -11.387764      -11.380454      -11.380454    -17.15
+        176        352.0             0.01               135.40    0.005788      -11.385634      -11.379846      -11.379846    -10.03
+        177        354.0             0.01               149.50    0.006392      -11.386509      -11.380118      -11.380118    -13.21
+        178        356.0             0.01               189.93    0.008120      -11.388432      -11.380312      -11.380312    -15.48
+        179        358.0             0.01               161.28    0.006895      -11.386956      -11.380061      -11.380061    -12.54
+        180        360.0             0.01               134.70    0.005759      -11.385795      -11.380036      -11.380036    -12.25
+        181        362.0             0.01               141.40    0.006045      -11.386275      -11.380230      -11.380230    -14.52
+        182        364.0             0.01               144.59    0.006182      -11.385800      -11.379618      -11.379618     -7.36
+        183        366.0             0.02               227.53    0.009727      -11.390379      -11.380652      -11.380652    -19.45
+        184        368.0             0.01               200.07    0.008553      -11.388730      -11.380176      -11.380176    -13.89
+        185        370.0             0.01               142.75    0.006103      -11.386163      -11.380060      -11.380060    -12.54
+        186        372.0             0.01                86.27    0.003688      -11.383854      -11.380166      -11.380166    -13.78
+        187        374.0             0.02                48.88    0.002090      -11.381833      -11.379743      -11.379743     -8.82
+        188        376.0             0.02               128.62    0.005499      -11.385661      -11.380162      -11.380162    -13.73
+        189        378.0             0.01               202.47    0.008656      -11.388956      -11.380300      -11.380300    -15.34
+        190        380.0             0.01               230.89    0.009871      -11.390147      -11.380276      -11.380276    -15.06
+        191        382.0             0.01               204.78    0.008755      -11.389164      -11.380409      -11.380409    -16.62
+        192        384.0             0.01               109.73    0.004691      -11.384526      -11.379835      -11.379835     -9.90
+        193        386.0             0.02                83.51    0.003570      -11.383375      -11.379804      -11.379804     -9.54
+        194        388.0             0.01               136.53    0.005837      -11.386240      -11.380403      -11.380403    -16.54
+        195        390.0             0.01               162.57    0.006950      -11.386745      -11.379795      -11.379795     -9.43
+        196        392.0             0.01               198.95    0.008505      -11.389117      -11.380612      -11.380612    -18.98
+        197        394.0             0.01               147.66    0.006313      -11.386078      -11.379765      -11.379765     -9.09
+        198        396.0             0.01               157.00    0.006712      -11.386800      -11.380088      -11.380088    -12.86
+        199        398.0             0.02               178.28    0.007622      -11.387817      -11.380195      -11.380195    -14.11
+        200        400.0             0.01               190.29    0.008135      -11.388189      -11.380054      -11.380054    -12.46
+        201        402.0             0.01               198.62    0.008491      -11.388982      -11.380490      -11.380490    -17.57
+        202        404.0             0.01               121.53    0.005196      -11.385128      -11.379932      -11.379932    -11.04
+        203        406.0             0.01                76.48    0.003270      -11.383243      -11.379973      -11.379973    -11.52
+        204        408.0             0.01               103.93    0.004443      -11.384472      -11.380028      -11.380028    -12.16
+        205        410.0             0.01               172.00    0.007353      -11.387271      -11.379918      -11.379918    -10.87
+        206        412.0             0.01               253.50    0.010838      -11.391365      -11.380527      -11.380527    -17.99
+        207        414.0             0.01               227.99    0.009747      -11.390123      -11.380376      -11.380376    -16.23
+        208        416.0             0.01               128.24    0.005483      -11.385187      -11.379705      -11.379705     -8.38
+        209        418.0             0.02                86.05    0.003679      -11.383962      -11.380283      -11.380283    -15.15
+        210        420.0             0.02                55.00    0.002351      -11.381807      -11.379455      -11.379455     -5.46
+        211        422.0             0.01               158.61    0.006781      -11.387245      -11.380464      -11.380464    -17.26
+        212        424.0             0.02               202.41    0.008654      -11.388861      -11.380208      -11.380208    -14.26
+        213        426.0             0.02               189.44    0.008099      -11.388274      -11.380175      -11.380175    -13.88
+        214        428.0             0.01               168.96    0.007224      -11.387522      -11.380299      -11.380299    -15.33
+        215        430.0             0.02               116.18    0.004967      -11.384718      -11.379751      -11.379751     -8.92
+        216        432.0             0.02               148.10    0.006332      -11.386533      -11.380201      -11.380201    -14.19
+        217        434.0             0.02               181.27    0.007750      -11.388201      -11.380452      -11.380452    -17.11
+        218        436.0             0.02               140.70    0.006015      -11.385830      -11.379815      -11.379815     -9.67
+        219        438.0             0.02               140.79    0.006019      -11.386211      -11.380192      -11.380192    -14.08
+        220        440.0             0.02               128.48    0.005493      -11.385637      -11.380144      -11.380144    -13.52
+        221        442.0             0.02               149.25    0.006381      -11.385943      -11.379562      -11.379562     -6.71
+        222        444.0             0.02               247.55    0.010583      -11.391329      -11.380746      -11.380746    -20.56
+        223        446.0             0.02               214.93    0.009189      -11.388999      -11.379810      -11.379810     -9.61
+        224        448.0             0.01               193.61    0.008277      -11.388710      -11.380433      -11.380433    -16.89
+        225        450.0             0.02               102.40    0.004378      -11.384300      -11.379922      -11.379922    -10.92
+        226        452.0             0.01                61.41    0.002626      -11.382303      -11.379678      -11.379678     -8.06
+        227        454.0             0.02               147.72    0.006315      -11.386634      -11.380319      -11.380319    -15.56
+        228        456.0             0.02               199.70    0.008537      -11.388654      -11.380117      -11.380117    -13.20
+        229        458.0             0.01               224.85    0.009613      -11.389889      -11.380276      -11.380276    -15.07
+        230        460.0             0.01               193.89    0.008289      -11.388736      -11.380447      -11.380447    -17.06
+        231        462.0             0.01                97.40    0.004164      -11.383735      -11.379571      -11.379571     -6.81
+        232        464.0             0.02               102.66    0.004389      -11.384477      -11.380088      -11.380088    -12.86
+        233        466.0             0.01               130.69    0.005587      -11.385845      -11.380258      -11.380258    -14.85
+        234        468.0             0.01               147.43    0.006303      -11.385992      -11.379689      -11.379689     -8.19
+        235        470.0             0.01               192.26    0.008220      -11.388942      -11.380723      -11.380723    -20.28
+        236        472.0             0.01               116.54    0.004983      -11.384516      -11.379534      -11.379534     -6.38
+        237        474.0             0.01               126.27    0.005398      -11.385581      -11.380183      -11.380183    -13.97
+        238        476.0             0.01               152.29    0.006511      -11.386409      -11.379898      -11.379898    -10.64
+        239        478.0             0.01               189.05    0.008082      -11.388278      -11.380196      -11.380196    -14.12
+        240        480.0             0.02               205.27    0.008776      -11.389146      -11.380370      -11.380370    -16.16
+        241        482.0             0.01               149.07    0.006373      -11.386347      -11.379974      -11.379974    -11.53
+        242        484.0             0.01               103.19    0.004412      -11.384384      -11.379972      -11.379972    -11.51
+        243        486.0             0.01               112.45    0.004807      -11.384919      -11.380111      -11.380111    -13.13
+        244        488.0             0.02               150.20    0.006421      -11.386306      -11.379885      -11.379885    -10.48
+        245        490.0             0.01               224.94    0.009616      -11.389981      -11.380365      -11.380365    -16.10
+        246        492.0             0.02               219.25    0.009373      -11.389773      -11.380400      -11.380400    -16.51
+        247        494.0             0.01               151.36    0.006471      -11.386310      -11.379839      -11.379839     -9.95
+        248        496.0             0.02               116.63    0.004986      -11.385172      -11.380185      -11.380185    -14.00
+        249        498.0             0.01                92.92    0.003973      -11.383506      -11.379533      -11.379533     -6.37
+        250        500.0             0.02               184.96    0.007907      -11.388397      -11.380490      -11.380490    -17.56
+------------|------------|------|---------|---------|----------|-----------|---------------|---------------|---------------|-----------
+       Step |  Sim. Time | Iter |  t_Ener |  t_Grad |     Temp |     E_Kin |         E_Pot |         E_Tot |      Cons.Qty | E.Drift
+            |       [fs] |      |     [s] |     [s] |      [K] | [Hartree] |     [Hartree] |     [Hartree] |     [Hartree] |     [K]
+
+
+Finished MD run of 250 steps.
+
+
+The average temperature during this run was 152.38406 K.
+
+
+Smallest interatomic distance from active region: 0.969108 Angstrom (atoms 2 - 8).
+
+
+>>> Invariance Statistics >>>
+
+    The maximal deviation of the gradient from translational invariance was 1.076e-11 kJ mol^-1 Angstrom^-1.
+    This would introduce a center of mass drift of 0.000 Kelvin within 1.0 ps.
+
+    The maximal deviation of the gradient from rotational invariance (torque) was 1.313e-02 kJ mol^-1 rad^-1.
+    This would introduce an overall rotation of 0.001 Kelvin within 1.0 ps.
+
+<<< Invariance Statistics <<<
+
+
+### System Geometry ###
+
+  * Region "All" = "Active" = "QM":
+      Bounding box: from (   -1.646 |   -1.500 |   -1.055 )
+                      to (    1.440 |    1.151 |    1.008 ) Angstrom
+      System extent:     (    3.087 |    2.651 |    2.063 ) Angstrom
+      Center of mass:    (    0.373 |    0.018 |    0.169 ) Angstrom
+
+      Angular momentum:  (   0.00000529 |  -0.00000157 |  -0.00000447 ) a.m.u. Angstrom^2 fs^-1
+      Angular velocity:  (   0.00000028 |  -0.00000003 |  -0.00000003 ) fs^-1
+      Moment of inertia: (        17.95 |        -0.84 |        -9.83 )
+                         (        -0.84 |        53.65 |        -3.03 ) a.m.u. Angstrom^2
+                         (        -9.83 |        -3.03 |        57.82 )
+      Singular values:   (        15.60 |        61.14 |        52.69 ) a.m.u. Angstrom^2
+
+
+
+>>> Timing data >>>
+    MD loop was running for 3.797 seconds
+    Performance: 0.015 seconds/step, 474086.935 fs/hour.
+    Time spent within the MD module (overhead): 0.043 seconds (1.1430 % of total time).
+<<< Timing data <<<
+
+
+Finished MD loop.
+
+-------------------------------------------------------------------------------------------
+
+#######################################################################
+########        Finished Executing Input Script (SAN-VM)       ########
+#######################################################################
+
+    Total execution time: 3.797 seconds
+
+            24 instructions executed
+             6 function calls
+
+
+Timings for individual modules during the MD run:
+
+XTB module                        ...        3.685 sec (=   0.061 min)  88.6 %
+ORCA initialization               ...        0.412 sec (=   0.007 min)   9.9 %
+Self time inside of MD module     ...        0.063 sec (=   0.001 min)   1.5 %
+------------------------------------------------------------------------------
+Sum of individual times           ...        4.160 sec (=   0.069 min) 100.0 %
+
+Total wall time of MD module      ...        4.209 sec (=   0.070 min)
+             --> "dark time"      ...        0.049 sec (=   0.001 min)   1.2 %
+
+( The "dark time" is spent in the ORCA-internal routines for energy and gradient calculation,
+  but not inside of the sub-programs which do so. It contains operating system overhead for
+  spawning new processes in each MD step and some file I/O time. )
+
+
+
+    ###########################################################
+    ####     ORCA ab initio Molecular Dynamics leaving     ####
+    ####     Scriptable Nuclear Dynamics (SANdy) + ORCA    ####
+    ####           (c) Martin Brehm, 2016 - 2025           ####
+    ####           https://sanscript.org/orcamd            ####
+    ###########################################################
+
+
+-------------------------------------------------------------------------------------------
+
+
+--------------------------------
+SUGGESTED CITATIONS FOR THIS RUN
+--------------------------------
+
+Below you find a list of papers that are relevant to this ORCA run
+We neither can nor want to force you to cite these papers, but we appreciate if you do
+You receive ORCA, which is the product of decades of hard work by many enthusiastic individuals, for free
+The only thing we kindly ask in return is that you cite our papers,
+We deeply appreciate it, if you show your appreciation for ORCA by not just citing the generic ORCA reference.
+
+Please note that relegating all ORCA citations to the supporting information does *not* help us.
+SI sections are not indexed - citations you put there will not count into any citation statistics
+But we need these citations in order to attract the funding resources that allow us to do what we are doing
+
+Therefore, if you are a happy ORCA user, please consider citing a few of the papers listed below in the main body of your paper
+
+In addition to the list printed below, the program has created the file etanol_dt200.bibtex that contains the list in bibtex format
+You can import this file easily into all common literature databanks and citation aid programs
+
+It goes without saying that in many instances, there are alternative algorithms to achieve similar
+results as the ones you have gotten from ORCA. It is, of course, also the case that in some instances
+ORCA just re-implements algorithms worked out by others. We are fully aware of that and we are also
+fully appreciative of our colleagues work. Hence this citation list should not be read as indicating
+that the listed papers, which are focused on our own work, are the only ones worth citing. It simply
+meant to make it easier for users to cite ORCA specific papers. It is not a substitute for doing your
+own literature research and citing the relevant literature in a scientifically appropriate manner.
+
+List of essential papers. We consider these as the minimum necessary citations
+
+  1. Bannwarth, C.; Ehlert, S.; Grimme, S.
+     GFN2-xTB—An Accurate and Broadly Parametrized Self-Consistent Tight-Binding Quantum Chemical Method with Multipole Electrostatics and Density-Dependent Dispersion Contributions
+     J. Chem. Theory Comput. 2019 15(3), 1652-1671
+     doi.org/10.1021/acs.jctc.8b01176
+  2. Neese, F.
+     Software update: the ORCA program system, version 6.0
+     WIRES Comput. Molec. Sci. 2025 15(1), e70019
+     doi.org/10.1002/wcms.70019
+
+List of papers to cite with high priority. The work reported in these papers was absolutely
+necessary for this run to complete.
+Our perspective: the developers of density functionals and basis sets usually get cited in chemistry papers
+Good! But without the algorithms to do something with them, the functionals or basis sets would not do anything.
+Hence, in our opinion, the algorithm design and method developments papers are equally worthy of getting cited
+
+  1. Bannwarth, C.; Caldeweyher, E.; Ehlert, S.; Hansen, A.; Pracht, P.; Seibert, J.; Spicher, S.; Grimme, S.
+     Extended tight-binding quantum chemistry methods
+     WIRES Comput. Molec. Sci. 2020 11(2), e1493
+     doi.org/10.1002/wcms.1493
+
+List of suggested additional citations. These are papers that are important in the 'surrounding' of 
+of this run, or papers that preceded the highly important papers. If you like your results we are grateful for a citation.
+
+  1. Neese, F.
+     The ORCA program system
+     WIRES Comput. Molec. Sci. 2012 2(1), 73-78
+     doi.org/10.1002/wcms.81
+  2. Neese, F.
+     Software update: the ORCA program system, version 4.0
+     WIRES Comput. Molec. Sci. 2018 8(1), 1-6
+     doi.org/10.1002/wcms.1327
+  3. Neese, F.; Wennmohs, F.; Becker, U.; Riplinger, C.
+     The ORCA quantum chemistry program package
+     J. Chem. Phys. 2020 152(22), 224108
+     doi.org/10.1063/5.0004608
+  4. Neese, F.
+     Software update: The ORCA program system—Version 5.0
+     WIRES Comput. Molec. Sci. 2022 12(1), e1606
+     doi.org/10.1002/wcms.1606
+
+List of optional additional citations
+
+  1. Neese, F.
+     Approximate second-order SCF convergence for spin unrestricted wavefunctions
+     Chem. Phys. Lett. 2000 325(1-3), 93-98
+     doi.org/10.1016/s0009-2614(00)00662-x
+
+Timings for individual modules:
+
+Sum of individual times          ...        4.329 sec (=   0.072 min)
+Molecular Dynamics run           ...        4.329 sec (=   0.072 min) 100.0 %
+                             ****ORCA TERMINATED NORMALLY****
+TOTAL RUN TIME: 0 days 0 hours 0 minutes 5 seconds 541 msec

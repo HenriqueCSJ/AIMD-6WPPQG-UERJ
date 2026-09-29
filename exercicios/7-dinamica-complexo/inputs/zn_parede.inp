@@ -1,0 +1,20 @@
+# Complexo com XTB2/ALPB; PAL8 = 8 threads do xTB.
+! MD XTB2 ALPB(water) PAL8
+%maxcore 256
+
+%md
+  Timestep 0.5_fs
+  Randomize 42
+  # Banho a 300 K; acoplamento em 100 fs.
+  Thermostat CSVR 300_K Timecon 100_fs
+  # Parede suave: centro (0,0,0), raio 6 A.
+  Walls Sphere 0, 0, 0, 6.0_A Spring 10.0
+  # Retoma posicoes, velocidades e relogio fornecidos.
+  Restart "preparacao_termica.mdrestart"
+  Dump Position Stride 1 Filename "zn_parede-traj.xyz"
+  # Novo trecho: 1000 x 0.5 fs = 500 fs (5e-13 s).
+  Run 1000
+end
+
+# Carga 2, multiplicidade 1; XYZ na mesma pasta.
+* xyzfile 2 1 zn_solvato.xyz

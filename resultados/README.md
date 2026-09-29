@@ -2,7 +2,8 @@
 
 [← Materiais](../README.md#materiais-do-minicurso)
 
-As saídas selecionadas para comparação serão adicionadas junto dos exemplos da aula. Não há resultados de AIMD nesta primeira versão.
+As **15 execuções concluídas com PAL8** estão junto de seus [sete exercícios](../exercicios/README.md). Cada página vincula input comentado, estrutura, saída completa, tempos medidos e, nas MD, CSV de energia/temperatura e trajetória XYZ. O complexo também inclui distâncias Zn–N/Zn–O e estado de reinício comum.
 
-Guarde seus cálculos em execucoes/ ou fora do repositório. Essa pasta local é ignorada pelo Git. Os resultados de referência devem permanecer vinculados ao input e à versão do programa que os gerou.
+Os [pilotos operacionais anteriores](pilotos-progressao/README.md) ficam preservados separadamente; não substituem as referências dos exercícios.
 
+Guarde seus cálculos em `execucoes/` dentro da pasta do exercício ou fora do repositório. Essas pastas locais são ignoradas pelo Git. Preserve os resultados fornecidos.

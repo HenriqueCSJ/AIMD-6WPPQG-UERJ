@@ -7,6 +7,7 @@
 - Um computador no qual você possa instalar programas; a primeira configuração do WSL e do runtime Windows pode pedir permissão de administrador.
 - Cadastro no [fórum do ORCA](https://orcaforum.kofo.mpg.de/), com acesso aos downloads.
 - **ORCA 6.1.1** e o MPI da rota escolhida: Open MPI do Ubuntu via apt ou MS-MPI no Windows nativo.
+- [XTB2 e SOLVATOR funcionando](05-xtb-solvator.md): teste a instalação existente antes de acrescentar ou substituir programas.
 - Um editor de texto simples, como [Visual Studio Code](https://code.visualstudio.com/download).
 - [Avogadro](https://avogadro.cc/install/index.html) para abrir e examinar estruturas XYZ; instale a versão para o seu sistema.
 - Uma cópia deste repositório e os [testes de instalação](03-testar-instalacao.md) concluídos.
@@ -34,6 +35,7 @@ Em ambos os sistemas, use um diretório de cálculos separado da instalação do
 - [ ] O MPI corresponde à rota escolhida.
 - [ ] O teste serial termina normalmente.
 - [ ] O teste paralelo com dois processos termina normalmente.
+- [ ] O teste `XTB2`/SOLVATOR termina normalmente e produz o XYZ de 9 átomos.
 - [ ] Consigo abrir [agua.xyz](../estruturas/agua.xyz) no Avogadro.
 - [ ] Sei onde salvar inputs, saídas e trajetórias.
 
