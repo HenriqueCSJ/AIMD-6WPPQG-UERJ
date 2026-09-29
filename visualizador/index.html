@@ -4,9 +4,9 @@
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="Leia resultados de dinâmica molecular do ORCA: energias, temperatura, trajetórias e distâncias. Tudo no seu navegador.">
   <title>Laboratório de trajetórias · AIMD com ORCA</title>
-  <link rel="stylesheet" href="app.css?v=20260928-3d2">
-  <script defer src="orca-parser.js"></script><script defer src="charts.js"></script>
-  <script defer src="vendor/3Dmol-min.js"></script><script defer src="examples.js"></script><script defer src="app.js?v=20260928-3d2"></script>
+  <link rel="stylesheet" href="app.css?v=20260928-workshop4">
+  <script defer src="orca-parser.js?v=20260928-workshop4"></script><script defer src="charts.js"></script>
+  <script defer src="vendor/3Dmol-min.js"></script><script defer src="examples.js?v=20260928-workshop4"></script><script defer src="app.js?v=20260928-workshop4"></script>
 </head>
 <body>
 <a class="skip" href="#main">Ir para o conteúdo</a>
@@ -37,10 +37,10 @@
         <option value="water">1 · Água com DFT</option>
         <option value="solvent">2 · Água: vácuo × CPCM</option>
         <option value="ethanol">3 · Etanol com XTB2</option>
-        <option value="timestep" selected>4 · O efeito do timestep</option>
-        <option value="thermostat">5 · NVE × termostato</option>
+        <option value="timestep" selected>4 · Timestep: falha e correção</option>
+        <option value="timestep_accuracy">4b · Timestep: precisão e custo</option><option value="thermostat">5 · NVE × termostato</option>
         <option value="solvator">6 · Complexo e SOLVATOR</option>
-        <option value="complex">7 · Complexo: com × sem parede</option>
+        <option value="complex">7 · Parede: retenção das águas</option><option value="fullerene">8 · Água dentro de C₆₀ (opcional)</option><option value="complex_short">Apoio · Parede: referência curta</option>
       </select>
       <div class="example-actions"><button class="button secondary" id="example-button" type="button">Explorar exemplo <span aria-hidden="true">→</span></button><button class="button" id="example-trajectory-button" type="button">Ver trajetória 3D</button></div>
       <p class="muted small">Resultados reais do minicurso, identificados como referência.</p>
@@ -77,7 +77,7 @@
 
     <section id="panel-trajectory" role="tabpanel" aria-labelledby="tab-trajectory" hidden>
       <div class="toolbar"><label>Simulação<select id="trajectory-run"></select></label><button type="button" class="button small-button" id="reset-view">Centralizar</button><label class="check-label"><input id="proximity-lines" type="checkbox" checked> Traços de proximidade</label><label class="check-label"><input id="atom-labels" type="checkbox"> Mostrar índices</label></div>
-      <div id="trajectory-empty" class="empty" hidden></div>
+      <p id="trajectory-status" class="trajectory-status" hidden></p><div id="trajectory-empty" class="empty" hidden></div>
       <div id="trajectory-content" class="trajectory-layout">
         <div class="molecule-card">
           <div id="molecule" aria-label="Estrutura molecular interativa. Arraste para girar e use a roda para ampliar." role="img"></div>

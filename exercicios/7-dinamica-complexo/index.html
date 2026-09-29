@@ -1,18 +1,16 @@
 <!doctype html>
 <html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>7. Dinâmica do complexo · AIMD / ORCA</title><link rel="stylesheet" href="../pagina.css"><script defer src="../pagina.js"></script></head>
-<body><a class="skip" href="#conteudo">Ir para o conteúdo</a><header class="brand"><a href="../index.html"><strong>AIMD com ORCA</strong><small>6º Workshop PPGQ–UERJ · 7 de outubro de 2026</small></a><div class="logos"><img src="../../assets/uerj-logo.png" alt="UERJ"><img src="../../assets/ufrrj-logo-compacto.png" alt="UFRRJ"></div></header><div class="layout"><nav class="course-nav" aria-label="Exercícios"><h2>Do input à interpretação</h2><a class="home" href="../index.html">Visão geral do percurso</a><div class="links"><a href="../1-agua-dft/index.html"><span class="num">01</span><span>Água com DFT</span></a><a href="../2-solvente-implicito/index.html"><span class="num">02</span><span>Solvente implícito</span></a><a href="../3-xtb2-etanol/index.html"><span class="num">03</span><span>XTB2 e etanol</span></a><a href="../4-timestep/index.html"><span class="num">04</span><span>Passo de integração</span></a><a href="../5-termostato/index.html"><span class="num">05</span><span>Temperatura e termostato</span></a><a href="../6-complexo-solvator/index.html"><span class="num">06</span><span>Zn–en e SOLVATOR</span></a><a href="../7-dinamica-complexo/index.html" aria-current="page"><span class="num">07</span><span>Dinâmica do complexo</span></a></div></nav><main id="conteudo"><h1 id="7-acompanhar-o-complexo-e-o-confinamento">7. Acompanhar o complexo e o confinamento</h1>
+<body><a class="skip" href="#conteudo">Ir para o conteúdo</a><header class="brand"><a href="../index.html"><strong>AIMD com ORCA</strong><small>6º Workshop PPGQ–UERJ · 7 de outubro de 2026</small></a><div class="logos"><img src="../../assets/uerj-logo.png" alt="UERJ"><img src="../../assets/ufrrj-logo-compacto.png" alt="UFRRJ"></div></header><div class="layout"><nav class="course-nav" aria-label="Exercícios"><h2>Do input à interpretação</h2><a class="home" href="../index.html">Visão geral do percurso</a><div class="links"><a href="../1-agua-dft/index.html"><span class="num">01</span><span>Água com DFT</span></a><a href="../2-solvente-implicito/index.html"><span class="num">02</span><span>Solvente implícito</span></a><a href="../3-xtb2-etanol/index.html"><span class="num">03</span><span>XTB2 e etanol</span></a><a href="../4-timestep/index.html"><span class="num">04</span><span>Passo de integração</span></a><a href="../5-termostato/index.html"><span class="num">05</span><span>Temperatura e termostato</span></a><a href="../6-complexo-solvator/index.html"><span class="num">06</span><span>Zn–en e SOLVATOR</span></a><a href="../7-dinamica-complexo/index.html" aria-current="page"><span class="num">07</span><span>Dinâmica do complexo</span></a><a href="../8-agua-no-fulereno/index.html"><span class="num">08</span><span>Água em C₆₀ · opcional</span></a></div></nav><main id="conteudo"><h1 id="7-manter-as-aguas-perto-do-complexo">7. Manter as águas perto do complexo</h1>
 <p><a href="../index.html">← Percurso</a> · <a href="../../visualizador/index.html">Aplicativo de análise</a></p>
-<p><strong>35 min · 43 átomos · XTB2/ALPB</strong></p>
+<p><strong>35 min · Zn²⁺–etilenodiamina + águas · 43 átomos</strong></p>
 <blockquote>
-<p><strong>Pergunta da atividade:</strong> O que as distâncias mostram, além da animação?</p>
+<p><strong>Pergunta:</strong> como impedir que águas da camada externa se afastem da região simulada?</p>
 </blockquote>
-<h2 id="1-prepare">1. Prepare</h2>
-<p>O pacote inclui a estrutura e o <strong>reinício comum</strong>, já preparado. Acrescentaremos <strong>500 fs = 0,5 ps = 5 × 10⁻¹³ s</strong>. O relógio continua de 100 até 600 fs. Execute o caso com parede; o controle sem parede já está disponível.</p>
-<p><a href="aula-zn_parede.zip">Baixar os arquivos da atividade</a> · <a href="estruturas/zn_solvato.xyz">Abrir a estrutura</a></p>
-<p>Extraia o pacote. Ele contém o input e os arquivos que precisam ficar juntos. Use uma pasta para esta atividade.</p>
-<h2 id="2-execute">2. Execute</h2>
-<p>Salve este conteúdo como <strong><code>zn_parede.inp</code></strong>; ele já está no pacote.</p>
-<p><a href="inputs/zn_parede.inp">Baixar input</a> · <a href="aula-zn_parede.zip">Baixar pacote com os arquivos necessários</a></p>
+<h2 id="1-compare-a-mesma-condicao-inicial">1. Compare a mesma condição inicial</h2>
+<p>As duas trajetórias partem do <strong>mesmo arquivo de reinício</strong>, com as mesmas posições e velocidades, após 100 fs de preparação. Ambas usam XTB2/ALPB(water), CSVR a 300 K, timestep de 0,5 fs e mais <strong>2 ps = 2 × 10⁻¹² s</strong>. Apenas a parede muda. O relógio vai de 100 a 2100 fs.</p>
+<p>ALPB modifica o ambiente eletrostático; não impede uma água explícita de se afastar. A parede acrescenta uma força restauradora quando um átomo ultrapassa o raio escolhido.</p>
+<h2 id="2-execute-com-parede">2. Execute com parede</h2>
+<p><a href="aula-zn_parede_longo.zip">Pacote para executar</a> · <a href="inputs/zn_parede_longo.inp">Input</a></p>
 <pre><code class="language-text"># Complexo com XTB2/ALPB; PAL8 = 8 threads do xTB.
 ! MD XTB2 ALPB(water) PAL8
 %maxcore 256
@@ -23,71 +21,53 @@
   # Banho a 300 K; acoplamento em 100 fs.
   Thermostat CSVR 300_K Timecon 100_fs
   # Parede suave: centro (0,0,0), raio 6 A.
-  Walls Sphere 0, 0, 0, 6.0_A Spring 10.0
+  Walls Sphere 0, 0, 0, 6.0_A Spring 50.0
   # Retoma posicoes, velocidades e relogio fornecidos.
   Restart &quot;preparacao_termica.mdrestart&quot;
-  Dump Position Stride 1 Filename &quot;zn_parede-traj.xyz&quot;
-  # Novo trecho: 1000 x 0.5 fs = 500 fs (5e-13 s).
-  Run 1000
+  Dump Position Stride 1 Filename &quot;zn_parede_longo-traj.xyz&quot;
+  # Novo trecho: 4000 x 0.5 fs = 2000 fs (2e-12 s).
+  Run 4000
 end
 
 # Carga 2, multiplicidade 1; XYZ na mesma pasta.
 * xyzfile 2 1 zn_solvato.xyz
 </code></pre>
-<p><strong>Repare nestas escolhas:</strong></p>
-<ul>
-<li><code>Walls Sphere</code> acrescenta uma parede suave de raio 6 Å, centrada na origem.</li>
-<li><code>Restart</code> retoma posições e velocidades. Não inicializamos velocidades novas.</li>
-<li>As distâncias serão medidas no aplicativo: <strong>nenhuma lista de Colvars é necessária</strong>.</li>
-</ul>
 <details>
-<summary>Executar no Ubuntu / WSL2 — recomendado</summary>
-<p>Extraia o pacote em uma pasta e abra o terminal Ubuntu <strong>nessa pasta</strong>, onde estão o input e o XYZ. Com <code>ORCA_DIR</code> configurado no tutorial, copie o bloco inteiro. Ele cria uma execução nova e devolve o terminal à pasta inicial.</p>
+<summary>Executar no Ubuntu / WSL2</summary>
+<p>Extraia o pacote em uma pasta nova. Abra o Ubuntu nessa pasta, com <code>ORCA_DIR</code> configurado no tutorial, e copie:</p>
 <pre><code class="language-bash">(
   test -x &quot;$ORCA_DIR/orca&quot; || { echo &quot;Configure ORCA_DIR antes de executar.&quot;; exit 1; }
   pasta=$(mktemp -d ./execucao-XXXXXX) || exit 1
-  cp zn_parede.inp zn_solvato.xyz preparacao_termica.mdrestart &quot;$pasta/&quot; || exit 1
+  cp zn_parede_longo.inp zn_solvato.xyz preparacao_termica.mdrestart &quot;$pasta/&quot; || exit 1
   cd &quot;$pasta&quot; || exit 1
-  &quot;$ORCA_DIR/orca&quot; zn_parede.inp &gt; zn_parede.out 2&gt;&amp;1
-  tail -n 5 zn_parede.out
+  &quot;$ORCA_DIR/orca&quot; zn_parede_longo.inp &gt; zn_parede_longo.out 2&gt;&amp;1
+  tail -n 12 zn_parede_longo.out
   echo &quot;Resultados: $PWD&quot;
 )
 </code></pre>
-<p>Procure <strong><code>ORCA TERMINATED NORMALLY</code></strong>. Abra <code>explorer.exe .</code> para localizar a nova pasta <code>execucao-…</code> e carregar os arquivos no aplicativo. Execute um cálculo por vez; o ORCA gerencia o paralelismo de <code>PAL8</code>.</p>
+<p>Abra <code>explorer.exe .</code> para localizar os resultados. Execute um cálculo por vez.</p>
 </details>
 <details>
-<summary>Alternativa: executar no Windows nativo</summary>
-<p>Extraia o pacote, abra o PowerShell nessa pasta e ajuste o caminho do ORCA. Esta rota exige ORCA/MS-MPI já testados na instalação.</p>
-<pre><code class="language-powershell">&amp; {
-  $orca = 'C:\ORCA_6.1.1\orca.exe'
-  if (-not (Test-Path -LiteralPath $orca)) { throw 'Ajuste o caminho do ORCA.' }
-  $pasta = Join-Path $PWD ('execucao-' + [guid]::NewGuid().ToString('N'))
-  New-Item -ItemType Directory -Path $pasta | Out-Null
-  Copy-Item -LiteralPath 'zn_parede.inp', 'zn_solvato.xyz', 'preparacao_termica.mdrestart' -Destination $pasta -ErrorAction Stop
-  Push-Location $pasta
-  try {
-    &amp; $orca zn_parede.inp &gt; zn_parede.out 2&gt;&amp;1
-    Get-Content zn_parede.out -Tail 5
-    Get-Location
-  } finally { Pop-Location }
-}
+<summary>Alternativa no Windows nativo</summary>
+<p>Com ORCA/MS-MPI instalados, extraia o pacote numa pasta nova, abra o PowerShell nela e ajuste o caminho:</p>
+<pre><code class="language-powershell">&amp; 'C:\ORCA_6.1.1\orca.exe' zn_parede_longo.inp &gt; zn_parede_longo.out 2&gt;&amp;1
+Get-Content zn_parede_longo.out -Tail 12
 </code></pre>
 </details>
-<h2 id="3-veja-e-interprete">3. Veja e interprete</h2>
-<p><a href="../../visualizador/index.html">Carregar meus arquivos no aplicativo</a> · <a href="../../visualizador/index.html?exemplo=complex">Abrir as referências desta atividade</a></p>
-<p>Na nova pasta de execução, selecione <strong><code>zn_parede.out</code></strong>, <strong><code>zn_parede-md-ener.csv</code></strong> e <strong><code>zn_parede-traj.xyz</code></strong>. Pode carregar os três juntos.</p>
+<p>O pacote inclui o reinício. <strong>Raio 6 Å</strong>, centro fixo na origem e <code>Spring 50.0</code> em kJ mol⁻¹ Å⁻². A parede é suave: os átomos podem ultrapassar um pouco o raio antes de serem repelidos. Ela modifica o modelo físico e não representa uma caixa periódica nem solvente infinito.</p>
+<h2 id="3-veja-a-agua-que-se-afasta">3. Veja a água que se afasta</h2>
+<p><a href="../../visualizador/index.html?exemplo=complex&amp;aba=trajetoria">Abrir a comparação 3D</a> · <a href="../../visualizador/index.html">Carregar meus arquivos</a></p>
 <ol>
-<li>Carregue <code>.out</code>, <code>*-md-ener.csv</code> e <code>*-traj.xyz</code>. Veja a trajetória e T.</li>
-<li>Em <strong>Distâncias</strong>, comece por <strong>Zn(0)–N(1)</strong> e <strong>Zn(0)–N(4)</strong>. Depois compare <strong>Zn(0)–O(13)</strong> e <strong>Zn(0)–O(25)</strong>.</li>
-<li>Abra a referência com/sem parede. O afastamento do solvente muda? A parede impede toda ultrapassagem do raio?</li>
+<li>Reproduza a referência <strong>sem parede</strong> até o fim. Uma água da camada externa se afasta.</li>
+<li>Troque para <strong>com parede</strong>. O contorno mostra onde começa a repulsão.</li>
+<li>Em <strong>Distâncias</strong>, compare <strong>Zn 0 — O 25</strong>. Os índices começam em zero.</li>
+<li>Confira também <strong>Zn 0 — N 1</strong> e <strong>Zn 0 — N 4</strong>: retenção espacial e coordenação são observações diferentes.</li>
 </ol>
-<blockquote>
-<p><strong>Para levar:</strong> Uma distância observada por 0,5 ps não determina estabilidade termodinâmica nem ausência de reação em tempos maiores.</p>
-</blockquote>
+<p>Nesta execução, a distância final Zn 0–O 25 foi <strong>9.13 Å sem parede</strong> e <strong>4.19 Å com parede</strong>. O maior raio atômico em relação à origem atingiu <strong>9.28 Å sem parede</strong> e <strong>6.30 Å com parede</strong>. Esses números descrevem estas trajetórias; não são limites universais de evaporação.</p>
+<p><strong>O ganho:</strong> conservar uma região finita de solvente explícito ao redor do sistema durante a demonstração. <strong>O custo:</strong> forças artificiais nas bordas alteram o movimento; raio pequeno ou parede muito rígida podem distorcer a estrutura e exigir timestep menor. Aqui a perda de uma água significa afastamento no modelo de aglomerado, não uma taxa de evaporação de solução macroscópica.</p>
 <details>
-<summary>Opcional: executar o controle sem parede</summary>
-<p>Este input retoma o mesmo estado inicial e remove apenas o confinamento. Use uma execução separada; compare com o resultado fornecido se o tempo da aula for curto.</p>
-<p><a href="inputs/zn_sem_parede.inp">Baixar input</a> · <a href="aula-zn_sem_parede.zip">Baixar pacote com os arquivos necessários</a></p>
+<summary>Executar também o controle sem parede</summary>
+<p><a href="aula-zn_sem_parede_longo.zip">Pacote para executar</a> · <a href="inputs/zn_sem_parede_longo.inp">Input</a></p>
 <pre><code class="language-text"># Controle: mesmo estado inicial, agora sem parede.
 ! MD XTB2 ALPB(water) PAL8
 %maxcore 256
@@ -99,57 +79,40 @@ end
   Thermostat CSVR 300_K Timecon 100_fs
   # Retoma posicoes, velocidades e relogio fornecidos.
   Restart &quot;preparacao_termica.mdrestart&quot;
-  Dump Position Stride 1 Filename &quot;zn_sem_parede-traj.xyz&quot;
-  # Novo trecho: 1000 x 0.5 fs = 500 fs (5e-13 s).
-  Run 1000
+  Dump Position Stride 1 Filename &quot;zn_sem_parede_longo-traj.xyz&quot;
+  # Novo trecho: 4000 x 0.5 fs = 2000 fs (2e-12 s).
+  Run 4000
 end
 
 # Carga 2, multiplicidade 1; XYZ na mesma pasta.
 * xyzfile 2 1 zn_solvato.xyz
 </code></pre>
 <details>
-<summary>Executar no Ubuntu / WSL2 — recomendado</summary>
-<p>Extraia o pacote em uma pasta e abra o terminal Ubuntu <strong>nessa pasta</strong>, onde estão o input e o XYZ. Com <code>ORCA_DIR</code> configurado no tutorial, copie o bloco inteiro. Ele cria uma execução nova e devolve o terminal à pasta inicial.</p>
+<summary>Executar no Ubuntu / WSL2</summary>
+<p>Extraia o pacote em uma pasta nova. Abra o Ubuntu nessa pasta, com <code>ORCA_DIR</code> configurado no tutorial, e copie:</p>
 <pre><code class="language-bash">(
   test -x &quot;$ORCA_DIR/orca&quot; || { echo &quot;Configure ORCA_DIR antes de executar.&quot;; exit 1; }
   pasta=$(mktemp -d ./execucao-XXXXXX) || exit 1
-  cp zn_sem_parede.inp zn_solvato.xyz preparacao_termica.mdrestart &quot;$pasta/&quot; || exit 1
+  cp zn_sem_parede_longo.inp zn_solvato.xyz preparacao_termica.mdrestart &quot;$pasta/&quot; || exit 1
   cd &quot;$pasta&quot; || exit 1
-  &quot;$ORCA_DIR/orca&quot; zn_sem_parede.inp &gt; zn_sem_parede.out 2&gt;&amp;1
-  tail -n 5 zn_sem_parede.out
+  &quot;$ORCA_DIR/orca&quot; zn_sem_parede_longo.inp &gt; zn_sem_parede_longo.out 2&gt;&amp;1
+  tail -n 12 zn_sem_parede_longo.out
   echo &quot;Resultados: $PWD&quot;
 )
 </code></pre>
-<p>Procure <strong><code>ORCA TERMINATED NORMALLY</code></strong>. Abra <code>explorer.exe .</code> para localizar a nova pasta <code>execucao-…</code> e carregar os arquivos no aplicativo. Execute um cálculo por vez; o ORCA gerencia o paralelismo de <code>PAL8</code>.</p>
+<p>Abra <code>explorer.exe .</code> para localizar os resultados. Execute um cálculo por vez.</p>
 </details>
 <details>
-<summary>Alternativa: executar no Windows nativo</summary>
-<p>Extraia o pacote, abra o PowerShell nessa pasta e ajuste o caminho do ORCA. Esta rota exige ORCA/MS-MPI já testados na instalação.</p>
-<pre><code class="language-powershell">&amp; {
-  $orca = 'C:\ORCA_6.1.1\orca.exe'
-  if (-not (Test-Path -LiteralPath $orca)) { throw 'Ajuste o caminho do ORCA.' }
-  $pasta = Join-Path $PWD ('execucao-' + [guid]::NewGuid().ToString('N'))
-  New-Item -ItemType Directory -Path $pasta | Out-Null
-  Copy-Item -LiteralPath 'zn_sem_parede.inp', 'zn_solvato.xyz', 'preparacao_termica.mdrestart' -Destination $pasta -ErrorAction Stop
-  Push-Location $pasta
-  try {
-    &amp; $orca zn_sem_parede.inp &gt; zn_sem_parede.out 2&gt;&amp;1
-    Get-Content zn_sem_parede.out -Tail 5
-    Get-Location
-  } finally { Pop-Location }
-}
+<summary>Alternativa no Windows nativo</summary>
+<p>Com ORCA/MS-MPI instalados, extraia o pacote numa pasta nova, abra o PowerShell nela e ajuste o caminho:</p>
+<pre><code class="language-powershell">&amp; 'C:\ORCA_6.1.1\orca.exe' zn_sem_parede_longo.inp &gt; zn_sem_parede_longo.out 2&gt;&amp;1
+Get-Content zn_sem_parede_longo.out -Tail 12
 </code></pre>
 </details>
 </details>
-<p>Os índices começam em zero. O primeiro quadro XYZ é 100,5 fs, enquanto o CSV inclui 100 fs; o aplicativo alinha pelo tempo. <code>Walls</code> é a grafia usada no ORCA 6.1.1; o manual ainda reúne essa opção na seção <code>Cell</code>.</p>
-<details>
-<summary>Referências, preparação e explicações adicionais</summary>
-<p>Resultados reais já calculados com PAL8. O input completo de cada referência está ao lado da saída; as séries não foram substituídas por simulações novas.</p>
+<h2 id="resultados-reais">Resultados reais</h2>
 <ul>
-<li><strong>zn_parede:</strong> <a href="resultados/zn_parede/zn_parede.inp">input completo usado</a> · <a href="resultados/zn_parede/zn_parede.out">saída</a> · <a href="resultados/zn_parede/zn_parede-md-ener.csv">energias</a> · <a href="resultados/zn_parede/zn_parede-traj.xyz">trajetória</a>.</li>
-<li><strong>zn_sem_parede:</strong> <a href="resultados/zn_sem_parede/zn_sem_parede.inp">input completo usado</a> · <a href="resultados/zn_sem_parede/zn_sem_parede.out">saída</a> · <a href="resultados/zn_sem_parede/zn_sem_parede-md-ener.csv">energias</a> · <a href="resultados/zn_sem_parede/zn_sem_parede-traj.xyz">trajetória</a>.</li>
+<li><strong>zn_parede_longo:</strong> <a href="resultados/zn_parede_longo/zn_parede_longo.inp">input usado</a> · <a href="resultados/zn_parede_longo/zn_parede_longo.out">saída</a> · <a href="resultados/zn_parede_longo/zn_parede_longo-md-ener.csv">energias</a> · <a href="resultados/zn_parede_longo/zn_parede_longo-traj.xyz">trajetória</a>.</li>
+<li><strong>zn_sem_parede_longo:</strong> <a href="resultados/zn_sem_parede_longo/zn_sem_parede_longo.inp">input usado</a> · <a href="resultados/zn_sem_parede_longo/zn_sem_parede_longo.out">saída</a> · <a href="resultados/zn_sem_parede_longo/zn_sem_parede_longo-md-ener.csv">energias</a> · <a href="resultados/zn_sem_parede_longo/zn_sem_parede_longo-traj.xyz">trajetória</a>.</li>
 </ul>
-<p><a href="apoio.html">Consultar preparação, números e respostas</a>.</p>
-</details>
-<p><strong>Manual:</strong> <a href="https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html#cell">Paredes de MD (seção Cell no manual)</a> · <a href="https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html#restart">Reinício</a>.</p>
-<p><strong>Antes de avançar:</strong> anote uma mudança no input, uma observação e uma conclusão que esta trajetória ainda não permite.</p><nav class="endnav" aria-label="Próxima etapa"><a href="../6-complexo-solvator/index.html">← Exercício 6</a><a href="../index.html">Voltar ao percurso →</a></nav></main></div><footer>Henrique de Castro Silva Junior e Virginia Camila Rufino Ferreira · ORCA 6.1.1 · Materiais e dados locais; links externos levam à documentação oficial.</footer></body></html>
+<p>As referências antigas de 0,5 ps permanecem em <a href="apoio.html">apoio</a> e no <a href="../../visualizador/index.html?exemplo=complex_short">aplicativo</a>. <strong>Manual:</strong> <a href="https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html#cell">Paredes, seção Cell</a> · <a href="https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html#restart">Restart</a>. O ORCA 6.1.1 usado aceita a grafia <code>Walls</code>.</p><nav class="endnav" aria-label="Próxima etapa"><a href="../6-complexo-solvator/index.html">← Exercício 6</a><a href="../8-agua-no-fulereno/index.html">Exercício 8 →</a></nav></main></div><footer>Henrique de Castro Silva Junior e Virginia Camila Rufino Ferreira · ORCA 6.1.1 · Materiais e dados locais; links externos levam à documentação oficial.</footer></body></html>

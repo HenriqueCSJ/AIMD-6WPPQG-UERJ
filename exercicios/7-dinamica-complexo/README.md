@@ -1,24 +1,20 @@
-# 7. Acompanhar o complexo e o confinamento
+# 7. Manter as águas perto do complexo
 
 [← Percurso](../README.md) · [Aplicativo de análise](../../visualizador/index.html)
 
-**35 min · 43 átomos · XTB2/ALPB**
+**35 min · Zn²⁺–etilenodiamina + águas · 43 átomos**
 
-> **Pergunta da atividade:** O que as distâncias mostram, além da animação?
+> **Pergunta:** como impedir que águas da camada externa se afastem da região simulada?
 
-## 1. Prepare
+## 1. Compare a mesma condição inicial
 
-O pacote inclui a estrutura e o **reinício comum**, já preparado. Acrescentaremos **500 fs = 0,5 ps = 5 × 10⁻¹³ s**. O relógio continua de 100 até 600 fs. Execute o caso com parede; o controle sem parede já está disponível.
+As duas trajetórias partem do **mesmo arquivo de reinício**, com as mesmas posições e velocidades, após 100 fs de preparação. Ambas usam XTB2/ALPB(water), CSVR a 300 K, timestep de 0,5 fs e mais **2 ps = 2 × 10⁻¹² s**. Apenas a parede muda. O relógio vai de 100 a 2100 fs.
 
-[Baixar os arquivos da atividade](aula-zn_parede.zip) · [Abrir a estrutura](estruturas/zn_solvato.xyz)
+ALPB modifica o ambiente eletrostático; não impede uma água explícita de se afastar. A parede acrescenta uma força restauradora quando um átomo ultrapassa o raio escolhido.
 
-Extraia o pacote. Ele contém o input e os arquivos que precisam ficar juntos. Use uma pasta para esta atividade.
+## 2. Execute com parede
 
-## 2. Execute
-
-Salve este conteúdo como **`zn_parede.inp`**; ele já está no pacote.
-
-[Baixar input](inputs/zn_parede.inp) · [Baixar pacote com os arquivos necessários](aula-zn_parede.zip)
+[Pacote para executar](aula-zn_parede_longo.zip) · [Input](inputs/zn_parede_longo.inp)
 
 ```text
 # Complexo com XTB2/ALPB; PAL8 = 8 threads do xTB.
@@ -31,83 +27,67 @@ Salve este conteúdo como **`zn_parede.inp`**; ele já está no pacote.
   # Banho a 300 K; acoplamento em 100 fs.
   Thermostat CSVR 300_K Timecon 100_fs
   # Parede suave: centro (0,0,0), raio 6 A.
-  Walls Sphere 0, 0, 0, 6.0_A Spring 10.0
+  Walls Sphere 0, 0, 0, 6.0_A Spring 50.0
   # Retoma posicoes, velocidades e relogio fornecidos.
   Restart "preparacao_termica.mdrestart"
-  Dump Position Stride 1 Filename "zn_parede-traj.xyz"
-  # Novo trecho: 1000 x 0.5 fs = 500 fs (5e-13 s).
-  Run 1000
+  Dump Position Stride 1 Filename "zn_parede_longo-traj.xyz"
+  # Novo trecho: 4000 x 0.5 fs = 2000 fs (2e-12 s).
+  Run 4000
 end
 
 # Carga 2, multiplicidade 1; XYZ na mesma pasta.
 * xyzfile 2 1 zn_solvato.xyz
 ```
+<details markdown="1"><summary>Executar no Ubuntu / WSL2</summary>
 
-**Repare nestas escolhas:**
-
-- `Walls Sphere` acrescenta uma parede suave de raio 6 Å, centrada na origem.
-- `Restart` retoma posições e velocidades. Não inicializamos velocidades novas.
-- As distâncias serão medidas no aplicativo: **nenhuma lista de Colvars é necessária**.
-
-<details markdown="1"><summary>Executar no Ubuntu / WSL2 — recomendado</summary>
-
-Extraia o pacote em uma pasta e abra o terminal Ubuntu **nessa pasta**, onde estão o input e o XYZ. Com `ORCA_DIR` configurado no tutorial, copie o bloco inteiro. Ele cria uma execução nova e devolve o terminal à pasta inicial.
+Extraia o pacote em uma pasta nova. Abra o Ubuntu nessa pasta, com `ORCA_DIR` configurado no tutorial, e copie:
 
 ```bash
 (
   test -x "$ORCA_DIR/orca" || { echo "Configure ORCA_DIR antes de executar."; exit 1; }
   pasta=$(mktemp -d ./execucao-XXXXXX) || exit 1
-  cp zn_parede.inp zn_solvato.xyz preparacao_termica.mdrestart "$pasta/" || exit 1
+  cp zn_parede_longo.inp zn_solvato.xyz preparacao_termica.mdrestart "$pasta/" || exit 1
   cd "$pasta" || exit 1
-  "$ORCA_DIR/orca" zn_parede.inp > zn_parede.out 2>&1
-  tail -n 5 zn_parede.out
+  "$ORCA_DIR/orca" zn_parede_longo.inp > zn_parede_longo.out 2>&1
+  tail -n 12 zn_parede_longo.out
   echo "Resultados: $PWD"
 )
 ```
 
-Procure **`ORCA TERMINATED NORMALLY`**. Abra `explorer.exe .` para localizar a nova pasta `execucao-…` e carregar os arquivos no aplicativo. Execute um cálculo por vez; o ORCA gerencia o paralelismo de `PAL8`.
+Abra `explorer.exe .` para localizar os resultados. Execute um cálculo por vez.
 
 </details>
 
-<details markdown="1"><summary>Alternativa: executar no Windows nativo</summary>
+<details markdown="1"><summary>Alternativa no Windows nativo</summary>
 
-Extraia o pacote, abra o PowerShell nessa pasta e ajuste o caminho do ORCA. Esta rota exige ORCA/MS-MPI já testados na instalação.
+Com ORCA/MS-MPI instalados, extraia o pacote numa pasta nova, abra o PowerShell nela e ajuste o caminho:
 
 ```powershell
-& {
-  $orca = 'C:\ORCA_6.1.1\orca.exe'
-  if (-not (Test-Path -LiteralPath $orca)) { throw 'Ajuste o caminho do ORCA.' }
-  $pasta = Join-Path $PWD ('execucao-' + [guid]::NewGuid().ToString('N'))
-  New-Item -ItemType Directory -Path $pasta | Out-Null
-  Copy-Item -LiteralPath 'zn_parede.inp', 'zn_solvato.xyz', 'preparacao_termica.mdrestart' -Destination $pasta -ErrorAction Stop
-  Push-Location $pasta
-  try {
-    & $orca zn_parede.inp > zn_parede.out 2>&1
-    Get-Content zn_parede.out -Tail 5
-    Get-Location
-  } finally { Pop-Location }
-}
+& 'C:\ORCA_6.1.1\orca.exe' zn_parede_longo.inp > zn_parede_longo.out 2>&1
+Get-Content zn_parede_longo.out -Tail 12
 ```
 
 </details>
 
-## 3. Veja e interprete
+O pacote inclui o reinício. **Raio 6 Å**, centro fixo na origem e `Spring 50.0` em kJ mol⁻¹ Å⁻². A parede é suave: os átomos podem ultrapassar um pouco o raio antes de serem repelidos. Ela modifica o modelo físico e não representa uma caixa periódica nem solvente infinito.
 
-[Carregar meus arquivos no aplicativo](../../visualizador/index.html) · [Abrir as referências desta atividade](../../visualizador/index.html?exemplo=complex)
+## 3. Veja a água que se afasta
 
-Na nova pasta de execução, selecione **`zn_parede.out`**, **`zn_parede-md-ener.csv`** e **`zn_parede-traj.xyz`**. Pode carregar os três juntos.
+[Abrir a comparação 3D](../../visualizador/index.html?exemplo=complex&aba=trajetoria) · [Carregar meus arquivos](../../visualizador/index.html)
 
-1. Carregue `.out`, `*-md-ener.csv` e `*-traj.xyz`. Veja a trajetória e T.
-2. Em **Distâncias**, comece por **Zn(0)–N(1)** e **Zn(0)–N(4)**. Depois compare **Zn(0)–O(13)** e **Zn(0)–O(25)**.
-3. Abra a referência com/sem parede. O afastamento do solvente muda? A parede impede toda ultrapassagem do raio?
+1. Reproduza a referência **sem parede** até o fim. Uma água da camada externa se afasta.
+2. Troque para **com parede**. O contorno mostra onde começa a repulsão.
+3. Em **Distâncias**, compare **Zn 0 — O 25**. Os índices começam em zero.
+4. Confira também **Zn 0 — N 1** e **Zn 0 — N 4**: retenção espacial e coordenação são observações diferentes.
 
-> **Para levar:** Uma distância observada por 0,5 ps não determina estabilidade termodinâmica nem ausência de reação em tempos maiores.
+Nesta execução, a distância final Zn 0–O 25 foi **9.13 Å sem parede** e **4.19 Å com parede**. O maior raio atômico em relação à origem atingiu **9.28 Å sem parede** e **6.30 Å com parede**. Esses números descrevem estas trajetórias; não são limites universais de evaporação.
 
-<details markdown="1"><summary>Opcional: executar o controle sem parede</summary>
 
-Este input retoma o mesmo estado inicial e remove apenas o confinamento. Use uma execução separada; compare com o resultado fornecido se o tempo da aula for curto.
+**O ganho:** conservar uma região finita de solvente explícito ao redor do sistema durante a demonstração. **O custo:** forças artificiais nas bordas alteram o movimento; raio pequeno ou parede muito rígida podem distorcer a estrutura e exigir timestep menor. Aqui a perda de uma água significa afastamento no modelo de aglomerado, não uma taxa de evaporação de solução macroscópica.
 
-[Baixar input](inputs/zn_sem_parede.inp) · [Baixar pacote com os arquivos necessários](aula-zn_sem_parede.zip)
+<details markdown="1"><summary>Executar também o controle sem parede</summary>
+
+[Pacote para executar](aula-zn_sem_parede_longo.zip) · [Input](inputs/zn_sem_parede_longo.inp)
 
 ```text
 # Controle: mesmo estado inicial, agora sem parede.
@@ -121,72 +101,50 @@ Este input retoma o mesmo estado inicial e remove apenas o confinamento. Use uma
   Thermostat CSVR 300_K Timecon 100_fs
   # Retoma posicoes, velocidades e relogio fornecidos.
   Restart "preparacao_termica.mdrestart"
-  Dump Position Stride 1 Filename "zn_sem_parede-traj.xyz"
-  # Novo trecho: 1000 x 0.5 fs = 500 fs (5e-13 s).
-  Run 1000
+  Dump Position Stride 1 Filename "zn_sem_parede_longo-traj.xyz"
+  # Novo trecho: 4000 x 0.5 fs = 2000 fs (2e-12 s).
+  Run 4000
 end
 
 # Carga 2, multiplicidade 1; XYZ na mesma pasta.
 * xyzfile 2 1 zn_solvato.xyz
 ```
+<details markdown="1"><summary>Executar no Ubuntu / WSL2</summary>
 
-<details markdown="1"><summary>Executar no Ubuntu / WSL2 — recomendado</summary>
-
-Extraia o pacote em uma pasta e abra o terminal Ubuntu **nessa pasta**, onde estão o input e o XYZ. Com `ORCA_DIR` configurado no tutorial, copie o bloco inteiro. Ele cria uma execução nova e devolve o terminal à pasta inicial.
+Extraia o pacote em uma pasta nova. Abra o Ubuntu nessa pasta, com `ORCA_DIR` configurado no tutorial, e copie:
 
 ```bash
 (
   test -x "$ORCA_DIR/orca" || { echo "Configure ORCA_DIR antes de executar."; exit 1; }
   pasta=$(mktemp -d ./execucao-XXXXXX) || exit 1
-  cp zn_sem_parede.inp zn_solvato.xyz preparacao_termica.mdrestart "$pasta/" || exit 1
+  cp zn_sem_parede_longo.inp zn_solvato.xyz preparacao_termica.mdrestart "$pasta/" || exit 1
   cd "$pasta" || exit 1
-  "$ORCA_DIR/orca" zn_sem_parede.inp > zn_sem_parede.out 2>&1
-  tail -n 5 zn_sem_parede.out
+  "$ORCA_DIR/orca" zn_sem_parede_longo.inp > zn_sem_parede_longo.out 2>&1
+  tail -n 12 zn_sem_parede_longo.out
   echo "Resultados: $PWD"
 )
 ```
 
-Procure **`ORCA TERMINATED NORMALLY`**. Abra `explorer.exe .` para localizar a nova pasta `execucao-…` e carregar os arquivos no aplicativo. Execute um cálculo por vez; o ORCA gerencia o paralelismo de `PAL8`.
+Abra `explorer.exe .` para localizar os resultados. Execute um cálculo por vez.
 
 </details>
 
-<details markdown="1"><summary>Alternativa: executar no Windows nativo</summary>
+<details markdown="1"><summary>Alternativa no Windows nativo</summary>
 
-Extraia o pacote, abra o PowerShell nessa pasta e ajuste o caminho do ORCA. Esta rota exige ORCA/MS-MPI já testados na instalação.
+Com ORCA/MS-MPI instalados, extraia o pacote numa pasta nova, abra o PowerShell nela e ajuste o caminho:
 
 ```powershell
-& {
-  $orca = 'C:\ORCA_6.1.1\orca.exe'
-  if (-not (Test-Path -LiteralPath $orca)) { throw 'Ajuste o caminho do ORCA.' }
-  $pasta = Join-Path $PWD ('execucao-' + [guid]::NewGuid().ToString('N'))
-  New-Item -ItemType Directory -Path $pasta | Out-Null
-  Copy-Item -LiteralPath 'zn_sem_parede.inp', 'zn_solvato.xyz', 'preparacao_termica.mdrestart' -Destination $pasta -ErrorAction Stop
-  Push-Location $pasta
-  try {
-    & $orca zn_sem_parede.inp > zn_sem_parede.out 2>&1
-    Get-Content zn_sem_parede.out -Tail 5
-    Get-Location
-  } finally { Pop-Location }
-}
+& 'C:\ORCA_6.1.1\orca.exe' zn_sem_parede_longo.inp > zn_sem_parede_longo.out 2>&1
+Get-Content zn_sem_parede_longo.out -Tail 12
 ```
 
 </details>
 
 </details>
 
-Os índices começam em zero. O primeiro quadro XYZ é 100,5 fs, enquanto o CSV inclui 100 fs; o aplicativo alinha pelo tempo. `Walls` é a grafia usada no ORCA 6.1.1; o manual ainda reúne essa opção na seção `Cell`.
+## Resultados reais
 
-<details markdown="1"><summary>Referências, preparação e explicações adicionais</summary>
+- **zn_parede_longo:** [input usado](resultados/zn_parede_longo/zn_parede_longo.inp) · [saída](resultados/zn_parede_longo/zn_parede_longo.out) · [energias](resultados/zn_parede_longo/zn_parede_longo-md-ener.csv) · [trajetória](resultados/zn_parede_longo/zn_parede_longo-traj.xyz).
+- **zn_sem_parede_longo:** [input usado](resultados/zn_sem_parede_longo/zn_sem_parede_longo.inp) · [saída](resultados/zn_sem_parede_longo/zn_sem_parede_longo.out) · [energias](resultados/zn_sem_parede_longo/zn_sem_parede_longo-md-ener.csv) · [trajetória](resultados/zn_sem_parede_longo/zn_sem_parede_longo-traj.xyz).
 
-Resultados reais já calculados com PAL8. O input completo de cada referência está ao lado da saída; as séries não foram substituídas por simulações novas.
-
-- **zn_parede:** [input completo usado](resultados/zn_parede/zn_parede.inp) · [saída](resultados/zn_parede/zn_parede.out) · [energias](resultados/zn_parede/zn_parede-md-ener.csv) · [trajetória](resultados/zn_parede/zn_parede-traj.xyz).
-- **zn_sem_parede:** [input completo usado](resultados/zn_sem_parede/zn_sem_parede.inp) · [saída](resultados/zn_sem_parede/zn_sem_parede.out) · [energias](resultados/zn_sem_parede/zn_sem_parede-md-ener.csv) · [trajetória](resultados/zn_sem_parede/zn_sem_parede-traj.xyz).
-
-[Consultar preparação, números e respostas](apoio.md).
-
-</details>
-
-**Manual:** [Paredes de MD (seção Cell no manual)](https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html#cell) · [Reinício](https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html#restart).
-
-**Antes de avançar:** anote uma mudança no input, uma observação e uma conclusão que esta trajetória ainda não permite.
+As referências antigas de 0,5 ps permanecem em [apoio](apoio.md) e no [aplicativo](../../visualizador/index.html?exemplo=complex_short). **Manual:** [Paredes, seção Cell](https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html#cell) · [Restart](https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html#restart). O ORCA 6.1.1 usado aceita a grafia `Walls`.

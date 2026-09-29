@@ -1,4 +1,4 @@
-# Sete exercícios, do input à interpretação
+# Sete exercícios e uma extensão: do input à interpretação
 
 [← Materiais do minicurso](../README.md#materiais-do-minicurso)
 
@@ -7,7 +7,7 @@
 **7 de outubro de 2026 · 13h–16h e 17h–18h · remoto**<br>
 Henrique de Castro Silva Junior e Virginia Camila Rufino Ferreira
 
-Começamos com uma molécula de água e DFT. Passamos cedo para **XTB2**, ganhamos tempo para testar integração e termostatos e terminamos acompanhando um complexo de Zn²⁺ com etilenodiamina e águas explícitas.
+Começamos com uma molécula de água e DFT. Passamos cedo para **XTB2**, ganhamos tempo para testar integração e termostatos e terminamos acompanhando um complexo de Zn²⁺ com etilenodiamina e águas explícitas. Uma extensão opcional retoma a água dentro de C₆₀.
 
 Cada atividade segue três etapas: **prepare, execute e interprete**. O input principal tem entre **13 e 20 linhas**, com comentários curtos. Um pacote reúne o input, a estrutura e, quando necessário, o reinício. Nas páginas HTML, use **Copiar** para levar o conteúdo ao editor. Variantes, preparação e explicações extensas ficam em seções opcionais.
 
@@ -40,7 +40,7 @@ Nove átomos e 0,5 ps = 5 × 10⁻¹³ s de NVE. Guarde esse resultado para os d
 ### 4. Timestep — confrontar custo e erro
 
 [Abrir exercício 4](4-timestep/README.md) · 25 min de aula<br>
-Compare 0,25, 0,5 e 2,0 fs durante o mesmo tempo físico. Execute o passo grande de 2 fs e use as demais referências; o passo fino fica opcional. **Novas variantes: 44,9 s e 5,6 s.**
+Provoque uma falha com 5 fs e repita do início com 0,5 fs. O caso ruim para após 15 fs; a correção chega aos 500 fs planejados. **Falha em 2,7 s; correção em 18,8 s.** A comparação fina 0,25/0,5/2 fs fica como apoio.
 
 ### 5. Termostato — permitir troca de energia
 
@@ -55,13 +55,18 @@ Acrescente seis águas ao complexo preparado: 25 → 43 átomos. **Referência e
 ### 7. Dinâmica do complexo — medir coordenação e confinamento
 
 [Abrir exercício 7](7-dinamica-complexo/README.md) · 35 min, após 5 min de retomada<br>
-Execute uma trajetória de 0,5 ps com parede e compare com o controle fornecido sem parede. No aplicativo, comece pelas duas distâncias Zn–N e escolha dois O para comparar. **Referências em aproximadamente 26 s cada.**
+Execute uma trajetória de 2 ps com parede e compare com o controle fornecido sem parede. Acompanhe Zn 0–O 25: a água se afasta sem confinamento. **Referências em aproximadamente 2 min 19 s cada.**
+
+### 8. Água dentro de C₆₀ — extensão opcional
+
+[Abrir exercício 8](8-agua-no-fulereno/README.md) · 10–15 min com referência pronta<br>
+63 átomos, 1 ps = 10⁻¹² s e a água visível dentro da gaiola. Compare confinamento molecular com a parede artificial. Usar apenas se houver folga; caso contrário, fica para depois da aula.
 
 ## Ritmo e referências
 
 O [roteiro dos ministrantes](roteiro-4h.md) reserva **200 min de conteúdo/prática + 25 min de margem + 15 min de descanso** dentro dos dois blocos. O descanso é de 14h20–14h35; o intervalo oficial é de 16h–17h. As sete execuções obrigatórias são curtas; otimizações e preparação térmica estão fornecidas como apoio.
 
-Os tempos acima foram medidos uma vez por caso, com **ORCA 6.1.1, xTB 6.7.1, PAL8 e Open MPI 4.1.6**, no Ubuntu 24.04.4/WSL2 de um Intel Core Ultra 9 185H. São referências deste ambiente, não promessas de desempenho. Ao todo estão preservadas **15 execuções concluídas**, incluindo controles, otimizações e preparação.
+Os tempos acima foram medidos uma vez por caso, com **ORCA 6.1.1, xTB 6.7.1, PAL8 e Open MPI 4.1.6**, no Ubuntu 24.04.4/WSL2 de um Intel Core Ultra 9 185H. São referências deste ambiente, não promessas de desempenho. Ao todo estão preservadas **21 execuções preservadas (20 normais e uma falha deliberada de timestep)**, incluindo controles, otimizações e preparação.
 
 Se uma execução atrasar, abra o resultado de referência e prossiga, identificando que ele foi fornecido. O aplicativo foi testado localmente com esses arquivos. O ensaio completo da aula e o teste em computador mais modesto ainda precisam ser realizados.
 

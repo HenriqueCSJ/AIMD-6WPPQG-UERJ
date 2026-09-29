@@ -13,7 +13,7 @@ O aluno carrega os arquivos e passa diretamente à interpretação. Não precisa
 
 No WSL, use `explorer.exe .` na pasta do cálculo para encontrá-la pelo seletor de arquivos do Windows. O aplicativo não precisa executar dentro do WSL.
 
-O seletor de exemplos oferece os sete momentos da aula, usando dez cálculos reais já preservados neste repositório. **Ver trajetória 3D** abre diretamente a molécula do exemplo escolhido. Os exemplos são identificados como referências dos ministrantes. A cópia local inclui os dados e a biblioteca molecular: a leitura e os exemplos não precisam de internet. Links para o manual do ORCA são externos.
+O seletor de exemplos oferece os sete momentos da aula e a extensão H₂O@C₆₀, usando quinze cálculos reais já preservados neste repositório. **Ver trajetória 3D** abre diretamente a molécula do exemplo escolhido. Os exemplos são identificados como referências dos ministrantes. A cópia local inclui os dados e a biblioteca molecular: a leitura e os exemplos não precisam de internet. Links para o manual do ORCA são externos.
 
 ## O que pode ser observado
 
@@ -63,3 +63,14 @@ node scripts/build_viewer_examples.cjs
 Nenhum desses comandos executa ORCA. O aluno não precisa de Node; ele apenas abre o aplicativo. A implementação é uma versão de trabalho para o curso, com verificação funcional e visual local. O site está publicado no GitHub Pages, com abertura, carregamento do exemplo de timestep e reprodução da trajetória conferidos no endereço público. O ensaio integral com a turma permanece pendente.
 
 Verificação desta versão: 11 testes automatizados aprovados; leitura comparada com nove séries MD reais; doze distâncias do complexo conferidas contra os Colvars originais. Upload, exemplos, animação, seleção de distâncias, conversões de unidades e exportação foram exercitados no navegador, incluindo uma tela de 390 px. A abertura foi verificada por HTTP local. A abertura direta de `index.html` pelo sistema de arquivos não foi verificada, pois esse protocolo é bloqueado no navegador integrado usado para os testes.
+
+
+## Reprodução e novos exemplos
+
+O tempo físico usa campos estáveis em fs, ps e segundos, com precisão fixa durante cada trajetória. A reprodução acompanha o relógio do navegador: trajetórias longas completam um ciclo em até 8 s a 1×, e trajetórias com o mesmo intervalo físico têm o mesmo ritmo de reprodução. Pode pular quadros de exibição quando o desenho demora; as setas permitem inspeção individual dos quadros carregados.
+
+As referências maiores usam uma prévia amostrada para reduzir a transferência, sempre identificada sob a animação. Cada coordenada e tempo mostrado vem de um quadro real; não há interpolação. Os links para os XYZ originais mantêm todos os quadros e os uploads são lidos integralmente. Energias não são reduzidas.
+
+- Timestep: 5 fs causa uma falha real, identificada como dados parciais; 0,5 fs demonstra a correção.
+- Parede: comparação de 2 ps; a esfera indica uma parede fixa reconhecida no input do `.out`. XYZ sozinho não define uma parede.
+- H₂O@C₆₀: carbonos em armação fina para permitir ver a água interna; nenhuma posição é alterada.

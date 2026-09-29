@@ -2,7 +2,7 @@
 
 [← Exercícios](README.md) · [Visualizador de energias](visualizador-energias.md)
 
-**Data:** 7 de outubro de 2026, horário de Brasília. **Estado:** sete exercícios preparados, com inputs comentados e 15 execuções reais PAL8. As páginas estão no [percurso do aluno](README.md). Falta o ensaio integral pelos ministrantes e a conferência em computador mais modesto. O planejamento reserva **200 minutos de conteúdo e prática + 25 minutos de margem**, além das pausas.
+**Data:** 7 de outubro de 2026, horário de Brasília. **Estado:** sete exercícios principais e uma extensão opcional, com inputs comentados e 21 execuções PAL8 preservadas (incluindo uma falha deliberada). As páginas estão no [percurso do aluno](README.md). Falta o ensaio integral pelos ministrantes e a conferência em computador mais modesto. O planejamento reserva **200 minutos de conteúdo e prática + 25 minutos de margem**, além das pausas.
 
 O percurso é **água com DFT → solvatação implícita → GFN2-xTB → passo de integração → termostato → complexação Zn²⁺–etilenodiamina → SOLVATOR → dinâmica em solvente explícito e confinamento**. Aumentar uma dificuldade por vez, mantendo os inputs curtos e os gráficos como apoio à interpretação. GFN2-xTB é um método semiempírico de estrutura eletrônica: preserva o ciclo energia–forças–movimento, mas não é DFT nem um campo de força clássico.
 
@@ -35,11 +35,11 @@ As sete etapas conceituais não são sete oficinas independentes: DFT/CPCM forma
 
 Apresentar uma pergunta; apontar as linhas do input que a controlam; cada participante executa um caso curto; abrir trajetória e CSV; responder à pergunta usando uma observação. Explicações de teoria entram nesse momento, em blocos de poucos minutos. Manter saídas de referência disponíveis para quem tiver problema de instalação ou computador lento.
 
-**Ensaio computacional realizado com PAL8:** água/DFT em 81 s, água/CPCM em 78 s; etanol NVE/NVT em 16/14 s; timestep fino em 45 s e grosseiro em 6 s; SOLVATOR com seis águas em 202 s e com duas em 64 s; MD do complexo em 26 s. Esses tempos foram medidos no Intel Core Ultra 9 185H dos ministrantes, com WSL2. Reservar até **2 min por água/DFT**, **3 min por etanol** e **5 min por SOLVATOR ou MD do complexo** antes de recorrer à saída fornecida. O SOLVATOR principal excedeu a meta anterior de 3 min; a alternativa de duas águas já está disponível. Conferir os tempos também em computador mais modesto. Rodar um cálculo por vez; PAL8 é a referência, com PAL2/PAL4 como ajustes aos recursos do aluno. O MPI deve ter sido testado antes do curso.
+**Ensaio computacional realizado com PAL8:** água/DFT em 81 s, água/CPCM em 78 s; etanol NVE/NVT em 16/14 s; timestep fino em 45 s e grosseiro em 6 s; SOLVATOR com seis águas em 202 s e com duas em 64 s; MD revisada do complexo em 139 s por caso. Esses tempos foram medidos no Intel Core Ultra 9 185H dos ministrantes, com WSL2. Reservar até **2 min por água/DFT**, **3 min por etanol** e **5 min por SOLVATOR ou MD do complexo** antes de recorrer à saída fornecida. O SOLVATOR principal excedeu a meta anterior de 3 min; a alternativa de duas águas já está disponível. Conferir os tempos também em computador mais modesto. Rodar um cálculo por vez; PAL8 é a referência, com PAL2/PAL4 como ajustes aos recursos do aluno. O MPI deve ter sido testado antes do curso.
 
 A abertura é uma conferência, não uma sessão de instalação: quem não passar no teste acompanha com as saídas de referência e recebe apoio em paralelo. Os ministrantes podem alternar explicação e atendimento sem parar toda a turma.
 
-**Execução mínima por participante: sete cálculos curtos** — água DFT, água DFT/CPCM, etanol NVE, uma variação de timestep, etanol NVT, SOLVATOR e MD do complexo. A troca DFT → XTB2 na água fica em demonstração curta do ministrante; a terceira curva de timestep e a MD sem parede são referências já calculadas. Relaxação e preparação térmica do complexo são explicadas com arquivos intermediários fornecidos, sem exigir que todos completem essa cadeia ao vivo.
+**Execução mínima por participante: sete cálculos curtos** — água DFT, água DFT/CPCM, etanol NVE, uma variação de timestep (mais a repetição corrigida, quando possível), etanol NVT, SOLVATOR e MD do complexo. A troca DFT → XTB2 na água fica em demonstração curta do ministrante; as curvas finas de timestep e a MD sem parede são referências já calculadas. Relaxação e preparação térmica do complexo são explicadas com arquivos intermediários fornecidos, sem exigir que todos completem essa cadeia ao vivo.
 
 Cada bloco inclui editar, salvar, executar, localizar os arquivos, abrir e interpretar. O tempo de CPU ocupa apenas uma parte. Distribuir inputs comentados, estruturas e saídas por etapa; alunos alteram poucas linhas, sem redigitar um input inteiro. Na abertura, reservar no máximo 5 min para conferência e cerca de 10 min para a introdução conceitual.
 
@@ -84,17 +84,13 @@ Depois passar ao **etanol, 9 átomos**, com geometria preparada. Alvo comum para
 
 **Sistema:** o mesmo etanol com GFN2-xTB, sem termostato, sem parede nem outros vieses. Partir da mesma geometria e das mesmas velocidades: manter a mesma semente e demais parâmetros. Usar convergência eletrônica consistente.
 
-Proposta para o ensaio, mantendo **0,5 ps = 5 × 10⁻¹³ s** em todas as trajetórias:
+**Demonstração principal revisada:** etanol a 300 K com timestep de 5 fs e alvo de 500 fs. O ensaio real abortou após registrar 15 fs: temperatura de aproximadamente 1,37 milhão K e falha de autoconsistência eletrônica após a perda de estabilidade da integração. Mostrar o `.out`, a energia e os quatro quadros salvos. Não apresentar a distorção como uma reação.
 
-- 0,25 fs = 2,5 × 10⁻¹⁶ s, 2.000 passos: referência mais fina.
-- 0,5 fs = 5 × 10⁻¹⁶ s, 1.000 passos: ponto de partida da aula.
-- 2,0 fs = 2 × 10⁻¹⁵ s, 250 passos: teste deliberadamente mais grosseiro para ligações envolvendo H sem restrições.
+**Correção que o aluno executa:** voltar à geometria inicial, reduzir para 0,5 fs e ajustar para 1000 passos; não reutilizar o restart danificado. O resultado corrigido completa 500 fs em cerca de 19 s. Não ligar um termostato para mascarar o erro. Se necessário, a curva do exercício 3 já serve de referência; repetir permite praticar a correção concreta.
 
-Não usar o mesmo número de passos nas três execuções: isso mudaria também o tempo simulado. **Reutilizar o caso de 0,5 fs do exercício 3; cada participante executa 2,0 fs**, deixando 0,25 fs como extensão opcional e recebendo as três referências prontas. Não prometer que 2 fs sempre causará uma explosão; a evidência é o comportamento da energia e da estrutura no caso ensaiado.
+A comparação anterior de 0,25/0,5/2 fs, todas completas em 500 fs, permanece como apoio à discussão de precisão e custo. O caso de 2 fs é uma integração pior que ainda termina normalmente; não confundir com o novo caso de falha real. A página do exercício traz ambos os percursos, com a falha/correção em primeiro plano.
 
-**Gráficos:** K e U trocando energia, E total, e ΔE(t) = E(t) − E(0), com unidades e escala visível. Oscilação limitada e deriva sistemática são diferentes. Passo maior resolve pior os movimentos mais rápidos; convergência SCF ruim também pode provocar deriva. O termostato deve ficar desligado neste diagnóstico, pois a troca de energia com o banho confundiria a interpretação.
-
-**Critério de conclusão:** escolher um passo com base no compromisso entre custo e erro observado, não apenas porque o cálculo terminou.
+**Critério de conclusão:** explicar a causa numérica, corrigir o passo e o número de passos, e verificar duração, energia e geometria. A amplitude de energia e a deriva são medidas diferentes.
 
 ## 5. Termostato: temperatura controlada, energia trocada
 
@@ -128,7 +124,7 @@ Os [inputs, geometrias e resultados do complexo](6-complexo-solvator/README.md) 
 
 ## 7. Dinâmica do complexo solvatado: coordenação e parede
 
-Retomar o complexo preparado pelo SOLVATOR, **[Zn(en)(H₂O)₄]²⁺ + 6 H₂O**, 43 átomos, usado como referência comum por todos, inclusive quem executar a alternativa de SOLVATOR com 31 átomos. Não transportar essa alternativa para a MD de 43 átomos sem uma preparação própria. Distribuir uma geometria comum previamente relaxada, com a origem e as etapas intermediárias identificadas. O aluno inspeciona seu próprio resultado do SOLVATOR, mas não precisa concluir uma otimização para acompanhar a MD. Usar GFN2-xTB, ALPB e CSVR a 300 K, com alvo de ensaio de **0,5 ps = 5 × 10⁻¹³ s**, 1.000 passos de 0,5 fs. Extensão para 1 ps somente se o ensaio demonstrar tempo adequado. Não depender de deixar o cálculo rodando na pausa oficial.
+Retomar o complexo preparado pelo SOLVATOR, **[Zn(en)(H₂O)₄]²⁺ + 6 H₂O**, 43 átomos, usado como referência comum por todos, inclusive quem executar a alternativa de SOLVATOR com 31 átomos. Não transportar essa alternativa para a MD de 43 átomos sem uma preparação própria. Distribuir uma geometria comum previamente relaxada, com a origem e as etapas intermediárias identificadas. O aluno inspeciona seu próprio resultado do SOLVATOR, mas não precisa concluir uma otimização para acompanhar a MD. Usar GFN2-xTB, ALPB e CSVR a 300 K, com **2 ps = 2 × 10⁻¹² s** adicionais, 4000 passos de 0,5 fs, iniciados do mesmo restart. A referência levou cerca de 2 min 19 s. Comparar com o controle sem parede já fornecido, sem exigir duas execuções ao vivo. Não depender de deixar o cálculo rodando na pausa oficial.
 
 Após **5 min de retomada**, distribuir os **35 min do bloco** em inspeção da geometria e preparação fornecida (5 min), configuração da MD (5 min), execução (8 min, incluindo os arquivos), análise de energias/temperatura e coordenação (12 min) e conclusão (5 min). A preparação térmica deve constar nos arquivos fornecidos e ser explicada; não declarar equilíbrio só porque passaram algumas centenas de passos. Não impor montagem, otimização, equilíbrio e duas MD como uma cadeia obrigatória dentro desse bloco.
 
@@ -141,10 +137,10 @@ Cada participante executa **uma MD com parede** e compara com referências com/s
 ```text
 # Parede suave: centro na origem, raio em angstrom; nao e caixa periodica.
 # Rigidez em kJ mol-1 A-2; os atomos podem ultrapassar o raio e receber forca.
-Walls Sphere 0, 0, 0, 6_A Spring 10.0
+Walls Sphere 0, 0, 0, 6_A Spring 50.0
 ```
 
-`Spring 10.0` está em kJ mol⁻¹ Å⁻². Centralizar e medir a estrutura antes de escolher o raio, com folga e sem compressão inicial. O comando não escolhe automaticamente esse raio. Parede muito rígida pode exigir timestep menor. [Cell na MD](https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html#cell).
+`Spring 50.0` está em kJ mol⁻¹ Å⁻². Centralizar e medir a estrutura antes de escolher o raio, com folga e sem compressão inicial. O comando não escolhe automaticamente esse raio. Parede muito rígida pode exigir timestep menor. [Cell na MD](https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html#cell).
 
 **Há duas paredes diferentes no fluxo:** a do SOLVATOR/DOCKING é criada automaticamente durante a montagem do solvente; a `Walls` é definida no novo input de MD. Um arquivo XYZ transfere coordenadas, não configurações de confinamento. Portanto, não supor que a parede de montagem acompanha o complexo na dinâmica.
 
@@ -173,3 +169,9 @@ Em 28/09/2026 foram feitos quatro testes iniciais curtos com a água didática d
 Esses pilotos confirmam sintaxe, execução básica e formato da saída. Os exercícios completos agora estão nas sete pastas numeradas: geometrias otimizadas, etanol e complexo Zn²⁺–en cronometrados, SOLVATOR com duas/seis águas, parede escolhida com folga inicial, comparação de timestep no etanol e contraste NVE/NVT. A água dos pilotos antigos não foi previamente otimizada; seus transientes não substituem as referências atuais.
 
 Antes da aula, testar os casos obrigatórios também em um computador mais modesto, preparar versões curtas e conferir a visualização de trajetória escolhida. Toda comparação deve identificar método, ambiente, geometria inicial, semente, timestep, número de passos, termostato e parede.
+
+## 8. Extensão opcional: água em C₆₀
+
+Usar somente com 10–15 min livres, sem suprimir descanso, recuperação da turma ou fechamento. Caso contrário, indicar como atividade posterior. A [página 8](8-agua-no-fulereno/README.md) oferece input, estrutura relaxada e trajetória real de 1 ps com XTB2/PAL8. Não exige que a turma construa ou otimize a gaiola durante o encontro.
+
+O arco didático é água isolada → parede artificial na camada de solvatação → água confinada por uma gaiola de átomos. Explicar que a MD tem núcleos clássicos: este exercício não calcula espectros de rotor quântico nem demonstra encapsulamento por passagem através do C₆₀ intacto.

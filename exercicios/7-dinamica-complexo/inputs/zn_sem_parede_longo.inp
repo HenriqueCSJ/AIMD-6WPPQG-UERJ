@@ -1,0 +1,18 @@
+# Controle: mesmo estado inicial, agora sem parede.
+! MD XTB2 ALPB(water) PAL8
+%maxcore 256
+
+%md
+  Timestep 0.5_fs
+  Randomize 42
+  # Banho a 300 K; acoplamento em 100 fs.
+  Thermostat CSVR 300_K Timecon 100_fs
+  # Retoma posicoes, velocidades e relogio fornecidos.
+  Restart "preparacao_termica.mdrestart"
+  Dump Position Stride 1 Filename "zn_sem_parede_longo-traj.xyz"
+  # Novo trecho: 4000 x 0.5 fs = 2000 fs (2e-12 s).
+  Run 4000
+end
+
+# Carga 2, multiplicidade 1; XYZ na mesma pasta.
+* xyzfile 2 1 zn_solvato.xyz

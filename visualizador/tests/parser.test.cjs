@@ -4,13 +4,13 @@ const csv=(name,lesson)=>fs.readFileSync(path.join(root,`exercicios/${lesson}/re
 const header='# Step; Sim. Time; Iter; t_Ener; t_Grad; Temp; E_Kin; E_Pot; E_Tot; Cons.Qty; E.Drift';
 const row=(step,time,T=300)=>`${step};${time};;;;${T};0.01;-1;-0.99;;`;
 test('all retained MD outputs agree with CSV values; input metadata recognizes None as NVE',()=>{
- let checked=0;for(const lesson of fs.readdirSync(path.join(root,'exercicios')).filter(s=>/^[1-7]-/.test(s))){const results=path.join(root,'exercicios',lesson,'resultados');for(const name of fs.readdirSync(results)){
+ let checked=0;for(const lesson of fs.readdirSync(path.join(root,'exercicios')).filter(s=>/^[1-8]-/.test(s))){const results=path.join(root,'exercicios',lesson,'resultados');for(const name of fs.readdirSync(results)){
   const dir=path.join(results,name),ener=path.join(dir,name+'-md-ener.csv');if(!fs.existsSync(ener))continue;
   const c=R.parseEnergyCSV(fs.readFileSync(ener,'utf8')),o=R.parseOut(fs.readFileSync(path.join(dir,name+'.out'),'utf8'));
   assert.equal(R.validateEnergySources(c,o),null,name);assert.equal(o.rows.length,c.rows.length,name);
   assert.equal(c.rows[0].total,o.rows[0].total);assert.equal(c.rows.at(-1).total,o.rows.at(-1).total);
-  assert.equal(o.metadata.ensemble,/csvr|parede|termica/.test(name)?'NVT':'NVE',name);checked++;
- }}assert.equal(checked,9);
+  assert.equal(o.metadata.ensemble,/csvr|parede|termica|agua_c60/.test(name)?'NVT':'NVE',name);checked++;
+ }}assert.equal(checked,14);
 });
 test('real timestep controls retain the full duration and measured energy amplitudes',()=>{
  for(const [name,lesson,count,span] of [['etanol_dt025','4-timestep',2001,.000038],['etanol_nve','3-xtb2-etanol',1001,.000114],['etanol_dt200','4-timestep',251,.002526]]){
@@ -56,3 +56,18 @@ test('Colvars only accepts Position / Angstrom, not Internal Force or angular CV
  assert.throws(()=>R.parseColvars('# Simulation Time; Colvar 1 Position / Degree\n0;90'),/Angstrom/);
 });
 test('empty files are rejected clearly',()=>{assert.throws(()=>R.parseEnergyCSV(''),/cabeçalho/);assert.throws(()=>R.parseXYZ(''),/quadros/);});
+
+test('real 5fs failure is explicit and partial; corrected run reaches 500fs',()=>{
+ const base=path.join(root,'exercicios/4-timestep/resultados/etanol_dt500/etanol_dt500');
+ const out=R.parseOut(fs.readFileSync(base+'.out','utf8')),energy=R.parseEnergyCSV(fs.readFileSync(base+'-md-ener.csv','utf8'));
+ assert.equal(out.metadata.failed,true);assert.equal(out.metadata.normal,false);
+ assert.equal(energy.rows.at(-1).time,15);assert.ok(energy.rows.at(-1).temperature>1e6);
+ assert.equal(R.parseEnergyCSV(csv('etanol_corrigido','4-timestep')).rows.at(-1).time,500);
+});
+
+test('fixed sphere geometry is read without inventing unknown units or elastic boundaries',()=>{
+ const parse=line=>R.parseOut('ORCA\n| 1> ! MD XTB2\n| 2> '+line).metadata;
+ assert.deepEqual(parse('Walls Sphere 0, 0, 0, 6.0_A Spring 50.0').wallSphere,{center:{x:0,y:0,z:0},radius:6});
+ assert.equal(parse('Walls Sphere 0, 0, 0, 6.0_Bohr Spring 50.0').wallSphere,null);
+ assert.equal(parse('Walls Sphere 0, 0, 0, 6.0_A Spring 50.0 Elastic 10, 0.01').wallSphere,null);
+});

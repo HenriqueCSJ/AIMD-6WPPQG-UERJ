@@ -6,6 +6,8 @@
 
 > **Pergunta da atividade:** Como posições e velocidades se transformam em uma trajetória?
 
+**Por que uma água sozinha?** É o menor exemplo que permite ver ligações vibrando e energia cinética trocando com potencial sem sobrecarregar o primeiro cálculo DFT. Reserve poucos minutos à química; o restante deste bloco ensina a salvar o input, executar e carregar os arquivos. Ela não representa água líquida, rede de ligações de hidrogênio ou uma reação. No [exercício 8 opcional](../8-agua-no-fulereno/README.md), retomamos essa molécula dentro de C₆₀.
+
 ## 1. Prepare
 
 A água já está otimizada com BLYP/def2-SVP. Vamos simular apenas **20 fs = 2 × 10⁻¹⁴ s**; o objetivo é entender o ciclo da dinâmica.

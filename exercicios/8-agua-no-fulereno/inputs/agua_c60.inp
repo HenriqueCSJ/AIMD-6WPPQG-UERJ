@@ -1,0 +1,17 @@
+# Agua encapsulada: todos os atomos da gaiola se movem.
+! MD XTB2 PAL8
+%maxcore 256
+
+%md
+  Timestep 0.5_fs
+  Randomize 42
+  Initvel 300_K
+  # Banho termico; o confinamento vem do proprio C60.
+  Thermostat CSVR 300_K Timecon 100_fs
+  Dump Position Stride 1 Filename "agua_c60-traj.xyz"
+  # 2000 x 0.5 fs = 1 ps (1e-12 s).
+  Run 2000
+end
+
+# Neutro, singlete; geometria previamente relaxada.
+* xyzfile 0 1 agua_c60.xyz

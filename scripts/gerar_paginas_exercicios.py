@@ -4,7 +4,7 @@ import html,re
 import markdown
 ROOT=Path(__file__).resolve().parents[1]
 EX=ROOT/'exercicios'
-LESSONS=[('1-agua-dft','Água com DFT'),('2-solvente-implicito','Solvente implícito'),('3-xtb2-etanol','XTB2 e etanol'),('4-timestep','Passo de integração'),('5-termostato','Temperatura e termostato'),('6-complexo-solvator','Zn–en e SOLVATOR'),('7-dinamica-complexo','Dinâmica do complexo')]
+LESSONS=[('1-agua-dft','Água com DFT'),('2-solvente-implicito','Solvente implícito'),('3-xtb2-etanol','XTB2 e etanol'),('4-timestep','Passo de integração'),('5-termostato','Temperatura e termostato'),('6-complexo-solvator','Zn–en e SOLVATOR'),('7-dinamica-complexo','Dinâmica do complexo'),('8-agua-no-fulereno','Água em C₆₀ · opcional')]
 def render(folder,title,source,index,filename='index.html'):
     inside=folder!=EX; prefix='../' if inside else '';repo_prefix='../../' if inside else '../'
     nav=f'<a class="home" href="{prefix}index.html">Visão geral do percurso</a><div class="links">'
@@ -27,7 +27,7 @@ def render(folder,title,source,index,filename='index.html'):
     endnav=''
     if index:
         prev=f'<a href="../{LESSONS[index-2][0]}/index.html">← Exercício {index-1}</a>' if index>1 else '<a href="../index.html">← Percurso</a>'
-        nxt=f'<a href="../{LESSONS[index][0]}/index.html">Exercício {index+1} →</a>' if index<7 else '<a href="../index.html">Voltar ao percurso →</a>'
+        nxt=f'<a href="../{LESSONS[index][0]}/index.html">Exercício {index+1} →</a>' if index<len(LESSONS) else '<a href="../index.html">Voltar ao percurso →</a>'
         endnav=f'<nav class="endnav" aria-label="Próxima etapa">{prev}{nxt}</nav>'
     page=f'''<!doctype html>
 <html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{html.escape(title)} · AIMD / ORCA</title><link rel="stylesheet" href="{prefix}pagina.css"><script defer src="{prefix}pagina.js"></script></head>

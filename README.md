@@ -73,7 +73,7 @@ O workshop acontece de **5 a 8 de outubro de 2026**, no âmbito do Programa de P
 
 ## Sequência das atividades
 
-O [roteiro de 4 horas](exercicios/roteiro-4h.md) parte de água com DFT e solvatação implícita e passa cedo para **GFN2-xTB**, com exercícios de timestep, termostato, ALPB, complexação Zn²⁺–etilenodiamina, SOLVATOR e confinamento. A proposta revisada reserva **200 min de conteúdo/prática e 25 min de margem**, com descanso de 14h20–14h35 e intervalo oficial de 16h–17h. Reutilizamos trajetórias para reduzir repetições e preservar tempo de interpretação. Os [sete exercícios completos](exercicios/README.md) já incluem páginas HTML, inputs comentados, estruturas e 15 execuções reais com PAL8. O ensaio completo da aula e o teste em computador mais modesto ainda precisam ser feitos.
+O [roteiro de 4 horas](exercicios/roteiro-4h.md) parte de água com DFT e solvatação implícita e passa cedo para **GFN2-xTB**, com exercícios de timestep, termostato, ALPB, complexação Zn²⁺–etilenodiamina, SOLVATOR e confinamento. A proposta revisada reserva **200 min de conteúdo/prática e 25 min de margem**, com descanso de 14h20–14h35 e intervalo oficial de 16h–17h. Reutilizamos trajetórias para reduzir repetições e preservar tempo de interpretação. Os [sete exercícios completos](exercicios/README.md) já incluem páginas HTML, inputs comentados, estruturas e 21 execuções PAL8 preservadas, incluindo uma falha deliberada e sua correção. O ensaio completo da aula e o teste em computador mais modesto ainda precisam ser feitos.
 
 O [Laboratório de trajetórias](visualizador/README.md) lê os outputs e mostra energias, temperatura, animação e distâncias entre átomos. Carregue os arquivos ou abra um dos exemplos reais. Os arquivos escolhidos são processados no navegador, sem envio a um servidor de análise.
 
@@ -88,15 +88,15 @@ O [Laboratório de trajetórias](visualizador/README.md) lê os outputs e mostra
 | Slides | Serão disponibilizados em uma etapa posterior. |
 | [`estruturas/`](estruturas/README.md) | Geometrias em XYZ; inclui uma molécula de água para o teste de instalação. |
 | [`inputs/`](inputs/README.md) | Inputs ORCA organizados por etapa; testes serial e paralelo já disponíveis. |
-| [`exercicios/`](exercicios/README.md) | Sete páginas com inputs comentados, XYZ, trajetórias, resultados e questões. |
+| [`exercicios/`](exercicios/README.md) | Sete atividades principais e uma extensão H₂O@C₆₀, com inputs, XYZ e resultados. |
 | [`trajetorias/`](trajetorias/README.md) | Orientações e links para as trajetórias nos exercícios. |
-| [`resultados/`](resultados/README.md) | Acesso às 15 execuções de referência dos exercícios e aos pilotos anteriores. |
+| [`resultados/`](resultados/README.md) | Acesso às execuções de referência dos exercícios e aos pilotos anteriores. |
 | [`notebooks/`](notebooks/README.md) | Cadernos de análise, a adicionar. |
 | [`scripts/`](scripts/README.md) | Diagnóstico do ambiente Linux e Windows. |
 | [`tutoriais/`](tutoriais/README.md) | Guias de instalação, preparação e primeiro teste. |
 | [`assets/`](assets/README.md) | Identidade visual e créditos do workshop. |
 
-**Disponível nesta etapa:** [sete exercícios numerados](exercicios/README.md), organizados em preparar, executar e interpretar. Os inputs principais têm 13–20 linhas, com comentários essenciais; os pacotes incluem os arquivos necessários, e as referências preservam os inputs completos originais. Também estão disponíveis guias de instalação e roteiro. Os slides ainda não fazem parte desta entrega. Para ler como site local, abra `exercicios/index.html`. O aplicativo está em `visualizador/index.html`, com leitura de outputs e exemplos dos sete exercícios. O site está publicado no GitHub Pages; o ensaio integral do curso permanece pendente.
+**Disponível nesta etapa:** [sete exercícios numerados](exercicios/README.md), organizados em preparar, executar e interpretar. Os inputs principais têm 13–20 linhas, com comentários essenciais; os pacotes incluem os arquivos necessários, e as referências preservam os inputs completos originais. Também estão disponíveis guias de instalação e roteiro. A extensão [água em C₆₀](exercicios/8-agua-no-fulereno/README.md) inclui uma trajetória real de 1 ps. Os slides ainda não fazem parte desta entrega. Para ler como site local, abra `exercicios/index.html`. O aplicativo está em `visualizador/index.html`, com leitura de outputs e exemplos dos sete exercícios e de H₂O@C₆₀. O site está publicado no GitHub Pages; o ensaio integral do curso permanece pendente.
 
 ### Baixar os materiais
 
