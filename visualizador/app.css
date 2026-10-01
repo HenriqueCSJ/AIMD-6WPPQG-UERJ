@@ -126,3 +126,7 @@ body.trajectory-open{overflow:hidden}
 .trajectory-expanded .highlight-tools>summary{padding:8px 12px}
 .trajectory-expanded .highlight-editor{padding:0 12px 10px}
 @media(max-width:600px){.highlight-summary-help{display:block;margin:3px 0 0 17px}.highlight-editor{padding:0 12px 12px}.highlight-fields #highlight-add{flex:1}.highlight-options>label{min-height:36px}.highlight-options .text-button{margin-left:0}.proton-highlight{order:3}.highlight-chip{font-size:11px}}
+
+.button.highlight-launcher{background:#9b0058;color:white;border-color:#9b0058}
+.button.highlight-launcher:hover,.button.highlight-launcher[aria-expanded=true]{background:#730042;border-color:#730042}
+@media(max-width:600px){.molecule-tools .highlight-launcher{order:2;width:100%}}

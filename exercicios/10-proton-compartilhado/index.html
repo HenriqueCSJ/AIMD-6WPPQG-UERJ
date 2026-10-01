@@ -6,10 +6,10 @@
 <blockquote>
 <p><strong>Pergunta:</strong> quando um H muda de proximidade entre dois O, ele permaneceu no novo lado ou voltou logo depois?</p>
 </blockquote>
-<p>No dímero neutro da abertura, as águas mudam a orientação da ligação de hidrogênio e preservam suas ligações O–H covalentes. Aqui, o dímero protonado H₅O₂⁺ permite acompanhar o H da ponte. Usamos GFN2-xTB, um método semiempírico de estrutura eletrônica, com núcleos clássicos. Não há solvente implícito, parede ou força aplicada para transferir o H.</p>
+<p>No dímero neutro da abertura, as águas mudam a orientação da ligação de hidrogênio e preservam suas ligações O–H covalentes. Aqui, o dímero protonado H₅O₂⁺ permite acompanhar o H compartilhado. Usamos GFN2-xTB, um método semiempírico de estrutura eletrônica, com núcleos clássicos. Não há solvente implícito, parede ou força aplicada para transferir o H.</p>
 <h2 id="1-prepare">1. Prepare</h2>
 <p><a href="aula-proton_shared.zip">Pacote para executar</a> · <a href="inputs/proton_shared.inp">Input comentado</a> · <a href="estruturas/h5o2_otimizado.xyz">Geometria otimizada</a></p>
-<p>Extraia o pacote numa pasta nova. Os índices do aplicativo começam em <strong>zero</strong>: <strong>O 0, O 1 e H 2</strong> formam a ponte; H 3–6 são os demais hidrogênios. A carga total é +1 e a multiplicidade é 1.</p>
+<p>Extraia o pacote numa pasta nova. Os índices do aplicativo começam em <strong>zero</strong>: <strong>O 0, O 1 e H 2</strong> compõem a unidade O–H–O; H 3–6 são os demais hidrogênios. A carga total é +1 e a multiplicidade é 1.</p>
 <pre><code class="language-text">! MD XTB2 PAL8
 %maxcore 256
 %md
@@ -40,7 +40,7 @@ end
 <p><a href="../../visualizador/index.html?exemplo=proton_shared&amp;aba=trajetoria">Abrir H₅O₂⁺ no aplicativo</a> · <a href="resultado-proton_shared.zip">Baixar resultado pronto</a></p>
 <h2 id="3-meca-e-interprete">3. Meça e interprete</h2>
 <ol>
-<li>Em <strong>Trajetória</strong>, clique em <strong>Destacar próton H 2</strong>. Ele fica magenta e maior; o restante fica em cinza. O destaque acompanha o mesmo H durante a animação. Em <strong>Destaques</strong>, você pode mudar a cor, o tamanho e destacar também O 0 e O 1. Observe a ponte sem usar a velocidade da animação como escala de tempo físico.</li>
+<li>Em <strong>Trajetória</strong>, clique em <strong>Destacar próton H 2</strong>. Ele fica magenta e maior; o restante fica em cinza. O destaque acompanha o mesmo H durante a animação. Em <strong>Destacar átomos/moléculas</strong>, você pode mudar a cor, o tamanho e destacar também O 0 e O 1. Observe o H compartilhado sem usar a velocidade da animação como escala de tempo físico.</li>
 <li>Em <strong>Geometria</strong>, acompanhe <strong>O 0–H 2</strong> e <strong>O 1–H 2</strong>. Defina δ = r(O 0–H 2) − r(O 1–H 2). δ negativo indica H 2 mais perto de O 0; positivo, mais perto de O 1.</li>
 <li>Examine 850–1050 fs. Toda mudança de sinal parece uma passagem duradoura? Verifique o que acontece algumas dezenas de fs depois.</li>
 <li>Compare a temperatura instantânea com o alvo de 300 K. A média desta trajetória foi 242,81 K; o alvo não garante temperatura instantânea constante nem equilíbrio térmico em 2 ps.</li>

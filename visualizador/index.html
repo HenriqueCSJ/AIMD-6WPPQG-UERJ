@@ -4,10 +4,10 @@
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="Leia resultados de dinâmica molecular do ORCA: energias, temperatura, trajetórias e medidas geométricas. Tudo no seu navegador.">
   <title>Laboratório de trajetórias · AIMD com ORCA</title>
-  <link rel="stylesheet" href="app.css?v=20261001-highlights1">
+  <link rel="stylesheet" href="app.css?v=20261001-highlights2">
   <script defer src="orca-parser.js?v=20260929-chemistry2"></script><script defer src="charts.js?v=20261001-interactions1"></script><script defer src="geometry.js?v=20260929-chemistry2"></script>
-  <script defer src="highlight-selection.js?v=20261001-highlights1"></script>
-  <script defer src="vendor/3Dmol-min.js"></script><script defer src="examples.js?v=20261001-course"></script><script defer src="example-loader.js?v=20260929-loading1"></script><script defer src="app.js?v=20261001-highlights1"></script>
+  <script defer src="highlight-selection.js?v=20261001-highlights2"></script>
+  <script defer src="vendor/3Dmol-min.js"></script><script defer src="examples.js?v=20261001-course"></script><script defer src="example-loader.js?v=20260929-loading1"></script><script defer src="app.js?v=20261001-highlights2"></script>
 </head>
 <body>
 <a class="skip" href="#main">Ir para o conteúdo</a>
@@ -107,7 +107,7 @@
       <p id="trajectory-status" class="trajectory-status" hidden></p><div id="trajectory-stage-summary" class="stage-summary" hidden></div><div id="trajectory-empty" class="empty" hidden></div>
       <div id="trajectory-content" class="trajectory-layout">
         <div class="molecule-card">
-          <div class="molecule-tools"><div class="interaction-modes" role="group" aria-label="Ação ao arrastar a molécula"><button type="button" class="button small-button" id="rotate-molecule" aria-pressed="true">Girar</button><button type="button" class="button small-button" id="pan-molecule" aria-pressed="false">Mover</button></div><span id="molecule-drag-hint" class="small muted">Arraste para girar a molécula</span><button type="button" class="button small-button proton-highlight" id="highlight-proton" hidden>Destacar próton H 2</button><button type="button" class="button small-button" id="expand-trajectory" aria-expanded="false">Ampliar área</button></div>
+          <div class="molecule-tools"><div class="interaction-modes" role="group" aria-label="Ação ao arrastar a molécula"><button type="button" class="button small-button" id="rotate-molecule" aria-pressed="true">Girar</button><button type="button" class="button small-button" id="pan-molecule" aria-pressed="false">Mover</button></div><span id="molecule-drag-hint" class="small muted">Arraste para girar a molécula</span><button type="button" class="button small-button highlight-launcher" id="highlight-toggle" aria-controls="highlight-tools" aria-expanded="false">Destacar átomos/moléculas</button><button type="button" class="button small-button proton-highlight" id="highlight-proton" hidden>Destacar próton H 2</button><button type="button" class="button small-button" id="expand-trajectory" aria-expanded="false">Ampliar área</button></div>
           <details class="highlight-tools" id="highlight-tools">
             <summary>Destaques <span id="highlight-count">· nenhum</span> <span class="highlight-summary-help">Átomos e moléculas em cores fortes</span></summary>
             <div class="highlight-editor">
@@ -127,7 +127,7 @@
               </div>
               <div id="highlight-list" class="highlight-list" aria-label="Destaques desta simulação"></div>
               <p id="highlight-status" class="small" role="status" aria-live="polite"></p>
-              <p class="small muted highlight-explanation">A cor acompanha os mesmos índices durante a animação. “Molécula” usa a proximidade no quadro escolhido, sem unir pontes H ou contatos metálicos; a lista fica fixa. Use índices para ajustar a seleção. Cores e tamanhos são apenas destaques visuais.</p>
+              <p class="small muted highlight-explanation">A cor acompanha os mesmos índices durante a animação. “Molécula” usa a proximidade no quadro escolhido, sem agrupar moléculas por ligações H ou contatos metálicos; a lista fica fixa. Use índices para ajustar a seleção. Cores e tamanhos são apenas destaques visuais.</p>
             </div>
           </details>
           <div id="molecule" tabindex="0" aria-label="Estrutura molecular interativa. Modo Girar: arraste para girar e use a roda para ampliar." aria-describedby="molecule-keyboard-help" role="application"></div>

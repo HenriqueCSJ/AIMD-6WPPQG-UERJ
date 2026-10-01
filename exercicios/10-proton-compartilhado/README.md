@@ -6,13 +6,13 @@
 
 > **Pergunta:** quando um H muda de proximidade entre dois O, ele permaneceu no novo lado ou voltou logo depois?
 
-No dímero neutro da abertura, as águas mudam a orientação da ligação de hidrogênio e preservam suas ligações O–H covalentes. Aqui, o dímero protonado H₅O₂⁺ permite acompanhar o H da ponte. Usamos GFN2-xTB, um método semiempírico de estrutura eletrônica, com núcleos clássicos. Não há solvente implícito, parede ou força aplicada para transferir o H.
+No dímero neutro da abertura, as águas mudam a orientação da ligação de hidrogênio e preservam suas ligações O–H covalentes. Aqui, o dímero protonado H₅O₂⁺ permite acompanhar o H compartilhado. Usamos GFN2-xTB, um método semiempírico de estrutura eletrônica, com núcleos clássicos. Não há solvente implícito, parede ou força aplicada para transferir o H.
 
 ## 1. Prepare
 
 [Pacote para executar](aula-proton_shared.zip) · [Input comentado](inputs/proton_shared.inp) · [Geometria otimizada](estruturas/h5o2_otimizado.xyz)
 
-Extraia o pacote numa pasta nova. Os índices do aplicativo começam em **zero**: **O 0, O 1 e H 2** formam a ponte; H 3–6 são os demais hidrogênios. A carga total é +1 e a multiplicidade é 1.
+Extraia o pacote numa pasta nova. Os índices do aplicativo começam em **zero**: **O 0, O 1 e H 2** compõem a unidade O–H–O; H 3–6 são os demais hidrogênios. A carga total é +1 e a multiplicidade é 1.
 
 ```text
 ! MD XTB2 PAL8
@@ -59,7 +59,7 @@ Execute um cálculo por vez. A referência completou **2 ps em 123,847 s**; a ot
 
 ## 3. Meça e interprete
 
-1. Em **Trajetória**, clique em **Destacar próton H 2**. Ele fica magenta e maior; o restante fica em cinza. O destaque acompanha o mesmo H durante a animação. Em **Destaques**, você pode mudar a cor, o tamanho e destacar também O 0 e O 1. Observe a ponte sem usar a velocidade da animação como escala de tempo físico.
+1. Em **Trajetória**, clique em **Destacar próton H 2**. Ele fica magenta e maior; o restante fica em cinza. O destaque acompanha o mesmo H durante a animação. Em **Destacar átomos/moléculas**, você pode mudar a cor, o tamanho e destacar também O 0 e O 1. Observe o H compartilhado sem usar a velocidade da animação como escala de tempo físico.
 2. Em **Geometria**, acompanhe **O 0–H 2** e **O 1–H 2**. Defina δ = r(O 0–H 2) − r(O 1–H 2). δ negativo indica H 2 mais perto de O 0; positivo, mais perto de O 1.
 3. Examine 850–1050 fs. Toda mudança de sinal parece uma passagem duradoura? Verifique o que acontece algumas dezenas de fs depois.
 4. Compare a temperatura instantânea com o alvo de 300 K. A média desta trajetória foi 242,81 K; o alvo não garante temperatura instantânea constante nem equilíbrio térmico em 2 ps.
