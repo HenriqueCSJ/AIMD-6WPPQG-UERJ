@@ -25,15 +25,17 @@ test('startup manifest contains no trajectories and only the requested calculati
   assert.equal(Object.keys(store.runs).length,0);
   const result=await loader.loadPreset('water');
   assert.equal(requested.length,1);
-  assert.match(requested[0],/examples\/dimero_xtb2_2ps\.js/);
+  assert.match(requested[0],/examples\/dimero_xtb2_5ps\.js/);
   assert.equal(result.runs[0].xyz.elements.length,6);
-  assert.equal(result.runs[0].xyz.frames.length,4001);
+  assert.equal(result.runs[0].xyz.frames.length,10001);
   assert.equal(Object.keys(store.runs).length,1);
 });
 
 test('every exposed preset resolves all retained runs and original download links',async()=>{
   const {store,loader}=bundledLoader();
-  assert.equal(Object.keys(store.presets).length,24);
+  const selector=read('index.html').match(/<select id="example-select">([\s\S]*?)<\/select>/)[1];
+  const exposed=[...selector.matchAll(/<option value="([^"]+)"/g)].map(match=>match[1]);
+  assert.deepEqual(Object.keys(store.presets).sort(),exposed.sort());
   for(const [key,preset] of Object.entries(store.presets)){
     const {runs}=await loader.loadPreset(key);
     assert.equal(runs.length,preset.runs.length,key);
@@ -47,7 +49,7 @@ test('every exposed preset resolves all retained runs and original download link
       for(const file of run.files)assert.ok(fs.existsSync(path.join(viewer,'..',file.path)),file.path);
     }
   }
-  assert.equal(Object.keys(store.runs).length,30);
+  assert.deepEqual(Object.keys(store.runs).sort(),Object.keys(store.sources).sort());
   for(const key of ['zn_parede_longo','zn_sem_parede_longo']){
     assert.equal(store.runs[key].xyz.elements.length,43);
     assert.equal(store.runs[key].xyz.frames.length,1001);

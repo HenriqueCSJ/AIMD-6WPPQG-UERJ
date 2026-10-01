@@ -1,0 +1,54 @@
+{
+  "metadata": {
+    "version": "6.1.1",
+    "method": "XTB2",
+    "ensemble": "NVT",
+    "thermostat": "CSVR",
+    "targetTemperature": 300,
+    "timestep": 0.25,
+    "charge": 1,
+    "multiplicity": 1,
+    "wall": false,
+    "hasMD": true,
+    "changingConditions": false,
+    "stages": [
+      {
+        "index": 1,
+        "startFs": 0,
+        "endFs": 2000,
+        "timestep": 0.25,
+        "thermostat": "CSVR",
+        "targetStartK": 300,
+        "targetEndK": 300,
+        "ramp": false,
+        "label": "Trajetória original"
+      },
+      {
+        "index": 2,
+        "startFs": 2000,
+        "endFs": 10000,
+        "timestep": 0.25,
+        "thermostat": "CSVR",
+        "targetStartK": 300,
+        "targetEndK": 300,
+        "ramp": false,
+        "label": "Continuação por restart"
+      }
+    ]
+  },
+  "energyBreaksAfterFs": [
+    2000
+  ],
+  "warnings": [
+    "Trajetória original de 2 ps seguida de continuação até 10 ps. Todos os 40001 quadros foram preservados.",
+    "Restart aos 2000 fs: posições e velocidades preservadas; sequência aleatória CSVR reiniciada. A quantidade conservada tem referência própria por etapa.",
+    "Compartilhamento e recrossamentos geométricos; não são taxas convergidas nem transporte em água líquida."
+  ],
+  "relatedFiles": [
+    "etapas/z01_dinamica.out",
+    "etapas/z02_02000_10000fs.out",
+    "etapas/z02_02000_10000fs.inp",
+    "etapas/z01_dinamica.mdrestart",
+    "etapas/h5o2_restart_2ps.xyz"
+  ]
+}

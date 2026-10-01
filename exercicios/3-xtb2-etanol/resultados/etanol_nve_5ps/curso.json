@@ -1,0 +1,49 @@
+{
+  "metadata": {
+    "version": "6.1.1",
+    "method": "XTB2",
+    "ensemble": "NVE",
+    "thermostat": "None",
+    "timestep": 0.5,
+    "charge": 0,
+    "multiplicity": 1,
+    "wall": false,
+    "hasMD": true,
+    "changingConditions": false,
+    "stages": [
+      {
+        "index": 1,
+        "startFs": 0,
+        "endFs": 500,
+        "timestep": 0.5,
+        "thermostat": "None",
+        "ramp": false,
+        "label": "Trajetória original"
+      },
+      {
+        "index": 2,
+        "startFs": 500,
+        "endFs": 5000,
+        "timestep": 0.5,
+        "thermostat": "None",
+        "ramp": false,
+        "label": "Continuação NVE por restart"
+      }
+    ]
+  },
+  "energyBreaksAfterFs": [
+    500
+  ],
+  "warnings": [
+    "Trajetória original seguida de continuação NVE até 5 ps; todos os 10001 quadros preservados. Restart em 500 fs, sem reinicializar velocidades.",
+    "Segmentos identificados no gráfico; energia e temperatura originais mantidas. Os inputs curtos da aula permanecem separados da referência ampliada.",
+    "Uma trajetória finita não estabelece populações de equilíbrio nem taxas convergidas."
+  ],
+  "relatedFiles": [
+    "etapas/etanol_nve.out",
+    "etapas/ethanol_00500_05000fs.out",
+    "etapas/ethanol_00500_05000fs.inp",
+    "etapas/etanol_nve.mdrestart",
+    "etapas/ethanol_restart.xyz"
+  ]
+}

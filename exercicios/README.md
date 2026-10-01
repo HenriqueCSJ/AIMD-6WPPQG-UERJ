@@ -9,6 +9,8 @@ Henrique de Castro Silva Junior · Virginia Camila Rufino Ferreira
 
 Cinco blocos, do primeiro input à interpretação química. Os cálculos ao vivo usam **XTB2**. Cada atividade oferece inputs comentados, estruturas e resultados prontos para quem precisar acompanhar sem esperar o cálculo.
 
+**Mais tempo para observar:** o laboratório oferece referências de **5 ps** para o dímero neutro e o etanol NVE e de **10 ps** para H₅O₂⁺. As versões curtas e seus inputs continuam disponíveis para a execução durante a aula. A reprodução começa em **60 segundos por ciclo**, com duração e velocidade ajustáveis.
+
 ### 01 · Uma ligação H em movimento
 
 [Abrir atividade](1-agua-dft/README.md) · [Ver no laboratório](../visualizador/index.html?exemplo=water&aba=trajetoria) · **25 min de aula**
@@ -37,7 +39,7 @@ Cinco etapas contínuas no mesmo input. Acompanhe a temperatura e o diedro C–C
 
 [Abrir atividade](10-proton-compartilhado/README.md) · [Ver no laboratório](../visualizador/index.html?exemplo=proton_shared&aba=trajetoria) · **20 min**
 
-H₅O₂⁺, sete átomos, **2 ps em cerca de 2 min de execução**. Compare as duas distâncias O–H: onde está o próton e quando ele retorna? Compartilhamento e recrossamentos ficam visíveis; esta molécula isolada não representa transporte de prótons na água líquida.
+H₅O₂⁺, sete átomos: **10 ps prontos para observar**, com o input curto de **2 ps em cerca de 2 min de execução** disponível para a aula. Compare as duas distâncias O–H: onde está o próton e quando ele retorna? Compartilhamento e recrossamentos ficam visíveis; esta molécula isolada não representa transporte de prótons na água líquida.
 
 ## Opcionais e referências
 

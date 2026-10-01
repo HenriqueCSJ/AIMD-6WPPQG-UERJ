@@ -1,0 +1,79 @@
+{
+  "status": "completed_data_checked",
+  "case": "ethanol",
+  "frames": 10001,
+  "start_fs": 0,
+  "end_fs": 5000,
+  "dt_fs": 0.5,
+  "original_prefix_unchanged": true,
+  "original_frames": 1001,
+  "extension_frames": 9000,
+  "duplicate_csv_step_removed": 1000,
+  "duplicate_csv_physical_values_equal": true,
+  "checkpoint_geometry_matches": true,
+  "max_step_displacement_A": 0.026317958448621063,
+  "restart_boundary_max_displacement_A": 0.01515597347284429,
+  "covalent_pair_ranges_A_zero_based": {
+    "0-1": [
+      1.4596948021147886,
+      1.594849546507792
+    ],
+    "1-2": [
+      1.3581807723786472,
+      1.4661691271095205
+    ],
+    "0-3": [
+      1.0401357281341197,
+      1.1477186737726979
+    ],
+    "0-4": [
+      1.0466966516784713,
+      1.1328666359222646
+    ],
+    "0-5": [
+      1.0390912056353685,
+      1.1432760026505584
+    ],
+    "1-6": [
+      1.0208572496920578,
+      1.19756587674272
+    ],
+    "1-7": [
+      1.0391759004957184,
+      1.154922973905024
+    ],
+    "2-8": [
+      0.9389187311088114,
+      0.992095827793931
+    ]
+  },
+  "fixed_pair_integrity_screen_passed": true,
+  "temperature_range_K": [
+    39.42,
+    300.0
+  ],
+  "temperature_mean_K": 149.12297770222978,
+  "nve_combined": {
+    "energy_span_kJ_mol": 0.5487294246486272,
+    "energy_end_minus_start_kJ_mol": -0.10239448594438727,
+    "energy_linear_slope_kJ_mol_ps": -0.054980598494230745
+  },
+  "nve_original": {
+    "energy_span_kJ_mol": 0.2993069588992512,
+    "energy_end_minus_start_kJ_mol": 0.1470279798086267,
+    "energy_linear_slope_kJ_mol_ps": -0.05073410104551182
+  },
+  "nve_extension": {
+    "energy_span_kJ_mol": 0.5329764268099098,
+    "energy_end_minus_start_kJ_mol": -0.24942246575301397,
+    "energy_linear_slope_kJ_mol_ps": -0.05571592602119111
+  },
+  "original_elapsed_seconds": 15.764,
+  "extension_elapsed_seconds": 136.128,
+  "interpretation": "Single finite NVE continuation; geometric integrity screen, not an equilibrium or kinetic claim.",
+  "CCOH_dihedral_signed_range_deg": [
+    -79.47914958970301,
+    -27.977989333316483
+  ],
+  "CCOH_dihedral_note": "Signed angles wrap at +/-180 degrees; the range alone is not a count of conformational transitions."
+}

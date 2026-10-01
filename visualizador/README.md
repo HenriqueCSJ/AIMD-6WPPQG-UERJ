@@ -69,9 +69,11 @@ Os testes automatizados conferem parsing, unidades, falhas, reinícios, programa
 
 ## Reprodução e novos exemplos
 
+As referências principais do dímero neutro e do etanol NVE têm **5 ps**; a do próton compartilhado tem **10 ps**. Cada uma conserva o trecho original e acrescenta uma continuação por restart, com todos os quadros disponíveis. As referências curtas permanecem em **Opcionais e referências**; as comparações de timestep e de termostato continuam usando seus dados originais. O maior tempo de simulação e a duração da reprodução são controles diferentes.
+
 O tempo físico usa campos estáveis em fs, ps e segundos, com precisão fixa durante cada trajetória. A reprodução acompanha o relógio do navegador e começa com um ciclo de **60 s a 1×**, independentemente do número de quadros. A nota sob os controles informa a duração efetiva: 60 s a 0,5× produzem um ciclo de 120 s; a 2×, de 30 s. Mudar a duração ou a velocidade durante a reprodução preserva a posição atual. Isso não prolonga a simulação nem altera os tempos do XYZ. O navegador pode pular quadros de exibição quando o desenho demora; as setas permitem inspeção individual dos quadros carregados.
 
-As referências maiores usam uma prévia amostrada para reduzir a transferência, sempre identificada sob a animação. Cada coordenada e tempo mostrado vem de um quadro real; não há interpolação. Os links para os XYZ originais mantêm todos os quadros e os uploads são lidos integralmente. Energias não são reduzidas.
+Algumas referências de sistemas maiores, como Zn–en e gotas protonadas, usam uma prévia amostrada para reduzir a transferência, sempre identificada sob a animação. O dímero neutro de 5 ps, o etanol NVE de 5 ps e o H₅O₂⁺ de 10 ps mantêm todos os quadros no aplicativo. Cada coordenada e tempo mostrado vem de um quadro real; não há interpolação. Os links para os XYZ originais mantêm todos os quadros e os uploads são lidos integralmente. Energias não são reduzidas.
 
 - Timestep: 2,5 fs causa uma falha progressiva, com registros até 325 fs, identificada como dados parciais; 0,5 fs demonstra a correção.
 - Parede: comparação de 2 ps; a esfera indica uma parede fixa reconhecida no input do `.out`. XYZ sozinho não define uma parede.

@@ -1,0 +1,12 @@
+# Finite NVE continuation; positions and velocities retained from checkpoint.
+! MD XTB2 PAL8
+%maxcore 256
+%md
+  Timestep 0.5_fs
+  Thermostat None
+  Randomize 42
+  Dump Position Stride 1 Filename "ethanol_00500_05000fs-traj.xyz"
+  Restart "etanol_nve.mdrestart"
+  Run 9000
+end
+* xyzfile 0 1 ethanol_restart.xyz

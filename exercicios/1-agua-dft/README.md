@@ -1,8 +1,8 @@
-# 01 · Uma ligação de hidrogênio em movimento
+# 01 · Uma ligação H em movimento
 
 [← Percurso](../README.md) · [Laboratório de trajetórias](../../visualizador/index.html)
 
-**25 min · duas águas · 6 átomos · XTB2 · 2 ps = 2 × 10⁻¹² s**
+**25 min · duas águas · 6 átomos · XTB2 · execução da aula: 2 ps · referência ampliada: 5 ps**
 
 > **Pergunta:** As duas águas permanecem doadora e aceptora durante toda a dinâmica?
 
@@ -10,7 +10,11 @@
 
 Uma água começa como doadora da ligação H. Vamos observar a reorientação: **uma água pode passar de doadora a aceptora da ligação H?** A estrutura já foi relaxada com B97-3c; a otimização é fornecida, não precisa ser repetida na aula.
 
-Vamos acompanhar **2 ps = 2 × 10⁻¹² s** com XTB2, sem termostato. A referência levou **56,5 s nesta máquina**. A geometria inicial é a mesma da comparação DFT fornecida; não é apresentada como um mínimo de XTB2. Este dímero isolado não representa água líquida.
+Vamos executar **2 ps = 2 × 10⁻¹² s** com XTB2, sem termostato. Essa execução original levou **56,5 s nesta máquina**. A geometria inicial é a mesma da comparação DFT fornecida; não é apresentada como um mínimo de XTB2. Este dímero isolado não representa água líquida.
+
+O laboratório abre a **referência ampliada de 5 ps**: os 2 ps originais seguidos por mais 3 ps a partir do checkpoint, preservando posições, velocidades, timestep de 0,5 fs e NVE. São **10001 quadros originais**, sem interpolação ou redução. O input curto abaixo permanece igual para a execução em aula; a referência de 2 ps continua disponível separadamente.
+
+A continuação levou **91,1 s nesta máquina**, além dos 56,5 s originais. Nos 5 ps completos, O···O varia de **2,617 a 3,511 Å** e a amplitude de Etotal é **0,260 kJ/mol**. Cada H permanece associado à sua água no acompanhamento pelo O mais próximo.
 
 ## 2. Execute
 
@@ -59,18 +63,18 @@ Espere o prompt voltar antes de iniciar outro cálculo. Os arquivos de resultado
 
 ## 3. Observe, meça, explique
 
-[Abrir referência em 3D](../../visualizador/index.html?exemplo=water&aba=trajetoria)
+[Abrir referência de 5 ps em 3D](../../visualizador/index.html?exemplo=water&aba=trajetoria) · [Abrir os 2 ps originais](../../visualizador/index.html?exemplo=water_short&aba=trajetoria)
 
 1. Ative **Ligações H**. O traço descontínuo indica um contato que passa pelo critério geométrico do visualizador; não é uma ligação covalente adicional.
 2. Em **Geometria**, compare **O 0–H 1**, **H 1···O 3** e **O 0···O 3**. Acrescente o ângulo **0–1–3** (D–H···A).
 3. Em **Energia**, mostre K, U e E. Alongar/comprimir as ligações modifica U; o movimento altera K. A energia total deve variar pouco neste caso sem banho.
 4. Avance pelos primeiros 50 fs e depois por toda a trajetória. Identifique qual O doa H e qual aceita. Meça também os contatos partindo dos H 4 e 5 da segunda água.
 
-**Nesta referência XTB2:** O···O varia de **2,633 a 3,511 Å**; as quatro ligações covalentes O–H permanecem entre **0,914 e 1,020 Å**. O 0 começa como doador; perto de 50 fs, o O 3 aparece como doador. Há outras alternâncias ao longo dos 2 ps.
+**Nos 2 ps originais XTB2:** O···O varia de **2,633 a 3,511 Å**; as quatro ligações covalentes O–H permanecem entre **0,914 e 1,020 Å**. O 0 começa como doador; perto de 50 fs, o O 3 aparece como doador. Há outras alternâncias ao longo dos 2 ps. Essas faixas descrevem o trecho original; use a extensão para investigar se a faixa observada aumenta quando a janela chega a 5 ps.
 
 **Interpretação:** as moléculas giram e reorganizam o contato intermolecular. A troca de doador/aceptor **não é transferência de próton**: cada H continua ligado à sua água. O desaparecimento do traço H ao cruzar um corte geométrico não prova dissociação irreversível.
 
-Na análise dos dados completos, o critério operacional foi H···O < 2,4 Å e O–H···O > 130°. Os cortes ajustáveis do visualizador podem deslocar o instante em que o traço aparece. A amplitude de Etotal foi **0,194 kJ/mol**; examine a curva inteira, não apenas a diferença entre início e fim. Em NVE, a temperatura instantânea deste sistema de seis átomos pode variar bastante.
+Na análise dos 2 ps originais, o critério operacional foi H···O < 2,4 Å e O–H···O > 130°. Os cortes ajustáveis do visualizador podem deslocar o instante em que o traço aparece. A amplitude de Etotal nesse trecho foi **0,194 kJ/mol**; examine a curva inteira, não apenas a diferença entre início e fim. Em NVE, a temperatura instantânea deste sistema de seis átomos pode variar bastante. A referência ampliada identifica o restart em 2000 fs e mantém os valores físicos originais de energia e temperatura.
 
 **Limite:** uma única trajetória não fornece populações de equilíbrio ou taxas de troca. O tempo medido de **56,5 s** não é garantia para outros computadores. Se ultrapassar **2 min durante a aula**, abra a referência e continue a análise.
 
@@ -92,6 +96,7 @@ Ela continua como [referência adicional já calculada](../../visualizador/index
 
 ## Resultados e manual
 
+- **XTB2, referência ampliada de 5 ps:** [trajetória completa](resultados/dimero_xtb2_5ps/dimero_xtb2_5ps-traj.xyz) · [energias](resultados/dimero_xtb2_5ps/dimero_xtb2_5ps-md-ener.csv) · [etapas e limites](resultados/dimero_xtb2_5ps/curso.json) · [verificação](resultados/dimero_xtb2_5ps/verificacao.json) · [pacote completo de resultados](resultado-dimero_xtb2_5ps.zip) · [input e checkpoint para continuar de 2 até 5 ps](aula-dimero_restart_5ps.zip). As saídas das duas execuções estão separadas por etapa no pacote.
 - **XTB2, 2 ps:** [saída](resultados/dimero_xtb2_2ps/dimero_xtb2_2ps.out) · [input usado](resultados/dimero_xtb2_2ps/dimero_xtb2_2ps.inp) · [energias](resultados/dimero_xtb2_2ps/dimero_xtb2_2ps-md-ener.csv) · [trajetória completa](resultados/dimero_xtb2_2ps/dimero_xtb2_2ps-traj.xyz) · [tempo de execução](resultados/dimero_xtb2_2ps/execucao.json).
 - **DFT, comparação pronta de 60 fs:** [saída](resultados/dimero_b97/dimero_b97.out) · [energias](resultados/dimero_b97/dimero_b97-md-ener.csv) · [trajetória](resultados/dimero_b97/dimero_b97-traj.xyz).
 

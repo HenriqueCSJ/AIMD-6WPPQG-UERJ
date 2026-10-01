@@ -2,7 +2,7 @@
 
 [← Percurso](../README.md) · [Laboratório de trajetórias](../../visualizador/index.html)
 
-**Parte do bloco 02 (35 min com timestep e correção) · etanol · XTB2 · 0,5 ps = 5 × 10⁻¹³ s**
+**Parte do bloco 02 (35 min com timestep e correção) · etanol · XTB2 · controle da aula: 0,5 ps · referência ampliada: 5 ps**
 
 > **Pergunta:** Uma trajetória sem troca de conformação ensina alguma coisa?
 
@@ -11,6 +11,10 @@
 Uma animação pode esconder a diferença entre a molécula inteira girar e uma rotação **interna**. Para o H da hidroxila, acompanhe o diedro **C 0–C 1–O 2–H 8**, em graus. Ele não muda se girarmos apenas a câmera ou a molécula como um corpo rígido.
 
 Vamos começar com uma trajetória curta, sem termostato: ela será o controle para o timestep e para as etapas de temperatura. `Initvel 300_K` inicializa velocidades; não mantém o sistema a 300 K.
+
+O laboratório também oferece **5 ps de NVE**, por continuação dos 0,5 ps originais a partir do checkpoint, com as mesmas posições, velocidades, timestep de 0,5 fs e ausência de termostato. A referência ampliada preserva **10001 quadros originais**. O input abaixo continua produzindo os 0,5 ps do controle; as comparações de timestep e termostato conservam essa série curta para manter os dados pareados.
+
+A continuação levou **136,1 s nesta máquina**, além dos 15,8 s originais. Nos 5 ps completos, o diedro C 0–C 1–O 2–H 8 varia de **−79,5° a −28,0°**, sem troca de região conformacional observada. A amplitude de Etotal é **0,549 kJ/mol**.
 
 ## 2. Execute
 
@@ -62,7 +66,9 @@ Espere o prompt voltar antes de iniciar outro cálculo. Os arquivos de resultado
 
 ## 3. Distinga os dois movimentos
 
-[Abrir o controle curto](../../visualizador/index.html?exemplo=ethanol&aba=distancias) · [Comparar com o etanol em etapas](../../visualizador/index.html?exemplo=thermostat&aba=distancias)
+[Abrir NVE ampliado de 5 ps](../../visualizador/index.html?exemplo=ethanol&aba=geometria) · [Abrir o controle original de 0,5 ps](../../visualizador/index.html?exemplo=ethanol_short&aba=geometria) · [Comparar com o etanol em etapas](../../visualizador/index.html?exemplo=thermostat&aba=geometria)
+
+As faixas numéricas abaixo descrevem o **controle original de 0,5 ps**. Examine depois os 5 ps para investigar o efeito da janela de observação, sem atribuí-lo a mudança de temperatura. O restart em 500 fs fica identificado no gráfico e não reinicializa velocidades.
 
 1. Em **Geometria**, use o atalho para a torsão do etanol ou selecione **Diedro**, com índices **0, 1, 2, 8**.
 2. No controle NVE, o diedro vai de **−73,9° a −33,7°** em 0,5 ps: oscila em torno de uma orientação gauche. Isso é **libração**, sem troca de região conformacional observada.
@@ -75,6 +81,7 @@ Espere o prompt voltar antes de iniciar outro cálculo. Os arquivos de resultado
 
 ## Resultados e manual
 
+- **NVE ampliado, 5 ps:** [trajetória completa](resultados/etanol_nve_5ps/etanol_nve_5ps-traj.xyz) · [energias](resultados/etanol_nve_5ps/etanol_nve_5ps-md-ener.csv) · [etapas e limites](resultados/etanol_nve_5ps/curso.json) · [verificação](resultados/etanol_nve_5ps/verificacao.json) · [pacote completo de resultados](resultado-etanol_nve_5ps.zip) · [input e checkpoint para continuar de 0,5 até 5 ps](aula-etanol_restart_5ps.zip). As saídas das duas execuções estão separadas por etapa no pacote.
 - **etanol_nve:** [saída](resultados/etanol_nve/etanol_nve.out) · [input usado](resultados/etanol_nve/etanol_nve.inp) · [energias](resultados/etanol_nve/etanol_nve-md-ener.csv) · [trajetória](resultados/etanol_nve/etanol_nve-traj.xyz) · [tempo de execução](resultados/etanol_nve/execucao.json).
 
 [Manual ORCA: dinâmica molecular](https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html).

@@ -6,7 +6,11 @@
 
 > **Pergunta:** quando um H muda de proximidade entre dois O, ele permaneceu no novo lado ou voltou logo depois?
 
-No dímero neutro da abertura, as águas mudam a orientação da ligação de hidrogênio e preservam suas ligações O–H covalentes. Aqui, o dímero protonado H₅O₂⁺ permite acompanhar o H compartilhado. Usamos GFN2-xTB, um método semiempírico de estrutura eletrônica, com núcleos clássicos. Não há solvente implícito, parede ou força aplicada para transferir o H.
+No dímero neutro da abertura, as águas mudam a orientação da ligação H e preservam suas ligações O–H covalentes. Aqui, o dímero protonado H₅O₂⁺ permite acompanhar o H compartilhado. Usamos GFN2-xTB, um método semiempírico de estrutura eletrônica, com núcleos clássicos. Não há solvente implícito, parede ou força aplicada para transferir o H.
+
+**Para observar com calma:** o laboratório abre agora a referência completa de **10 ps**, com **40001 quadros**. Um ciclo de reprodução começa em **60 s**; escolha **120 s** em **Duração a 1×**, ou reduza **Velocidade**, para acompanhar cada passagem por mais tempo. Esses controles não alteram o tempo físico.
+
+O input curto abaixo continua disponível para executar os primeiros **2 ps** durante a aula. A referência longa preserva esses mesmos 2 ps e acrescenta **8 ps por restart**, sem reinicializar posições ou velocidades.
 
 ## 1. Prepare
 
@@ -55,20 +59,45 @@ Espere o prompt voltar antes de iniciar outro cálculo. Os arquivos de resultado
 
 Execute um cálculo por vez. A referência completou **2 ps em 123,847 s**; a otimização anterior levou 2,375 s. São tempos observados em ORCA 6.1.1/xTB 6.7.1, WSL2, Intel Core Ultra 9 185H, PAL8 solicitado, e podem mudar em outro computador. Se a espera comprometer o bloco, passe aos dados prontos.
 
-[Abrir H₅O₂⁺ no aplicativo](../../visualizador/index.html?exemplo=proton_shared&aba=trajetoria) · [Baixar resultado pronto](resultado-proton_shared.zip)
+[Observar 10 ps no aplicativo](../../visualizador/index.html?exemplo=proton_shared&aba=trajetoria) · [Baixar os 10 ps completos](resultado-proton_shared_10ps.zip) · [Referência original de 2 ps](../../visualizador/index.html?exemplo=proton_shared_short&aba=trajetoria) · [Baixar os 2 ps originais](resultado-proton_shared.zip)
+
+### Continuar de 2 até 10 ps
+
+Baixe o [pacote de continuação](aula-proton_restart_10ps.zip) e extraia em outra pasta. Ele inclui o checkpoint aos 2 ps, as coordenadas correspondentes e o input de mais 32000 passos de 0,25 fs. O comando `Restart` recupera o estado salvo; o input não contém `Initvel`.
+
+**Ubuntu / WSL2**, na pasta extraída:
+
+```bash
+orca z02_02000_10000fs.inp > z02_02000_10000fs.out &
+```
+
+**Windows (CMD)**, na pasta extraída:
+
+```bat
+orca z02_02000_10000fs.inp > z02_02000_10000fs.out
+```
+
+Espere uma execução terminar antes de iniciar outra. A extensão começa aos 2000 fs e termina aos 10000 fs; os arquivos completos para visualização já estão reunidos no pacote de resultado acima.
 
 ## 3. Meça e interprete
 
 1. Em **Trajetória**, clique em **Destacar próton H 2**. Ele fica magenta e maior; o restante fica em cinza. O destaque acompanha o mesmo H durante a animação. Em **Destacar átomos/moléculas**, você pode mudar a cor, o tamanho e destacar também O 0 e O 1. Observe o H compartilhado sem usar a velocidade da animação como escala de tempo físico.
 2. Em **Geometria**, acompanhe **O 0–H 2** e **O 1–H 2**. Defina δ = r(O 0–H 2) − r(O 1–H 2). δ negativo indica H 2 mais perto de O 0; positivo, mais perto de O 1.
 3. Examine 850–1050 fs. Toda mudança de sinal parece uma passagem duradoura? Verifique o que acontece algumas dezenas de fs depois.
-4. Compare a temperatura instantânea com o alvo de 300 K. A média desta trajetória foi 242,81 K; o alvo não garante temperatura instantânea constante nem equilíbrio térmico em 2 ps.
+4. Compare a temperatura instantânea com o alvo de 300 K. A média dos primeiros 2 ps foi 242,81 K; o alvo não garante temperatura instantânea constante nem equilíbrio térmico em 2 ps.
 
-Nos dados completos ocorreram **79 cruzamentos de δ = 0**. Exigir afastamento de pelo menos 0,10 Å da região central e permanência muda a contagem: nove mudanças para 20 fs, uma para 50 fs e nenhuma para 100 fs. **Um cruzamento não é uma taxa de reação.** O exemplo mostra compartilhamento e recrossamentos; dois oxigênios não constituem uma rede extensa de transporte de prótons.
+Nos **2 ps originais** ocorreram **79 cruzamentos de δ = 0**. Exigir afastamento de pelo menos 0,10 Å da região central e permanência muda a contagem: nove mudanças para 20 fs, uma para 50 fs e nenhuma para 100 fs. **Um cruzamento não é uma taxa de reação.** O exemplo mostra compartilhamento e recrossamentos; dois oxigênios não constituem uma rede extensa de transporte de prótons.
 
-A referência do aplicativo contém todos os **8001 quadros**, espaçados de 0,25 fs. O CSV conserva o tempo impresso pelo ORCA, arredondado a uma casa decimal; para instantes entre quartos de fs, use o comentário do XYZ ou o passo multiplicado por 0,25 fs.
+Nos **10 ps completos**, H 2 apresentou **432 cruzamentos** de δ = 0. Com o mesmo limiar de 0,10 Å, as contagens para 20, 50 e 100 fs de persistência foram **58, 5 e 0**, respectivamente. A média de temperatura foi **285,11 K**. O maior tempo permite observar mais movimento, sem transformar essas contagens em taxas convergidas.
+
+A continuação levou **493,574 s** nesta máquina, além dos 123,847 s do trecho original. O restart preserva posições, velocidades, passo e tempo; o gerador aleatório do termostato CSVR recomeça e a quantidade conservada tem referência própria em cada etapa. Por isso os gráficos separam a fronteira aos 2000 fs. Não é uma réplica independente nem uma promessa de equivalência bit a bit a uma execução ininterrupta. [Manual ORCA: restart](https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html#restarting-simulations).
+
+A referência longa do aplicativo contém todos os **40001 quadros**, espaçados de 0,25 fs; o primeiro trecho de 8001 quadros permanece inalterado. O CSV conserva o tempo impresso pelo ORCA, arredondado a uma casa decimal; para instantes entre quartos de fs, use o comentário do XYZ ou o passo multiplicado por 0,25 fs.
 
 ## Arquivos e consulta
+
+- **10 ps:** [XYZ completo](resultados/proton_shared_10ps/proton_shared_10ps-traj.xyz), [energias e temperatura](resultados/proton_shared_10ps/proton_shared_10ps-md-ener.csv), [etapas e condições](resultados/proton_shared_10ps/curso.json), [saída da continuação](resultados/proton_shared_10ps/etapas/z02_02000_10000fs.out) e [conferência numérica](resultados/proton_shared_10ps/verificacao.json).
+**2 ps originais**, preservados abaixo:
 
 - [Saída ORCA](resultados/proton_shared/proton_shared.out) · [Energias](resultados/proton_shared/proton_shared-md-ener.csv) · [Trajetória completa](resultados/proton_shared/proton_shared-traj.xyz).
 - [Input original da referência](resultados/proton_shared/proton_shared.inp) · [Registro de execução](resultados/proton_shared/execucao.json). Os resultados foram copiados com um nome comum para facilitar o carregamento; as séries não foram interpoladas.

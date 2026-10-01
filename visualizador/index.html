@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="app.css?v=20261001-temperature1">
   <script defer src="orca-parser.js?v=20260929-chemistry2"></script><script defer src="charts.js?v=20261001-interactions1"></script><script defer src="geometry.js?v=20260929-chemistry2"></script>
   <script defer src="highlight-selection.js?v=20261001-temperature1"></script>
-  <script defer src="vendor/3Dmol-min.js"></script><script defer src="examples.js?v=20261001-course"></script><script defer src="example-loader.js?v=20260929-loading1"></script><script defer src="app.js?v=20261001-playback1"></script>
+  <script defer src="vendor/3Dmol-min.js"></script><script defer src="examples.js?v=20261001-longproton1"></script><script defer src="example-loader.js?v=20260929-loading1"></script><script defer src="app.js?v=20261001-longproton1"></script>
 </head>
 <body>
 <a class="skip" href="#main">Ir para o conteúdo</a>
@@ -36,16 +36,19 @@
       <label class="sr-only" for="example-select">Exemplo do minicurso</label>
       <select id="example-select">
         <optgroup label="Durante a aula · cinco blocos">
-          <option value="water" selected>01 · Dímero de água: ligação H</option>
-          <option value="ethanol">02a · Etanol: controle NVE</option>
+          <option value="water" selected>01 · Dímero de água: ligação H · 5 ps</option>
+          <option value="ethanol">02a · Etanol: NVE · 5 ps</option>
           <option value="timestep">02b · Timestep: instabilidade e correção</option>
           <option value="thermostat">03 · Etanol: aquecer e resfriar</option>
           <option value="solvator">04a · Zn–en: construir com SOLVATOR</option>
           <option value="complex">04b · Zn–en: efeito da parede</option>
           <option value="chelation">04c · Zn–en: formação do quelato (dados prontos)</option>
-          <option value="proton_shared">05 · H₅O₂⁺: um próton entre duas águas</option>
+          <option value="proton_shared">05 · H₅O₂⁺: um próton entre duas águas · 10 ps</option>
         </optgroup>
         <optgroup label="Opcionais e referências">
+          <option value="proton_shared_short">H₅O₂⁺ · referência original de 2 ps</option>
+          <option value="water_short">Dímero de água · referência original de 2 ps</option>
+          <option value="ethanol_short">Etanol NVE · controle original de 0,5 ps</option>
           <option value="solvent">DFT · Dímero no vácuo × CPCM</option>
           <option value="proton_droplet">Gota protonada · 300 K</option>
           <option value="proton_droplet_400k">Gota protonada · 400 K</option>

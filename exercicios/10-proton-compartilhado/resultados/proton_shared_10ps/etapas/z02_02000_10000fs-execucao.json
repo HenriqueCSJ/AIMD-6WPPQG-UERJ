@@ -1,0 +1,22 @@
+{
+  "status": "awaiting_results_review",
+  "case": "z02_02000_10000fs",
+  "runtime_directory": "/home/henrique/aimd-workshop/exercicios-pal8-20260928/z02_02000_10000fs_h5o2_extension_20261001",
+  "controller_pid": 14,
+  "time_limit_seconds": 1800,
+  "start_step": 8000,
+  "start_fs": 2000,
+  "additional_steps": 32000,
+  "dt_fs": 0.25,
+  "target_step": 40000,
+  "target_fs": 10000,
+  "velocities_reinitialized": false,
+  "updated_at": "2026-10-01T18:44:16-03:00",
+  "orca_pid": 16,
+  "returncode": 0,
+  "elapsed_seconds": 493.574,
+  "normal_termination": true,
+  "final_step": 40000.0,
+  "final_fs": 10000.0,
+  "target_reached": true
+}

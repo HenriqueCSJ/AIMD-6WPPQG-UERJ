@@ -1,0 +1,63 @@
+{
+  "status": "completed_data_checked",
+  "case": "water",
+  "frames": 10001,
+  "start_fs": 0,
+  "end_fs": 5000,
+  "dt_fs": 0.5,
+  "original_prefix_unchanged": true,
+  "original_frames": 4001,
+  "extension_frames": 6000,
+  "duplicate_csv_step_removed": 4000,
+  "duplicate_csv_physical_values_equal": true,
+  "checkpoint_geometry_matches": true,
+  "max_step_displacement_A": 0.029489231410585376,
+  "restart_boundary_max_displacement_A": 0.016166266464238056,
+  "covalent_pair_ranges_A_zero_based": {
+    "0-1": [
+      0.9445466549008186,
+      0.9834403018685361
+    ],
+    "0-2": [
+      0.9386073990328695,
+      0.9900996242145348
+    ],
+    "3-4": [
+      0.914237118737331,
+      1.0198641946816582
+    ],
+    "3-5": [
+      0.9368253262445737,
+      0.9920848239215575
+    ]
+  },
+  "fixed_pair_integrity_screen_passed": true,
+  "temperature_range_K": [
+    18.13,
+    358.41
+  ],
+  "temperature_mean_K": 210.85950004999503,
+  "nve_combined": {
+    "energy_span_kJ_mol": 0.2599244643097336,
+    "energy_end_minus_start_kJ_mol": -0.07088849026695243,
+    "energy_linear_slope_kJ_mol_ps": -0.0198690401805805
+  },
+  "nve_original": {
+    "energy_span_kJ_mol": 0.19428697332477896,
+    "energy_end_minus_start_kJ_mol": -0.002625499640998896,
+    "energy_linear_slope_kJ_mol_ps": -0.02115615637744554
+  },
+  "nve_extension": {
+    "energy_span_kJ_mol": 0.20478897188149858,
+    "energy_end_minus_start_kJ_mol": -0.06826299062595353,
+    "energy_linear_slope_kJ_mol_ps": -0.019465107728229656
+  },
+  "original_elapsed_seconds": 56.486,
+  "extension_elapsed_seconds": 91.095,
+  "interpretation": "Single finite NVE continuation; geometric integrity screen, not an equilibrium or kinetic claim.",
+  "OO_range_A": [
+    2.616672115753025,
+    3.511013638362457
+  ],
+  "hydrogens_keep_initial_nearest_O": true
+}

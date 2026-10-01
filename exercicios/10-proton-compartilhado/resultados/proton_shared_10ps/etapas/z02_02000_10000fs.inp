@@ -1,0 +1,14 @@
+# H5O2+: continue the retained 2 ps state for 8 ps, reaching 10 ps.
+# Same Hamiltonian, integration step, thermostat settings and explicit seed.
+# Positions and velocities come from the checkpoint; do not initialize velocities.
+! MD XTB2 PAL8
+%maxcore 256
+%md
+  Timestep 0.25_fs
+  Thermostat CSVR 300_K Timecon 100_fs
+  Dump Position Stride 1 Filename "z02_02000_10000fs-traj.xyz"
+  Randomize 93201
+  Restart "z01_dinamica.mdrestart"
+  Run 32000
+end
+* xyzfile 1 1 h5o2_restart_2ps.xyz

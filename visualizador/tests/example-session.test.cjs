@@ -330,13 +330,18 @@ test('invalid manual indices preserve an existing selection instead of applying 
   assert.match(ui.nodes['highlight-status'].textContent,/fora dos limites/);assert.equal(JSON.stringify(run.highlights),original);
 });
 
-test('the shared-proton shortcut marks H2 only for the identified course reference',async()=>{
-  const ui=session({inspectState:true}),data=preset('proton_shared');
-  data.runs[0].xyz.elements=['O','O','H','H','H','H','H'];data.runs[0].xyz.frames[0].coords=Array.from({length:7},(_,i)=>[i,0,0]);
-  const pending=ui.choose('proton_shared',true);ui.requests[0].resolve(data);await pending;
-  ui.nodes['highlight-proton'].fire('click');assert.deepEqual(Array.from(ui.state.runs[0].highlights[0].indices),[2]);
-  ui.state.runs[0].reference=false;ui.state.runs[0].highlights=[];ui.nodes['highlight-proton'].fire('click');
-  assert.equal(ui.state.runs[0].highlights.length,0);
+test('the shared-proton shortcut marks H2 for both retained references and no other identity',async()=>{
+  for(const key of ['proton_shared','proton_shared_10ps']){
+    const ui=session({inspectState:true}),data=preset(key);
+    data.runs[0].xyz.elements=['O','O','H','H','H','H','H'];data.runs[0].xyz.frames[0].coords=Array.from({length:7},(_,i)=>[i,0,0]);
+    const pending=ui.choose(key,true);ui.requests[0].resolve(data);await pending;
+    assert.equal(ui.nodes['highlight-proton'].hidden,false);
+    ui.nodes['highlight-proton'].fire('click');assert.deepEqual(Array.from(ui.state.runs[0].highlights[0].indices),[2]);
+    const run=ui.state.runs[0];run.highlights=[];run.reference=false;ui.nodes['highlight-proton'].fire('click');
+    assert.equal(run.highlights.length,0);
+    run.reference=true;run.key='another_h5o2';ui.nodes['highlight-proton'].fire('click');assert.equal(run.highlights.length,0);
+    run.key=key;run.xyz.elements[2]='O';ui.nodes['highlight-proton'].fire('click');assert.equal(run.highlights.length,0);
+  }
 });
 
 test('trajectory temperature is rendered from T alone, preserving gaps and segments',async()=>{

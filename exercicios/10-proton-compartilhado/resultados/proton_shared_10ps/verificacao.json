@@ -1,0 +1,45 @@
+{
+  "status": "reviewed_completed_data",
+  "frames": 40001,
+  "start_fs": 0,
+  "end_fs": 10000,
+  "dt_fs": 0.25,
+  "original_prefix_unchanged": true,
+  "original_frames": 8001,
+  "extension_frames": 32000,
+  "duplicate_csv_step_removed": 8000,
+  "duplicate_csv_physical_values_equal": true,
+  "restart_boundary_max_displacement_A": 0.007792527412487575,
+  "max_step_displacement_A": 0.022476865919473354,
+  "OO_range_A": [
+    2.28532245460291,
+    2.6927837831618513
+  ],
+  "all_H_max_nearest_OH_A": 1.3391004277102279,
+  "min_HH_A": 1.3314156617972557,
+  "raw_sign_crossings_by_zero_based_H": {
+    "2": 432,
+    "3": 0,
+    "4": 0,
+    "5": 0,
+    "6": 0
+  },
+  "persistent_changes_epsilon_0p10A_by_fs": {
+    "20": 58,
+    "50": 5,
+    "100": 0
+  },
+  "temperature_mean_K": 285.1147131321717,
+  "temperature_range_K": [
+    51.95,
+    772.43
+  ],
+  "conserved_quantity_span_kJ_mol_by_segment": [
+    0.18115947512378416,
+    0.3518169516928446
+  ],
+  "original_elapsed_seconds": 123.847,
+  "extension_elapsed_seconds": 493.574,
+  "interpretation": "Geometric recrossings and persistence in a seven-atom isolated system; no claim of bulk transport or converged rates.",
+  "restart_note": "CSVR restart preserves positions and velocities, not the prior random-number stream. Each segment retains its own conserved-quantity reference."
+}

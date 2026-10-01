@@ -194,7 +194,7 @@
   function highlightSettings(run){return run.highlightSettings||(run.highlightSettings={size:1.6,muted:true});}
   function highlightColors(run){const map=new Map();for(const group of highlights(run))for(const index of group.indices)map.set(index,group.color);return map;}
   function highlightRadius(element,run){return (elementRadii[element]||.42)*highlightSettings(run).size;}
-  function sharedProtonExample(run){return !!run?.reference&&run.key==='proton_shared'&&run.xyz?.elements.join(',')==='O,O,H,H,H,H,H';}
+  function sharedProtonExample(run){return !!run?.reference&&['proton_shared','proton_shared_10ps'].includes(run.key)&&run.xyz?.elements.join(',')==='O,O,H,H,H,H,H';}
   function highlightMode(){const manual=$('highlight-kind').value==='indices';$('highlight-atom-field').hidden=manual;$('highlight-indices-field').hidden=!manual;$('highlight-paint').disabled=manual;if(manual)$('highlight-paint').checked=false;}
   function renderHighlights(run,changedRun=false){
     if(!run?.xyz)return;
