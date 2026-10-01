@@ -1,0 +1,20 @@
+# Encontro real hidratado: trecho assistido, sem significado cinetico.
+! MD XTB2 ALPB(water) PAL8
+%maxcore 256
+%md
+  Timestep 0.25_fs
+  Randomize 93001
+  Initvel 300_K
+  Thermostat CSVR 300_K Timecon 100_fs
+  Walls Sphere 0, 0, 0, 9.0_A Spring 50.0
+  Dump Position Stride 4 Filename "m01a_N_sem_vies_agua-traj.xyz"
+  Manage_Colvar Define 1 Distance Atom 0 Atom 61
+  Manage_Colvar Define 2 Distance Atom 0 Atom 64
+  Manage_Colvar Define 3 CoordNumber Atom 0 Group 1 4 7 10 13 16 19 22 25 28 31 34 37 40 43 46 49 52 55 58 Cutoff 2.6_A
+  # Aproximar apenas N61; todas as aguas e N64 ficam sem vies.
+  # Upper nao obriga a agua individual nem impoe ligacoes covalentes.
+  Restraint Add Colvar 1 Harmonic Spring 200.0 Upper Ramp 3.886868 2.2
+  Run 4000
+  # Revisar antes de retirar o unico vies em outro bloco.
+end
+* xyzfile 2 1 encontro_real_R1.xyz

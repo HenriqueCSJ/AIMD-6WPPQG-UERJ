@@ -1,28 +1,28 @@
 <!doctype html>
-<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>1. Ligação H com DFT · AIMD / ORCA</title><link rel="stylesheet" href="../pagina.css"><script defer src="../pagina.js"></script></head>
-<body><a class="skip" href="#conteudo">Ir para o conteúdo</a><header class="brand"><a href="../index.html"><strong>AIMD com ORCA</strong><small>6º Workshop PPGQ–UERJ · 7 de outubro de 2026</small></a><div class="logos"><img src="../../assets/uerj-logo.png" alt="UERJ"><img src="../../assets/ufrrj-logo-compacto.png" alt="UFRRJ"></div></header><div class="layout"><nav class="course-nav" aria-label="Exercícios"><h2>Do input à interpretação</h2><a class="home" href="../index.html">Visão geral do percurso</a><div class="links"><a href="../1-agua-dft/index.html" aria-current="page"><span class="num">01</span><span>Ligação H com DFT</span></a><a href="../2-solvente-implicito/index.html"><span class="num">02</span><span>O papel do contínuo</span></a><a href="../3-xtb2-etanol/index.html"><span class="num">03</span><span>Vibração e torsão</span></a><a href="../4-timestep/index.html"><span class="num">04</span><span>Passo de integração</span></a><a href="../5-termostato/index.html"><span class="num">05</span><span>Aquecer e resfriar</span></a><a href="../6-complexo-solvator/index.html"><span class="num">06</span><span>Zn–en e SOLVATOR</span></a><a href="../7-dinamica-complexo/index.html"><span class="num">07</span><span>Dinâmica do complexo</span></a><a href="../8-agua-no-fulereno/index.html"><span class="num">08</span><span>Água em C₆₀ · opcional</span></a></div></nav><main id="conteudo"><h1 id="1-uma-ligacao-de-hidrogenio-em-movimento">1. Uma ligação de hidrogênio em movimento</h1>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>01 · Dímero de água · AIMD / ORCA</title><link rel="stylesheet" href="../pagina.css?v=20261001-course"><script defer src="../pagina.js"></script></head>
+<body><a class="skip" href="#conteudo">Ir para o conteúdo</a><header class="brand"><a href="../index.html"><strong>AIMD com ORCA</strong><small>6º Workshop PPGQ–UERJ · 7 de outubro de 2026</small></a><div class="logos"><img src="../../assets/uerj-logo.png" alt="UERJ"><img src="../../assets/ufrrj-logo-compacto.png" alt="UFRRJ"></div></header><div class="layout"><nav class="course-nav" aria-label="Exercícios"><h2>Do input à interpretação</h2><a class="home" href="../index.html">Visão geral do percurso</a><h3 class="nav-group">Durante a aula</h3><div class="links"><a href="../1-agua-dft/index.html" aria-current="page"><span class="num">01</span><span>Dímero de água</span></a><a href="../3-xtb2-etanol/index.html"><span class="num">02a</span><span>Etanol: controle</span></a><a href="../4-timestep/index.html"><span class="num">02b</span><span>Timestep e correção</span></a><a href="../5-termostato/index.html"><span class="num">03</span><span>Aquecer e resfriar</span></a><a href="../6-complexo-solvator/index.html"><span class="num">04a</span><span>Zn–en: SOLVATOR</span></a><a href="../7-dinamica-complexo/index.html"><span class="num">04b</span><span>Zn–en: parede</span></a><a href="../11-formacao-quelato/index.html"><span class="num">04c</span><span>Zn–en: formar o quelato</span></a><a href="../10-proton-compartilhado/index.html"><span class="num">05</span><span>Um próton entre duas águas</span></a></div><h3 class="nav-group">Opcionais e referências</h3><div class="links"><a href="../2-solvente-implicito/index.html"><span class="num">↗</span><span>DFT e solvente contínuo</span></a><a href="../12-gota-protonada/index.html"><span class="num">↗</span><span>Gota protonada: 300–600 K</span></a><a href="../8-agua-no-fulereno/index.html"><span class="num">↗</span><span>Água dentro de C₆₀</span></a><a href="../9-aluminio-amonia/index.html"><span class="num">↗</span><span>Al³⁺/amônia: referência</span></a></div></nav><main id="conteudo"><h1 id="01-uma-ligacao-de-hidrogenio-em-movimento">01 · Uma ligação de hidrogênio em movimento</h1>
 <p><a href="../index.html">← Percurso</a> · <a href="../../visualizador/index.html">Laboratório de trajetórias</a></p>
-<p><strong>20 min · duas águas · 6 átomos · DFT / B97-3c</strong></p>
+<p><strong>25 min · duas águas · 6 átomos · XTB2 · 2 ps = 2 × 10⁻¹² s</strong></p>
 <blockquote>
-<p><strong>Pergunta:</strong> O que muda mais: uma ligação O–H ou o contato entre duas águas?</p>
+<p><strong>Pergunta:</strong> As duas águas permanecem doadora e aceptora durante toda a dinâmica?</p>
 </blockquote>
 <h2 id="1-prepare-o-par-de-moleculas">1. Prepare o par de moléculas</h2>
-<p>Uma água doa H para a outra. Agora há uma pergunta intermolecular: <strong>o contato O–H···O respira e muda de direção?</strong> A estrutura já foi relaxada com B97-3c; a otimização é fornecida, não precisa ser repetida na aula.</p>
-<p>Vamos acompanhar <strong>60 fs = 0,060 ps = 6 × 10⁻¹⁴ s</strong>, sem termostato. É uma observação curta de geometria e energia, não uma amostra de água líquida.</p>
+<p>Uma água começa como doadora da ligação H. Vamos observar a reorientação: <strong>uma água pode passar de doadora a aceptora da ligação H?</strong> A estrutura já foi relaxada com B97-3c; a otimização é fornecida, não precisa ser repetida na aula.</p>
+<p>Vamos acompanhar <strong>2 ps = 2 × 10⁻¹² s</strong> com XTB2, sem termostato. A referência levou <strong>56,5 s nesta máquina</strong>. A geometria inicial é a mesma da comparação DFT fornecida; não é apresentada como um mínimo de XTB2. Este dímero isolado não representa água líquida.</p>
 <h2 id="2-execute">2. Execute</h2>
-<p><a href="aula-dimero_b97.zip">Baixar pacote</a> · <a href="inputs/dimero_b97.inp">Input</a> · <a href="estruturas/dimero_b97.xyz">Estrutura</a></p>
-<pre><code class="language-text"># Exemplo didatico; oito processos solicitados.
-! MD B97-3c TightSCF PAL8
+<p><a href="aula-dimero_xtb2_2ps.zip">Baixar pacote</a> · <a href="inputs/dimero_xtb2_2ps.inp">Input</a> · <a href="estruturas/dimero_b97.xyz">Estrutura</a></p>
+<pre><code class="language-text"># Duas aguas: 2 ps = 2e-12 s, sem banho termico nem parede.
+! MD XTB2 PAL8
 %maxcore 256
 
 %md
   Randomize 42
   Initvel 300_K
-  Dump Position Stride 1 Filename &quot;dimero_b97-traj.xyz&quot;
   Timestep 0.5_fs
   Thermostat None
-  # 60 fs: observar vibracao e geometria da ligacao H.
-  Run 120
+  Dump Position Stride 1 Filename &quot;dimero_xtb2_2ps-traj.xyz&quot;
+  # Geometria inicial compartilhada com a demonstracao DFT.
+  Run 4000
 end
 * xyzfile 0 1 dimero_b97.xyz
 </code></pre>
@@ -32,20 +32,20 @@ end
 <pre><code class="language-bash">(
   test -x &quot;$ORCA_DIR/orca&quot; || { echo &quot;Configure ORCA_DIR primeiro.&quot;; exit 1; }
   pasta=$(mktemp -d ./execucao-XXXXXX) || exit 1
-  cp dimero_b97.inp dimero_b97.xyz &quot;$pasta/&quot; || exit 1
+  cp dimero_xtb2_2ps.inp dimero_b97.xyz &quot;$pasta/&quot; || exit 1
   cd &quot;$pasta&quot; || exit 1
-  &quot;$ORCA_DIR/orca&quot; dimero_b97.inp &gt; dimero_b97.out 2&gt;&amp;1
-  tail -n 12 dimero_b97.out
+  &quot;$ORCA_DIR/orca&quot; dimero_xtb2_2ps.inp &gt; dimero_xtb2_2ps.out 2&gt;&amp;1
+  tail -n 12 dimero_xtb2_2ps.out
   echo &quot;Resultados: $PWD&quot;
 )
 </code></pre>
-<p>Abra <code>explorer.exe .</code> e localize a pasta <code>execucao-…</code>. Carregue <strong><code>dimero_b97.out</code></strong>, <strong><code>dimero_b97-md-ener.csv</code></strong> e <strong><code>dimero_b97-traj.xyz</code></strong> no laboratório. Execute um cálculo por vez.</p>
+<p>Abra <code>explorer.exe .</code> e localize a pasta <code>execucao-…</code>. Carregue <strong><code>dimero_xtb2_2ps.out</code></strong>, <strong><code>dimero_xtb2_2ps-md-ener.csv</code></strong> e <strong><code>dimero_xtb2_2ps-traj.xyz</code></strong> no laboratório. Execute um cálculo por vez.</p>
 </details>
 <details>
 <summary>Alternativa: Windows nativo</summary>
 <p>Extraia o pacote em uma pasta nova. Abra o PowerShell nela e ajuste o caminho:</p>
-<pre><code class="language-powershell">&amp; 'C:\ORCA_6.1.1\orca.exe' dimero_b97.inp &gt; dimero_b97.out 2&gt;&amp;1
-Get-Content dimero_b97.out -Tail 12
+<pre><code class="language-powershell">&amp; 'C:\ORCA_6.1.1\orca.exe' dimero_xtb2_2ps.inp &gt; dimero_xtb2_2ps.out 2&gt;&amp;1
+Get-Content dimero_xtb2_2ps.out -Tail 12
 </code></pre>
 </details>
 <h2 id="3-observe-meca-explique">3. Observe, meça, explique</h2>
@@ -54,19 +54,27 @@ Get-Content dimero_b97.out -Tail 12
 <li>Ative <strong>Ligações H</strong>. O traço descontínuo indica um contato que passa pelo critério geométrico do visualizador; não é uma ligação covalente adicional.</li>
 <li>Em <strong>Geometria</strong>, compare <strong>O 0–H 1</strong>, <strong>H 1···O 3</strong> e <strong>O 0···O 3</strong>. Acrescente o ângulo <strong>0–1–3</strong> (D–H···A).</li>
 <li>Em <strong>Energia</strong>, mostre K, U e E. Alongar/comprimir as ligações modifica U; o movimento altera K. A energia total deve variar pouco neste caso sem banho.</li>
+<li>Avance pelos primeiros 50 fs e depois por toda a trajetória. Identifique qual O doa H e qual aceita. Meça também os contatos partindo dos H 4 e 5 da segunda água.</li>
 </ol>
-<p><strong>Nesta referência:</strong> O 0···O 3 varia de <strong>2.949 a 2.987 Å</strong>; H 1···O 3, de <strong>1.993 a 2.674 Å</strong>; o ângulo 0–1–3, de <strong>97.1° a 178.7°</strong>. Compare com a faixa da ligação covalente O 0–H 1: <strong>0.959–0.979 Å</strong>.</p>
-<p><strong>Interpretação:</strong> uma ligação H tem distância e orientação variáveis. O desenho tracejado ajuda a localizar o contato; são as medidas que mostram o movimento. Ele pode desaparecer ao cruzar um corte do visualizador, sem que isso prove um evento de dissociação.</p>
-<p><strong>Limite:</strong> 60 fs não fornecem tempo de vida, constante de equilíbrio, espectro convergido ou taxa de troca de moléculas. A duração computacional medida foi <strong>275.6 s</strong> com PAL8 nesta máquina; se ultrapassar 5 min no computador do aluno, use a referência.</p>
+<p><strong>Nesta referência XTB2:</strong> O···O varia de <strong>2,633 a 3,511 Å</strong>; as quatro ligações covalentes O–H permanecem entre <strong>0,914 e 1,020 Å</strong>. O 0 começa como doador; perto de 50 fs, o O 3 aparece como doador. Há outras alternâncias ao longo dos 2 ps.</p>
+<p><strong>Interpretação:</strong> as moléculas giram e reorganizam o contato intermolecular. A troca de doador/aceptor <strong>não é transferência de próton</strong>: cada H continua ligado à sua água. O desaparecimento do traço H ao cruzar um corte geométrico não prova dissociação irreversível.</p>
+<p>Na análise dos dados completos, o critério operacional foi H···O &lt; 2,4 Å e O–H···O &gt; 130°. Os cortes ajustáveis do visualizador podem deslocar o instante em que o traço aparece. A amplitude de Etotal foi <strong>0,194 kJ/mol</strong>; examine a curva inteira, não apenas a diferença entre início e fim. Em NVE, a temperatura instantânea deste sistema de seis átomos pode variar bastante.</p>
+<p><strong>Limite:</strong> uma única trajetória não fornece populações de equilíbrio ou taxas de troca. O tempo medido de <strong>56,5 s</strong> não é garantia para outros computadores. Se ultrapassar <strong>2 min durante a aula</strong>, abra a referência e continue a análise.</p>
+<details>
+<summary>Comparação DFT já calculada</summary>
+<p>Não execute DFT durante a aula. A referência curta B97-3c simulou <strong>60 fs</strong> em <strong>275,5 s</strong> nesta máquina; ela permite comparar a geometria e o custo com XTB2. Compare apenas a janela comum de 0–60 fs. XTB2 usa uma aproximação diferente para a energia eletrônica; trajetórias mais longas não demonstram maior precisão.</p>
+<p><a href="../../visualizador/index.html?exemplo=water_dft&amp;aba=trajetoria">Abrir DFT em 3D</a> · <a href="inputs/dimero_b97.inp">Input DFT</a> · <a href="aula-dimero_b97.zip">Pacote DFT, para estudo posterior</a>.</p>
+</details>
 <details>
 <summary>E a molécula de água isolada?</summary>
-<p>Ela continua como <a href="../../visualizador/index.html?exemplo=water_single">aquecimento opcional</a>: mede-se O–H e H–O–H e observa-se a troca K/U. É útil para aprender a executar e distinguir vibração de otimização. <strong>Não há ligação H intermolecular, solvente explícito, conformação interna complexa ou reação neste modelo.</strong> Os 20 fs originais não servem para extrair um espectro vibracional confiável. Por isso ela saiu do percurso principal.</p>
+<p>Ela continua como <a href="../../visualizador/index.html?exemplo=water_single">referência adicional já calculada</a>: mede-se O–H e H–O–H e observa-se a troca K/U. É útil para distinguir vibração de otimização. <strong>Não há ligação H intermolecular, solvente explícito, conformação interna complexa ou reação neste modelo.</strong> Os 20 fs originais não servem para extrair um espectro vibracional confiável. Por isso ela saiu do percurso principal.</p>
 <p><a href="aula-agua_dft.zip">Pacote antigo</a> · <a href="apoio.html">Resultados e preparação anteriores</a>.</p>
 </details>
 <h2 id="resultados-e-manual">Resultados e manual</h2>
 <ul>
-<li><strong>dimero_b97:</strong> <a href="resultados/dimero_b97/dimero_b97.out">saída</a> · <a href="resultados/dimero_b97/dimero_b97.inp">input usado</a> · <a href="resultados/dimero_b97/dimero_b97-md-ener.csv">energias</a> · <a href="resultados/dimero_b97/dimero_b97-traj.xyz">trajetória</a> · <a href="resultados/dimero_b97/execucao.json">tempo de execução</a>.</li>
+<li><strong>XTB2, 2 ps:</strong> <a href="resultados/dimero_xtb2_2ps/dimero_xtb2_2ps.out">saída</a> · <a href="resultados/dimero_xtb2_2ps/dimero_xtb2_2ps.inp">input usado</a> · <a href="resultados/dimero_xtb2_2ps/dimero_xtb2_2ps-md-ener.csv">energias</a> · <a href="resultados/dimero_xtb2_2ps/dimero_xtb2_2ps-traj.xyz">trajetória completa</a> · <a href="resultados/dimero_xtb2_2ps/execucao.json">tempo de execução</a>.</li>
+<li><strong>DFT, comparação pronta de 60 fs:</strong> <a href="resultados/dimero_b97/dimero_b97.out">saída</a> · <a href="resultados/dimero_b97/dimero_b97-md-ener.csv">energias</a> · <a href="resultados/dimero_b97/dimero_b97-traj.xyz">trajetória</a>.</li>
 </ul>
 <p><a href="https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html">Manual ORCA: dinâmica molecular</a>.</p>
 <p><a href="resultados/preparar_dimero_b97/preparar_dimero_b97.out">Preparação do dímero</a>. Geometria convergida na otimização; não foi feita análise de frequências.</p>
-<p>Método: <a href="https://www.faccts.de/docs/orca/6.1/manual/contents/modelchemistries/3cmethods.html">B97-3c no manual do ORCA</a>.</p><nav class="endnav" aria-label="Próxima etapa"><a href="../index.html">← Percurso</a><a href="../2-solvente-implicito/index.html">Exercício 2 →</a></nav></main></div><footer>Henrique de Castro Silva Junior e Virginia Camila Rufino Ferreira · ORCA 6.1.1 · Materiais e dados locais; links externos levam à documentação oficial.</footer></body></html>
+<p>Métodos: <a href="../../tutoriais/05-xtb-solvator.md">preparar XTB2 no ORCA</a> · <a href="https://www.faccts.de/docs/orca/6.1/manual/contents/modelchemistries/3cmethods.html">B97-3c das referências DFT</a>.</p><nav class="endnav" aria-label="Próxima etapa"><a href="../index.html">← Percurso</a><a href="../3-xtb2-etanol/index.html">Etanol: controle →</a></nav></main></div><footer>Henrique de Castro Silva Junior e Virginia Camila Rufino Ferreira · ORCA 6.1.1 · Materiais e dados locais; links externos levam à documentação oficial.</footer></body></html>

@@ -1,62 +1,60 @@
 # Execute. Observe. Explique.
 
-[← Início do minicurso](../index.html) · [Abrir o laboratório](../visualizador/index.html)
+[← Início do minicurso](../index.html) · [Abrir o laboratório](../visualizador/index.html) · [Horários](roteiro-4h.md)
 
-**7 de outubro · 13h–16h e 17h–18h · remoto**<br>
+**7 de outubro · 13h–16h e 17h–18h · remoto**
 Henrique de Castro Silva Junior · Virginia Camila Rufino Ferreira
+
+## Durante a aula
+
+Cinco blocos, do primeiro input à interpretação química. Os cálculos ao vivo usam **XTB2**. Cada atividade oferece inputs comentados, estruturas e resultados prontos para quem precisar acompanhar sem esperar o cálculo.
+
+### 01 · Uma ligação H em movimento
+
+[Abrir atividade](1-agua-dft/README.md) · [Ver no laboratório](../visualizador/index.html?exemplo=water&aba=trajetoria) · **25 min de aula**
+
+Duas águas, **2 ps = 2 × 10⁻¹² s**. Meça distâncias e ângulos; identifique a reorientação e a troca de doador/aceptor da ligação H. Isso não exige transferência de próton. Execução de referência: **56 s**.
+
+### 02 · Etanol: perceber o erro e corrigir
+
+[Começar pelo controle NVE](3-xtb2-etanol/README.md) → [Timestep inadequado e correção](4-timestep/README.md) · **35 min no total**
+
+Observe o diedro, compare as energias e descubra por que o cálculo fica instável. Volte à estrutura íntegra e reduza o timestep. Controle, falha e correção levaram aproximadamente **16, 10 e 19 s**, respectivamente. A falha não representa uma reação química.
+
+### 03 · Aquecer, explorar, resfriar
+
+[Abrir atividade](5-termostato/README.md) · [Ver no laboratório](../visualizador/index.html?exemplo=thermostat&aba=trajetoria) · **25 min**
+
+Cinco etapas contínuas no mesmo input. Acompanhe a temperatura e o diedro C–C–O–H por **5 ps = 5 × 10⁻¹² s**. Execução de referência: **2min30**. Alvo do termostato e temperatura instantânea são coisas diferentes.
+
+### 04 · Zn–en: solvente, parede e quelato
+
+[A · Construir com SOLVATOR](6-complexo-solvator/README.md) → [B · Comparar com/sem parede](7-dinamica-complexo/README.md) → [C · Identificar a formação do quelato](11-formacao-quelato/README.md)
+
+**45 min antes do intervalo + 20 min no retorno.** SOLVATOR e dinâmica com parede são executados ao vivo; os controles e a associação Zn–en são interpretados a partir de resultados prontos. Veja a diferença entre reter água perto do complexo e coordená-la ao metal. Na associação, identifique dois N da mesma en e duas águas deslocadas. A aproximação inicial foi guiada e está identificada na atividade.
+
+### 05 · Um próton entre duas águas
+
+[Abrir atividade](10-proton-compartilhado/README.md) · [Ver no laboratório](../visualizador/index.html?exemplo=proton_shared&aba=trajetoria) · **20 min**
+
+H₅O₂⁺, sete átomos, **2 ps em cerca de 2 min de execução**. Compare as duas distâncias O–H: onde está o próton e quando ele retorna? Compartilhamento e recrossamentos ficam visíveis; esta molécula isolada não representa transporte de prótons na água líquida.
+
+## Opcionais e referências
+
+Estes materiais ficam fora do percurso obrigatório. Abra as trajetórias prontas ou continue os cálculos depois da aula.
+
+- **[DFT e solvente implícito](2-solvente-implicito/README.md):** compare o dímero no vácuo e com CPCM, usando o mesmo método. Nenhuma execução DFT é exigida durante a aula.
+- **[Gota protonada, 300/400/500/600 K](12-gota-protonada/README.md):** investigue transferência, compartilhamento, retornos e dispersão. Aquecer não garante propagação sustentada; as condições partem do mesmo checkpoint.
+- **[Água dentro de C₆₀](8-agua-no-fulereno/README.md):** confinamento por uma gaiola molecular, com trajetória pronta. Execução de referência: cerca de 4 min.
+- **[Hidratação do Zn a partir de águas afastadas](7-dinamica-complexo/hidratacao.html):** observe a primeira camada se formar; a referência de 5 ps não forma o quelato.
+- **[Al³⁺/água/amônia](9-aluminio-amonia/README.md):** arquivo de testes com XTB2 e ajuste de convergência. Não é parte da aula; a reprodução DFT foi interrompida.
+
+Controles de timestep, termostato, água isolada e dinâmicas curtas também estão agrupados em **Opcionais e referências** na lista do laboratório. Não é necessário executar todas as variantes.
 
 ## Antes de começar
 
-Conclua os [testes de instalação](../tutoriais/03-testar-instalacao.md) e de [XTB2/SOLVATOR](../tutoriais/05-xtb-solvator.md). Baixe o pacote de cada exercício, extraia e execute em uma pasta nova. Os inputs usam **PAL8**; adapte a PAL2/PAL4 se necessário e rode **um cálculo por vez**.
+Conclua os [testes de instalação](../tutoriais/03-testar-instalacao.md) e de [XTB2/SOLVATOR](../tutoriais/05-xtb-solvator.md). Baixe e extraia o pacote da atividade em uma pasta nova. Os inputs usam **PAL8**; adapte a PAL2/PAL4 se necessário e rode **um cálculo por vez**.
 
-Para analisar, carregue juntos o **`.out`**, o **`-md-ener.csv`** e o **`-traj.xyz`**. Também é possível abrir a referência fornecida em cada página. O laboratório lê seus arquivos localmente, no navegador.
+Carregue juntos **`.out`**, **`-md-ener.csv`** e **`-traj.xyz`**. O laboratório lê seus arquivos localmente. Na trajetória, use **Mover** para reposicionar a molécula e acompanhe o marcador nas curvas de energia. Você também pode abrir o resultado pronto.
 
-## Percurso da aula
-
-### 01 · Uma ligação de hidrogênio em movimento
-
-[Abrir atividade](1-agua-dft/README.md) · **20 min**<br>
-Duas águas com DFT. Meça O–H, H···O e o ângulo do contato. Distinga vibração covalente de movimento intermolecular.
-
-### 02 · O que o solvente contínuo representa?
-
-[Abrir atividade](2-solvente-implicito/README.md) · **10 min**<br>
-O mesmo dímero com CPCM. As forças mudam; o número de moléculas não. Relacione o modelo com o que aparece no filme.
-
-### 03 · O H do etanol vibra ou gira?
-
-[Abrir atividade](3-xtb2-etanol/README.md) · **25 min**<br>
-Passe para XTB2 e meça o diedro C–C–O–H. O controle curto mostra libração; compare com a trajetória mais longa do exercício 5.
-
-### 04 · Perceber o erro antes da explosão
-
-[Abrir atividade](4-timestep/README.md) · **25 min**<br>
-Com 2,5 fs, a energia se desvia antes do aquecimento extremo. Diagnostique, volte ao início e corrija para 0,5 fs.
-
-### 05 · Aquecer, explorar, resfriar
-
-[Abrir atividade](5-termostato/README.md) · **25 min**<br>
-Cinco etapas dentro de um só `%md`. Veja os alvos do termostato, o tempo real dos dados e a mudança de orientação da hidroxila.
-
-### 06 · Construir a vizinhança do complexo
-
-[Abrir atividade](6-complexo-solvator/README.md) · **30 min**<br>
-Use SOLVATOR no complexo Zn²⁺–etilenodiamina. Diferencie os vizinhos do metal das águas da camada externa.
-
-### 07 · Reter solvente não é criar coordenação
-
-[Abrir atividade](7-dinamica-complexo/README.md) · **35 min**<br>
-Compare a mesma condição inicial com e sem parede. Acompanhe uma água que se afasta e os contatos Zn–N/Zn–O.
-
-### 08 · Água dentro de C₆₀ · opcional
-
-[Abrir extensão](8-agua-no-fulereno/README.md) · **10–15 min, somente se houver folga**<br>
-A molécula se reorienta dentro de uma gaiola real. Compare esse confinamento com o potencial artificial da atividade 7.
-
-## Para usar bem o tempo
-
-O [roteiro de 4 horas](roteiro-4h.md) preserva **15 min de descanso, 25 min de margem e o intervalo oficial de 16h–17h**. Otimizações e controles já estão fornecidos. Se um cálculo atrasar, abra a referência e prossiga com a interpretação; não é necessário concluir todas as variantes ao vivo.
-
-**Ao terminar cada atividade:** registre uma observação medida, sua interpretação química e algo que a trajetória ainda não permite concluir. Os tempos de execução nas páginas são medições desta máquina, não promessas para outros computadores. O ensaio integral da aula permanece pendente.
-
-[Manual de MD do ORCA](https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html) · [Modelo químico do complexo](complexacao-solvator.md)
+O [roteiro de quatro horas](roteiro-4h.md) preserva **15 min de descanso, 25 min de margem e o intervalo de 16h–17h**. Os tempos de execução foram medidos na máquina de referência; variam entre computadores. Ao terminar, registre uma observação, sua interpretação e algo que a trajetória ainda não permite concluir.

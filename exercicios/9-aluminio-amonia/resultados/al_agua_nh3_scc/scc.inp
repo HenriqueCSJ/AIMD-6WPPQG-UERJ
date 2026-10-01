@@ -1,0 +1,6 @@
+$scc
+  broydamp=0.1
+  iterations=1000
+$write
+  output file=properties.out
+$end

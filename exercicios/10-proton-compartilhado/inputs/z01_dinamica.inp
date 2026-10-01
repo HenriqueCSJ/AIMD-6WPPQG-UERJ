@@ -1,0 +1,12 @@
+# H5O2+ a 300 K: 2 ps, sem solvente, parede ou forca de transferencia.
+! MD XTB2 PAL8
+%maxcore 256
+%md
+  Timestep 0.25_fs
+  Thermostat CSVR 300_K Timecon 100_fs
+  Dump Position Stride 1 Filename "z01_dinamica-traj.xyz"
+  Randomize 93201
+  Initvel 300_K
+  Run 8000
+end
+* xyzfile 1 1 h5o2_otimizado.xyz

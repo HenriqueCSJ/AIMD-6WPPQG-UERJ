@@ -25,15 +25,15 @@ test('startup manifest contains no trajectories and only the requested calculati
   assert.equal(Object.keys(store.runs).length,0);
   const result=await loader.loadPreset('water');
   assert.equal(requested.length,1);
-  assert.match(requested[0],/examples\/dimero_b97\.js/);
+  assert.match(requested[0],/examples\/dimero_xtb2_2ps\.js/);
   assert.equal(result.runs[0].xyz.elements.length,6);
-  assert.equal(result.runs[0].xyz.frames.length,121);
+  assert.equal(result.runs[0].xyz.frames.length,4001);
   assert.equal(Object.keys(store.runs).length,1);
 });
 
 test('every exposed preset resolves all retained runs and original download links',async()=>{
   const {store,loader}=bundledLoader();
-  assert.equal(Object.keys(store.presets).length,16);
+  assert.equal(Object.keys(store.presets).length,24);
   for(const [key,preset] of Object.entries(store.presets)){
     const {runs}=await loader.loadPreset(key);
     assert.equal(runs.length,preset.runs.length,key);
@@ -47,7 +47,7 @@ test('every exposed preset resolves all retained runs and original download link
       for(const file of run.files)assert.ok(fs.existsSync(path.join(viewer,'..',file.path)),file.path);
     }
   }
-  assert.equal(Object.keys(store.runs).length,21);
+  assert.equal(Object.keys(store.runs).length,30);
   for(const key of ['zn_parede_longo','zn_sem_parede_longo']){
     assert.equal(store.runs[key].xyz.elements.length,43);
     assert.equal(store.runs[key].xyz.frames.length,1001);
@@ -79,6 +79,27 @@ test('overlapping preset requests share a pending script and reuse its loaded da
   wait.resolve();const [a,b]=await Promise.all([first,second]);
   assert.strictEqual(a.runs[0],b.runs[0]);
   await loader.loadPreset('a');assert.equal(count,1);
+});
+
+test('aluminum examples preserve both timesteps and the resolved proton-transfer sequence',async()=>{
+  const {loader}=bundledLoader();const {runs}=await loader.loadPreset('aluminum');
+  for(const run of runs){
+    const xyz=run.xyz,dt=run.key.endsWith('dt05')?0.5:1;
+    assert.equal(xyz.elements.length,23);assert.equal(xyz.elements[0],'Al');
+    assert.equal(xyz.elements[7],'O');assert.equal(xyz.elements[9],'H');assert.equal(xyz.elements[19],'N');
+    assert.equal(xyz.frames.length,2000/dt+1);assert.equal(run.energy.rows.length,xyz.frames.length);
+    assert.equal(xyz.frames[0].time,0);assert.equal(xyz.frames.at(-1).time,2000);
+    assert.equal(run.out.metadata.normal,true);
+    const distance=(c,a,b)=>Math.hypot(...c[a].map((v,k)=>v-c[b][k]));
+    const changes=[];let last='O';
+    for(const frame of xyz.frames){
+      const host=distance(frame.coords,9,7)<distance(frame.coords,9,19)?'O':'N';
+      if(host!==last){changes.push(frame.time);last=host;}
+      assert.ok(distance(frame.coords,0,19)>4,'No direct Al-N coordination in this reference');
+    }
+    assert.deepEqual(changes,dt===0.5?[147,154.5,163.5,172,178.5]:[148,155,164,173,178]);
+    assert.equal(last,'N');assert.ok(distance(xyz.frames.at(-1).coords,9,19)<1.1);
+  }
 });
 
 test('a preset is not returned partially; a failed run can be retried without reloading its successful partner',async()=>{

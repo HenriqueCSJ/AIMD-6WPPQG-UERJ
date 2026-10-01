@@ -45,3 +45,6 @@ Thumbs.db
 
 # Pacotes didaticos: apenas inputs, XYZ e estados de reinicio da aula
 !exercicios/*/aula-*.zip
+
+# Resultados didaticos completos para baixar no site
+!exercicios/*/resultado-*.zip

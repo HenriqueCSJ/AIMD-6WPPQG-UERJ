@@ -19,3 +19,6 @@ Arquivos oficiais obtidos em 28/09/2026, preservados sem redesenho, recorte ou r
 ## Prévia do aplicativo e acessos
 
 `laboratorio-preview.png` é uma captura do Laboratório de trajetórias deste repositório, mostrando a referência de Zn–en com parede. É uma prévia da interface, preservada sem editar as coordenadas ou os valores exibidos; o link abre o resultado interativo. Os arquivos `botao-*.svg` são elementos de navegação autorais do README, sem dados científicos.
+
+
+A captura atual laboratorio-energia-preview.jpg foi feita em 01/10/2026, no quadro de 1100,5 fs da mesma referência com parede. Mostra a área ampliada e as três energias selecionáveis com o marcador sincronizado. A aproximação da câmera usa o zoom do próprio aplicativo; coordenadas e valores permanecem os do cálculo.

@@ -1,0 +1,20 @@
+# Caso fornecido: Al3+ + 6 aguas + NH3, agora com XTB2.
+! MD XTB2 PAL8
+%maxcore 256
+# Reduz a mistura SCC para esta geometria ionica; requer scc.inp.
+%xtb
+  XTBINPUTSTRING "--input scc.inp"
+end
+%md
+  # Semente fixa para reproduzir as velocidades iniciais.
+  Randomize 42
+  Initvel 300_K
+  # Preserva o passo e o banho do exemplo; conferir a sensibilidade ao passo.
+  Timestep 1.0_fs
+  Thermostat Berendsen 300_K Timecon 20.0_fs
+  Dump Position Stride 1 Filename "al_agua_nh3_scc-traj.xyz"
+  # 2000 x 1 fs = 2 ps = 2e-12 s.
+  Run 2000
+end
+# Carga total +3 e multiplicidade 1; geometria original sem pre-otimizacao.
+* xyzfile 3 1 al_agua_nh3.xyz

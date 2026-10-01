@@ -30,3 +30,67 @@
 .time-readout>span{min-width:0;white-space:nowrap}
 .time-readout .time-s{grid-column:1/-1}
 .wall-key{font-size:12px;color:#31787a;margin-left:auto}.trajectory-status{background:#fff2e8;border-left:3px solid #b05b26;padding:12px 16px;border-radius:5px}.frame-value strong.time-readout{display:grid;font-size:14px;min-height:66px}.time-readout{grid-template-columns:1fr}.time-readout .time-s{grid-column:auto}.timeline-control output{width:250px;min-width:250px;text-align:right}.frame-index{display:inline-block;min-width:118px}.frame-time-value{display:inline-block;min-width:95px}@media(max-width:600px){.timeline-control output{width:100%;min-width:0;text-align:left}.time-readout{grid-template-columns:1fr 1fr}.time-readout .time-s{grid-column:1/-1}}
+/* Keep the motion and its energy history visible together, with room to pan. */
+body.loaded main{max-width:1560px}
+.trajectory-layout{grid-template-columns:minmax(0,1.6fr) minmax(365px,1fr);gap:20px;align-items:start}
+#molecule{height:clamp(480px,64vh,710px)}
+.molecule-tools{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:12px 16px;border-bottom:1px solid var(--line);background:#f8fbf9}
+.interaction-modes{display:flex;gap:4px}
+.interaction-modes .button[aria-pressed=true]{background:var(--teal);color:white;border-color:var(--teal)}
+.molecule-tools #expand-trajectory{margin-left:auto}
+#molecule[data-interaction=pan]{cursor:move}
+.molecule-legend{padding:8px 18px;gap:8px 15px}
+.trajectory-aside{display:block;min-width:0}
+.trajectory-energy-card{padding:18px 18px 12px;margin:0 0 18px}
+.trajectory-energy-card .chart-heading{align-items:center;gap:8px}
+.trajectory-energy-card select{font-size:12px;padding:6px 26px 6px 9px;min-height:36px}
+.trajectory-energy-status{font-size:12px;color:var(--teal);font-variant-numeric:tabular-nums;min-height:36px;line-height:1.4;margin:12px 0 0}
+.trajectory-energy-card .chart{min-height:0}
+.trajectory-energy-card .chart-legend{gap:4px 12px}
+#trajectory-energy-note{margin:9px 0 0;line-height:1.5}
+#trajectory-energy-empty{padding:24px 0;line-height:1.6}
+.frame-readouts{padding:0 5px}
+#frame-values{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:18px}
+.frame-value{min-width:0}
+.frame-value strong{font-size:15px;font-variant-numeric:tabular-nums;overflow-wrap:anywhere;line-height:1.5}
+.frame-value strong.time-readout{font-size:12px}
+.trajectory-aside .interpret{margin:12px 0 0;padding:18px}
+body.trajectory-open{overflow:hidden}
+.trajectory-expanded{position:fixed;inset:0;z-index:50;background:var(--bg);padding:20px 28px;overflow:auto}
+.trajectory-expanded .trajectory-layout{grid-template-columns:minmax(0,1.8fr) minmax(390px,1fr)}
+.trajectory-expanded #molecule{height:clamp(500px,67vh,900px)}
+@media(max-width:1100px){.trajectory-layout{grid-template-columns:minmax(0,1.4fr) minmax(325px,1fr)}.molecule-tools #molecule-drag-hint{order:3;width:100%}.trajectory-expanded .trajectory-layout{grid-template-columns:minmax(0,1.4fr) minmax(325px,1fr)}.timeline-control{flex-wrap:wrap}.timeline-control output{width:100%;text-align:left}}
+@media(max-width:800px){.trajectory-layout,.trajectory-expanded .trajectory-layout{grid-template-columns:minmax(0,1fr)}#molecule{height:clamp(420px,60vh,620px)}.trajectory-energy-card{margin-top:0}.trajectory-expanded{padding:14px}.trajectory-expanded #molecule{height:clamp(420px,64vh,720px)}.trajectory-aside .chart-heading .small{display:block}}
+@media(max-width:600px){#molecule{height:clamp(380px,55vh,500px)}.molecule-tools{padding:10px 12px;gap:8px}.molecule-tools .small-button{padding:7px 10px}.trajectory-energy-card{padding:16px 12px}.frame-value strong{font-size:14px}.frame-value .time-readout{grid-template-columns:1fr}.frame-value .time-readout .time-s{grid-column:auto}.trajectory-expanded #molecule{height:clamp(400px,60vh,580px)}}
+/* Expanded desktop view puts transport ahead of the canvas and sizes the
+   canvas to the actual space left on screen; secondary explanations stay below. */
+@media(min-width:801px){
+  .trajectory-expanded{display:flex;flex-direction:column;gap:10px;padding:12px 20px}
+  .trajectory-expanded>.toolbar{order:0;gap:8px 12px;margin:0;align-items:center;flex-shrink:0}
+  .trajectory-expanded>.toolbar>label:first-child{min-width:190px;max-width:250px}
+  .trajectory-expanded>.toolbar>label:first-child select{width:100%}
+  .trajectory-expanded>.toolbar .small-button{margin-left:0}
+  .trajectory-expanded>.toolbar .check-label{font-size:12px;padding-bottom:0;white-space:nowrap}
+  .trajectory-expanded>.toolbar select,.trajectory-expanded>.toolbar input[type=number]{min-height:34px;padding-top:5px;padding-bottom:5px}
+  .trajectory-expanded>.toolbar .contact-cutoff-control{padding-bottom:0}
+  .trajectory-expanded>#trajectory-status,.trajectory-expanded>#trajectory-empty{order:1;flex-shrink:0;margin:0;padding:8px 12px}
+  .trajectory-expanded>.trajectory-layout{order:2;flex-shrink:0}
+  .trajectory-expanded>.contact-heuristic{order:3;margin:0;flex-shrink:0}
+  .trajectory-expanded>.stage-summary{order:4;margin:0;flex-shrink:0}
+  .trajectory-expanded .molecule-card{display:flex;flex-direction:column}
+  .trajectory-expanded .molecule-tools{order:0;padding:8px 12px}
+  .trajectory-expanded .molecule-tools #molecule-drag-hint{display:none}
+  .trajectory-expanded .playback{order:1;padding:8px 12px 0;gap:4px 12px}
+  .trajectory-expanded .playback-setting{flex-direction:row;align-items:center;gap:6px}
+  .trajectory-expanded .playback-setting select{min-width:78px;padding:6px 25px 6px 8px}
+  .trajectory-expanded .playback #frame-number{width:78px;padding:6px 8px}
+  .trajectory-expanded .timeline-control{flex-wrap:nowrap;gap:10px}
+  .trajectory-expanded .timeline-control output{width:230px;min-width:230px;text-align:right}
+  .trajectory-expanded #molecule{order:2;height:clamp(280px,calc(100vh - 240px),950px)}
+  .trajectory-expanded .molecule-legend{order:3}
+  .trajectory-expanded .playback-note{order:4}
+  .trajectory-expanded .molecule-note{order:5}
+}
+.trajectory-series{margin:12px 0 0;gap:6px 14px;font-size:12px}
+.trajectory-series label{white-space:nowrap}
+#molecule:focus-visible{outline:3px solid #ac6500;outline-offset:-4px}

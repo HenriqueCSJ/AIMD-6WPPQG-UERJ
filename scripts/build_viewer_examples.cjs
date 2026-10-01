@@ -2,6 +2,15 @@
 const fs=require('node:fs'),path=require('node:path');
 const root=path.resolve(__dirname,'..'),R=require('../visualizador/orca-parser.js');
 const specs=[
+ ['proton_shared','H₅O₂⁺ · próton compartilhado · 2 ps','10-proton-compartilhado'],
+ ['chelation','Zn–en · aproximação assistida → quelato · 3 ps','11-formacao-quelato'],
+ ['proton_droplet_300k','Gota protonada · 300 K · controle','12-gota-protonada'],
+ ['proton_droplet_400k','Gota protonada · rampa até 400 K','12-gota-protonada'],
+ ['proton_droplet_500k','Gota protonada · rampa até 500 K','12-gota-protonada'],
+ ['proton_droplet_600k','Gota protonada · rampa até 600 K','12-gota-protonada'],
+ ['al_agua_nh3_dt05','Al³⁺ + águas + NH₃ · 0,5 fs','9-aluminio-amonia'],
+ ['al_agua_nh3_scc','Al³⁺ + águas + NH₃ · 1 fs','9-aluminio-amonia'],
+ ['dimero_xtb2_2ps','Dímero de água · XTB2 · 2 ps','1-agua-dft'],
  ['dimero_b97','Dímero de água · DFT','1-agua-dft'],
  ['dimero_b97_cpcm','Dímero de água · DFT/CPCM','2-solvente-implicito'],
  ['agua_dft','Água · DFT','1-agua-dft'],
@@ -38,16 +47,35 @@ for(const [key,label,lesson] of specs){
    // Keep bundled examples small. Original XYZ downloads retain every frame.
    // Keep the small ethanol molecule complete so geometric extrema and the
    // fast O-H vibration are not aliased by the teaching reference preview.
-   const stride=key==='etanol_etapas'?1:Math.ceil(parsed.frames.length/1001);
+   const stride=['proton_shared','etanol_etapas','dimero_xtb2_2ps','al_agua_nh3_dt05','al_agua_nh3_scc'].includes(key)?1:Math.ceil(parsed.frames.length/1001);
    if(stride>1){const all=parsed.frames;parsed.previewStride=stride;parsed.originalFrameCount=all.length;parsed.frames=all.filter((f,i)=>i%stride===0||i===all.length-1);parsed.warnings.push(`Prévia da referência: 1 a cada ${stride} quadros, mais o último. Baixe/carregue o XYZ original para examinar todos. Tempos e coordenadas preservados, sem interpolação.`);}
   }
   run[slot]=parsed;run.files.push({name:file,path:rel,kind:parsed.kind});
+ }
+ // Joined trajectories have verified stage metadata, not a fabricated whole-run .out.
+ const courseFile=path.join(root,folder,'curso.json');
+ if(fs.existsSync(courseFile)){
+  const course=JSON.parse(fs.readFileSync(courseFile,'utf8'));
+  run.metadata=course.metadata;run.warnings.push(...(course.warnings||[]));
+  // A joined file retains per-stage conserved-energy references. Break charts at
+  // the documented boundaries without shifting any measured value or timestamp.
+  const breaks=course.energyBreaksAfterFs||[];
+  if(run.energy&&breaks.length){run.energy.rows.forEach(row=>row.segment+=breaks.filter(t=>row.time>t).length);run.energy.warnings.push('Gráficos separados nas fronteiras documentadas de restart/Run; valores e tempos originais preservados.');}
+  for(const relative of course.relatedFiles||[]){const rel=path.posix.normalize(`${folder}/${relative}`);if(!fs.existsSync(path.join(root,rel)))throw new Error(`Missing course source: ${rel}`);run.files.push({name:path.basename(rel),path:rel,kind:'stage-output'});}
+  run.files.push({name:'curso.json',path:`${folder}/curso.json`,kind:'course-metadata'});
  }
  const issue=R.validateEnergySources(run.energy,run.out);if(issue)throw new Error(key+': '+issue);
  runs[key]=run;
 }
 const presets={
- water:{runs:['dimero_b97']},solvent:{runs:['dimero_b97','dimero_b97_cpcm']},ethanol:{runs:['etanol_nve']},
+ proton_shared:{runs:['proton_shared'],tab:'trajectory'},
+ chelation:{runs:['chelation'],tab:'trajectory'},
+ proton_droplet:{runs:['proton_droplet_300k'],tab:'trajectory'},
+ proton_droplet_400k:{runs:['proton_droplet_400k'],tab:'trajectory'},
+ proton_droplet_500k:{runs:['proton_droplet_500k'],tab:'trajectory'},
+ proton_droplet_600k:{runs:['proton_droplet_600k'],tab:'trajectory'},
+ aluminum:{runs:['al_agua_nh3_dt05','al_agua_nh3_scc'],tab:'trajectory'},
+ water:{runs:['dimero_xtb2_2ps']},water_dft:{runs:['dimero_b97']},solvent:{runs:['dimero_b97','dimero_b97_cpcm']},ethanol:{runs:['etanol_nve']},
  water_single:{runs:['agua_dft']},solvent_single:{runs:['agua_dft','agua_cpcm']},
  timestep:{runs:['etanol_instavel','etanol_corrigido']},timestep_abrupt:{runs:['etanol_dt500','etanol_corrigido']},timestep_accuracy:{runs:['etanol_dt025','etanol_nve','etanol_dt200']},thermostat:{runs:['etanol_etapas']},thermostat_compare:{runs:['etanol_nve','etanol_csvr']},
  solvator:{runs:['zn_solvator','preparar_complexo'],tab:'trajectory'},complex:{runs:['zn_parede_longo','zn_sem_parede_longo']},
@@ -55,7 +83,7 @@ const presets={
 };
 // Ordinary scripts, rather than fetch(), preserve direct file:// use offline.
 // The small manifest is loaded at startup; calculations are loaded on demand.
-const version='20260929-hydration1',sources={},folder=path.join(root,'visualizador/examples');
+const version='20261001-course1',sources={},folder=path.join(root,'visualizador/examples');
 fs.mkdirSync(folder,{recursive:true});let totalBytes=0;
 for(const [key,run] of Object.entries(runs)){
  const filename=`${key}.js`,full=path.join(folder,filename);

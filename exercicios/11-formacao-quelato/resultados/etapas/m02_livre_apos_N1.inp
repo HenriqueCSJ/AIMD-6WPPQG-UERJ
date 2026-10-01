@@ -1,0 +1,18 @@
+# Retirar a aproximacao Zn-N; continuar posicoes, velocidades e relogio.
+! MD XTB2 ALPB(water) PAL8
+%maxcore 256
+%md
+  Timestep 0.25_fs
+  Randomize 93002
+  Thermostat CSVR 300_K Timecon 100_fs
+  Walls Sphere 0, 0, 0, 9.0_A Spring 50.0
+  Dump Position Stride 4 Filename "m02_livre_apos_N1-traj.xyz"
+  Manage_Colvar Define 1 Distance Atom 0 Atom 61
+  Manage_Colvar Define 2 Distance Atom 0 Atom 64
+  Manage_Colvar Define 3 CoordNumber Atom 0 Group 1 4 7 10 13 16 19 22 25 28 31 34 37 40 43 46 49 52 55 58 Cutoff 2.6_A
+  Restraint Reset Colvar 1
+  Restraint Reset Colvar 3
+  Restart "m01a_N_sem_vies_agua.mdrestart"
+  Run 8000
+end
+* xyzfile 2 1 encontro_real_R1.xyz

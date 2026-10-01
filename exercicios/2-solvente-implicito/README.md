@@ -1,18 +1,20 @@
-# 2. Um ambiente contínuo não cria vizinhos
+# Opcional · O papel do solvente contínuo
 
 [← Percurso](../README.md) · [Laboratório de trajetórias](../../visualizador/index.html)
 
-**10 min · o mesmo dímero · DFT / CPCM(water)**
+**10 min · análise de resultados fornecidos · DFT / CPCM(water)**
 
 > **Pergunta:** Ativar água como solvente acrescenta novas ligações de hidrogênio?
 
 ## 1. Mude apenas o ambiente
 
-Reutilize as mesmas seis coordenadas, semente, método e duração. Acrescente `CPCM(water)` à primeira linha. O campo de reação do meio contínuo modifica energia e forças; **as duas águas explícitas continuam sendo as únicas moléculas presentes**.
+Compare as duas referências DFT fornecidas: elas usam as mesmas seis coordenadas, semente, método e duração de 60 fs. A diferença no input é `CPCM(water)` na primeira linha. O campo de reação do meio contínuo modifica energia e forças; **as duas águas explícitas continuam sendo as únicas moléculas presentes**.
 
-## 2. Compare a referência ou execute
+## 2. Abra as referências prontas
 
-Na aula, abra primeiro o resultado fornecido. A repetição com CPCM é opcional: esta referência levou cerca de 5 min 24 s, e queremos preservar tempo para interpretar.
+Na aula, **não execute este cálculo DFT**. Compare os resultados de vácuo e CPCM fornecidos abaixo, ambos de 60 fs. A referência CPCM levou cerca de 5 min 24 s nesta máquina. O input fica disponível para leitura e reprodução depois da aula.
+
+Não compare diretamente a trajetória XTB2 de 2 ps da atividade 1 com a DFT/CPCM para atribuir diferenças só ao solvente: nessa comparação também mudariam o método e a duração.
 
 [Baixar pacote](aula-dimero_b97_cpcm.zip) · [Input](inputs/dimero_b97_cpcm.inp) · [Estrutura](estruturas/dimero_b97.xyz)
 
@@ -33,7 +35,7 @@ end
 * xyzfile 0 1 dimero_b97.xyz
 ```
 
-<details markdown="1"><summary>Executar no Ubuntu / WSL2</summary>
+<details markdown="1"><summary>Reprodução após a aula: Ubuntu / WSL2</summary>
 
 Extraia o pacote e abra o Ubuntu nessa pasta. Com `ORCA_DIR` configurado no guia, copie:
 
@@ -53,7 +55,7 @@ Abra `explorer.exe .` e localize a pasta `execucao-…`. Carregue **`dimero_b97_
 
 </details>
 
-<details markdown="1"><summary>Alternativa: Windows nativo</summary>
+<details markdown="1"><summary>Reprodução após a aula: Windows nativo</summary>
 
 Extraia o pacote em uma pasta nova. Abra o PowerShell nela e ajuste o caminho:
 

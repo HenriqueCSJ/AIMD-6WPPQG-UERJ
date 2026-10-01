@@ -1,8 +1,8 @@
-# 3. O H do etanol vibra ou muda de orientação?
+# 02a · Etanol: o controle antes da correção
 
 [← Percurso](../README.md) · [Laboratório de trajetórias](../../visualizador/index.html)
 
-**25 min · etanol · XTB2 · 0,5 ps = 5 × 10⁻¹³ s**
+**Parte do bloco 02 (35 min com timestep e correção) · etanol · XTB2 · 0,5 ps = 5 × 10⁻¹³ s**
 
 > **Pergunta:** Uma trajetória sem troca de conformação ensina alguma coisa?
 
@@ -10,7 +10,7 @@
 
 Uma animação pode esconder a diferença entre a molécula inteira girar e uma rotação **interna**. Para o H da hidroxila, acompanhe o diedro **C 0–C 1–O 2–H 8**, em graus. Ele não muda se girarmos apenas a câmera ou a molécula como um corpo rígido.
 
-Vamos começar com uma trajetória curta, sem termostato: ela será o controle para os exercícios 4 e 5. `Initvel 300_K` inicializa velocidades; não mantém o sistema a 300 K.
+Vamos começar com uma trajetória curta, sem termostato: ela será o controle para o timestep e para as etapas de temperatura. `Initvel 300_K` inicializa velocidades; não mantém o sistema a 300 K.
 
 ## 2. Execute
 
@@ -74,7 +74,7 @@ Get-Content etanol_nve.out -Tail 12
 1. Em **Geometria**, use o atalho para a torsão do etanol ou selecione **Diedro**, com índices **0, 1, 2, 8**.
 2. No controle NVE, o diedro vai de **−73,9° a −33,7°** em 0,5 ps: oscila em torno de uma orientação gauche. Isso é **libração**, sem troca de região conformacional observada.
 3. Selecione **Distância**, O 2–H 8. A ligação vibra entre **0,939 e 0,992 Å**. Esse movimento não é rotação da hidroxila nem transferência de próton.
-4. Abra a referência **em etapas**: a 1,5 ps o diedro é **+52,3°**, enquanto no início era **−55,7°**. Há acesso a outra orientação; o O–H continua ligado. No exercício 5 vamos executar e explicar o programa que produziu isso.
+4. Abra a referência **em etapas**: a 1,5 ps o diedro é **+52,3°**, enquanto no início era **−55,7°**. Há acesso a outra orientação; o O–H continua ligado. No bloco 03 vamos executar e explicar o programa que produziu isso.
 
 **Interpretação:** uma molécula pode vibrar e permanecer na mesma região conformacional durante toda uma trajetória curta. Ausência de troca em 0,5 ps não mede a barreira nem prova que outra conformação seja inacessível. A faixa angular, o tempo passado em cada região e a integridade das ligações respondem a perguntas diferentes.
 

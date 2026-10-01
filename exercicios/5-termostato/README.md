@@ -1,4 +1,4 @@
-# 5. Aquecer, explorar, resfriar — no mesmo input
+# 03 · Aquecer, explorar, resfriar — no mesmo input
 
 [← Percurso](../README.md) · [Laboratório de trajetórias](../../visualizador/index.html)
 
@@ -85,7 +85,7 @@ Get-Content etanol_etapas.out -Tail 12
 [Abrir a trajetória em etapas](../../visualizador/index.html?exemplo=thermostat&aba=trajetoria)
 
 1. Veja a faixa de etapas no laboratório e acompanhe a marca ativa durante a animação. A programação vem do input; o tempo efetivamente simulado vem dos dados.
-2. Em **Geometria → Diedro**, meça **0–1–2–8**. Compare o controle do exercício 3, que só librava, com esta trajetória: **−55,7° em 0 ps, +52,3° em 1,5 ps e +62,6° em 5 ps**.
+2. Em **Geometria → Diedro**, meça **0–1–2–8**. Compare o controle 02a, que só librava, com esta trajetória: **−55,7° em 0 ps, +52,3° em 1,5 ps e +62,6° em 5 ps**.
 3. Confirme que O 2–H 8 permanece entre **0,917 e 1,022 Å**. O H muda de orientação em torno de C–O; ele não foi transferido para outro átomo.
 4. Na energia, o banho pode fornecer e retirar energia. Agora uma mudança de E não tem o mesmo significado que no teste NVE do timestep.
 

@@ -1,8 +1,8 @@
-# 4. A instabilidade aparece antes da explosão
+# 02b · A instabilidade aparece antes da explosão
 
 [← Percurso](../README.md) · [Laboratório de trajetórias](../../visualizador/index.html)
 
-**25 min · etanol · XTB2 · NVE**
+**Parte do bloco 02 (35 min com o controle NVE) · etanol · XTB2 · NVE**
 
 > **Pergunta:** A temperatura parecer razoável significa que a integração está boa?
 
@@ -75,7 +75,7 @@ No filme, use **0,25×** ou avance quadro a quadro para examinar a degradação;
 
 ## 3. Corrija a causa e repita
 
-Volte à **estrutura inicial intacta**, sem usar o restart defeituoso. Reduza para **0,5 fs** e use **1000 passos** para conservar o alvo de 500 fs. O resultado corrigido abaixo já está calculado e pode ser reutilizado do exercício 3.
+Volte à **estrutura inicial intacta**, sem usar o restart defeituoso. Reduza para **0,5 fs** e use **1000 passos** para conservar o alvo de 500 fs. O resultado corrigido abaixo já está calculado e pode ser reutilizado do controle 02a.
 
 [Baixar pacote](aula-etanol_corrigido.zip) · [Input](inputs/etanol_corrigido.inp) · [Estrutura](estruturas/etanol.xyz)
 

@@ -1,0 +1,14 @@
+# Equilibracao inicial de 0.5 ps; revisar antes de observar.
+! MD XTB2 ALPB(water) PAL8
+%maxcore 256
+%md
+  Timestep 0.25_fs
+  Thermostat CSVR 300_K Timecon 100_fs
+  # Parede fora da gota revisada; nao guia transferencias O-H.
+  Walls Sphere 0, 0, 0, 8.5000_A Spring 10.0000
+  Dump Position Stride 2 Filename "p03_equilibrar-traj.xyz"
+  Randomize 93101
+  Initvel 300_K
+  Run 2000
+end
+* xyzfile 1 1 gota_equilibrar.xyz

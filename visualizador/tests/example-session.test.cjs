@@ -8,12 +8,16 @@ const OrcaReader=require('../orca-parser.js'),Geometry=require('../geometry.js')
 const viewer=path.resolve(__dirname,'..');
 const deferred=()=>{let resolve,reject;const promise=new Promise((a,b)=>{resolve=a;reject=b;});return {promise,resolve,reject};};
 class Element{
-  constructor(tag='div'){this.tag=tag;this.children=[];this.listeners={};this.dataset={};this.attributes={};this.value='';this.hidden=false;this.checked=false;this.innerHTML='';this.textContent='';this.classList={add(){},remove(){},toggle(){}};}
+  constructor(tag='div'){this.tag=tag;this.children=[];this.listeners={};this.dataset={};this.attributes={};this.value='';this.hidden=false;this.checked=false;this.inert=false;this.isConnected=true;this.tabIndex=['button','input','select','textarea','a'].includes(tag)?0:-1;this.innerHTML='';this.textContent='';this.style={removeProperty(key){delete this[key];}};const classes=new Set();this.classList={add:value=>classes.add(value),remove:value=>classes.delete(value),contains:value=>classes.has(value),toggle(value,force){const on=force??!classes.has(value);if(on)classes.add(value);else classes.delete(value);return on;}};}
   addEventListener(type,callback){this.listeners[type]=callback;}
   fire(type,event={}){return this.listeners[type]?.(event);}
   setAttribute(key,value){this.attributes[key]=value;}
+  getAttribute(key){return this.attributes[key]??null;}
+  removeAttribute(key){delete this.attributes[key];}
+  focus(){if(this.ownerDocument)this.ownerDocument.activeElement=this;}
+  getClientRects(){for(let node=this;node;node=node.parentElement)if(node.hidden||node.inert)return [];return [{}];}
   replaceChildren(...children){this.children=[];this.innerHTML='';this.textContent='';if(this.tag==='select')this.value='';this.append(...children);}
-  append(...children){for(const child of children){this.children.push(child);if(this.tag==='select'&&this.value==='')this.value=child.value;}}
+  append(...children){for(const child of children){this.children.push(child);child.parentElement=this;if(this.tag==='select'&&this.value==='')this.value=child.value;}}
   get options(){return this.children;}
   set innerHTML(html){
     this.html=html;this.controls=[];
@@ -24,32 +28,37 @@ class Element{
   get innerHTML(){return this.html;}
   set value(value){this.selectedValue=String(value);}
   get value(){return this.selectedValue;}
-  querySelectorAll(selector){return this.controls.filter(control=>selector==='[data-run]'?control.dataset.run:selector==='[data-remove]'?control.dataset.remove:false);}
+  querySelectorAll(selector){if(selector==='a[href],button,input,select,textarea,[tabindex]'){const found=[];for(const child of this.children){if(child.tabIndex>=0)found.push(child);found.push(...child.querySelectorAll(selector));}return found;}return this.controls.filter(control=>selector==='[data-run]'?control.dataset.run:selector==='[data-remove]'?control.dataset.remove:false);}
   scrollIntoView(){}
 }
-function session(){
+function session({inspectState=false}={}){
   const html=fs.readFileSync(path.join(viewer,'index.html'),'utf8'),nodes={};
   for(const match of html.matchAll(/<([\w-]+)\b[^>]*\bid="([^"]+)"[^>]*>/g))nodes[match[2]]=new Element(match[1]);
   for(const [id,value] of Object.entries({'energy-mode':'delta','energy-unit':'kj','time-unit':'fs','distance-source':'xyz','geometry-type':'distance'}))nodes[id].value=value;
   nodes['distance-source'].append(...['xyz','colvars'].map(value=>Object.assign(new Element('option'),{value})));
   const checkboxes=['total','potential','kinetic'].map(value=>Object.assign(new Element('input'),{value,checked:true}));
   const tabs=['energy','trajectory','distance'].map(tab=>Object.assign(nodes['tab-'+tab],{dataset:{tab}}));
-  const card=new Element(),requests=[],cancelled=[];
+  const card=new Element(),requests=[],cancelled=[],documentListeners={};
   const context=vm.createContext({
     console,URLSearchParams,location:{search:''},OrcaReader,Geometry,
     chartNumber:value=>String(value),ScientificChart:class{constructor(node,options){node.chart=options;}},
     cancelAnimationFrame(id){cancelled.push(id);},requestAnimationFrame(){return 1;},setTimeout,clearTimeout,
-    document:{body:new Element('body'),getElementById:id=>nodes[id],createElement:tag=>new Element(tag),addEventListener(){},
+    document:{body:new Element('body'),getElementById:id=>nodes[id],createElement:tag=>new Element(tag),addEventListener(type,callback){documentListeners[type]=callback;},
       querySelector:selector=>selector==='.example-card'?card:null,
       querySelectorAll:selector=>selector==='[data-tab]'?tabs:selector==='[name="energy-series"]:checked'?checkboxes.filter(box=>box.checked):selector==='[name="energy-series"]'?checkboxes:[]},
     addEventListener(){},AIMDExampleLoader:{loadPreset:key=>{const pending=deferred();requests.push({key,...pending});return pending.promise;}}
   });
   context.window=context;
-  vm.runInContext(fs.readFileSync(path.join(viewer,'app.js'),'utf8'),context);
+  for(const node of Object.values(nodes))node.ownerDocument=context.document;context.document.body.ownerDocument=context.document;
+  nodes.molecule.tabIndex=0;
+  let source=fs.readFileSync(path.join(viewer,'app.js'),'utf8');
+  // A test-only bridge supplies a renderer double without creating WebGL.
+  if(inspectState)source=source.replace(/\}\)\(\);\s*$/,'globalThis.__testState=state;})();');
+  vm.runInContext(source,context);
   const choose=(key,trajectory=false)=>{nodes['example-select'].value=key;return nodes[trajectory?'example-trajectory-button':'example-button'].fire('click');};
   const toggle=(index,checked)=>{const box=nodes.runs.querySelectorAll('[data-run]')[index];box.checked=checked;box.fire('change');};
   const remove=index=>nodes.runs.querySelectorAll('[data-remove]')[index].fire('click');
-  return {nodes,requests,choose,toggle,remove,cancelled};
+  return {nodes,requests,choose,toggle,remove,cancelled,document:context.document,key:event=>documentListeners.keydown(event),state:context.__testState};
 }
 function preset(key,{staticOnly=false}={}){
   const xyz={elements:['O','H'],frames:[{time:0,step:0,coords:[[0,0,0],[0,0,1]]}],warnings:[]};
@@ -194,4 +203,46 @@ test('an XYZ added to a previously unchecked energy run reactivates that run',as
   assert.equal(ui.nodes.runs.querySelectorAll('[data-run]')[0].checked,true);
   assert.equal(ui.nodes['trajectory-run'].options[0].textContent,'sample');
   assert.equal(ui.nodes['trajectory-run'].value,ui.nodes['trajectory-run'].options[0].value);
+});
+
+function expandedSession(){
+  const ui=session(),panel=ui.nodes['panel-trajectory'],workspace=ui.nodes.workspace,background=ui.nodes['clear-button'],previouslyInert=new Element();
+  previouslyInert.inert=true;
+  ui.document.body.append(ui.nodes['upload-button'],workspace,previouslyInert);
+  workspace.append(background,panel);
+  panel.append(ui.nodes['trajectory-run'],ui.nodes['expand-trajectory'],ui.nodes.molecule,ui.nodes['goto-distances']);
+  ui.nodes['expand-trajectory'].focus();ui.nodes['expand-trajectory'].fire('click');
+  return {...ui,panel,background,previouslyInert};
+}
+
+test('expanded view contains keyboard focus and Escape restores focus and previous inert states',()=>{
+  const ui=expandedSession();let prevented=0;
+  assert.equal(ui.background.inert,true);assert.equal(ui.nodes['upload-button'].inert,true);
+  assert.equal(ui.panel.getAttribute('role'),'dialog');assert.equal(ui.panel.getAttribute('aria-modal'),'true');
+  ui.nodes['goto-distances'].focus();ui.key({key:'Tab',preventDefault(){prevented++;}});
+  assert.equal(ui.document.activeElement,ui.nodes['trajectory-run']);
+  ui.key({key:'Tab',shiftKey:true,preventDefault(){prevented++;}});
+  assert.equal(ui.document.activeElement,ui.nodes['goto-distances']);assert.equal(prevented,2);
+  ui.key({key:'Escape',preventDefault(){}});
+  assert.equal(ui.document.activeElement,ui.nodes['expand-trajectory']);
+  assert.equal(ui.background.inert,false);assert.equal(ui.nodes['upload-button'].inert,false);assert.equal(ui.previouslyInert.inert,true);
+  assert.equal(ui.document.body.classList.contains('trajectory-open'),false);assert.equal(ui.panel.getAttribute('role'),'tabpanel');assert.equal(ui.panel.getAttribute('aria-modal'),null);
+});
+
+test('clearing an expanded session unlocks scrolling, restores the background, and focuses upload',()=>{
+  const ui=expandedSession();ui.nodes['clear-button'].fire('click');
+  assert.equal(ui.nodes.workspace.hidden,true);assert.equal(ui.document.body.classList.contains('trajectory-open'),false);
+  assert.equal(ui.panel.classList.contains('trajectory-expanded'),false);assert.equal(ui.nodes['expand-trajectory'].getAttribute('aria-expanded'),'false');
+  assert.equal(ui.background.inert,false);assert.equal(ui.document.activeElement,ui.nodes['upload-button']);
+});
+
+test('Mover focuses the canvas and arrow keys pan without changing frame or allowing browser shortcuts',()=>{
+  const ui=session({inspectState:true}),moves=[];let prevented=0;
+  ui.state.viewer={translateScene:(x,y)=>moves.push([x,y])};ui.state.frame=7;
+  const key=(key,extra={})=>ui.nodes.molecule.fire('keydown',{key,preventDefault(){prevented++;},stopPropagation(){},...extra});
+  key('ArrowRight');assert.equal(moves.length,0);
+  ui.nodes['pan-molecule'].fire('click');assert.equal(ui.document.activeElement,ui.nodes.molecule);
+  key('ArrowRight');key('ArrowUp',{shiftKey:true});key('ArrowLeft',{altKey:true});key('ArrowDown',{ctrlKey:true});key('ArrowLeft',{metaKey:true});
+  assert.deepEqual(moves,[[12,0],[0,-40]]);assert.equal(prevented,2);assert.equal(ui.state.frame,7);
+  ui.nodes['rotate-molecule'].fire('click');key('ArrowDown');assert.equal(moves.length,2);
 });

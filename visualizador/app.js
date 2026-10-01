@@ -9,12 +9,13 @@
   const state={runs:[],nextId:1,tab:'energy',viewer:null,initialView:null,model:null,viewRun:null,frame:0,selectedAtom:null,playing:false,timer:null,playback:{runId:null,startFrame:0,baseDuration:0,phase:0,lastTimestamp:null},timeFormat:null,pairs:{},geometryMeasures:{},colvars:{},distanceSeries:[],geometrySeries:[],contactShapes:[],busy:false,exampleRequest:0,exampleLoading:false,exampleRetry:null};
   const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const energy=run=>run.energy||run.out;
-  const metadata=run=>run.out?.metadata||{};
+  const metadata=run=>run.metadata||run.out?.metadata||{};
   const ensemble=run=>run.ensembleOverride||metadata(run).ensemble||'unknown';
   const visible=()=>state.runs.filter(r=>r.visible);
   const timeFactor=()=>({fs:1,ps:1e-3,s:1e-15}[$('time-unit').value]);
   const energyFactor=()=>$('energy-unit').value==='eh'?1:R.HARTREE_TO_KJMOL;
   const energyUnit=()=>$('energy-unit').value==='eh'?'Eh':'kJ/mol';
+  Object.assign(state,{trajectoryChart:null,energyIndex:null,frameIndex:null,interaction:'rotate',panGesture:null,expandedReturnFocus:null,expandedBackground:[]});
   function decimalPlaces(value){
     const magnitude=Math.abs(value);if(!Number.isFinite(magnitude)||magnitude===0)return 0;
     for(let places=0;places<=8;places++){const scale=10**places;if(Math.abs(magnitude*scale-Math.round(magnitude*scale))<=1e-7*Math.max(1,magnitude*scale))return places;}
@@ -62,7 +63,7 @@
     const values=$('frame-values');
     if(values.dataset.ready)return;
     values.replaceChildren();
-    const fields=[['time','Tempo físico'],['temperature','Temperatura'],['potential','Energia potencial'],['atoms','Átomos']];
+    const fields=[['time','Tempo físico'],['temperature','Temperatura'],['kinetic','Energia cinética'],['potential','Energia potencial'],['total','Energia total'],['atoms','Átomos']];
     fields.forEach(([key,label])=>{
       const row=document.createElement('div');row.className='frame-value';
       const name=document.createElement('span');name.textContent=label;row.append(name);
@@ -141,10 +142,10 @@
     }
   }
   function renderAll(preferredTrajectory){
-    const loaded=state.runs.length>0;$('workspace').hidden=!loaded;$('welcome-guide').hidden=loaded;document.body.classList.toggle('loaded',loaded);if(!loaded){stop();return;}
+    const loaded=state.runs.length>0;$('workspace').hidden=!loaded;$('welcome-guide').hidden=loaded;document.body.classList.toggle('loaded',loaded);if(!loaded){stop();const expanded=$('expand-trajectory').getAttribute('aria-expanded')==='true';expandTrajectory(false,false);if(expanded)$('upload-button').focus();return;}
     renderRuns();updateRunSelectors(preferredTrajectory);renderDetails();changeTab(state.tab);
   }
-  function changeTab(tab){stop();state.tab=tab;for(const name of ['energy','trajectory','distance']){$('panel-'+name).hidden=name!==tab;$('tab-'+name).setAttribute('aria-selected',name===tab);$('tab-'+name).tabIndex=name===tab?0:-1;}
+  function changeTab(tab){stop();state.tab=tab;const expanded=$('expand-trajectory').getAttribute('aria-expanded')==='true';if(tab!=='trajectory')expandTrajectory(false,false);for(const name of ['energy','trajectory','distance']){$('panel-'+name).hidden=name!==tab;$('tab-'+name).setAttribute('aria-selected',name===tab);$('tab-'+name).tabIndex=name===tab?0:-1;}if(expanded&&tab!=='trajectory')$('tab-'+tab).focus();
     if(tab==='energy')renderEnergy();if(tab==='trajectory')renderTrajectory();if(tab==='distance')renderDistances(true);
   }
   function energyWindow(){const read=id=>{const raw=$(id)?.value?.trim()||'';return raw===''?null:Number(raw);};const from=read('energy-window-from'),to=read('energy-window-to');return {from:Number.isFinite(from)?from:-Infinity,to:Number.isFinite(to)?to:Infinity,active:Number.isFinite(from)||Number.isFinite(to)};}
@@ -167,7 +168,7 @@
     if(runs.some(r=>metadata(r).wall))context+=' Há confinamento em pelo menos uma simulação; considere também as forças da parede.';
     const known=key=>runs.some(r=>r.reference&&r.key===key),unstable=known('etanol_instavel'),legacyUnstable=known('etanol_dt500');
     const question=unstable||legacyUnstable?'Por que esta dinâmica falhou?':known('etanol_etapas')?'O etanol muda de conformação ao longo das etapas?':known('dimero_b97_cpcm')?'Como o ambiente implícito altera o movimento do dímero?':known('dimero_b97')?'A ligação de hidrogênio mantém a mesma geometria?':known('zn_parede_longo')?'Qual água a parede mantém por perto?':known('etanol_dt200')?'Qual timestep conserva melhor a energia?':known('etanol_csvr')?'O que o termostato muda?':known('etanol_nve')?'Oscilar é o mesmo que mudar de conformação?':known('agua_cpcm')?'O solvente foi representado sem acrescentar átomos?':known('zn_parede')?'O que a parede muda nesta trajetória curta?':runs.length>1?'O que mudou entre as simulações?':'Para onde vai a energia?';
-    const prompt=known('controle_dt025_31A')?'No primeiro quadro, todas as águas estão a 3,1 Å do Zn. Compare Zn 0–O 10 e Zn 0–O 1: quais águas entram na primeira camada? A en começa distante; estes 250 fs mostram hidratação, não quelação.':known('hidratacao_associacao_31A')?'As águas se coordenam no início. Em 5 ps a en se aproxima, mas nenhum N entra no corte de 2,6 Å. Compare Zn 0–N 31, Zn 0–N 34 e Zn 0–O 10; aproximação à camada de águas não é formação do quelato.':unstable?'Com 2,5 fs, acompanhe a janela dos primeiros 75 fs antes de examinar a trajetória completa. A energia já se afasta enquanto a temperatura ainda está na faixa inicial; o término posterior é uma falha parcial, não uma prova de equilíbrio.':legacyUnstable?'Com 5 fs, a energia e a temperatura explodem e o cálculo para cedo. Volte à estrutura inicial, reduza o timestep e compare a janela inicial com a trajetória completa; não use um termostato para mascarar o erro.':known('etanol_etapas')?'Abra Geometria e escolha Etanol C–C–O–H. Relacione o diedro às cinco etapas de 300 → 600 → 300 K. O H gira com a hidroxila: isso não é transferência de próton. Aquecimento e maior duração mudam juntos; esta trajetória não fornece populações de equilíbrio nem constantes de velocidade.':known('dimero_b97_cpcm')?'Em Geometria, compare O 0 — O 3 e o ângulo O 0 — H 1 — O 3. O CPCM modifica o ambiente eletrostático sem adicionar moléculas de solvente. Os 60 fs mostram respostas locais; não fornecem uma média de solução ou uma energia livre de associação.':known('dimero_b97')?'Ative Ligações H e acompanhe O 0 — H 1 ··· O 3. Meça O 0 — O 3 e o ângulo 0–1–3: a ponte pode perder alinhamento enquanto a distância O···O muda pouco. O tracejado usa um critério geométrico; desaparecer não prova dissociação química.':known('zn_parede_longo')?'Abra Trajetória e Geometria: acompanhe Zn 0 — O 25 até 2100 fs. Os dois casos partem do mesmo reinício. A parede retém a região de águas explícitas, mas introduz forças artificiais na borda. O 25 começa a cerca de 4 Å do Zn; não é um ligante diretamente coordenado.':known('etanol_dt200')?'Os três casos cobrem o mesmo tempo físico. Compare a amplitude de E e o custo de usar um passo menor. Terminar normalmente é suficiente para escolher um timestep?':known('etanol_csvr')?'Ambas começam com velocidades inicializadas a 300 K. Compare T e E: qual caso pode trocar energia com um banho? A trajetória já demonstra equilíbrio?':known('etanol_nve')?'Em Geometria, selecione Etanol C–C–O–H. Nesta referência curta o diedro oscila aproximadamente entre −74° e −34°, sem trocar de conformação. Compare com o exemplo 5, mais longo e com aquecimento, para observar a rotação da hidroxila.':known('agua_cpcm')?'Abra as duas trajetórias e conte os átomos. Depois confira CPCM no método, em “Arquivos e condições”. Uma diferença visual pequena não significa que o modelo não foi ativado.':known('zn_parede')?'Compare também as distâncias e a animação. A energia sozinha mostra se uma água se afastou? A parede garante que nunca haverá escape?':'Localize uma região da curva. A energia cinética aumenta quando a potencial diminui? Como a temperatura acompanha essa troca?';
+    const prompt=known('controle_dt025_31A')?'No primeiro quadro, todas as águas estão a 3,1 Å do Zn. Compare Zn 0–O 10 e Zn 0–O 1: quais águas entram na primeira camada? A en começa distante; estes 250 fs mostram hidratação, não quelação.':known('hidratacao_associacao_31A')?'As águas se coordenam no início. Em 5 ps a en se aproxima, mas nenhum N entra no corte de 2,6 Å. Compare Zn 0–N 31, Zn 0–N 34 e Zn 0–O 10; aproximação à camada de águas não é formação do quelato.':unstable?'Com 2,5 fs, acompanhe a janela dos primeiros 75 fs antes de examinar a trajetória completa. A energia já se afasta enquanto a temperatura ainda está na faixa inicial; o término posterior é uma falha parcial, não uma prova de equilíbrio.':legacyUnstable?'Com 5 fs, a energia e a temperatura explodem e o cálculo para cedo. Volte à estrutura inicial, reduza o timestep e compare a janela inicial com a trajetória completa; não use um termostato para mascarar o erro.':known('etanol_etapas')?'Abra Geometria e escolha Etanol C–C–O–H. Relacione o diedro às cinco etapas de 300 → 600 → 300 K. O H gira com a hidroxila: isso não é transferência de próton. Aquecimento e maior duração mudam juntos; esta trajetória não fornece populações de equilíbrio nem constantes de velocidade.':known('dimero_b97_cpcm')?'Em Geometria, compare O 0 — O 3 e o ângulo O 0 — H 1 — O 3. O CPCM modifica o ambiente eletrostático sem adicionar moléculas de solvente. Os 60 fs mostram respostas locais; não fornecem uma média de solução ou uma energia livre de associação.':known('dimero_b97')?'Ative Ligações H e acompanhe O 0 — H 1 ··· O 3. Meça O 0 — O 3 e o ângulo 0–1–3: a ponte pode perder alinhamento enquanto a distância O···O muda pouco. O tracejado usa um critério geométrico; desaparecer não prova dissociação química.':known('zn_parede_longo')?'Abra Trajetória e Geometria: acompanhe Zn 0 — O 25 até 2100 fs. Os dois casos partem do mesmo reinício. A parede retém a região de águas explícitas, mas introduz forças artificiais na borda. O 25 começa a cerca de 4 Å do Zn; não é um ligante diretamente coordenado.':known('etanol_dt200')?'Os três casos cobrem o mesmo tempo físico. Compare a amplitude de E e o custo de usar um passo menor. Terminar normalmente é suficiente para escolher um timestep?':known('etanol_csvr')?'Ambas começam com velocidades inicializadas a 300 K. Compare T e E: qual caso pode trocar energia com um banho? A trajetória já demonstra equilíbrio?':known('etanol_nve')?'Em Geometria, selecione Etanol C–C–O–H. Nesta referência curta o diedro oscila aproximadamente entre −74° e −34°, sem trocar de conformação. Compare com o bloco 03, mais longo e com aquecimento, para observar a rotação da hidroxila.':known('agua_cpcm')?'Abra as duas trajetórias e conte os átomos. Depois confira CPCM no método, em “Arquivos e condições”. Uma diferença visual pequena não significa que o modelo não foi ativado.':known('zn_parede')?'Compare também as distâncias e a animação. A energia sozinha mostra se uma água se afastou? A parede garante que nunca haverá escape?':'Localize uma região da curva. A energia cinética aumenta quando a potencial diminui? Como a temperatura acompanha essa troca?';
     $('energy-guide').innerHTML=`<h3>${question}</h3><p>${esc(context)}</p><p>${prompt}</p><details><summary>Como ler sem tirar conclusões além dos dados</summary><p>Amplitude e diferença entre início e fim são medidas diferentes. Uma oscilação limitada não é sinônimo de deriva. Médias de uma trajetória curta não comprovam equilíbrio; energia absoluta de métodos ou composições diferentes não fornece energia livre de reação.</p><p>Curvas não são suavizadas. Lacunas e reinícios permanecem separados. Quando exibida, a variação de cada curva usa seu próprio primeiro valor disponível.</p></details>`;
   }
   function renderDetails(){
@@ -182,11 +183,12 @@
   function isWaterCage(xyz){return xyz.elements.length===63&&xyz.elements.filter(e=>e==='C').length===60&&xyz.elements.filter(e=>e==='O').length===1&&xyz.elements.filter(e=>e==='H').length===2;}
   function stageTarget(stage){
     const numeric=value=>value===null||value===undefined||value===''?NaN:Number(value),start=numeric(stage.targetStartK),end=numeric(stage.targetEndK),single=numeric(stage.targetTemperature);
-    if(stage.ramp&&Number.isFinite(start)&&Number.isFinite(end))return `${num(start)}→${num(end)} K`;
-    if(Number.isFinite(single))return `${num(single)} K`;
-    if(Number.isFinite(start)&&Number.isFinite(end)&&start!==end)return `${num(start)}→${num(end)} K`;
-    if(Number.isFinite(start))return `${num(start)} K`;
-    return 'temperatura não informada';
+    const describe=value=>stage.label?`${stage.label} · ${value}`:value;
+    if(stage.ramp&&Number.isFinite(start)&&Number.isFinite(end))return describe(`${num(start)}→${num(end)} K`);
+    if(Number.isFinite(single))return describe(`${num(single)} K`);
+    if(Number.isFinite(start)&&Number.isFinite(end)&&start!==end)return describe(`${num(start)}→${num(end)} K`);
+    if(Number.isFinite(start))return describe(`${num(start)} K`);
+    return describe('temperatura não informada');
   }
   function stageTime(value){const numeric=value===null||value===undefined||value===''?NaN:Number(value);return Number.isFinite(numeric)?`${num(numeric)} fs · ${num(numeric/1000)} ps`:'fim não informado';}
   function renderStageSummary(runs,targetId,actualTime=null){
@@ -226,6 +228,101 @@
       state.viewer.addCurve({points,radius:.018,color:'#3e9295',opacity:.65,smooth:0});
     }
   }
+  function renderTrajectoryChart(run){
+    const rows=energy(run)?.rows||[],keys=['kinetic','potential','total'],selected=keys.filter(key=>$('trajectory-show-'+key).checked),hasValue=row=>keys.some(key=>Number.isFinite(row[key]));
+    state.energyIndex=TrajectoryTime.index(rows,hasValue);state.frameIndex=TrajectoryTime.index(run.xyz.frames);state.trajectoryChart=null;
+    const hasData=rows.some(hasValue),has=rows.some(row=>selected.some(key=>Number.isFinite(row[key])));$('trajectory-energy-chart').hidden=!has;$('trajectory-energy-empty').hidden=has;
+    if(!has){$('trajectory-energy-chart').replaceChildren();$('trajectory-energy-empty').textContent=!selected.length?'Selecione ao menos uma energia nas caixas acima.':hasData?'As energias selecionadas não constam deste arquivo. Escolha outra curva nas caixas acima.':'Este XYZ não traz as três energias. Carregue o arquivo -md-ener.csv ou um .out de MD com o mesmo nome-base para acompanhar as curvas.';$('trajectory-energy-note').textContent='As energias e o XYZ são associados pelo tempo físico registrado nos arquivos.';updateTrajectoryCursor(run);return;}
+    const labels={kinetic:'Cinética · K',potential:'Potencial · U',total:'Total · E'},colors={kinetic:'#ac6300',potential:'#8e5ea2',total:'#006e66'},dashes={kinetic:'2 3',potential:'5 3',total:''};
+    const delta=$('trajectory-energy-mode').value==='delta';
+    const series=selected.map(key=>{const first=rows.find(row=>Number.isFinite(row[key]))?.[key];return {name:labels[key],color:colors[key],dash:dashes[key],points:rows.map(row=>({x:row.time,y:Number.isFinite(row[key])?(row[key]-(delta?first:0))*R.HARTREE_TO_KJMOL:null,segment:row.segment}))};});
+    let xmin=state.energyIndex.entries[0].time,xmax=state.energyIndex.entries.at(-1).time;
+    // Keep the real XYZ cursor visible at a rounded CSV endpoint; plotted
+    // energy points and hover values retain their original CSV timestamps.
+    for(const frame of run.xyz.frames)if(state.energyIndex.exact(frame.time,frame)){xmin=Math.min(xmin,frame.time);xmax=Math.max(xmax,frame.time);}
+    state.trajectoryChart=new ScientificChart($('trajectory-energy-chart'),{title:'Energias e quadro atual',series,height:290,xDomain:[xmin,xmax],yLabel:`${delta?'Δ energia':'Energia'} (kJ/mol)`,xLabel:'Tempo físico (fs)',xUnit:'fs',yUnit:'kJ/mol',onSeek:time=>{const index=state.frameIndex.nearest(time,state.frame);if(index!==null)seekFrame(index);else $('trajectory-energy-status').textContent='Este tempo está fora dos quadros XYZ disponíveis; o quadro foi mantido.';}});
+    const missing=selected.filter(key=>!rows.some(row=>Number.isFinite(row[key]))).map(key=>labels[key]);
+    $('trajectory-energy-note').textContent=(delta?'ΔX = X(t) − X(primeiro ponto), para cada curva. ':'Valores absolutos. ')+(missing.length?`Sem dados: ${missing.join(', ')}. `:'')+'A linha escura acompanha o tempo do XYZ. Clique na curva para ir ao quadro disponível mais próximo; ← → e Enter também selecionam.';
+    updateTrajectoryCursor(run);
+  }
+  function updateTrajectoryCursor(run){
+    const frame=run?.xyz.frames[state.frame],time=frame?.time,hasEnergy=!!state.energyIndex?.entries.length;
+    const covered=hasEnergy&&state.energyIndex.covers(time,frame),row=hasEnergy?state.energyIndex.exact(time,frame):null;state.trajectoryChart?.setCursorX(covered?time:null);
+    const status=$('trajectory-energy-status');
+    if(!['kinetic','potential','total'].some(key=>$('trajectory-show-'+key).checked))status.textContent='Selecione ao menos uma energia acima.';
+    else if(!hasEnergy)status.textContent='Sem série de energia associada.';
+    else if(!Number.isFinite(time))status.textContent='O XYZ não informa tempo físico; não há sincronização com as energias.';
+    else if(!covered)status.textContent=`${num(time,8)} fs · sem energia correspondente neste intervalo.`;
+    else status.textContent=`Quadro ${state.frame+1} · ${num(time,8)} fs${row?(Math.abs(row.time-time)>1e-7?` · tempo CSV arredondado (${num(row.time,8)} fs)`:' · amostra de energia disponível'):' · entre amostras de energia; valores não interpolados'}`;
+  }
+  function setInteraction(mode){
+    state.interaction=mode;state.panGesture=null;$('molecule').dataset.interaction=mode;
+    $('rotate-molecule').setAttribute('aria-pressed',String(mode==='rotate'));$('pan-molecule').setAttribute('aria-pressed',String(mode==='pan'));
+    $('molecule').setAttribute('aria-label',`Estrutura molecular interativa. ${mode==='pan'?'Modo Mover: arraste ou use as setas para reposicionar.':'Modo Girar: arraste para girar.'} Use a roda para ampliar.`);
+    $('molecule-drag-hint').textContent=mode==='pan'?'Arraste ou use as setas para mover':'Arraste para girar a molécula';
+    if(mode==='pan')$('molecule').focus({preventScroll:true});
+  }
+  function startPan(event,touch=false){
+    if(state.interaction!=='pan'||!state.viewer||(touch?event.touches.length!==1:event.button!==0))return;
+    const point=touch?event.touches[0]:event;state.panGesture={x:point.clientX,y:point.clientY,touch};
+    // Let 3Dmol receive down/up events: an unmoved click still selects an atom.
+  }
+  function movePan(event,touch=false){
+    const gesture=state.panGesture;if(!gesture||gesture.touch!==touch)return;
+    if(touch&&event.touches.length!==1){state.panGesture=null;return;}
+    const point=touch?event.touches[0]:event,dx=point.clientX-gesture.x,dy=point.clientY-gesture.y;
+    event.preventDefault();event.stopImmediatePropagation();gesture.x=point.clientX;gesture.y=point.clientY;
+    // translateScene changes the retained scene position, so playback preserves
+    // the pan and native rotation cannot run simultaneously with this gesture.
+    if(dx||dy)state.viewer.translateScene(dx,dy);
+  }
+  function panWithKeyboard(event){
+    if(state.interaction!=='pan'||!state.viewer||event.altKey||event.ctrlKey||event.metaKey)return;
+    const direction={ArrowLeft:[-1,0],ArrowRight:[1,0],ArrowUp:[0,-1],ArrowDown:[0,1]}[event.key];if(!direction)return;
+    event.preventDefault();event.stopPropagation();const step=event.shiftKey?40:12;
+    state.viewer.translateScene(direction[0]*step,direction[1]*step);
+  }
+  function resizeTrajectory(){
+    if(state.tab!=='trajectory'||!currentTrajectory()?.xyz)return;
+    const panel=$('panel-trajectory'),canvas=$('molecule'),expanded=$('expand-trajectory').getAttribute('aria-expanded')==='true';
+    // Controls come before the canvas when expanded. Use the remaining viewport
+    // height so a laptop can show transport, molecule, and energy chart together.
+    canvas.style.height=expanded&&window.innerWidth>800?`${Math.max(280,Math.min(950,window.innerHeight-canvas.getBoundingClientRect().top-panel.scrollTop-24))}px`:'';
+    state.viewer?.resize();renderTrajectoryChart(currentTrajectory());
+  }
+  function expandTrajectory(expanded,restoreFocus=true){
+    const panel=$('panel-trajectory'),button=$('expand-trajectory'),wasExpanded=button.getAttribute('aria-expanded')==='true';
+    if(expanded&&!wasExpanded){
+      state.expandedReturnFocus=document.activeElement||button;state.expandedBackground=[];
+      // Inactivate siblings along the panel's ancestor chain without making
+      // the panel itself inert. Remember existing inert states for restoration.
+      let branch=panel;
+      for(let parent=branch.parentElement;parent;branch=parent,parent=parent.parentElement){
+        for(const sibling of parent.children)if(sibling!==branch){state.expandedBackground.push({node:sibling,inert:sibling.inert});sibling.inert=true;}
+        if(parent===document.body)break;
+      }
+    }
+    panel.classList.toggle('trajectory-expanded',expanded);document.body.classList.toggle('trajectory-open',expanded);
+    panel.setAttribute('role',expanded?'dialog':'tabpanel');if(expanded)panel.setAttribute('aria-modal','true');else panel.removeAttribute('aria-modal');
+    $('expand-trajectory').setAttribute('aria-expanded',String(expanded));$('expand-trajectory').textContent=expanded?'Reduzir área':'Ampliar área';
+    if(expanded){panel.scrollTop=0;button.focus({preventScroll:true});}
+    else{
+      for(const saved of state.expandedBackground)saved.node.inert=saved.inert;state.expandedBackground=[];
+      $('molecule').style?.removeProperty('height');state.panGesture=null;
+      if(wasExpanded&&restoreFocus)(state.expandedReturnFocus?.isConnected?state.expandedReturnFocus:button).focus({preventScroll:true});
+      state.expandedReturnFocus=null;
+    }
+    if(wasExpanded!==expanded)requestAnimationFrame(resizeTrajectory);
+  }
+  function expandedKeys(event){
+    if($('expand-trajectory').getAttribute('aria-expanded')!=='true')return;
+    if(event.key==='Escape'){event.preventDefault();expandTrajectory(false);return;}
+    if(event.key!=='Tab')return;
+    const focusable=[...$('panel-trajectory').querySelectorAll('a[href],button,input,select,textarea,[tabindex]')].filter(node=>!node.disabled&&node.tabIndex>=0&&node.getClientRects().length);
+    const first=focusable[0],last=focusable.at(-1),active=document.activeElement;
+    if(!first){event.preventDefault();$('expand-trajectory').focus();return;}
+    if(!focusable.includes(active)||(event.shiftKey?active===first:active===last)){event.preventDefault();(event.shiftKey?last:first).focus();}
+  }
   function renderTrajectory(){
     const run=currentTrajectory(),has=!!run?.xyz;$('trajectory-empty').hidden=has;$('trajectory-content').hidden=!has;
     $('reset-view').disabled=!has;
@@ -245,7 +342,7 @@
       const note=document.querySelector('.playback-note');note.textContent=run.xyz.frames.length<2?'Estrutura estática: um único quadro.':`A 1×, um ciclo leva ${(playbackDuration(run.xyz.frames)/1000).toLocaleString('pt-BR',{maximumFractionDigits:1})} s de reprodução. O tempo físico abaixo vem do XYZ. Use as setas para examinar cada quadro.`;
       if(run.xyz.previewStride)note.textContent+=` Prévia: 1 a cada ${run.xyz.previewStride} quadros originais, mais o último. Carregue o XYZ completo para ver todos.`;
       $('trajectory-status').hidden=!metadata(run).failed;$('trajectory-status').textContent=metadata(run).failed?'Cálculo interrompido com erro. Estes quadros são parciais: a distorção não é evidência confiável de reação.':'';
-      state.viewer.resize();drawFrame(changedRun);
+      state.viewer.resize();renderTrajectoryChart(run);drawFrame(changedRun);
     }catch(error){state.viewRun=null;stop();console.error('Falha ao desenhar a trajetória',run.key,error);$('trajectory-content').hidden=true;$('trajectory-empty').hidden=false;$('trajectory-empty').textContent='Não foi possível desenhar esta trajetória. Tente abrir o exemplo novamente; se persistir, confira se o navegador permite WebGL. Gráficos e medidas geométricas continuam disponíveis.';}
   }
   function drawFrame(fit=false){
@@ -268,9 +365,11 @@
     if(fit)resetView();else state.viewer.render();
     ensureTrajectoryReadouts();const timeline=physicalTimeValues(frame.time),frameLabel=$('frame-time').querySelector('.frame-index'),timeLabel=$('frame-time').querySelector('.frame-time-value');
     $('frame-slider').value=state.frame;$('frame-number').value=state.frame+1;$('previous-frame').disabled=state.frame===0;$('next-frame').disabled=state.frame===xyz.frames.length-1;frameLabel.textContent=`Quadro ${state.frame+1}/${xyz.frames.length}`;timeLabel.textContent=frame.time===null||frame.time===undefined?'tempo não informado':timeline.fs;
-    const rows=energy(run)?.rows||[],row=frame.time===null?null:rows.find(r=>Math.abs(r.time-frame.time)<.051&&(frame.step===null||r.step===frame.step));
+    const row=state.energyIndex?.exact(frame.time,frame);
     $('frame-time-fs').textContent=timeline.fs;$('frame-time-ps').textContent=timeline.ps;$('frame-time-s').textContent=timeline.s;renderStageSummary([run],'trajectory-stage-summary',frame.time);
-    $('frame-temperature').textContent=row?.temperature!==null&&row?.temperature!==undefined?`${num(row.temperature)} K`:'Sem ponto correspondente';$('frame-potential').textContent=row?.potential!==null&&row?.potential!==undefined?`${num(row.potential,9)} Eh`:'Sem ponto correspondente';$('frame-atoms').textContent=xyz.elements.length;
+    $('frame-temperature').textContent=Number.isFinite(row?.temperature)?`${num(row.temperature)} K`:'Sem amostra exata';
+    for(const key of ['kinetic','potential','total'])$('frame-'+key).textContent=Number.isFinite(row?.[key])?`${num(row[key],9)} Eh`:'Sem amostra exata';
+    $('frame-atoms').textContent=xyz.elements.length;updateTrajectoryCursor(run);
   }
   function resetView(){
     if(!state.viewer||!state.model)return;const run=currentTrajectory();state.viewer.setView(state.initialView);state.viewer.rotate(60,'x');state.viewer.rotate(-20,'y');
@@ -282,7 +381,17 @@
       // Leave room for rotated edge atoms and their rendered sphere radii.
       state.viewer.zoom(.9);
     }else state.viewer.zoomTo();
-    if(run?.xyz.elements.length<=3)state.viewer.zoom(2.2);state.viewer.render();
+    if(run?.xyz&&run.xyz.elements.length<=20&&!metadata(run).wallSphere&&!run.xyz.elements.includes('Zn')){
+      // 3Dmol's default fit reserves a 5 Å radius even for tiny molecules.
+      // Correct only that minimum, using atom extents plus the rendered radii;
+      // confined systems keep their entire wall and Zn keeps its shared view.
+      const coords=run.xyz.frames[state.frame].coords,low=[Infinity,Infinity,Infinity],high=[-Infinity,-Infinity,-Infinity];
+      for(const point of coords)for(let k=0;k<3;k++){low[k]=Math.min(low[k],point[k]);high[k]=Math.max(high[k],point[k]);}
+      const center=low.map((value,k)=>(value+high[k])/2);
+      const radius=Math.max(...coords.map((point,i)=>Math.hypot(...point.map((value,k)=>value-center[k]))+(elementRadii[run.xyz.elements[i]]||.42)));
+      state.viewer.zoom(Math.max(1,Math.min(3.4,5/(Math.max(radius,1)*1.2))));
+    }
+    state.viewer.render();
   }
   function renderAtomInfo(){const run=currentTrajectory(),index=state.selectedAtom,coords=run?.xyz?.frames[state.frame]?.coords[index];$('atom-info').textContent=index===null||!coords?'Selecione um átomo para ver seu índice e suas coordenadas.':`${run.xyz.elements[index]} · índice ${index}: x = ${num(coords[0],7)}, y = ${num(coords[1],7)}, z = ${num(coords[2],7)} Å.`;}
   function seekFrame(index){stop();const run=currentTrajectory();if(!run?.xyz)return;if(!Number.isFinite(index)){$('frame-number').value=state.frame+1;return;}state.frame=Math.max(0,Math.min(run.xyz.frames.length-1,Math.round(index)));drawFrame();}
@@ -376,6 +485,15 @@
   $('energy-window-full').addEventListener('click',()=>{$('energy-window-from').value='';$('energy-window-to').value='';renderEnergy();});$('energy-first-window').addEventListener('click',()=>{$('energy-window-from').value='0';$('energy-window-to').value='75';renderEnergy();});
   document.querySelectorAll('[name="energy-series"]').forEach(c=>c.addEventListener('change',renderEnergy));
   $('trajectory-run').addEventListener('change',()=>{stop();renderTrajectory();});$('reset-view').addEventListener('click',resetView);for(const id of ['atom-labels','proximity-lines','hydrogen-bonds','coordination-contacts'])$(id).addEventListener('change',()=>{drawFrame();renderContactLegend(currentTrajectory());});$('coordination-cutoff').addEventListener('input',()=>drawFrame());
+  $('rotate-molecule').addEventListener('click',()=>setInteraction('rotate'));$('pan-molecule').addEventListener('click',()=>setInteraction('pan'));
+  $('molecule').addEventListener('mousedown',event=>startPan(event),true);$('molecule').addEventListener('touchstart',event=>startPan(event,true),{capture:true,passive:true});
+  $('molecule').addEventListener('keydown',panWithKeyboard);
+  window.addEventListener('mousemove',event=>movePan(event),{capture:true,passive:false});window.addEventListener('touchmove',event=>movePan(event,true),{capture:true,passive:false});
+  for(const event of ['mouseup','touchend','touchcancel','blur'])window.addEventListener(event,()=>{state.panGesture=null;});
+  $('expand-trajectory').addEventListener('click',()=>expandTrajectory($('expand-trajectory').getAttribute('aria-expanded')!=='true'));
+  $('trajectory-energy-mode').addEventListener('change',()=>{const run=currentTrajectory();if(run?.xyz)renderTrajectoryChart(run);});
+  for(const key of ['kinetic','potential','total'])$('trajectory-show-'+key).addEventListener('change',()=>{const run=currentTrajectory();if(run?.xyz)renderTrajectoryChart(run);});
+  document.addEventListener('keydown',expandedKeys);
   $('frame-slider').addEventListener('input',()=>seekFrame(Number($('frame-slider').value)));$('play-button').addEventListener('click',play);
   $('previous-frame').addEventListener('click',()=>seekFrame(state.frame-1));$('next-frame').addEventListener('click',()=>seekFrame(state.frame+1));
   $('frame-number').addEventListener('change',()=>seekFrame($('frame-number').valueAsNumber-1));$('frame-number').addEventListener('keydown',event=>{if(event.key==='Enter'){event.preventDefault();seekFrame($('frame-number').valueAsNumber-1);}});
@@ -385,7 +503,7 @@
   $('ethanol-preset').addEventListener('click',()=>{const run=currentDistance();if(!run?.xyz||!G.isEthanolSkeleton(run.xyz.elements,run.xyz.frames[0].coords))return;$('geometry-type').value='dihedral';renderDistances();for(const [id,value] of [['atom-a',0],['atom-b',1],['atom-c',2],['atom-d',8]])$(id).value=String(value);if(addGeometryMeasure(run,'dihedral',[0,1,2,8])){renderDistances();message('Preset Etanol C0–C1–O2–H8 adicionado. O diedro é assinado em graus.',true);}});
   $('export-energy').addEventListener('click',exportEnergy);$('export-distance').addEventListener('click',exportDistance);
   $('help-button').addEventListener('click',()=>$('help-dialog').showModal());for(const id of ['close-help','help-done'])$(id).addEventListener('click',()=>$('help-dialog').close());
-  let resizeTimer;window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(()=>{if(state.tab==='energy'&&state.runs.length)renderEnergy();else if(state.tab==='distance'&&state.runs.length)renderDistances();state.viewer?.resize();},150);});
+  let resizeTimer;window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(()=>{if(state.tab==='energy'&&state.runs.length)renderEnergy();else if(state.tab==='distance'&&state.runs.length)renderDistances();if(state.tab==='trajectory')resizeTrajectory();else state.viewer?.resize();},150);});
   document.addEventListener('visibilitychange',()=>{if(document.hidden)stop();});
   const query=new URLSearchParams(location.search),requested=query.get('exemplo'),requestedTab=new Map([['energias','energy'],['trajetoria','trajectory'],['distancias','distance'],['geometria','distance']]).get(query.get('aba'));if(requestedTab)state.tab=requestedTab;if(requested&&window.AIMD_EXAMPLES?.presets[requested]){$('example-select').value=requested;loadExample(requested,requestedTab);}
 })();

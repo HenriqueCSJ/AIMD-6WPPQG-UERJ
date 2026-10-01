@@ -1,4 +1,4 @@
-# 8. Água dentro de um fulereno
+# Opcional · Água dentro de C₆₀
 
 [← Percurso](../README.md) · [Aplicativo de análise](../../visualizador/index.html)
 

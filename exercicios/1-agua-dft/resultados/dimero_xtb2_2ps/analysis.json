@@ -1,0 +1,205 @@
+{
+  "frames": 4001,
+  "first_fs": 0.0,
+  "last_fs": 2000.0,
+  "OH_range_A": [
+    0.914237118737331,
+    1.0198641946816582
+  ],
+  "OO_range_A": [
+    2.632626761070294,
+    3.511013638362457
+  ],
+  "OO_final_A": 3.0744782833423394,
+  "temperature_range_K": [
+    18.13,
+    358.41
+  ],
+  "E_total_span_Eh": 7.400000000146179e-05,
+  "E_total_final_minus_initial_Eh": -1.0000000010279564e-06,
+  "Hbond_criterion": "H...O < 2.4 A and O-H...O > 130 deg; instantaneous geometry, not lifetime",
+  "Hbond_frame_counts": {
+    "water0_donor": 791,
+    "water3_donor": 843,
+    "either": 1634
+  },
+  "Hbond_motif_transitions": [
+    {
+      "time_fs": 0.0,
+      "motif": "water0_donor"
+    },
+    {
+      "time_fs": 34.0,
+      "motif": "none"
+    },
+    {
+      "time_fs": 47.5,
+      "motif": "water3_donor"
+    },
+    {
+      "time_fs": 78.5,
+      "motif": "none"
+    },
+    {
+      "time_fs": 133.0,
+      "motif": "water3_donor"
+    },
+    {
+      "time_fs": 161.5,
+      "motif": "none"
+    },
+    {
+      "time_fs": 195.5,
+      "motif": "water0_donor"
+    },
+    {
+      "time_fs": 236.0,
+      "motif": "none"
+    },
+    {
+      "time_fs": 292.5,
+      "motif": "water0_donor"
+    },
+    {
+      "time_fs": 356.5,
+      "motif": "none"
+    },
+    {
+      "time_fs": 420.5,
+      "motif": "water3_donor"
+    },
+    {
+      "time_fs": 486.5,
+      "motif": "none"
+    },
+    {
+      "time_fs": 522.5,
+      "motif": "water3_donor"
+    },
+    {
+      "time_fs": 554.5,
+      "motif": "none"
+    },
+    {
+      "time_fs": 605.5,
+      "motif": "water0_donor"
+    },
+    {
+      "time_fs": 613.5,
+      "motif": "none"
+    },
+    {
+      "time_fs": 614.0,
+      "motif": "water0_donor"
+    },
+    {
+      "time_fs": 617.0,
+      "motif": "none"
+    },
+    {
+      "time_fs": 624.5,
+      "motif": "water0_donor"
+    },
+    {
+      "time_fs": 650.5,
+      "motif": "none"
+    },
+    {
+      "time_fs": 888.5,
+      "motif": "water0_donor"
+    },
+    {
+      "time_fs": 925.5,
+      "motif": "none"
+    },
+    {
+      "time_fs": 967.0,
+      "motif": "water3_donor"
+    },
+    {
+      "time_fs": 1054.0,
+      "motif": "none"
+    },
+    {
+      "time_fs": 1120.5,
+      "motif": "water3_donor"
+    },
+    {
+      "time_fs": 1124.5,
+      "motif": "none"
+    },
+    {
+      "time_fs": 1127.0,
+      "motif": "water3_donor"
+    },
+    {
+      "time_fs": 1151.0,
+      "motif": "none"
+    },
+    {
+      "time_fs": 1177.0,
+      "motif": "water0_donor"
+    },
+    {
+      "time_fs": 1214.0,
+      "motif": "none"
+    },
+    {
+      "time_fs": 1243.0,
+      "motif": "water0_donor"
+    },
+    {
+      "time_fs": 1263.5,
+      "motif": "none"
+    },
+    {
+      "time_fs": 1294.0,
+      "motif": "water3_donor"
+    },
+    {
+      "time_fs": 1365.0,
+      "motif": "none"
+    },
+    {
+      "time_fs": 1457.5,
+      "motif": "water0_donor"
+    },
+    {
+      "time_fs": 1482.5,
+      "motif": "none"
+    },
+    {
+      "time_fs": 1515.5,
+      "motif": "water3_donor"
+    },
+    {
+      "time_fs": 1593.5,
+      "motif": "none"
+    },
+    {
+      "time_fs": 1646.0,
+      "motif": "water0_donor"
+    },
+    {
+      "time_fs": 1664.5,
+      "motif": "none"
+    },
+    {
+      "time_fs": 1864.0,
+      "motif": "water0_donor"
+    },
+    {
+      "time_fs": 1906.5,
+      "motif": "none"
+    },
+    {
+      "time_fs": 1961.0,
+      "motif": "water0_donor"
+    }
+  ],
+  "review_flag": false,
+  "checkpoint": {
+    "step": 4000,
+    "time_fs": 2000.0
+  }
+}

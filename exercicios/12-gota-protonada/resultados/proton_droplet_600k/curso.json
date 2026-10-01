@@ -1,0 +1,72 @@
+{
+  "metadata": {
+    "version": "6.1.1",
+    "method": "XTB2 ALPB(water)",
+    "ensemble": "unknown",
+    "thermostat": "CSVR",
+    "targetTemperature": null,
+    "timestep": 0.25,
+    "charge": 1,
+    "multiplicity": 1,
+    "wall": true,
+    "wallSphere": {
+      "center": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "radius": 8.5
+    },
+    "changingConditions": true,
+    "hasMD": true,
+    "stages": [
+      {
+        "index": 1,
+        "startFs": 0,
+        "endFs": 500,
+        "timestep": 0.25,
+        "thermostat": "CSVR",
+        "targetStartK": 300,
+        "targetEndK": 300,
+        "ramp": false,
+        "label": "Prefixo comum aos quatro ramos"
+      },
+      {
+        "index": 2,
+        "startFs": 500,
+        "endFs": 1000,
+        "timestep": 0.25,
+        "thermostat": "CSVR",
+        "targetStartK": 300,
+        "targetEndK": 600,
+        "ramp": true,
+        "label": "Rampa"
+      },
+      {
+        "index": 3,
+        "startFs": 1000,
+        "endFs": 2500,
+        "timestep": 0.25,
+        "thermostat": "CSVR",
+        "targetStartK": 600,
+        "targetEndK": 600,
+        "ramp": false,
+        "label": "Manutenção"
+      }
+    ]
+  },
+  "warnings": [
+    "0–500 fs é o mesmo prefixo nas quatro temperaturas; cada ramo continua o mesmo checkpoint. Não são quatro preparações independentes.",
+    "A temperatura do banho é um alvo; acompanhe a temperatura cinética realizada.",
+    "A quantidade conservada preserva as referências originais de cada etapa. Não interpretar offsets de restart/Run como saltos físicos.",
+    "Agregado finito com dispersão parcial e parede suave: não representa água líquida de equilíbrio nem permite obter taxas ou condutividade."
+  ],
+  "relatedFiles": [
+    "../etapas/p03_equilibrar.out",
+    "../etapas/t600_gota.out"
+  ],
+  "energyBreaksAfterFs": [
+    500,
+    1000
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "metadata": {
+    "version": "6.1.1",
+    "method": "XTB2 ALPB(water)",
+    "ensemble": "NVT",
+    "thermostat": "CSVR",
+    "targetTemperature": 300,
+    "timestep": 0.25,
+    "charge": 2,
+    "multiplicity": 1,
+    "wall": true,
+    "wallSphere": {
+      "center": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "radius": 9
+    },
+    "changingConditions": true,
+    "hasMD": true,
+    "stages": [
+      {
+        "index": 1,
+        "startFs": 0,
+        "endFs": 1000,
+        "timestep": 0.25,
+        "thermostat": "CSVR",
+        "targetStartK": 300,
+        "targetEndK": 300,
+        "ramp": false,
+        "label": "N 61: aproximação assistida"
+      },
+      {
+        "index": 2,
+        "startFs": 1000,
+        "endFs": 3000,
+        "timestep": 0.25,
+        "thermostat": "CSVR",
+        "targetStartK": 300,
+        "targetEndK": 300,
+        "ramp": false,
+        "label": "Sem viés de coordenação"
+      }
+    ]
+  },
+  "warnings": [
+    "0–1000 fs: aproximação de N 61 assistida. 1000–3000 fs: sem viés de coordenação; parede e termostato permanecem.",
+    "Dados reunidos de duas etapas contínuas; a referência da quantidade conservada pode mudar no restart. Não interpretar esse offset como salto físico nem usar a série reunida como teste NVE.",
+    "Contatos geométricos não são ordens de ligação; o percurso condicionado não mede associação espontânea ou cinética experimental."
+  ],
+  "relatedFiles": [
+    "../etapas/m01a_N_sem_vies_agua.out",
+    "../etapas/m02_livre_apos_N1.out"
+  ],
+  "energyBreaksAfterFs": [
+    1000
+  ]
+}

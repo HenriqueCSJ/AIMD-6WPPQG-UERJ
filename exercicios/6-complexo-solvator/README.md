@@ -1,8 +1,8 @@
-# 6. Construir o ambiente com SOLVATOR
+# 04a · Construir o ambiente com SOLVATOR
 
 [← Percurso](../README.md) · [Aplicativo de análise](../../visualizador/index.html)
 
-**30 min · Zn²⁺–etilenodiamina · carga +2 · singlete**
+**Parte do bloco Zn–en (45 min com a parede) · Zn²⁺–etilenodiamina · carga +2 · singlete**
 
 > **Pergunta da atividade:** Como acrescentar águas explícitas a um complexo já preparado?
 
@@ -100,7 +100,7 @@ Ative **Coordenação** e **Ligações H** no visualizador. Identifique os dois 
 
 <details markdown="1"><summary>Opcional: montagem mais curta</summary>
 
-Troque seis por duas águas para praticar em menos tempo: o resultado tem 31 átomos. Execute somente uma versão. No exercício 7 todos usarão o sistema fornecido de 43 átomos.
+Troque seis por duas águas para praticar em menos tempo: o resultado tem 31 átomos. Execute somente uma versão. Na etapa 04b todos usarão o sistema fornecido de 43 átomos.
 
 [Baixar input](inputs/zn_solvator_2aguas.inp) · [Baixar pacote com os arquivos necessários](aula-zn_solvator_2aguas.zip)
 

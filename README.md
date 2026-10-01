@@ -24,20 +24,23 @@
 
 ### Um laboratório no seu navegador
 
-Veja a trajetória, acompanhe energia e temperatura, meça distâncias, ângulos e diedros. Abra um exemplo pronto ou carregue `.out`, `-md-ener.csv` e `-traj.xyz`. **Seus arquivos são lidos localmente**, sem conta e sem instalação.
+Veja a trajetória em uma área ampliável, gire ou arraste a molécula e acompanhe o quadro atual nas curvas de energia cinética, potencial e total. Meça também distâncias, ângulos e diedros. Abra um exemplo pronto ou carregue `.out`, `-md-ener.csv` e `-traj.xyz`. **Seus arquivos são lidos localmente**, sem conta e sem instalação.
 
-<a href="https://henriquecsj.github.io/AIMD-6WPPQG-UERJ/visualizador/?exemplo=complex&amp;aba=trajetoria"><img src="assets/laboratorio-preview.png" width="960" alt="Prévia real do laboratório de trajetórias: complexo de zinco, águas, parede e contatos tracejados. Clique para abrir o exemplo interativo."></a>
+<a href="https://henriquecsj.github.io/AIMD-6WPPQG-UERJ/visualizador/?exemplo=complex&amp;aba=trajetoria"><img src="assets/laboratorio-energia-preview.jpg" width="960" alt="Prévia real do laboratório de trajetórias: complexo de zinco, águas, parede e contatos tracejados. Clique para abrir o exemplo interativo."></a>
 
 **[Explorar o complexo de Zn²⁺ →](https://henriquecsj.github.io/AIMD-6WPPQG-UERJ/visualizador/?exemplo=complex&aba=trajetoria)**
 
-### O percurso da aula
+### Durante a aula: cinco blocos
 
-- **[01–02 · Ligação de hidrogênio](https://henriquecsj.github.io/AIMD-6WPPQG-UERJ/exercicios/1-agua-dft/)** — um dímero de água com DFT e o efeito do solvente implícito.
-- **[03–05 · Etanol em movimento](https://henriquecsj.github.io/AIMD-6WPPQG-UERJ/exercicios/3-xtb2-etanol/)** — torsão, instabilidade do timestep, correção e aquecimento por etapas.
-- **[06–07 · Complexação e solvente](https://henriquecsj.github.io/AIMD-6WPPQG-UERJ/exercicios/6-complexo-solvator/)** — Zn²⁺, SOLVATOR, contatos de coordenação e parede.
-- **[08 · Água dentro de C₆₀](https://henriquecsj.github.io/AIMD-6WPPQG-UERJ/exercicios/8-agua-no-fulereno/)** — extensão opcional sobre confinamento.
+1. **[Dímero de água](exercicios/1-agua-dft/README.md)** — ligação H, reorientação e medidas.
+2. **[Etanol e timestep](exercicios/3-xtb2-etanol/README.md)** — controle, instabilidade e correção.
+3. **[Aquecer e resfriar](exercicios/5-termostato/README.md)** — termostato, diedro e etapas contínuas.
+4. **[Zn–en](exercicios/6-complexo-solvator/README.md)** — SOLVATOR, parede e [formação do quelato](exercicios/11-formacao-quelato/README.md) com trajetória pronta.
+5. **[H₅O₂⁺](exercicios/10-proton-compartilhado/README.md)** — um próton compartilhado entre duas águas.
 
-Começamos com **DFT** e passamos a **GFN2-xTB (`XTB2`)** para explorar mais movimento. Os resultados fornecidos permitem acompanhar a aula mesmo quando uma execução local demora.
+**[Opcionais e referências](exercicios/README.md#opcionais-e-referencias):** DFT/CPCM, gotas protonadas de 300 a 600 K, água em C₆₀ e outros controles. A lista do laboratório separa estes materiais do percurso da aula.
+
+Os cálculos ao vivo usam **GFN2-xTB (`XTB2`)** desde o primeiro exercício. **DFT fica como comparação já calculada**, sem espera durante a aula. Os resultados fornecidos permitem acompanhar a aula mesmo quando uma execução local demora.
 
 **[Baixar os materiais (.zip)](https://github.com/HenriqueCSJ/AIMD-6WPPQG-UERJ/archive/refs/heads/main.zip)** · [Roteiro e horários](exercicios/roteiro-4h.md) · [Downloads oficiais](tutoriais/04-links-e-referencias.md)
 

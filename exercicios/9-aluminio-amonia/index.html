@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>↗ · Al³⁺/amônia: referência · AIMD / ORCA</title><link rel="stylesheet" href="../pagina.css?v=20261001-course"><script defer src="../pagina.js"></script></head>
+<body><a class="skip" href="#conteudo">Ir para o conteúdo</a><header class="brand"><a href="../index.html"><strong>AIMD com ORCA</strong><small>6º Workshop PPGQ–UERJ · 7 de outubro de 2026</small></a><div class="logos"><img src="../../assets/uerj-logo.png" alt="UERJ"><img src="../../assets/ufrrj-logo-compacto.png" alt="UFRRJ"></div></header><div class="layout"><nav class="course-nav" aria-label="Exercícios"><h2>Do input à interpretação</h2><a class="home" href="../index.html">Visão geral do percurso</a><h3 class="nav-group">Durante a aula</h3><div class="links"><a href="../1-agua-dft/index.html"><span class="num">01</span><span>Dímero de água</span></a><a href="../3-xtb2-etanol/index.html"><span class="num">02a</span><span>Etanol: controle</span></a><a href="../4-timestep/index.html"><span class="num">02b</span><span>Timestep e correção</span></a><a href="../5-termostato/index.html"><span class="num">03</span><span>Aquecer e resfriar</span></a><a href="../6-complexo-solvator/index.html"><span class="num">04a</span><span>Zn–en: SOLVATOR</span></a><a href="../7-dinamica-complexo/index.html"><span class="num">04b</span><span>Zn–en: parede</span></a><a href="../11-formacao-quelato/index.html"><span class="num">04c</span><span>Zn–en: formar o quelato</span></a><a href="../10-proton-compartilhado/index.html"><span class="num">05</span><span>Um próton entre duas águas</span></a></div><h3 class="nav-group">Opcionais e referências</h3><div class="links"><a href="../2-solvente-implicito/index.html"><span class="num">↗</span><span>DFT e solvente contínuo</span></a><a href="../12-gota-protonada/index.html"><span class="num">↗</span><span>Gota protonada: 300–600 K</span></a><a href="../8-agua-no-fulereno/index.html"><span class="num">↗</span><span>Água dentro de C₆₀</span></a><a href="../9-aluminio-amonia/index.html" aria-current="page"><span class="num">↗</span><span>Al³⁺/amônia: referência</span></a></div></nav><main id="conteudo"><h1 id="referencia-opcional-al3-agua-e-amonia">Referência opcional · Al³⁺, água e amônia</h1>
+<blockquote>
+<p><strong>Fora do percurso da aula.</strong> Estes resultados XTB2 exigem um ajuste de convergência. A reprodução DFT foi interrompida e não é uma referência completa. Para o caso reativo ao vivo, use <a href="../10-proton-compartilhado/index.html">H₅O₂⁺</a>.</p>
+</blockquote>
+<p><a href="../index.html">← Percurso</a> · <a href="../../visualizador/index.html?exemplo=aluminum&amp;aba=trajetoria">Abrir as duas trajetórias</a></p>
+<p><strong>15 min · XTB2 · 23 átomos · 2 ps = 2 × 10⁻¹² s</strong></p>
+<blockquote>
+<p><strong>Pergunta:</strong> a amônia se liga ao alumínio ou recebe um próton de uma água coordenada?</p>
+</blockquote>
+<p>Partimos da geometria fornecida: Al³⁺, seis águas e uma NH₃ afastada. Substituímos BLYP/D3/def2-SVP por <strong>XTB2</strong>. Não acrescentamos solvente implícito, parede nem otimização inicial. É um agregado isolado, com carga total +3 e multiplicidade 1.</p>
+<h2 id="1-execute">1. Execute</h2>
+<p><a href="aula-al_agua_nh3_scc.zip">Pacote de 1 fs</a> · <a href="aula-al_agua_nh3_dt05.zip">Pacote de 0,5 fs</a> · <a href="estruturas/al_agua_nh3.xyz">Estrutura inicial</a></p>
+<p>Para a aula, prefira <strong>0,5 fs</strong>; o pacote de <strong>1 fs</strong> conserva o passo do exemplo proposto para comparação. Ambos chegam a 2 ps. Execute apenas um e abra a outra referência pronta.</p>
+<p><strong>Atenção ao terceiro arquivo:</strong> cada pacote contém o input, a geometria e <code>scc.inp</code>. Mantenha os três na mesma pasta. A troca direta para XTB2, sem esse ajuste de convergência, falhou antes da dinâmica nesta geometria. <a href="apoio.html">Entenda e consulte a tentativa preservada</a>.</p>
+<details open>
+<summary>Input de 0,5 fs · recomendado para a execução em aula</summary>
+<pre><code class="language-text"># Caso fornecido: Al3+ + 6 aguas + NH3, agora com XTB2.
+! MD XTB2 PAL8
+%maxcore 256
+# Reduz a mistura SCC para esta geometria ionica; requer scc.inp.
+%xtb
+  XTBINPUTSTRING &quot;--input scc.inp&quot;
+end
+%md
+  # Semente fixa para reproduzir as velocidades iniciais.
+  Randomize 42
+  Initvel 300_K
+  # Controle: mesmo ponto inicial e banho; passo reduzido para conferir a reacao.
+  Timestep 0.5_fs
+  Thermostat Berendsen 300_K Timecon 20.0_fs
+  Dump Position Stride 1 Filename &quot;al_agua_nh3_dt05-traj.xyz&quot;
+  # 4000 x 0.5 fs = 2 ps = 2e-12 s.
+  Run 4000
+end
+# Carga total +3 e multiplicidade 1; geometria original sem pre-otimizacao.
+* xyzfile 3 1 al_agua_nh3.xyz
+</code></pre>
+</details>
+<details>
+<summary>Input de 1 fs · passo do exemplo original</summary>
+<pre><code class="language-text"># Caso fornecido: Al3+ + 6 aguas + NH3, agora com XTB2.
+! MD XTB2 PAL8
+%maxcore 256
+# Reduz a mistura SCC para esta geometria ionica; requer scc.inp.
+%xtb
+  XTBINPUTSTRING &quot;--input scc.inp&quot;
+end
+%md
+  # Semente fixa para reproduzir as velocidades iniciais.
+  Randomize 42
+  Initvel 300_K
+  # Preserva o passo e o banho do exemplo; conferir a sensibilidade ao passo.
+  Timestep 1.0_fs
+  Thermostat Berendsen 300_K Timecon 20.0_fs
+  Dump Position Stride 1 Filename &quot;al_agua_nh3_scc-traj.xyz&quot;
+  # 2000 x 1 fs = 2 ps = 2e-12 s.
+  Run 2000
+end
+# Carga total +3 e multiplicidade 1; geometria original sem pre-otimizacao.
+* xyzfile 3 1 al_agua_nh3.xyz
+</code></pre>
+</details>
+<details>
+<summary>Arquivo adicional scc.inp · ajuste numérico</summary>
+<p>O parâmetro <code>broydamp</code> reduz a mistura das cargas entre iterações; <code>iterations</code> aumenta o teto de iterações. Não é aquecimento e não é uma força aplicada aos átomos. O Hamiltoniano continua GFN2-xTB, com temperatura eletrônica de 300 K.</p>
+<pre><code class="language-text">$scc
+  broydamp=0.1
+  iterations=1000
+$write
+  output file=properties.out
+$end
+</code></pre>
+</details>
+<details>
+<summary>Coordenadas originais · al_agua_nh3.xyz</summary>
+<pre><code class="language-text">23
+Geometria fornecida por Henrique; Al(H2O)6 + NH3; carga total +3; singleto
+Al        -1.69843        0.30039       -0.52660
+O         -1.75434        2.28860       -0.16768
+H         -1.06074        2.96658       -0.39426
+H         -2.57402        2.86004       -0.19067
+O          0.18914        0.01137       -1.09162
+H          0.74757        0.53633       -1.72122
+H          0.81910       -0.68284       -0.76495
+O         -4.16028        0.33340        0.21207
+H         -4.88863       -0.23860       -0.13918
+H         -4.41422        0.36961        1.17124
+O         -1.89953       -1.63320       -0.98875
+H         -1.18917       -2.30830       -0.84601
+H         -2.72113       -2.18200       -0.88390
+O         -2.27717        0.41996       -2.39043
+H         -1.95369       -0.26864       -3.02303
+H         -2.55489        1.18412       -2.95722
+O         -1.29833        0.19812        1.32935
+H         -0.88999        0.97238        1.79308
+H         -1.06866       -0.60048        1.86891
+N         -7.75307        0.21769        1.57284
+H         -7.36248       -0.21900        2.40779
+H         -8.23546        1.07792        1.83306
+H         -8.41348       -0.42234        1.13168
+</code></pre>
+</details>
+<details>
+<summary>Executar no Ubuntu / WSL2</summary>
+<p>Extraia o pacote de 0,5 fs. Com <code>ORCA_DIR</code> configurado conforme o tutorial, abra o Ubuntu nessa pasta e execute:</p>
+<pre><code class="language-bash">(
+  test -x &quot;$ORCA_DIR/orca&quot; || { echo &quot;Configure ORCA_DIR antes de executar.&quot;; exit 1; }
+  pasta=$(mktemp -d ./execucao-XXXXXX) || exit 1
+  cp al_agua_nh3_dt05.inp al_agua_nh3.xyz scc.inp &quot;$pasta/&quot; || exit 1
+  cd &quot;$pasta&quot; || exit 1
+  &quot;$ORCA_DIR/orca&quot; al_agua_nh3_dt05.inp &gt; al_agua_nh3_dt05.out 2&gt;&amp;1
+  tail -n 12 al_agua_nh3_dt05.out
+  echo &quot;Resultados: $PWD&quot;
+)
+</code></pre>
+<p>Para o teste de 1 fs, use o outro pacote e substitua <code>al_agua_nh3_dt05</code> por <code>al_agua_nh3_scc</code>. Rode um cálculo por vez.</p>
+</details>
+<p>O teste de <strong>0,5 fs levou 96,4 s</strong>; o de <strong>1 fs, 49,3 s</strong>, no Intel Core Ultra 9 185H, WSL2, ORCA 6.1.1 / xTB 6.7.1, PAL8. São medições desta máquina. Se passar de 2 min na aula, abra a referência e avance para a interpretação.</p>
+<h2 id="2-procure-o-evento-nao-apenas-o-movimento">2. Procure o evento, não apenas o movimento</h2>
+<p><a href="../../visualizador/index.html?exemplo=aluminum&amp;aba=trajetoria">Abrir no laboratório</a>. O seletor da trajetória alterna os dois passos; ambos preservam todos os quadros.</p>
+<ol>
+<li>Pause perto de <strong>0,14–0,20 ps</strong> (1,4–2,0 × 10⁻¹³ s). Ative os índices dos átomos.</li>
+<li>Meça <strong>O 7–H 9</strong> e <strong>N 19–H 9</strong>. Esses índices começam em zero, como no visualizador. Na contagem convencional, são O8, H10 e N20.</li>
+<li>Acompanhe <strong>Al 0–N 19</strong>: a amônia chega a formar uma ligação direta com o metal? Compare com as distâncias Al–O.</li>
+<li>Vá ao final. Conte os H ligados ao N e ao O 7. Depois compare o pico de temperatura com o alvo de 300 K do termostato.</li>
+</ol>
+<p><strong>O que as referências mostram:</strong> o H 9 passa da água para a amônia, retorna brevemente e depois permanece no N até o final. Em 0,5 fs, a primeira troca de vizinho mais próximo ocorre aos <strong>147 fs</strong> e a última aos <strong>178,5 fs</strong>; em 1 fs, aos <strong>148 e 178 fs</strong>. O N termina com quatro H e o O 7 com um. Não são cinco transferências independentes: há recrossamentos do mesmo H.</p>
+<p>A mudança geométrica é compatível com:</p>
+<p><strong>[Al(H₂O)₆]³⁺ + NH₃ → [Al(H₂O)₅(OH)]²⁺ + NH₄⁺</strong></p>
+<p>O Al³⁺ atua como ácido de Lewis e favorece a acidez da água coordenada; a amônia recebe o H como base. A reação escrita usa a atribuição química de cargas formais. A análise da trajetória identifica vizinhos e ligações por geometria, sem medir cargas inteiras dos fragmentos.</p>
+<p><strong>Não houve coordenação Al–N:</strong> a menor distância ficou em cerca de <strong>4,09 Å</strong> no controle de 0,5 fs. O fragmento com quatro N–H se afasta e Al–N termina em <strong>56,19 Å</strong>. Sem parede ou meio contínuo, o modelo permite separação livre dos produtos. No mesmo controle, Al–O 7 contrai de <strong>2,57 para 1,65 Å</strong>, compatível com a formação do ligante hidroxo.</p>
+<h2 id="3-o-que-este-exemplo-permite-discutir">3. O que este exemplo permite discutir?</h2>
+<ul>
+<li><strong>Transferência versus reorientação.</strong> No dímero, a rede de contatos H muda; aqui um H muda persistentemente de O para N.</li>
+<li><strong>Temperatura do banho versus temperatura instantânea.</strong> O alvo é 300 K, mas o controle de 0,5 fs atinge aproximadamente <strong>705 K</strong> durante a reorganização inicial. O termostato remove energia ao longo do tempo; ele não fixa cada quadro em 300 K.</li>
+<li><strong>Sensibilidade ao timestep.</strong> Reduzir o passo preservou o evento qualitativo nesta condição inicial. Isso é um controle numérico útil, não uma validação geral do método ou da cinética.</li>
+</ul>
+<p>Berendsen com acoplamento de 20 fs foi mantido do exemplo proposto. É forte acoplamento e não gera a distribuição canônica exata. A geometria inicial não foi equilibrada; o gap eletrônico inicial pequeno produz ocupações fracionárias no xTB. Por isso, esta é uma <strong>demonstração exploratória de reação</strong>, não uma medida de pKa, barreira, velocidade ou comportamento do Al³⁺ em solução. A diferença de energia potencial entre os extremos inclui relaxação, transferência e separação; não é uma entalpia de reação.</p>
+<h2 id="resultados-e-leitura">Resultados e leitura</h2>
+<ul>
+<li><strong>0,5 fs:</strong> <a href="resultados/al_agua_nh3_dt05/al_agua_nh3_dt05.out">output</a> · <a href="resultados/al_agua_nh3_dt05/al_agua_nh3_dt05-md-ener.csv">energias</a> · <a href="resultados/al_agua_nh3_dt05/al_agua_nh3_dt05-traj.xyz">trajetória</a> · <a href="resultados/al_agua_nh3_dt05/analysis.json">medidas e eventos</a>.</li>
+<li><strong>1 fs:</strong> <a href="resultados/al_agua_nh3_scc/al_agua_nh3_scc.out">output</a> · <a href="resultados/al_agua_nh3_scc/al_agua_nh3_scc-md-ener.csv">energias</a> · <a href="resultados/al_agua_nh3_scc/al_agua_nh3_scc-traj.xyz">trajetória</a> · <a href="resultados/al_agua_nh3_scc/analysis.json">medidas e eventos</a>.</li>
+<li><a href="https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html">ORCA: MD, passos de integração e termostatos</a>.</li>
+<li><a href="https://www.faccts.de/docs/orca/6.1/manual/contents/modelchemistries/semiempirical.html">ORCA: XTB2 e XTBINPUTSTRING</a>.</li>
+<li><a href="https://github.com/grimme-lab/xtb/blob/main/man/xcontrol.7.adoc">xTB: opções do controle SCC</a>.</li>
+</ul>
+<p><strong>Para registrar:</strong> cite duas distâncias que distinguem transferência de próton de coordenação da amônia ao Al. Explique por que o alvo de 300 K não impede um pico de temperatura.</p><nav class="endnav" aria-label="Voltar"><a href="../index.html">← Percurso da aula</a><a href="../index.html#opcionais-e-referencias">Outros opcionais →</a></nav></main></div><footer>Henrique de Castro Silva Junior e Virginia Camila Rufino Ferreira · ORCA 6.1.1 · Materiais e dados locais; links externos levam à documentação oficial.</footer></body></html>

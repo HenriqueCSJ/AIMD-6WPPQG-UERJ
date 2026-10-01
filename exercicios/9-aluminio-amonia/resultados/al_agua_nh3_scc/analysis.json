@@ -1,0 +1,329 @@
+{
+  "stem": "al_agua_nh3_scc",
+  "normal_termination": true,
+  "frames": 2001,
+  "energy_rows": 2001,
+  "first_fs": 0.0,
+  "last_fs": 2000.0,
+  "timestep_fs": 1.0,
+  "Al_index": 0,
+  "N_index": 19,
+  "O_indices": [
+    1,
+    4,
+    7,
+    10,
+    13,
+    16
+  ],
+  "atom_indices": "zero-based",
+  "T_mean_K": 323.2417891054473,
+  "T_range_K": [
+    208.84,
+    682.89
+  ],
+  "T_late_mean_K": 312.2149900066622,
+  "conserved_late_span_kJ_mol": 0.9661838673144488,
+  "conserved_late_change_kJ_mol": -0.6957574044778346,
+  "SCC_converged": 2001,
+  "SCC_finished": 2001,
+  "SCC_iterations_range": [
+    7,
+    66
+  ],
+  "SCC_errors": [],
+  "gap_range_eV": [
+    0.127537669346,
+    7.994619671179
+  ],
+  "HOMO_occupation_range": [
+    1.8435,
+    2.0
+  ],
+  "Al_N_initial_min_final_A": [
+    6.408834020387841,
+    4.0811864048392925,
+    56.03117397367191
+  ],
+  "Al_O_initial_A": [
+    2.0211206137121622,
+    1.991406714091806,
+    2.570491881051004,
+    1.9981977269700635,
+    1.955274731461671,
+    1.9013388961734667
+  ],
+  "Al_O_final_A": [
+    1.955457888776933,
+    1.9640822161586629,
+    1.667619646263334,
+    1.9449982449680268,
+    1.9606427907034432,
+    1.964010268500542
+  ],
+  "Al_O_min_A": [
+    1.845701022040817,
+    1.7935447643987648,
+    1.6071241953863644,
+    1.8457827083536678,
+    1.7605082793636193,
+    1.781853687115274
+  ],
+  "Al_O_max_A": [
+    2.047908545788399,
+    2.156637746121271,
+    2.570491881051004,
+    2.034853010580778,
+    2.125560137360596,
+    2.164399724812628
+  ],
+  "H_host_crossings": [
+    {
+      "time_fs": 148.0,
+      "H": 9,
+      "from_atom": 7,
+      "to_atom": 19,
+      "from_element": "O",
+      "to_element": "N",
+      "old_new_H_counts_before": [
+        2,
+        3
+      ],
+      "old_new_H_counts_after": [
+        1,
+        4
+      ],
+      "r_from_A": 1.3833477732080082,
+      "r_to_A": 1.2094360112897935,
+      "nearest_host_duration_fs": 7.0,
+      "longest_unshared_residence_fs": 5.0,
+      "right_censored": false
+    },
+    {
+      "time_fs": 155.0,
+      "H": 9,
+      "from_atom": 19,
+      "to_atom": 7,
+      "from_element": "N",
+      "to_element": "O",
+      "old_new_H_counts_before": [
+        4,
+        1
+      ],
+      "old_new_H_counts_after": [
+        3,
+        2
+      ],
+      "r_from_A": 1.2992790037099256,
+      "r_to_A": 1.1803906203364876,
+      "nearest_host_duration_fs": 9.0,
+      "longest_unshared_residence_fs": 6.0,
+      "right_censored": false
+    },
+    {
+      "time_fs": 164.0,
+      "H": 9,
+      "from_atom": 7,
+      "to_atom": 19,
+      "from_element": "O",
+      "to_element": "N",
+      "old_new_H_counts_before": [
+        2,
+        3
+      ],
+      "old_new_H_counts_after": [
+        1,
+        4
+      ],
+      "r_from_A": 1.3309158640320855,
+      "r_to_A": 1.2252115161658326,
+      "nearest_host_duration_fs": 9.0,
+      "longest_unshared_residence_fs": 6.0,
+      "right_censored": false
+    },
+    {
+      "time_fs": 173.0,
+      "H": 9,
+      "from_atom": 19,
+      "to_atom": 7,
+      "from_element": "N",
+      "to_element": "O",
+      "old_new_H_counts_before": [
+        4,
+        1
+      ],
+      "old_new_H_counts_after": [
+        3,
+        2
+      ],
+      "r_from_A": 1.3782026166969235,
+      "r_to_A": 1.269344962747437,
+      "nearest_host_duration_fs": 5.0,
+      "longest_unshared_residence_fs": 2.0,
+      "right_censored": false
+    },
+    {
+      "time_fs": 178.0,
+      "H": 9,
+      "from_atom": 7,
+      "to_atom": 19,
+      "from_element": "O",
+      "to_element": "N",
+      "old_new_H_counts_before": [
+        2,
+        3
+      ],
+      "old_new_H_counts_after": [
+        1,
+        4
+      ],
+      "r_from_A": 1.3607690769299845,
+      "r_to_A": 1.3567850823484728,
+      "nearest_host_duration_fs": 1822.0,
+      "longest_unshared_residence_fs": 1766.0,
+      "right_censored": true
+    }
+  ],
+  "N_H_counts_histogram": {
+    "3": 162,
+    "4": 1839
+  },
+  "initial_H_counts": [
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    3
+  ],
+  "final_H_counts": [
+    2,
+    2,
+    1,
+    2,
+    2,
+    2,
+    4
+  ],
+  "max_nearest_XH_A": 1.3567850823484728,
+  "max_all_atom_radius_from_Al_A": 56.8315661068503,
+  "final_geometry_A": [
+    [
+      3.8784490195,
+      -0.4629578908,
+      -1.4206792638
+    ],
+    [
+      4.1496736396,
+      1.4663378032,
+      -1.2531355819
+    ],
+    [
+      3.2808068062,
+      1.8803893965,
+      -1.2116787977
+    ],
+    [
+      4.8161106759,
+      2.1574544349,
+      -1.2736579313
+    ],
+    [
+      5.8409681326,
+      -0.5303475314,
+      -1.3807253042
+    ],
+    [
+      6.435844696,
+      -0.1951761949,
+      -0.7044590397
+    ],
+    [
+      6.3787418089,
+      -0.9844032406,
+      -2.0322529171
+    ],
+    [
+      2.2201628082,
+      -0.3314176332,
+      -1.537893967
+    ],
+    [
+      1.2798650367,
+      -0.3219920483,
+      -1.5844055345
+    ],
+    [
+      -51.0236623496,
+      5.2596608606,
+      9.1415656024
+    ],
+    [
+      3.9369677561,
+      -2.404055248,
+      -1.5290064546
+    ],
+    [
+      3.0671925735,
+      -2.8074251046,
+      -1.6120493368
+    ],
+    [
+      4.6054668601,
+      -3.0917000926,
+      -1.4736009358
+    ],
+    [
+      4.1494314897,
+      -0.3938752205,
+      -3.3612761406
+    ],
+    [
+      4.8006851152,
+      -0.2223486522,
+      -4.0509491585
+    ],
+    [
+      3.2858462789,
+      -0.4999608626,
+      -3.7859372494
+    ],
+    [
+      4.0208423527,
+      -0.6256549089,
+      0.5313940324
+    ],
+    [
+      3.1738152233,
+      -0.3563132815,
+      0.9219961094
+    ],
+    [
+      4.5623515315,
+      -1.016013367,
+      1.2343447905
+    ],
+    [
+      -50.9728935537,
+      5.7143943028,
+      8.2054827264
+    ],
+    [
+      -51.0564801972,
+      5.0488222846,
+      7.4458345479
+    ],
+    [
+      -51.724887079,
+      6.4069405299,
+      8.1134917313
+    ],
+    [
+      -50.0985941199,
+      6.2670857745,
+      8.1655313994
+    ]
+  ],
+  "limits": "Geometric nearest O/N host and distance contacts; not bond order, integer fragment charge, rate or canonical sampling. Berendsen control does not validate timestep. Full electronic SCC logs retained."
+}
