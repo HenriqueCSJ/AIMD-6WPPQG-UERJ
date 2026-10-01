@@ -1,6 +1,6 @@
 (function(){
   'use strict';
-  const R=OrcaReader,G=Geometry,$=id=>document.getElementById(id),num=(n,p=5)=>chartNumber(n,p);
+  const R=OrcaReader,G=Geometry,H=HighlightSelection,$=id=>document.getElementById(id),num=(n,p=5)=>chartNumber(n,p);
   const colors=['#006e66','#a35b00','#6853a6','#176ba0','#a54664','#55612b'];
   const referenceColors={etanol_dt500:colors[4],etanol_instavel:colors[4],etanol_corrigido:colors[0],etanol_etapas:colors[0],thermostat_compare:colors[1],dimero_b97:colors[0],dimero_b97_cpcm:colors[1],dimero_dft:colors[0],dimero_cpcm:colors[1],agua_isolada:colors[0],water_single:colors[0],solvent_single:colors[1],zn_parede_longo:colors[0],zn_sem_parede_longo:colors[1],agua_c60:colors[0],agua_dft:colors[0],agua_cpcm:colors[1],etanol_dt025:colors[0],etanol_nve:colors[1],etanol_dt200:colors[2],etanol_csvr:colors[0],zn_parede:colors[0],zn_sem_parede:colors[1],zn_solvator:colors[0],preparar_complexo:colors[1]};
   const patterns=['','7 3','2 3','9 3 2 3','12 3','4 2 1 2','1 4','10 2 3 2','5 5','12 3 2 3 2 3','3 2','8 5'];
@@ -180,6 +180,76 @@
   }
   function currentTrajectory(){return visible().find(r=>r.id===Number($('trajectory-run').value));}
   function currentDistance(){return visible().find(r=>r.id===Number($('distance-run').value));}
+  // Highlights identify fixed atom indices. They never change the source XYZ,
+  // track a moving charge defect, or recalculate molecule membership per frame.
+  function highlights(run){return run?.highlights||[];}
+  function highlightSettings(run){return run.highlightSettings||(run.highlightSettings={size:1.6,muted:true});}
+  function highlightColors(run){const map=new Map();for(const group of highlights(run))for(const index of group.indices)map.set(index,group.color);return map;}
+  function highlightRadius(element,run){return (elementRadii[element]||.42)*highlightSettings(run).size;}
+  function sharedProtonExample(run){return !!run?.reference&&run.key==='proton_shared'&&run.xyz?.elements.join(',')==='O,O,H,H,H,H,H';}
+  function highlightMode(){const manual=$('highlight-kind').value==='indices';$('highlight-atom-field').hidden=manual;$('highlight-indices-field').hidden=!manual;$('highlight-paint').disabled=manual;if(manual)$('highlight-paint').checked=false;}
+  function renderHighlights(run,changedRun=false){
+    if(!run?.xyz)return;
+    const settings=highlightSettings(run),groups=highlights(run),count=new Set(groups.flatMap(group=>group.indices)).size;
+    if(changedRun){
+      const select=$('highlight-atom');select.replaceChildren();
+      run.xyz.elements.forEach((element,index)=>{const option=document.createElement('option');option.value=index;option.textContent=`${element} ${index}`;select.append(option);});
+      $('highlight-indices').value='';$('highlight-status').textContent='';$('highlight-paint').checked=false;
+      $('highlight-size').value=String(settings.size);$('highlight-muted').checked=settings.muted;
+    }
+    $('highlight-proton').hidden=!sharedProtonExample(run);
+    $('highlight-count').textContent=count?`· ${count} ${count===1?'átomo':'átomos'}`:'· nenhum';
+    $('highlight-clear').disabled=!groups.length;
+    const list=$('highlight-list');list.replaceChildren();
+    for(const group of groups){
+      const chip=document.createElement('span');chip.className='highlight-chip';
+      const swatch=document.createElement('i');swatch.style.backgroundColor=group.color;swatch.setAttribute('aria-hidden','true');
+      const label=document.createElement('span');label.textContent=group.label;label.title=`Índices: ${group.indices.join(', ')} · selecionados no quadro ${group.frame+1}`;
+      const remove=document.createElement('button');remove.type='button';remove.textContent='×';remove.setAttribute('aria-label',`Remover destaque ${group.label}`);
+      remove.addEventListener('click',()=>{stop();run.highlights=highlights(run).filter(item=>item!==group);$('highlight-status').textContent=`Destaque removido: ${group.label}.`;renderHighlights(run);renderContactLegend(run);drawFrame();});
+      chip.append(swatch,label,remove);list.append(chip);
+    }
+    highlightMode();
+  }
+  function addHighlight(){
+    const run=currentTrajectory();if(!run?.xyz)return;
+    stop();const kind=$('highlight-kind').value,seed=Number($('highlight-atom').value);
+    try{
+      let indices;
+      if(kind==='indices')indices=H.parseAtomIndices($('highlight-indices').value,run.xyz.elements.length);
+      else if(kind==='molecule')indices=H.moleculeIndices(run.xyz.elements,run.xyz.frames[state.frame].coords,seed);
+      else indices=Number.isInteger(seed)&&seed>=0&&seed<run.xyz.elements.length?[seed]:[];
+      if(!indices.length)throw new Error('Escolha um átomo válido para destacar.');
+      const anchor=kind==='indices'?indices[0]:seed,color=$('highlight-color').value;
+      if(!/^#[0-9a-f]{6}$/i.test(color))throw new Error('Escolha uma cor para o destaque.');
+      const label=kind==='atom'?`${run.xyz.elements[anchor]} ${anchor}`:kind==='molecule'?`Molécula de ${run.xyz.elements[anchor]} ${anchor} · ${indices.length} átomos`:`Grupo · ${indices.length} átomos`;
+      const group={indices:[...indices],anchor,color,label,frame:state.frame};
+      // Recoloring the same selection replaces it; overlapping selections are
+      // painted in insertion order, so the most recent color takes precedence.
+      run.highlights=highlights(run).filter(item=>item.indices.join(',')!==indices.join(','));run.highlights.push(group);
+      state.selectedAtom=anchor;$('highlight-atom').value=String(anchor);
+      $('highlight-status').textContent=`${label} em destaque. A seleção acompanha estes mesmos índices.`;
+      renderHighlights(run);renderContactLegend(run);drawFrame();
+    }catch(error){$('highlight-status').textContent=error.message;}
+  }
+  function selectTrajectoryAtom(index){
+    const run=currentTrajectory();if(!run?.xyz||!Number.isInteger(index)||index<0||index>=run.xyz.elements.length)return;
+    state.selectedAtom=index;$('highlight-atom').value=String(index);renderAtomInfo();
+    if($('highlight-paint').checked&&$('highlight-kind').value!=='indices')addHighlight();
+  }
+  function drawHighlights(run,atoms){
+    const map=highlightColors(run),settings=highlightSettings(run);
+    if(!map.size)return map;
+    if(settings.muted){
+      for(const element of new Set(run.xyz.elements)){
+        const cage=isWaterCage(run.xyz)&&element==='C',style={sphere:{radius:cage ? .075 : elementRadii[element]||.42,color:'#bdc8cd'}};
+        if($('proximity-lines').checked)style.stick={radius:cage ? .035 : .075,color:'#bdc8cd'};
+        state.model.setStyle({elem:element},style);
+      }
+    }
+    for(const [index,color] of map){const atom=atoms[index];if(!atom)continue;const style={sphere:{radius:highlightRadius(atom.elem,run),color}};if($('proximity-lines').checked)style.stick={radius:.095,color};state.model.setStyle({index},style);}
+    return map;
+  }
   function isWaterCage(xyz){return xyz.elements.length===63&&xyz.elements.filter(e=>e==='C').length===60&&xyz.elements.filter(e=>e==='O').length===1&&xyz.elements.filter(e=>e==='H').length===2;}
   function stageTarget(stage){
     const numeric=value=>value===null||value===undefined||value===''?NaN:Number(value),start=numeric(stage.targetStartK),end=numeric(stage.targetEndK),single=numeric(stage.targetTemperature);
@@ -215,7 +285,9 @@
   }
   function renderContactLegend(run){
     const legend=$('molecule-legend');if(!legend||!run?.xyz)return;
-    const elements=[...new Set(run.xyz.elements)].map(e=>`<span class="element-key"><i style="background:${elementColors[e]||'#8a8990'}"></i>${esc(e)}</span>`);
+    const highlighted=highlights(run),muted=highlighted.length&&highlightSettings(run).muted;
+    const elements=[...new Set(run.xyz.elements)].map(e=>`<span class="element-key"><i style="background:${muted?'#bdc8cd':elementColors[e]||'#8a8990'}"></i>${esc(e)}</span>`);
+    for(const group of highlighted)elements.push(`<span class="highlight-key"><i style="background:${group.color}"></i>${esc(group.label)}</span>`);
     const sphere=metadata(run).wallSphere;if(sphere)elements.push(`<span class="wall-key">Parede suave · raio ${num(sphere.radius)} Å</span>`);
     if(isWaterCage(run.xyz))elements.push('<span class="wall-key">C₆₀ em armação · água no interior</span>');
     elements.push('<span class="contact-key"><i class="contact-sample hbond-sample"></i>Ponte de H · heurística</span>','<span class="contact-key"><i class="contact-sample coordination-sample"></i>Coordenação · geométrica</span>');
@@ -337,6 +409,7 @@
       const changedRun=state.viewRun!==run.id;
       if(changedRun){state.frame=0;state.selectedAtom=null;state.viewRun=run.id;state.timeFormat=timeFormat(run.xyz.frames);ensureTrajectoryReadouts();$('frame-slider').value='0';state.viewer.removeAllModels();state.viewer.removeAllLabels();state.model=state.viewer.addModel();}
       if(changedRun)drawWall(run);
+      renderHighlights(run,changedRun);
       $('frame-slider').max=run.xyz.frames.length-1;$('frame-number').max=run.xyz.frames.length;$('play-button').disabled=run.xyz.frames.length<2;$('playback-speed').disabled=run.xyz.frames.length<2;
       ensureTrajectoryReadouts();renderContactLegend(run);
       const note=document.querySelector('.playback-note');note.textContent=run.xyz.frames.length<2?'Estrutura estática: um único quadro.':`A 1×, um ciclo leva ${(playbackDuration(run.xyz.frames)/1000).toLocaleString('pt-BR',{maximumFractionDigits:1})} s de reprodução. O tempo físico abaixo vem do XYZ. Use as setas para examinar cada quadro.`;
@@ -357,11 +430,13 @@
     state.model.setStyle({},{sphere:{radius:.37}});
     for(const element of new Set(xyz.elements)){const color=elementColors[element]||'#8a8990',style={sphere:{radius:elementRadii[element]||.42,color}};if($('proximity-lines').checked)style.stick={radius:.075,color};state.model.setStyle({elem:element},style);}
     if(isWaterCage(xyz))state.model.setStyle({elem:'C'},$('proximity-lines').checked?{stick:{radius:.035,color:'#8c999e'},sphere:{radius:.075,color:'#8c999e'}}:{sphere:{radius:.075,color:'#8c999e'}});
+    const highlighted=drawHighlights(run,atoms);
     state.viewer.removeAllLabels();
-    if($('atom-labels').checked)atoms.forEach((a,i)=>state.viewer.addLabel(`${a.elem} ${i}`,{position:a,fontColor:'#17313e',backgroundColor:'white',backgroundOpacity:.7,fontSize:11,borderThickness:0,inFront:true}));
+    if($('atom-labels').checked)atoms.forEach((a,i)=>state.viewer.addLabel(`${a.elem} ${i}`,{position:a,fontColor:'#17313e',backgroundColor:'white',backgroundOpacity:.7,fontSize:highlighted.has(i)?14:11,borderThickness:highlighted.has(i)?1:0,borderColor:highlighted.get(i)||'#17313e',inFront:true}));
     else if(run.reference&&run.key.includes('_longo')&&atoms[25]?.elem==='O')state.viewer.addLabel('O 25',{position:atoms[25],fontColor:'#9c382c',backgroundColor:'white',backgroundOpacity:.85,fontSize:12,borderThickness:0,inFront:true});
+    if(!$('atom-labels').checked)for(const group of highlights(run)){const atom=atoms[group.anchor];if(atom&&highlighted.get(group.anchor)===group.color)state.viewer.addLabel(`${atom.elem} ${group.anchor}${group.indices.length>1?` · ${group.indices.length} átomos`:''}`,{position:atom,screenOffset:{x:12,y:12},fontColor:'#172f40',backgroundColor:'white',backgroundOpacity:.9,fontSize:14,borderColor:group.color,borderThickness:1,inFront:true});}
     drawContactSuggestions(run,frame);
-    state.viewer.setClickable({},true,atom=>{state.selectedAtom=atom.serial;renderAtomInfo();});renderAtomInfo();
+    state.viewer.setClickable({},true,atom=>selectTrajectoryAtom(atom.serial));renderAtomInfo();
     if(fit)resetView();else state.viewer.render();
     ensureTrajectoryReadouts();const timeline=physicalTimeValues(frame.time),frameLabel=$('frame-time').querySelector('.frame-index'),timeLabel=$('frame-time').querySelector('.frame-time-value');
     $('frame-slider').value=state.frame;$('frame-number').value=state.frame+1;$('previous-frame').disabled=state.frame===0;$('next-frame').disabled=state.frame===xyz.frames.length-1;frameLabel.textContent=`Quadro ${state.frame+1}/${xyz.frames.length}`;timeLabel.textContent=frame.time===null||frame.time===undefined?'tempo não informado':timeline.fs;
@@ -388,7 +463,7 @@
       const coords=run.xyz.frames[state.frame].coords,low=[Infinity,Infinity,Infinity],high=[-Infinity,-Infinity,-Infinity];
       for(const point of coords)for(let k=0;k<3;k++){low[k]=Math.min(low[k],point[k]);high[k]=Math.max(high[k],point[k]);}
       const center=low.map((value,k)=>(value+high[k])/2);
-      const radius=Math.max(...coords.map((point,i)=>Math.hypot(...point.map((value,k)=>value-center[k]))+(elementRadii[run.xyz.elements[i]]||.42)));
+      const highlighted=highlightColors(run),radius=Math.max(...coords.map((point,i)=>Math.hypot(...point.map((value,k)=>value-center[k]))+(highlighted.has(i)?highlightRadius(run.xyz.elements[i],run):elementRadii[run.xyz.elements[i]]||.42)));
       state.viewer.zoom(Math.max(1,Math.min(3.4,5/(Math.max(radius,1)*1.2))));
     }
     state.viewer.render();
@@ -486,6 +561,14 @@
   document.querySelectorAll('[name="energy-series"]').forEach(c=>c.addEventListener('change',renderEnergy));
   $('trajectory-run').addEventListener('change',()=>{stop();renderTrajectory();});$('reset-view').addEventListener('click',resetView);for(const id of ['atom-labels','proximity-lines','hydrogen-bonds','coordination-contacts'])$(id).addEventListener('change',()=>{drawFrame();renderContactLegend(currentTrajectory());});$('coordination-cutoff').addEventListener('input',()=>drawFrame());
   $('rotate-molecule').addEventListener('click',()=>setInteraction('rotate'));$('pan-molecule').addEventListener('click',()=>setInteraction('pan'));
+  $('highlight-kind').addEventListener('change',highlightMode);
+  $('highlight-atom').addEventListener('change',()=>{state.selectedAtom=Number($('highlight-atom').value);renderAtomInfo();});
+  $('highlight-add').addEventListener('click',addHighlight);
+  $('highlight-indices').addEventListener('keydown',event=>{if(event.key==='Enter'){event.preventDefault();addHighlight();}});
+  $('highlight-clear').addEventListener('click',()=>{const run=currentTrajectory();if(!run)return;stop();run.highlights=[];$('highlight-status').textContent='Destaques removidos. Cores originais restauradas.';renderHighlights(run);renderContactLegend(run);drawFrame();});
+  $('highlight-proton').addEventListener('click',()=>{const run=currentTrajectory();if(!sharedProtonExample(run))return;$('highlight-kind').value='atom';$('highlight-atom').value='2';$('highlight-color').value='#e6007e';addHighlight();});
+  for(const id of ['highlight-size','highlight-muted'])$(id).addEventListener('change',()=>{const run=currentTrajectory();if(!run)return;const size=Number($('highlight-size').value);run.highlightSettings={size:[1,1.6,2.1].includes(size)?size:1.6,muted:$('highlight-muted').checked};renderContactLegend(run);drawFrame();});
+  $('highlight-tools').addEventListener('toggle',()=>{if($('expand-trajectory').getAttribute('aria-expanded')==='true')requestAnimationFrame(resizeTrajectory);});
   $('molecule').addEventListener('mousedown',event=>startPan(event),true);$('molecule').addEventListener('touchstart',event=>startPan(event,true),{capture:true,passive:true});
   $('molecule').addEventListener('keydown',panWithKeyboard);
   window.addEventListener('mousemove',event=>movePan(event),{capture:true,passive:false});window.addEventListener('touchmove',event=>movePan(event,true),{capture:true,passive:false});

@@ -59,7 +59,7 @@ Execute um cálculo por vez. A referência completou **2 ps em 123,847 s**; a ot
 
 ## 3. Meça e interprete
 
-1. Em **Trajetória**, selecione O 0, H 2 e O 1. Observe a ponte sem usar a velocidade da animação como escala de tempo físico.
+1. Em **Trajetória**, clique em **Destacar próton H 2**. Ele fica magenta e maior; o restante fica em cinza. O destaque acompanha o mesmo H durante a animação. Em **Destaques**, você pode mudar a cor, o tamanho e destacar também O 0 e O 1. Observe a ponte sem usar a velocidade da animação como escala de tempo físico.
 2. Em **Geometria**, acompanhe **O 0–H 2** e **O 1–H 2**. Defina δ = r(O 0–H 2) − r(O 1–H 2). δ negativo indica H 2 mais perto de O 0; positivo, mais perto de O 1.
 3. Examine 850–1050 fs. Toda mudança de sinal parece uma passagem duradoura? Verifique o que acontece algumas dezenas de fs depois.
 4. Compare a temperatura instantânea com o alvo de 300 K. A média desta trajetória foi 242,81 K; o alvo não garante temperatura instantânea constante nem equilíbrio térmico em 2 ps.

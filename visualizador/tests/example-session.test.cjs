@@ -4,7 +4,7 @@ const assert=require('node:assert/strict');
 const fs=require('node:fs');
 const path=require('node:path');
 const vm=require('node:vm');
-const OrcaReader=require('../orca-parser.js'),Geometry=require('../geometry.js');
+const OrcaReader=require('../orca-parser.js'),Geometry=require('../geometry.js'),HighlightSelection=require('../highlight-selection.js');
 const viewer=path.resolve(__dirname,'..');
 const deferred=()=>{let resolve,reject;const promise=new Promise((a,b)=>{resolve=a;reject=b;});return {promise,resolve,reject};};
 class Element{
@@ -34,13 +34,13 @@ class Element{
 function session({inspectState=false}={}){
   const html=fs.readFileSync(path.join(viewer,'index.html'),'utf8'),nodes={};
   for(const match of html.matchAll(/<([\w-]+)\b[^>]*\bid="([^"]+)"[^>]*>/g))nodes[match[2]]=new Element(match[1]);
-  for(const [id,value] of Object.entries({'energy-mode':'delta','energy-unit':'kj','time-unit':'fs','distance-source':'xyz','geometry-type':'distance'}))nodes[id].value=value;
+  for(const [id,value] of Object.entries({'energy-mode':'delta','energy-unit':'kj','time-unit':'fs','distance-source':'xyz','geometry-type':'distance','highlight-kind':'atom','highlight-color':'#e6007e','highlight-size':'1.6','highlight-atom':'0'}))nodes[id].value=value;
   nodes['distance-source'].append(...['xyz','colvars'].map(value=>Object.assign(new Element('option'),{value})));
   const checkboxes=['total','potential','kinetic'].map(value=>Object.assign(new Element('input'),{value,checked:true}));
   const tabs=['energy','trajectory','distance'].map(tab=>Object.assign(nodes['tab-'+tab],{dataset:{tab}}));
   const card=new Element(),requests=[],cancelled=[],documentListeners={};
   const context=vm.createContext({
-    console,URLSearchParams,location:{search:''},OrcaReader,Geometry,
+    console,URLSearchParams,location:{search:''},OrcaReader,Geometry,HighlightSelection,
     chartNumber:value=>String(value),ScientificChart:class{constructor(node,options){node.chart=options;}},
     cancelAnimationFrame(id){cancelled.push(id);},requestAnimationFrame(){return 1;},setTimeout,clearTimeout,
     document:{body:new Element('body'),getElementById:id=>nodes[id],createElement:tag=>new Element(tag),addEventListener(type,callback){documentListeners[type]=callback;},
@@ -53,12 +53,12 @@ function session({inspectState=false}={}){
   nodes.molecule.tabIndex=0;
   let source=fs.readFileSync(path.join(viewer,'app.js'),'utf8');
   // A test-only bridge supplies a renderer double without creating WebGL.
-  if(inspectState)source=source.replace(/\}\)\(\);\s*$/,'globalThis.__testState=state;})();');
+  if(inspectState)source=source.replace(/\}\)\(\);\s*$/,'globalThis.__testState=state;globalThis.__testHighlights={drawHighlights,selectTrajectoryAtom};})();');
   vm.runInContext(source,context);
   const choose=(key,trajectory=false)=>{nodes['example-select'].value=key;return nodes[trajectory?'example-trajectory-button':'example-button'].fire('click');};
   const toggle=(index,checked)=>{const box=nodes.runs.querySelectorAll('[data-run]')[index];box.checked=checked;box.fire('change');};
   const remove=index=>nodes.runs.querySelectorAll('[data-remove]')[index].fire('click');
-  return {nodes,requests,choose,toggle,remove,cancelled,document:context.document,key:event=>documentListeners.keydown(event),state:context.__testState};
+  return {nodes,requests,choose,toggle,remove,cancelled,document:context.document,key:event=>documentListeners.keydown(event),state:context.__testState,highlightHooks:context.__testHighlights};
 }
 function preset(key,{staticOnly=false}={}){
   const xyz={elements:['O','H'],frames:[{time:0,step:0,coords:[[0,0,0],[0,0,1]]}],warnings:[]};
@@ -245,4 +245,51 @@ test('Mover focuses the canvas and arrow keys pan without changing frame or allo
   key('ArrowRight');key('ArrowUp',{shiftKey:true});key('ArrowLeft',{altKey:true});key('ArrowDown',{ctrlKey:true});key('ArrowLeft',{metaKey:true});
   assert.deepEqual(moves,[[12,0],[0,-40]]);assert.equal(prevented,2);assert.equal(ui.state.frame,7);
   ui.nodes['rotate-molecule'].fire('click');key('ArrowDown');assert.equal(moves.length,2);
+});
+
+test('a highlighted molecule retains its atom identities when a hydrogen changes neighbor',async()=>{
+  const ui=session({inspectState:true}),data=preset('reactive-water');
+  data.runs[0].xyz={elements:['O','H','H','O','H','H'],frames:[
+    {time:0,coords:[[0,0,0],[.96,0,0],[-.24,.93,0],[3,0,0],[3.96,0,0],[3.24,.93,0]]},
+    {time:1,coords:[[0,0,0],[2.04,0,0],[-.24,.93,0],[3,0,0],[3.96,0,0],[3.24,.93,0]]}
+  ],warnings:[]};
+  const original=JSON.stringify(data.runs[0].xyz),pending=ui.choose('reactive-water',true);ui.requests[0].resolve(data);await pending;
+  ui.nodes['highlight-kind'].value='molecule';ui.nodes['highlight-atom'].value='0';ui.nodes['highlight-add'].fire('click');
+  const run=ui.state.runs[0];assert.deepEqual(Array.from(run.highlights[0].indices),[0,1,2]);
+  ui.state.frame=1;
+  const calls=[];ui.state.model={setStyle:(selection,style)=>calls.push({selection,style})};
+  const map=ui.highlightHooks.drawHighlights(run,run.xyz.elements.map(elem=>({elem})));
+  assert.equal(map.get(1),'#e6007e');assert.equal(map.has(3),false);
+  assert.equal(calls.find(call=>call.selection.index===1).style.sphere.color,'#e6007e');
+  assert.deepEqual(Array.from(run.highlights[0].indices),[0,1,2]);assert.equal(JSON.stringify(data.runs[0].xyz),original);
+});
+
+test('colors are isolated per simulation; recoloring replaces a selection and clearing restores the base display',async()=>{
+  const ui=session({inspectState:true}),pending=ui.choose('pair',true);
+  ui.requests[0].resolve({config:{runs:['one','two']},runs:[preset('one').runs[0],preset('two').runs[0]]});await pending;
+  ui.nodes['highlight-atom'].value='1';ui.nodes['highlight-add'].fire('click');
+  const [first,second]=ui.state.runs;assert.equal(first.highlights.length,1);assert.equal(second.highlights,undefined);
+  ui.nodes['highlight-color'].value='#009dcc';ui.nodes['highlight-add'].fire('click');
+  assert.equal(first.highlights.length,1);assert.equal(first.highlights[0].color,'#009dcc');
+  ui.nodes['trajectory-run'].value=String(second.id);ui.nodes['highlight-atom'].value='0';ui.nodes['highlight-add'].fire('click');
+  assert.deepEqual(Array.from(second.highlights[0].indices),[0]);assert.deepEqual(Array.from(first.highlights[0].indices),[1]);
+  ui.nodes['highlight-clear'].fire('click');assert.equal(second.highlights.length,0);assert.equal(first.highlights.length,1);
+  assert.match(ui.nodes['highlight-status'].textContent,/Cores originais restauradas/);
+});
+
+test('invalid manual indices preserve an existing selection instead of applying a partial highlight',async()=>{
+  const ui=session({inspectState:true}),pending=ui.choose('water',true);ui.requests[0].resolve(preset('water'));await pending;
+  ui.nodes['highlight-atom'].value='1';ui.nodes['highlight-add'].fire('click');
+  const run=ui.state.runs[0],original=JSON.stringify(run.highlights);
+  ui.nodes['highlight-kind'].value='indices';ui.nodes['highlight-indices'].value='0,999';ui.nodes['highlight-add'].fire('click');
+  assert.match(ui.nodes['highlight-status'].textContent,/fora dos limites/);assert.equal(JSON.stringify(run.highlights),original);
+});
+
+test('the shared-proton shortcut marks H2 only for the identified course reference',async()=>{
+  const ui=session({inspectState:true}),data=preset('proton_shared');
+  data.runs[0].xyz.elements=['O','O','H','H','H','H','H'];data.runs[0].xyz.frames[0].coords=Array.from({length:7},(_,i)=>[i,0,0]);
+  const pending=ui.choose('proton_shared',true);ui.requests[0].resolve(data);await pending;
+  ui.nodes['highlight-proton'].fire('click');assert.deepEqual(Array.from(ui.state.runs[0].highlights[0].indices),[2]);
+  ui.state.runs[0].reference=false;ui.state.runs[0].highlights=[];ui.nodes['highlight-proton'].fire('click');
+  assert.equal(ui.state.runs[0].highlights.length,0);
 });
