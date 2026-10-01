@@ -14,3 +14,5 @@
 6. [Confira XTB2 e SOLVATOR](05-xtb-solvator.md) — teste primeiro; instale o xTB externo somente se necessário.
 
 **Ambiente da aula:** no Ubuntu 24.04, instalamos Open MPI **4.1.6 via apt**; no Windows nativo, MS-MPI **10.1.12498.52**. O pacote Linux informa compilação com MPI 4.1.8; o guia registra essa diferença e orienta a conferir o funcionamento com testes serial e paralelo. Cada participante deve baixar o ORCA com sua própria conta e aceitar os termos aplicáveis.
+
+**Ao concluir:** abra um terminal novo, entre na pasta do input e use `orca arquivo.inp > arquivo.out &` no Ubuntu. No Windows nativo, use o Prompt de Comando com `orca arquivo.inp > arquivo.out`. Não é necessário repetir caminhos de instalação durante os exercícios.

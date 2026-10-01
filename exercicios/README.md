@@ -58,3 +58,31 @@ Conclua os [testes de instalação](../tutoriais/03-testar-instalacao.md) e de [
 Carregue juntos **`.out`**, **`-md-ener.csv`** e **`-traj.xyz`**. O laboratório lê seus arquivos localmente. Na trajetória, use **Mover** para reposicionar a molécula e acompanhe o marcador nas curvas de energia. Você também pode abrir o resultado pronto.
 
 O [roteiro de quatro horas](roteiro-4h.md) preserva **15 min de descanso, 25 min de margem e o intervalo de 16h–17h**. Os tempos de execução foram medidos na máquina de referência; variam entre computadores. Ao terminar, registre uma observação, sua interpretação e algo que a trajetória ainda não permite concluir.
+
+## Como executar
+
+A configuração do ORCA no PATH é feita **uma vez**, durante a [instalação](../tutoriais/README.md). Nos exercícios, basta entrar na pasta que contém o input e executar o comando mostrado na atividade. Mantenha os arquivos XYZ, de reinício ou outros auxiliares junto do input, conforme o pacote fornecido.
+
+**Ubuntu / WSL2:** abra o Ubuntu e entre na pasta com `cd /caminho/da/pasta`. Depois:
+
+```bash
+orca arquivo.inp > arquivo.out &
+```
+
+Substitua `arquivo` pelo nome da atividade. `>` grava a saída e `&` deixa o cálculo em segundo plano. Mantenha o terminal aberto e rode **um cálculo por vez**. Para acompanhar:
+
+```bash
+tail -f arquivo.out
+```
+
+**Ctrl+C** encerra apenas esse acompanhamento. O cálculo lançado em segundo plano continua. `jobs` mostra os trabalhos desse terminal; só inicie o próximo quando o anterior terminar. Para voltar ao cálculo em primeiro plano, use `fg`; nesse caso, Ctrl+C interrompe o cálculo. Confira no final do output `ORCA TERMINATED NORMALLY` ou a mensagem de erro — o exercício de timestep inadequado pode terminar com erro, como previsto.
+
+**Windows nativo:** no Explorador, abra a pasta do input, digite `cmd` na barra de endereço e pressione Enter. No Prompt de Comando:
+
+```bat
+orca arquivo.inp > arquivo.out
+```
+
+Espere o prompt voltar. No `cmd`, `&` separa comandos e **não** põe o cálculo em segundo plano. Para abrir o terminal em outra pasta por comando, use `cd /d "C:\caminho\da\pasta"`.
+
+Use uma pasta separada para cada variante e mantenha uma cópia dos resultados que quiser conservar antes de repetir um nome: `>` substitui o output existente. Os downloads dos exercícios já reúnem os arquivos necessários, e nenhum comando cria subpastas automáticas.

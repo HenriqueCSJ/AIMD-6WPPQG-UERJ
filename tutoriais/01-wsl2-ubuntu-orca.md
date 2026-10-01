@@ -165,42 +165,81 @@ find "$HOME/software/orca-6.1.1" -type f -name orca
 
 O último comando mostra o executável. Use **a pasta que o contém** no passo seguinte. Alguns arquivos criam uma subpasta ao serem extraídos; mantenha os módulos e bibliotecas juntos.
 
-## 7. Ative ORCA e MPI juntos
+## 7. Deixe o comando `orca` disponível em todo terminal
 
-Crie um pequeno arquivo de configuração pessoal:
+Faça esta configuração **uma única vez**. Depois, em qualquer pasta de cálculo, você poderá usar `orca arquivo.inp > arquivo.out &`.
+
+### 7.1. Defina os caminhos da instalação
 
 ```bash
-mkdir -p "$HOME/.config/aimd"
+mkdir -p "$HOME/.config/aimd" "$HOME/.local/bin"
 nano "$HOME/.config/aimd/env.sh"
 ```
 
-Cole o bloco abaixo, substituindo `PASTA_QUE_CONTEM_ORCA` pelo caminho encontrado. Se `orca` estiver diretamente em `~/software/orca-6.1.1/`, use esse caminho.
+Cole as três linhas abaixo. Troque `PASTA_QUE_CONTEM_ORCA` pela subpasta real encontrada no passo 6; se `orca` estiver diretamente em `~/software/orca-6.1.1/`, retire esse último componente. `ORCA_DIR` deve apontar para **a pasta do executável real**, nunca para `~/.local/bin`.
 
 ```bash
 export ORCA_DIR="$HOME/software/orca-6.1.1/PASTA_QUE_CONTEM_ORCA"
-export PATH="$ORCA_DIR:$PATH"
-export LD_LIBRARY_PATH="$ORCA_DIR/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+export PATH="$HOME/.local/bin:$ORCA_DIR:$PATH"
+export LD_LIBRARY_PATH="$ORCA_DIR:$ORCA_DIR/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
 ```
 
-No nano, salve com **Ctrl+O**, Enter e saia com **Ctrl+X**. Ative o arquivo **em cada novo terminal** usado para a aula:
+No nano, salve com **Ctrl+O**, Enter e saia com **Ctrl+X**. Agora abra:
 
 ```bash
-source "$HOME/.config/aimd/env.sh"
+nano "$HOME/.bashrc"
+```
+
+Acrescente ao final **uma única vez**, preservando o conteúdo existente:
+
+```bash
+# ORCA do minicurso: carregar automaticamente em cada terminal Bash.
+[ -f "$HOME/.config/aimd/env.sh" ] && . "$HOME/.config/aimd/env.sh"
+```
+
+### 7.2. Prepare o comando curto para os inputs com PAL8
+
+O [manual do ORCA paralelo](https://www.faccts.de/docs/orca/6.1/manual/contents/essentialelements/parallel.html) pede que o driver receba o caminho completo para localizar seus módulos. Este pequeno lançador resolve isso na instalação; durante a aula você continua digitando apenas `orca`.
+
+Crie `~/.local/bin/orca` com o conteúdo abaixo. Se esse arquivo já existir, guarde uma cópia antes de substituí-lo.
+
+```bash
+nano "$HOME/.local/bin/orca"
+```
+
+Conteúdo do arquivo:
+
+```sh
+#!/bin/sh
+. "$HOME/.config/aimd/env.sh"
+exec "$ORCA_DIR/orca" "$@"
+```
+
+Salve e execute:
+
+```bash
+chmod u+x "$HOME/.local/bin/orca"
+source "$HOME/.bashrc"
+hash -r
+```
+
+O lançador mantém a pasta atual, os argumentos e o output do cálculo. Ele chama o executável real, sem iniciar `mpirun` manualmente.
+
+### 7.3. Confira em um terminal novo
+
+Feche e abra o Ubuntu. **Não digite `source` novamente**: o `.bashrc` já carrega a configuração. Confira:
+
+```bash
 command -v orca
+type -a orca
 command -v mpirun
 mpirun --version
 ldd "$ORCA_DIR/orca_startup_mpi"
 ```
 
-Não deve haver `not found`. A biblioteca `libmpi.so.40` deve apontar para o MPI do sistema, normalmente em `/lib/x86_64-linux-gnu/` ou `/usr/lib/x86_64-linux-gnu/`. O manual do ORCA orienta a [usar caminho completo e bibliotecas do ambiente correspondente](https://www.faccts.de/docs/orca/6.1/manual/contents/essentialelements/parallel.html).
+O primeiro comando deve mostrar `/home/SEU_USUARIO/.local/bin/orca`, seguido da instalação real na lista de `type -a`. Se um alias ou função antigos aparecerem antes dele, remova essa definição antiga do seu `.bashrc`. O MPI deve vir de `/usr/bin/mpirun`. Não deve haver bibliotecas `not found`; `libmpi.so.40` deve apontar para o MPI do Ubuntu.
 
-Na raiz do repositório:
-
-```bash
-bash scripts/verificar-ambiente-linux.sh
-```
-
-**Continue em [Testar a instalação](03-testar-instalacao.md#wsl2--ubuntu).** Um MPI funcional, sozinho, não demonstra que o ORCA paralelo está configurado.
+Opcionalmente, na raiz do repositório, execute `bash scripts/verificar-ambiente-linux.sh`. Depois conclua os [testes serial e paralelo](03-testar-instalacao.md#wsl2--ubuntu) usando o comando curto. O guia de [instalação oficial](https://www.faccts.de/docs/orca/6.1/tutorials/first_steps/install.html) também explica PATH e terminais novos.
 
 ## Quando algo não funciona
 

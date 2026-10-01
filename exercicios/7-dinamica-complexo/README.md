@@ -42,32 +42,25 @@ end
 ```
 <details markdown="1"><summary>Executar no Ubuntu / WSL2</summary>
 
-Extraia o pacote em uma pasta nova. Abra o Ubuntu nessa pasta, com `ORCA_DIR` configurado no tutorial, e copie:
+Entre na **pasta extraída do exercício**, onde estão o input e seus arquivos auxiliares. Com a [instalação concluída](../../tutoriais/01-wsl2-ubuntu-orca.md), execute:
 
 ```bash
-(
-  test -x "$ORCA_DIR/orca" || { echo "Configure ORCA_DIR antes de executar."; exit 1; }
-  pasta=$(mktemp -d ./execucao-XXXXXX) || exit 1
-  cp zn_parede_longo.inp zn_solvato.xyz preparacao_termica.mdrestart "$pasta/" || exit 1
-  cd "$pasta" || exit 1
-  "$ORCA_DIR/orca" zn_parede_longo.inp > zn_parede_longo.out 2>&1
-  tail -n 12 zn_parede_longo.out
-  echo "Resultados: $PWD"
-)
+orca zn_parede_longo.inp > zn_parede_longo.out &
 ```
 
-Abra `explorer.exe .` para localizar os resultados. Execute um cálculo por vez.
+Espere o cálculo encerrar antes de iniciar outro. Os resultados ficam nessa mesma pasta; veja [como acompanhar a execução](../README.md#como-executar).
 
 </details>
 
 <details markdown="1"><summary>Alternativa no Windows nativo</summary>
 
-Com ORCA/MS-MPI instalados, extraia o pacote numa pasta nova, abra o PowerShell nela e ajuste o caminho:
+Abra o **Prompt de Comando (`cmd`) na pasta extraída**, com ORCA e MS-MPI já [configurados no Path](../../tutoriais/02-windows-orca-msmpi.md):
 
-```powershell
-& 'C:\ORCA_6.1.1\orca.exe' zn_parede_longo.inp > zn_parede_longo.out 2>&1
-Get-Content zn_parede_longo.out -Tail 12
+```bat
+orca zn_parede_longo.inp > zn_parede_longo.out
 ```
+
+Espere o prompt voltar antes de iniciar outro cálculo. Os arquivos de resultado ficam nessa mesma pasta.
 
 </details>
 
@@ -117,32 +110,25 @@ end
 ```
 <details markdown="1"><summary>Executar no Ubuntu / WSL2</summary>
 
-Extraia o pacote em uma pasta nova. Abra o Ubuntu nessa pasta, com `ORCA_DIR` configurado no tutorial, e copie:
+Entre na **pasta extraída do exercício**, onde estão o input e seus arquivos auxiliares. Com a [instalação concluída](../../tutoriais/01-wsl2-ubuntu-orca.md), execute:
 
 ```bash
-(
-  test -x "$ORCA_DIR/orca" || { echo "Configure ORCA_DIR antes de executar."; exit 1; }
-  pasta=$(mktemp -d ./execucao-XXXXXX) || exit 1
-  cp zn_sem_parede_longo.inp zn_solvato.xyz preparacao_termica.mdrestart "$pasta/" || exit 1
-  cd "$pasta" || exit 1
-  "$ORCA_DIR/orca" zn_sem_parede_longo.inp > zn_sem_parede_longo.out 2>&1
-  tail -n 12 zn_sem_parede_longo.out
-  echo "Resultados: $PWD"
-)
+orca zn_sem_parede_longo.inp > zn_sem_parede_longo.out &
 ```
 
-Abra `explorer.exe .` para localizar os resultados. Execute um cálculo por vez.
+Espere o cálculo encerrar antes de iniciar outro. Os resultados ficam nessa mesma pasta; veja [como acompanhar a execução](../README.md#como-executar).
 
 </details>
 
 <details markdown="1"><summary>Alternativa no Windows nativo</summary>
 
-Com ORCA/MS-MPI instalados, extraia o pacote numa pasta nova, abra o PowerShell nela e ajuste o caminho:
+Abra o **Prompt de Comando (`cmd`) na pasta extraída**, com ORCA e MS-MPI já [configurados no Path](../../tutoriais/02-windows-orca-msmpi.md):
 
-```powershell
-& 'C:\ORCA_6.1.1\orca.exe' zn_sem_parede_longo.inp > zn_sem_parede_longo.out 2>&1
-Get-Content zn_sem_parede_longo.out -Tail 12
+```bat
+orca zn_sem_parede_longo.inp > zn_sem_parede_longo.out
 ```
+
+Espere o prompt voltar antes de iniciar outro cálculo. Os arquivos de resultado ficam nessa mesma pasta.
 
 </details>
 

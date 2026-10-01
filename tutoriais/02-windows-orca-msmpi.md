@@ -2,106 +2,116 @@
 
 [← Tutoriais](README.md) · [Rota WSL2 + Ubuntu](01-wsl2-ubuntu-orca.md)
 
-**Rota alternativa.** Para acompanhar o minicurso, recomendamos [WSL2 + Ubuntu 24.04 LTS](01-wsl2-ubuntu-orca.md). Use este guia se optar pela instalação nativa no Windows.
+**Rota alternativa.** Para o minicurso, recomendamos [WSL2 + Ubuntu 24.04 LTS](01-wsl2-ubuntu-orca.md). O guia recomendado começa pela instalação do WSL2, incluindo reinício e criação do usuário Linux. A instalação nativa descrita aqui não precisa de WSL.
 
-**Ainda não tem WSL instalado?** O [guia recomendado começa pela instalação do WSL2 e do Ubuntu do zero](01-wsl2-ubuntu-orca.md#1-instale-o-wsl2), incluindo reinício e criação do usuário Linux. Se preferir continuar com a instalação nativa abaixo, **ela não requer WSL**.
+**O que instalar:** ORCA **6.1.1 para Windows 64 bits** e **Microsoft MPI 10.1.3**, build **10.1.12498.52**. Depois da configuração inicial, basta abrir o **Prompt de Comando (`cmd`)** na pasta do exercício e executar:
 
-**Configuração desta alternativa:** ORCA **6.1.1 para Windows 64 bits** + **Microsoft MPI 10.1.3**, cujo número de build é **10.1.12498.52**.
+```bat
+orca arquivo.inp > arquivo.out
+```
 
-Você executará os comandos no **PowerShell do Windows**. O Open MPI usado no Ubuntu não substitui o MS-MPI desta rota.
+No Windows nativo, esse comando fica em primeiro plano. O `&` usado no Ubuntu para executar em segundo plano não tem essa função no Prompt de Comando. [Execução no manual ORCA](https://www.faccts.de/docs/orca/6.1/manual/contents/quickstartguide/running.html) · [Sintaxe do CMD](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/cmd).
 
-## 1. Baixe o runtime correto
+## 1. Instale o MS-MPI
 
-Abra [Microsoft MPI v10.1.3 — Download Center oficial](https://www.microsoft.com/en-us/download/details.aspx?id=105289).
+Abra [Microsoft MPI v10.1.3 — Download Center oficial](https://www.microsoft.com/en-us/download/details.aspx?id=105289), baixe **`msmpisetup.exe`** e execute o instalador. O arquivo `msmpisdk.msi` é o SDK de desenvolvimento; não é necessário para rodar o ORCA.
 
-Selecione **`msmpisetup.exe`** e execute o instalador. Esse é o runtime necessário para rodar aplicações MPI. O arquivo separado `msmpisdk.msi` é o SDK de desenvolvimento e não é necessário para executar o ORCA.
+Essa versão atende ao build **10.1.12498.52** indicado no download do ORCA e tem suporte a Windows 10 e 11. O Open MPI instalado no Ubuntu é independente do MS-MPI desta rota.
 
-A página da Microsoft relaciona explicitamente **v10.1.3 ↔ 10.1.12498.52**, com suporte a Windows 10 e 11. O build anterior de v10.1.2 é **10.1.12498.18**; não confunda os dois.
+## 2. Cadastre-se e instale o ORCA
 
-Conclua a instalação e **abra um novo PowerShell**.
-
-## 2. Faça o cadastro e baixe o ORCA
-
-1. Entre no [cadastro do fórum ORCA](https://orcaforum.kofo.mpg.de/index.php?register/). Se necessário, use a [página inicial](https://orcaforum.kofo.mpg.de/) e o botão **Register**.
+1. Faça o [cadastro no fórum ORCA](https://orcaforum.kofo.mpg.de/index.php?register/). Se necessário, entre pela [página inicial](https://orcaforum.kofo.mpg.de/) e escolha **Register**.
 2. Ative sua conta, faça login e aceite os termos aplicáveis.
-3. Abra o [ORCA 6.1.1 Windows 64-bit Installer — arquivo 267](https://orcaforum.kofo.mpg.de/filebase/index.php?file/267-orca-6-1-1-windows-64bit-installer/).
-4. Baixe o pacote; se vier em ZIP, extraia-o antes de executar o instalador. A descrição desse download permite tentar o **.exe ou .msi** e informa vínculo contra **MS-MPI 10.1.12498.52**.
+3. Baixe o [ORCA 6.1.1 Windows 64-bit Installer — arquivo 267](https://orcaforum.kofo.mpg.de/filebase/index.php?file/267-orca-6-1-1-windows-64bit-installer/). Se vier em ZIP, extraia-o antes de abrir o instalador `.exe` ou `.msi`.
+4. Escolha **Full** ou **Custom**, incluindo os componentes paralelos. A opção **Typical** descrita no manual instala somente os módulos seriais.
+5. Anote a pasta escolhida. Neste guia, o exemplo é **`C:\ORCA_6.1.1`**, a pasta que contém `orca.exe`. Adapte-a se sua instalação estiver em outro lugar.
 
-O software não é incluído neste repositório. Use a sua própria conta para obtê-lo.
+O instalador configura **Path**, **ORCADIR** e **XTBEXE**. Esta última aponta para o executável xTB fornecido no pacote Windows, dentro de uma subpasta da instalação. Não é necessário reinstalar xTB para começar. [Instalação e variáveis oficiais](https://www.faccts.de/docs/orca/6.1/manual/contents/quickstartguide/installation.html).
 
-## 3. Instale os componentes paralelos
+## 3. Confira o Path permanente
 
-Escolha uma pasta local simples; neste guia, usaremos como exemplo:
+Feche as janelas do terminal, inclusive o Windows Terminal, e abra um novo **Prompt de Comando** pelo menu Iniciar. Digite:
+
+```bat
+where orca
+where mpiexec
+```
+
+O primeiro resultado de cada comando deve apontar para a instalação desejada, por exemplo:
 
 ```text
-C:\ORCA_6.1.1
+C:\ORCA_6.1.1\orca.exe
+C:\Program Files\Microsoft MPI\Bin\mpiexec.exe
 ```
 
-No instalador, escolha **Custom** ou **Full** e confirme que os módulos paralelos estão incluídos. A instalação **Typical** descrita no [manual oficial](https://www.faccts.de/docs/orca/6.1/manual/contents/quickstartguide/installation.html) instala apenas os componentes seriais. Se o pacote 6.1.1 apresentar opções diferentes, confira seus componentes e o resultado do teste paralelo.
+Se algum deles não for encontrado, faça esta configuração **uma única vez**:
 
-Não é preciso adicionar módulos especializados AUTOCI para os pequenos testes deste guia. Caso um exercício futuro os exija, a orientação será dada junto dele.
+1. Pesquise **Editar as variáveis de ambiente do sistema** no menu Iniciar e abra **Variáveis de Ambiente**.
+2. Localize **Path**. Se o instalador já criou a entrada em **Variáveis do sistema**, confira-a ali; se estiver em **Variáveis de usuário**, confira-a nesse grupo.
+3. Clique em **Editar → Novo** e acrescente a pasta real do ORCA e a pasta do MS-MPI que estiver faltando. Adicione **pastas**, sem `orca.exe` ou `mpiexec.exe` no final e sem aspas. **Preserve todas as outras entradas.**
+4. Confirme com **OK** e reabra o terminal. Repita os dois comandos `where`.
 
-Ao terminar, feche o terminal e abra outro para carregar as variáveis atualizadas.
+Se aparecer uma versão antiga primeiro, corrija a ordem no Path do grupo em que ela está cadastrada. Uma entrada no Path do usuário não passa automaticamente à frente das entradas do sistema. Não basta alterar apenas a janela atual: a configuração precisa continuar funcionando em um terminal recém-aberto.
 
-## 4. Confira executáveis e versão do MPI
+## 4. Confira os componentes
 
-No **PowerShell**:
+No novo **Prompt de Comando**:
 
-```powershell
-where.exe orca
-where.exe mpiexec
-$orcaExe = (Get-Command orca.exe -ErrorAction Stop).Source
-$mpiExe = Join-Path $env:ProgramFiles 'Microsoft MPI\Bin\mpiexec.exe'
-(Get-Item -LiteralPath $mpiExe).VersionInfo |
-    Select-Object FileVersion, ProductVersion
+```bat
+where orca_startup_mpi.exe
+set ORCADIR
+set XTBEXE
+mpiexec /np 2 hostname.exe
 ```
 
-O caminho do ORCA deve corresponder à instalação escolhida; o MPI esperado fica normalmente em `C:\Program Files\Microsoft MPI\Bin\`. A versão consultada deve corresponder a **10.1.12498.52**.
+O módulo paralelo deve pertencer à instalação do ORCA. `ORCADIR` deve indicar sua pasta, e `XTBEXE` deve indicar o arquivo `xtb.exe` existente dentro dela. O último comando deve imprimir o nome do computador duas vezes; isso confere o lançamento MPI, mas ainda não testa o ORCA.
 
-Se `where.exe mpiexec` mostrar várias instalações, confirme que o MS-MPI esperado aparece primeiro.
+Para conferir o build do MPI, localize o `mpiexec.exe` mostrado por `where`, abra **Propriedades → Detalhes** e confira **10.1.12498.52**.
 
-Para verificar o lançamento de processos:
+Se `ORCADIR` ou `XTBEXE` estiver ausente ou incorreta, repare a instalação ou ajuste essa variável na mesma janela de **Variáveis de Ambiente**: `ORCADIR` recebe a pasta do ORCA; `XTBEXE`, o caminho completo do `xtb.exe` realmente instalado. Não coloque aspas no valor. Reabra o terminal depois de salvar.
 
-```powershell
-& $mpiExe /np 2 hostname.exe
+## 5. Entre na pasta e execute
+
+Baixe e extraia o ZIP do exercício. No Explorador de Arquivos, entre na pasta que contém o input e suas estruturas, digite **`cmd` na barra de endereço** e pressione Enter. O Prompt abrirá nessa pasta.
+
+Execute o input pelo nome, substituindo `arquivo` pelo nome mostrado na página do exercício:
+
+```bat
+orca arquivo.inp > arquivo.out
 ```
 
-O nome do computador deve aparecer duas vezes. A [documentação Microsoft do mpiexec](https://learn.microsoft.com/en-us/powershell/high-performance-computing/mpiexec?view=hpc19-ps) descreve a opção de número de processos.
+Mantenha essa janela aberta até o cálculo terminar. A saída é gravada em `arquivo.out`, na mesma pasta. Você não precisa definir variáveis nem informar o caminho do programa a cada cálculo.
 
-### Se o ORCA ou MPI não estiver no Path
+**Antes da aula, faça [os testes serial e paralelo](03-testar-instalacao.md#windows-nativo), nessa ordem.** No teste paralelo, confira na saída o número de processos pedido pelo input e a mensagem **`ORCA TERMINATED NORMALLY`**. Encontrar o programa no Path, sozinho, não confirma que os módulos paralelos estão funcionando. O próprio ORCA chama o MPI; não execute `mpiexec orca ...`.
 
-Primeiro, reabra o PowerShell. Persistindo o problema, procure **Editar as variáveis de ambiente da sua conta**, edite **Path** e acrescente as pastas reais do ORCA e do MS-MPI. Preserve as demais entradas; não substitua todo o Path.
+## Se algo não funcionar
 
-Para testar apenas na janela atual, usando os caminhos deste exemplo:
+- **`orca` não reconhecido:** confira o passo 3 e abra um terminal novo.
+- **Só o serial funciona:** confira MS-MPI, instalação Full/Custom e o ajuste abaixo.
+- **xTB não encontrado:** confira `XTBEXE`, que deve apontar para o executável real, não apenas para uma pasta.
+- **`arquivo.inp.txt`:** habilite a exibição de extensões no Explorador e corrija o nome para `.inp`.
+- **Falha ao criar arquivos:** use uma pasta de trabalho local com permissão de escrita.
 
-```powershell
-$env:Path = 'C:\ORCA_6.1.1;C:\Program Files\Microsoft MPI\Bin;' + $env:Path
+<a id="se-o-paralelo-nao-encontrar-os-modulos"></a>
+<details>
+<summary>O ORCA encontra o input, mas não encontra seus módulos paralelos</summary>
+
+O [capítulo de execução paralela](https://www.faccts.de/docs/orca/6.1/manual/contents/essentialelements/parallel.html) pede que o driver receba seu caminho completo. Se essa for a causa da falha, configure este pequeno comando uma vez; os exercícios continuarão usando apenas `orca arquivo.inp > arquivo.out`.
+
+1. Dentro da pasta instalada do ORCA, crie a subpasta **`comando`**. No exemplo: `C:\ORCA_6.1.1\comando`.
+2. Nela, salve o arquivo **`orca.cmd`** como texto simples, com o conteúdo abaixo. Escolha **Todos os arquivos** ao salvar para evitar `orca.cmd.txt` e ajuste o caminho se necessário:
+
+```bat
+@echo off
+"C:\ORCA_6.1.1\orca.exe" %*
 ```
 
-Se escolheu outra pasta, adapte o comando.
+3. Em **Variáveis de Ambiente → Path**, acrescente `C:\ORCA_6.1.1\comando` **antes** de `C:\ORCA_6.1.1`, no **mesmo grupo** de variáveis em que a pasta original está registrada. Se estiver nas variáveis do sistema, a alteração requer permissão de administrador; adicionar o comando apenas ao Path do usuário não garante prioridade. Preserve as demais entradas.
+4. Reabra o Prompt fora da pasta de instalação e execute `where orca`. O **primeiro** resultado precisa ser `C:\ORCA_6.1.1\comando\orca.cmd`.
+5. Repita o teste paralelo. O comando `orca` agora encaminha a execução ao caminho completo de `orca.exe`, mantendo a pasta de trabalho e os argumentos do exercício.
 
-## 5. Baixe o repositório e teste o ORCA
+Se o erro continuar, examine a mensagem de saída: esse ajuste resolve a localização do driver, mas não substitui um runtime MPI ou componente ausente.
 
-Use **Code → Download ZIP** no [repositório do minicurso](https://github.com/HenriqueCSJ/AIMD-6WPPQG-UERJ), extraia-o e abra um PowerShell na pasta que contém `README.md`, `inputs` e `estruturas`.
-
-Você pode executar o diagnóstico somente leitura:
-
-```powershell
-powershell.exe -NoProfile -File .\scripts\verificar-ambiente-windows.ps1
-```
-
-Se a política da instituição bloquear scripts, não é necessário alterá-la: faça as verificações manuais acima.
-
-**Continue em [Testar a instalação — Windows](03-testar-instalacao.md#windows-nativo).** O teste serial deve preceder o paralelo. Use o caminho completo de `orca.exe`, obtido em `$orcaExe`, e deixe o próprio ORCA iniciar seus processos conforme o input.
-
-## Quando algo não funciona
-
-- **`orca` não reconhecido:** abra um novo terminal e confira o Path e o local real de `orca.exe`.
-- **Só o serial funciona:** confira o runtime MS-MPI, os componentes paralelos e a pasta de trabalho. O diagnóstico procura `orca_startup_mpi.exe` ao lado do executável.
-- **Versão .18 em vez de .52:** instale o runtime v10.1.3 indicado no passo 1 e confira novamente em um terminal novo.
-- **`water.inp.txt` ou equivalente:** habilite a exibição de extensões no Explorador. Os inputs devem terminar em `.inp`.
-- **Falha ao criar arquivos:** execute em uma pasta local na qual você tenha permissão de escrita.
-- **Acesso controlado/antivírus bloqueando executáveis:** consulte a política da máquina ou o suporte institucional; não desative a proteção globalmente.
-- **Erro no input:** envie as últimas linhas da saída junto da versão do programa e do MPI.
+</details>
 
 [Próximo: testes serial e paralelo →](03-testar-instalacao.md)

@@ -38,32 +38,25 @@ end
 
 <details markdown="1"><summary>Executar no Ubuntu / WSL2</summary>
 
-Extraia o pacote e abra o Ubuntu nessa pasta. Com `ORCA_DIR` configurado no guia, copie:
+Entre na **pasta extraída do exercício**, onde estão o input e seus arquivos auxiliares. Com a [instalação concluída](../../tutoriais/01-wsl2-ubuntu-orca.md), execute:
 
 ```bash
-(
-  test -x "$ORCA_DIR/orca" || { echo "Configure ORCA_DIR primeiro."; exit 1; }
-  pasta=$(mktemp -d ./execucao-XXXXXX) || exit 1
-  cp etanol_nve.inp etanol.xyz "$pasta/" || exit 1
-  cd "$pasta" || exit 1
-  "$ORCA_DIR/orca" etanol_nve.inp > etanol_nve.out 2>&1
-  tail -n 12 etanol_nve.out
-  echo "Resultados: $PWD"
-)
+orca etanol_nve.inp > etanol_nve.out &
 ```
 
-Abra `explorer.exe .` e localize a pasta `execucao-…`. Carregue **`etanol_nve.out`**, **`etanol_nve-md-ener.csv`** e **`etanol_nve-traj.xyz`** no laboratório. Execute um cálculo por vez.
+Espere o cálculo encerrar antes de iniciar outro. Os resultados ficam nessa mesma pasta; veja [como acompanhar a execução](../README.md#como-executar).
 
 </details>
 
 <details markdown="1"><summary>Alternativa: Windows nativo</summary>
 
-Extraia o pacote em uma pasta nova. Abra o PowerShell nela e ajuste o caminho:
+Abra o **Prompt de Comando (`cmd`) na pasta extraída**, com ORCA e MS-MPI já [configurados no Path](../../tutoriais/02-windows-orca-msmpi.md):
 
-```powershell
-& 'C:\ORCA_6.1.1\orca.exe' etanol_nve.inp > etanol_nve.out 2>&1
-Get-Content etanol_nve.out -Tail 12
+```bat
+orca etanol_nve.inp > etanol_nve.out
 ```
+
+Espere o prompt voltar antes de iniciar outro cálculo. Os arquivos de resultado ficam nessa mesma pasta.
 
 </details>
 

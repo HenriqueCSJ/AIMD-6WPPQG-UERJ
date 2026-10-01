@@ -14,7 +14,7 @@ Partimos da geometria fornecida: Al³⁺, seis águas e uma NH₃ afastada. Subs
 
 [Pacote de 1 fs](aula-al_agua_nh3_scc.zip) · [Pacote de 0,5 fs](aula-al_agua_nh3_dt05.zip) · [Estrutura inicial](estruturas/al_agua_nh3.xyz)
 
-Para a aula, prefira **0,5 fs**; o pacote de **1 fs** conserva o passo do exemplo proposto para comparação. Ambos chegam a 2 ps. Execute apenas um e abra a outra referência pronta.
+Para reproduzir esta referência opcional, prefira **0,5 fs**; o pacote de **1 fs** conserva o passo do exemplo proposto para comparação. Ambos chegam a 2 ps. Execute apenas um e abra a outra referência pronta.
 
 **Atenção ao terceiro arquivo:** cada pacote contém o input, a geometria e `scc.inp`. Mantenha os três na mesma pasta. A troca direta para XTB2, sem esse ajuste de convergência, falhou antes da dinâmica nesta geometria. [Entenda e consulte a tentativa preservada](apoio.md).
 
@@ -121,25 +121,19 @@ H         -8.41348       -0.42234        1.13168
 
 <details markdown="1"><summary>Executar no Ubuntu / WSL2</summary>
 
-Extraia o pacote de 0,5 fs. Com `ORCA_DIR` configurado conforme o tutorial, abra o Ubuntu nessa pasta e execute:
+Entre na **pasta extraída do exercício**, onde estão o input e seus arquivos auxiliares. Com a [instalação concluída](../../tutoriais/01-wsl2-ubuntu-orca.md), execute:
 
 ```bash
-(
-  test -x "$ORCA_DIR/orca" || { echo "Configure ORCA_DIR antes de executar."; exit 1; }
-  pasta=$(mktemp -d ./execucao-XXXXXX) || exit 1
-  cp al_agua_nh3_dt05.inp al_agua_nh3.xyz scc.inp "$pasta/" || exit 1
-  cd "$pasta" || exit 1
-  "$ORCA_DIR/orca" al_agua_nh3_dt05.inp > al_agua_nh3_dt05.out 2>&1
-  tail -n 12 al_agua_nh3_dt05.out
-  echo "Resultados: $PWD"
-)
+orca al_agua_nh3_dt05.inp > al_agua_nh3_dt05.out &
 ```
 
-Para o teste de 1 fs, use o outro pacote e substitua `al_agua_nh3_dt05` por `al_agua_nh3_scc`. Rode um cálculo por vez.
+Espere o cálculo encerrar antes de iniciar outro. Os resultados ficam nessa mesma pasta; veja [como acompanhar a execução](../README.md#como-executar).
+
+Para o teste de 1 fs, use o outro pacote e substitua `al_agua_nh3_dt05` por `al_agua_nh3_scc`.
 
 </details>
 
-O teste de **0,5 fs levou 96,4 s**; o de **1 fs, 49,3 s**, no Intel Core Ultra 9 185H, WSL2, ORCA 6.1.1 / xTB 6.7.1, PAL8. São medições desta máquina. Se passar de 2 min na aula, abra a referência e avance para a interpretação.
+O teste de **0,5 fs levou 96,4 s**; o de **1 fs, 49,3 s**, no Intel Core Ultra 9 185H, WSL2, ORCA 6.1.1 / xTB 6.7.1, PAL8. São medições desta máquina. A execução é opcional; os resultados prontos permitem fazer a interpretação sem esperar.
 
 ## 2. Procure o evento, não apenas o movimento
 

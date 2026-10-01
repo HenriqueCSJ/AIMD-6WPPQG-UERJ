@@ -12,7 +12,7 @@
 <p>Partimos da geometria fornecida: Al³⁺, seis águas e uma NH₃ afastada. Substituímos BLYP/D3/def2-SVP por <strong>XTB2</strong>. Não acrescentamos solvente implícito, parede nem otimização inicial. É um agregado isolado, com carga total +3 e multiplicidade 1.</p>
 <h2 id="1-execute">1. Execute</h2>
 <p><a href="aula-al_agua_nh3_scc.zip">Pacote de 1 fs</a> · <a href="aula-al_agua_nh3_dt05.zip">Pacote de 0,5 fs</a> · <a href="estruturas/al_agua_nh3.xyz">Estrutura inicial</a></p>
-<p>Para a aula, prefira <strong>0,5 fs</strong>; o pacote de <strong>1 fs</strong> conserva o passo do exemplo proposto para comparação. Ambos chegam a 2 ps. Execute apenas um e abra a outra referência pronta.</p>
+<p>Para reproduzir esta referência opcional, prefira <strong>0,5 fs</strong>; o pacote de <strong>1 fs</strong> conserva o passo do exemplo proposto para comparação. Ambos chegam a 2 ps. Execute apenas um e abra a outra referência pronta.</p>
 <p><strong>Atenção ao terceiro arquivo:</strong> cada pacote contém o input, a geometria e <code>scc.inp</code>. Mantenha os três na mesma pasta. A troca direta para XTB2, sem esse ajuste de convergência, falhou antes da dinâmica nesta geometria. <a href="apoio.html">Entenda e consulte a tentativa preservada</a>.</p>
 <details open>
 <summary>Input de 0,5 fs · recomendado para a execução em aula</summary>
@@ -104,20 +104,13 @@ H         -8.41348       -0.42234        1.13168
 </details>
 <details>
 <summary>Executar no Ubuntu / WSL2</summary>
-<p>Extraia o pacote de 0,5 fs. Com <code>ORCA_DIR</code> configurado conforme o tutorial, abra o Ubuntu nessa pasta e execute:</p>
-<pre><code class="language-bash">(
-  test -x &quot;$ORCA_DIR/orca&quot; || { echo &quot;Configure ORCA_DIR antes de executar.&quot;; exit 1; }
-  pasta=$(mktemp -d ./execucao-XXXXXX) || exit 1
-  cp al_agua_nh3_dt05.inp al_agua_nh3.xyz scc.inp &quot;$pasta/&quot; || exit 1
-  cd &quot;$pasta&quot; || exit 1
-  &quot;$ORCA_DIR/orca&quot; al_agua_nh3_dt05.inp &gt; al_agua_nh3_dt05.out 2&gt;&amp;1
-  tail -n 12 al_agua_nh3_dt05.out
-  echo &quot;Resultados: $PWD&quot;
-)
+<p>Entre na <strong>pasta extraída do exercício</strong>, onde estão o input e seus arquivos auxiliares. Com a <a href="https://github.com/HenriqueCSJ/AIMD-6WPPQG-UERJ/blob/main/tutoriais/01-wsl2-ubuntu-orca.md">instalação concluída</a>, execute:</p>
+<pre><code class="language-bash">orca al_agua_nh3_dt05.inp &gt; al_agua_nh3_dt05.out &amp;
 </code></pre>
-<p>Para o teste de 1 fs, use o outro pacote e substitua <code>al_agua_nh3_dt05</code> por <code>al_agua_nh3_scc</code>. Rode um cálculo por vez.</p>
+<p>Espere o cálculo encerrar antes de iniciar outro. Os resultados ficam nessa mesma pasta; veja <a href="../index.html#como-executar">como acompanhar a execução</a>.</p>
+<p>Para o teste de 1 fs, use o outro pacote e substitua <code>al_agua_nh3_dt05</code> por <code>al_agua_nh3_scc</code>.</p>
 </details>
-<p>O teste de <strong>0,5 fs levou 96,4 s</strong>; o de <strong>1 fs, 49,3 s</strong>, no Intel Core Ultra 9 185H, WSL2, ORCA 6.1.1 / xTB 6.7.1, PAL8. São medições desta máquina. Se passar de 2 min na aula, abra a referência e avance para a interpretação.</p>
+<p>O teste de <strong>0,5 fs levou 96,4 s</strong>; o de <strong>1 fs, 49,3 s</strong>, no Intel Core Ultra 9 185H, WSL2, ORCA 6.1.1 / xTB 6.7.1, PAL8. São medições desta máquina. A execução é opcional; os resultados prontos permitem fazer a interpretação sem esperar.</p>
 <h2 id="2-procure-o-evento-nao-apenas-o-movimento">2. Procure o evento, não apenas o movimento</h2>
 <p><a href="../../visualizador/index.html?exemplo=aluminum&amp;aba=trajetoria">Abrir no laboratório</a>. O seletor da trajetória alterna os dois passos; ambos preservam todos os quadros.</p>
 <ol>

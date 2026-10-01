@@ -35,36 +35,17 @@ end
 </ul>
 <details>
 <summary>Executar no Ubuntu / WSL2 — recomendado</summary>
-<p>Extraia o pacote em uma pasta e abra o terminal Ubuntu <strong>nessa pasta</strong>, onde estão o input e o XYZ. Com <code>ORCA_DIR</code> configurado no tutorial, copie o bloco inteiro. Ele cria uma execução nova e devolve o terminal à pasta inicial.</p>
-<pre><code class="language-bash">(
-  test -x &quot;$ORCA_DIR/orca&quot; || { echo &quot;Configure ORCA_DIR antes de executar.&quot;; exit 1; }
-  pasta=$(mktemp -d ./execucao-XXXXXX) || exit 1
-  cp zn_solvator.inp zn_en.xyz &quot;$pasta/&quot; || exit 1
-  cd &quot;$pasta&quot; || exit 1
-  &quot;$ORCA_DIR/orca&quot; zn_solvator.inp &gt; zn_solvator.out 2&gt;&amp;1
-  tail -n 5 zn_solvator.out
-  echo &quot;Resultados: $PWD&quot;
-)
+<p>Entre na <strong>pasta extraída do exercício</strong>, onde estão o input e seus arquivos auxiliares. Com a <a href="https://github.com/HenriqueCSJ/AIMD-6WPPQG-UERJ/blob/main/tutoriais/01-wsl2-ubuntu-orca.md">instalação concluída</a>, execute:</p>
+<pre><code class="language-bash">orca zn_solvator.inp &gt; zn_solvator.out &amp;
 </code></pre>
-<p>Procure <strong><code>ORCA TERMINATED NORMALLY</code></strong>. Abra <code>explorer.exe .</code> para localizar a nova pasta <code>execucao-…</code> e carregar os arquivos no aplicativo. Execute um cálculo por vez; o ORCA gerencia o paralelismo de <code>PAL8</code>.</p>
+<p>Espere o cálculo encerrar antes de iniciar outro. Os resultados ficam nessa mesma pasta; veja <a href="../index.html#como-executar">como acompanhar a execução</a>.</p>
 </details>
 <details>
 <summary>Alternativa: executar no Windows nativo</summary>
-<p>Extraia o pacote, abra o PowerShell nessa pasta e ajuste o caminho do ORCA. Esta rota exige ORCA/MS-MPI já testados na instalação.</p>
-<pre><code class="language-powershell">&amp; {
-  $orca = 'C:\ORCA_6.1.1\orca.exe'
-  if (-not (Test-Path -LiteralPath $orca)) { throw 'Ajuste o caminho do ORCA.' }
-  $pasta = Join-Path $PWD ('execucao-' + [guid]::NewGuid().ToString('N'))
-  New-Item -ItemType Directory -Path $pasta | Out-Null
-  Copy-Item -LiteralPath 'zn_solvator.inp', 'zn_en.xyz' -Destination $pasta -ErrorAction Stop
-  Push-Location $pasta
-  try {
-    &amp; $orca zn_solvator.inp &gt; zn_solvator.out 2&gt;&amp;1
-    Get-Content zn_solvator.out -Tail 5
-    Get-Location
-  } finally { Pop-Location }
-}
+<p>Abra o <strong>Prompt de Comando (<code>cmd</code>) na pasta extraída</strong>, com ORCA e MS-MPI já <a href="https://github.com/HenriqueCSJ/AIMD-6WPPQG-UERJ/blob/main/tutoriais/02-windows-orca-msmpi.md">configurados no Path</a>:</p>
+<pre><code class="language-bat">orca zn_solvator.inp &gt; zn_solvator.out
 </code></pre>
+<p>Espere o prompt voltar antes de iniciar outro cálculo. Os arquivos de resultado ficam nessa mesma pasta.</p>
 </details>
 <h2 id="3-veja-e-interprete">3. Veja e interprete</h2>
 <p>Ative <strong>Coordenação</strong> e <strong>Ligações H</strong> no visualizador. Identifique os dois N da etilenodiamina ligados geometricamente ao Zn e compare águas próximas do metal com as acrescentadas ao redor. <strong>SOLVATOR constrói um arranjo de solvatação</strong>; não é uma trajetória de associação do ligante nem demonstra uma constante de formação. O exercício seguinte pergunta se essa camada externa permanece por perto.</p>
@@ -97,36 +78,17 @@ end
 </code></pre>
 <details>
 <summary>Executar no Ubuntu / WSL2 — recomendado</summary>
-<p>Extraia o pacote em uma pasta e abra o terminal Ubuntu <strong>nessa pasta</strong>, onde estão o input e o XYZ. Com <code>ORCA_DIR</code> configurado no tutorial, copie o bloco inteiro. Ele cria uma execução nova e devolve o terminal à pasta inicial.</p>
-<pre><code class="language-bash">(
-  test -x &quot;$ORCA_DIR/orca&quot; || { echo &quot;Configure ORCA_DIR antes de executar.&quot;; exit 1; }
-  pasta=$(mktemp -d ./execucao-XXXXXX) || exit 1
-  cp zn_solvator_2aguas.inp zn_en.xyz &quot;$pasta/&quot; || exit 1
-  cd &quot;$pasta&quot; || exit 1
-  &quot;$ORCA_DIR/orca&quot; zn_solvator_2aguas.inp &gt; zn_solvator_2aguas.out 2&gt;&amp;1
-  tail -n 5 zn_solvator_2aguas.out
-  echo &quot;Resultados: $PWD&quot;
-)
+<p>Entre na <strong>pasta extraída do exercício</strong>, onde estão o input e seus arquivos auxiliares. Com a <a href="https://github.com/HenriqueCSJ/AIMD-6WPPQG-UERJ/blob/main/tutoriais/01-wsl2-ubuntu-orca.md">instalação concluída</a>, execute:</p>
+<pre><code class="language-bash">orca zn_solvator_2aguas.inp &gt; zn_solvator_2aguas.out &amp;
 </code></pre>
-<p>Procure <strong><code>ORCA TERMINATED NORMALLY</code></strong>. Abra <code>explorer.exe .</code> para localizar a nova pasta <code>execucao-…</code> e carregar os arquivos no aplicativo. Execute um cálculo por vez; o ORCA gerencia o paralelismo de <code>PAL8</code>.</p>
+<p>Espere o cálculo encerrar antes de iniciar outro. Os resultados ficam nessa mesma pasta; veja <a href="../index.html#como-executar">como acompanhar a execução</a>.</p>
 </details>
 <details>
 <summary>Alternativa: executar no Windows nativo</summary>
-<p>Extraia o pacote, abra o PowerShell nessa pasta e ajuste o caminho do ORCA. Esta rota exige ORCA/MS-MPI já testados na instalação.</p>
-<pre><code class="language-powershell">&amp; {
-  $orca = 'C:\ORCA_6.1.1\orca.exe'
-  if (-not (Test-Path -LiteralPath $orca)) { throw 'Ajuste o caminho do ORCA.' }
-  $pasta = Join-Path $PWD ('execucao-' + [guid]::NewGuid().ToString('N'))
-  New-Item -ItemType Directory -Path $pasta | Out-Null
-  Copy-Item -LiteralPath 'zn_solvator_2aguas.inp', 'zn_en.xyz' -Destination $pasta -ErrorAction Stop
-  Push-Location $pasta
-  try {
-    &amp; $orca zn_solvator_2aguas.inp &gt; zn_solvator_2aguas.out 2&gt;&amp;1
-    Get-Content zn_solvator_2aguas.out -Tail 5
-    Get-Location
-  } finally { Pop-Location }
-}
+<p>Abra o <strong>Prompt de Comando (<code>cmd</code>) na pasta extraída</strong>, com ORCA e MS-MPI já <a href="https://github.com/HenriqueCSJ/AIMD-6WPPQG-UERJ/blob/main/tutoriais/02-windows-orca-msmpi.md">configurados no Path</a>:</p>
+<pre><code class="language-bat">orca zn_solvator_2aguas.inp &gt; zn_solvator_2aguas.out
 </code></pre>
+<p>Espere o prompt voltar antes de iniciar outro cálculo. Os arquivos de resultado ficam nessa mesma pasta.</p>
 </details>
 </details>
 <p><strong>Na próxima atividade</strong>, use a estrutura relaxada e o reinício fornecidos. Não é preciso executar otimização e preparação térmica durante a aula.</p>

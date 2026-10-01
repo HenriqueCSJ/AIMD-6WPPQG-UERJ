@@ -42,18 +42,19 @@ end
 * xyzfile 2 1 zn_aguas_en_31A.xyz
 ```
 
-Extraia o pacote em uma pasta nova. No Ubuntu/WSL, com `ORCA_DIR` configurado conforme o guia de instalação:
+Entre na pasta extraída do pacote. Com a [instalação configurada](../../tutoriais/README.md), execute no **Ubuntu / WSL2**:
 
 ```bash
-"$ORCA_DIR/orca" controle_dt025_31A.inp > controle_dt025_31A.out 2>&1
-tail -n 12 controle_dt025_31A.out
+orca controle_dt025_31A.inp > controle_dt025_31A.out &
 ```
 
-No Windows nativo, ajuste o caminho da instalação:
+No **Windows nativo**, abra o Prompt de Comando (`cmd`) nessa pasta:
 
-```powershell
-& 'C:\ORCA_6.1.1\orca.exe' controle_dt025_31A.inp > controle_dt025_31A.out 2>&1
+```bat
+orca controle_dt025_31A.inp > controle_dt025_31A.out
 ```
+
+Veja [como acompanhar o cálculo](../README.md#como-executar). Os resultados ficam na pasta do input.
 
 Execute um cálculo por vez. PAL8 solicita oito threads ao xTB. Tempo medido aqui: **37 s**, incluindo a inicialização, em ORCA 6.1.1 / xTB 6.7.1, WSL2 e Core Ultra 9 185H; outras máquinas podem levar mais tempo.
 

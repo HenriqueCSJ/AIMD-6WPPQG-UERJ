@@ -31,25 +31,17 @@ end
 </code></pre>
 <details>
 <summary>Executar no Ubuntu / WSL2</summary>
-<p>Extraia o pacote em uma pasta nova. Abra o Ubuntu nessa pasta, com <code>ORCA_DIR</code> configurado no tutorial, e copie:</p>
-<pre><code class="language-bash">(
-  test -x &quot;$ORCA_DIR/orca&quot; || { echo &quot;Configure ORCA_DIR antes de executar.&quot;; exit 1; }
-  pasta=$(mktemp -d ./execucao-XXXXXX) || exit 1
-  cp agua_c60.inp agua_c60.xyz &quot;$pasta/&quot; || exit 1
-  cd &quot;$pasta&quot; || exit 1
-  &quot;$ORCA_DIR/orca&quot; agua_c60.inp &gt; agua_c60.out 2&gt;&amp;1
-  tail -n 12 agua_c60.out
-  echo &quot;Resultados: $PWD&quot;
-)
+<p>Entre na <strong>pasta extraída do exercício</strong>, onde estão o input e seus arquivos auxiliares. Com a <a href="https://github.com/HenriqueCSJ/AIMD-6WPPQG-UERJ/blob/main/tutoriais/01-wsl2-ubuntu-orca.md">instalação concluída</a>, execute:</p>
+<pre><code class="language-bash">orca agua_c60.inp &gt; agua_c60.out &amp;
 </code></pre>
-<p>Abra <code>explorer.exe .</code> para localizar os resultados. Execute um cálculo por vez.</p>
+<p>Espere o cálculo encerrar antes de iniciar outro. Os resultados ficam nessa mesma pasta; veja <a href="../index.html#como-executar">como acompanhar a execução</a>.</p>
 </details>
 <details>
 <summary>Alternativa no Windows nativo</summary>
-<p>Com ORCA/MS-MPI instalados, extraia o pacote numa pasta nova, abra o PowerShell nela e ajuste o caminho:</p>
-<pre><code class="language-powershell">&amp; 'C:\ORCA_6.1.1\orca.exe' agua_c60.inp &gt; agua_c60.out 2&gt;&amp;1
-Get-Content agua_c60.out -Tail 12
+<p>Abra o <strong>Prompt de Comando (<code>cmd</code>) na pasta extraída</strong>, com ORCA e MS-MPI já <a href="https://github.com/HenriqueCSJ/AIMD-6WPPQG-UERJ/blob/main/tutoriais/02-windows-orca-msmpi.md">configurados no Path</a>:</p>
+<pre><code class="language-bat">orca agua_c60.inp &gt; agua_c60.out
 </code></pre>
+<p>Espere o prompt voltar antes de iniciar outro cálculo. Os arquivos de resultado ficam nessa mesma pasta.</p>
 </details>
 <p>São <strong>2000 passos × 0,5 fs = 1000 fs = 1 ps = 10⁻¹² s</strong>. A referência PAL8 levou <strong>230.9 s</strong> nesta máquina. Em computadores mais lentos, use a referência e preserve o tempo de discussão.</p>
 <h2 id="3-interprete-em-3d">3. Interprete em 3D</h2>

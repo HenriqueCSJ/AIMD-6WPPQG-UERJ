@@ -24,14 +24,18 @@ end
 * xyzfile 1 1 h5o2_otimizado.xyz
 </code></pre>
 <h2 id="2-execute-ou-use-a-referencia">2. Execute ou use a referência</h2>
-<p>No Ubuntu/WSL2, com <code>ORCA_DIR</code> configurado no tutorial, abra o terminal na pasta extraída:</p>
-<pre><code class="language-bash">&quot;$ORCA_DIR/orca&quot; proton_shared.inp &gt; proton_shared.out 2&gt;&amp;1
-tail -n 12 proton_shared.out
+<p><strong>Ubuntu / WSL2:</strong></p>
+<p>Entre na <strong>pasta extraída do exercício</strong>, onde estão o input e seus arquivos auxiliares. Com a <a href="https://github.com/HenriqueCSJ/AIMD-6WPPQG-UERJ/blob/main/tutoriais/01-wsl2-ubuntu-orca.md">instalação concluída</a>, execute:</p>
+<pre><code class="language-bash">orca proton_shared.inp &gt; proton_shared.out &amp;
 </code></pre>
-<p>No PowerShell, ajuste o caminho da sua instalação:</p>
-<pre><code class="language-powershell">&amp; 'C:\ORCA_6.1.1\orca.exe' proton_shared.inp &gt; proton_shared.out 2&gt;&amp;1
-Get-Content proton_shared.out -Tail 12
+<p>Espere o cálculo encerrar antes de iniciar outro. Os resultados ficam nessa mesma pasta; veja <a href="../index.html#como-executar">como acompanhar a execução</a>.</p>
+<details>
+<summary>Windows nativo</summary>
+<p>Abra o <strong>Prompt de Comando (<code>cmd</code>) na pasta extraída</strong>, com ORCA e MS-MPI já <a href="https://github.com/HenriqueCSJ/AIMD-6WPPQG-UERJ/blob/main/tutoriais/02-windows-orca-msmpi.md">configurados no Path</a>:</p>
+<pre><code class="language-bat">orca proton_shared.inp &gt; proton_shared.out
 </code></pre>
+<p>Espere o prompt voltar antes de iniciar outro cálculo. Os arquivos de resultado ficam nessa mesma pasta.</p>
+</details>
 <p>Execute um cálculo por vez. A referência completou <strong>2 ps em 123,847 s</strong>; a otimização anterior levou 2,375 s. São tempos observados em ORCA 6.1.1/xTB 6.7.1, WSL2, Intel Core Ultra 9 185H, PAL8 solicitado, e podem mudar em outro computador. Se a espera comprometer o bloco, passe aos dados prontos.</p>
 <p><a href="../../visualizador/index.html?exemplo=proton_shared&amp;aba=trajetoria">Abrir H₅O₂⁺ no aplicativo</a> · <a href="resultado-proton_shared.zip">Baixar resultado pronto</a></p>
 <h2 id="3-meca-e-interprete">3. Meça e interprete</h2>

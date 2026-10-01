@@ -26,8 +26,16 @@ else
     check_failure "mpirun nao encontrado. Instale openmpi-bin pelo apt."
 fi
 if command -v orca >/dev/null; then
-    aimd_orca_exe="$(readlink -f "$(command -v orca)")"
-    echo "ORCA: $aimd_orca_exe"
+    aimd_orca_command="$(command -v orca)"
+    echo "Comando orca: $aimd_orca_command"
+    # ORCA_DIR indica a instalacao real quando o PATH encontra o lancador.
+    if [[ -n "${ORCA_DIR:-}" ]]; then
+        aimd_orca_exe="$ORCA_DIR/orca"
+    else
+        aimd_orca_exe="$(readlink -f "$aimd_orca_command")"
+    fi
+    echo "Executavel ORCA: $aimd_orca_exe"
+    [[ -x "$aimd_orca_exe" ]] || check_failure "Executavel ORCA ausente ou sem permissao. Confira ORCA_DIR."
     aimd_parallel="$(dirname "$aimd_orca_exe")/orca_startup_mpi"
     if [[ -f "$aimd_parallel" ]]; then
         aimd_libraries="$(ldd "$aimd_parallel" 2>&1)"

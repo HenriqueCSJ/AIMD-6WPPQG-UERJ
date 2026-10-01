@@ -37,32 +37,25 @@ end
 ```
 <details markdown="1"><summary>Executar no Ubuntu / WSL2</summary>
 
-Extraia o pacote em uma pasta nova. Abra o Ubuntu nessa pasta, com `ORCA_DIR` configurado no tutorial, e copie:
+Entre na **pasta extraída do exercício**, onde estão o input e seus arquivos auxiliares. Com a [instalação concluída](../../tutoriais/01-wsl2-ubuntu-orca.md), execute:
 
 ```bash
-(
-  test -x "$ORCA_DIR/orca" || { echo "Configure ORCA_DIR antes de executar."; exit 1; }
-  pasta=$(mktemp -d ./execucao-XXXXXX) || exit 1
-  cp agua_c60.inp agua_c60.xyz "$pasta/" || exit 1
-  cd "$pasta" || exit 1
-  "$ORCA_DIR/orca" agua_c60.inp > agua_c60.out 2>&1
-  tail -n 12 agua_c60.out
-  echo "Resultados: $PWD"
-)
+orca agua_c60.inp > agua_c60.out &
 ```
 
-Abra `explorer.exe .` para localizar os resultados. Execute um cálculo por vez.
+Espere o cálculo encerrar antes de iniciar outro. Os resultados ficam nessa mesma pasta; veja [como acompanhar a execução](../README.md#como-executar).
 
 </details>
 
 <details markdown="1"><summary>Alternativa no Windows nativo</summary>
 
-Com ORCA/MS-MPI instalados, extraia o pacote numa pasta nova, abra o PowerShell nela e ajuste o caminho:
+Abra o **Prompt de Comando (`cmd`) na pasta extraída**, com ORCA e MS-MPI já [configurados no Path](../../tutoriais/02-windows-orca-msmpi.md):
 
-```powershell
-& 'C:\ORCA_6.1.1\orca.exe' agua_c60.inp > agua_c60.out 2>&1
-Get-Content agua_c60.out -Tail 12
+```bat
+orca agua_c60.inp > agua_c60.out
 ```
+
+Espere o prompt voltar antes de iniciar outro cálculo. Os arquivos de resultado ficam nessa mesma pasta.
 
 </details>
 

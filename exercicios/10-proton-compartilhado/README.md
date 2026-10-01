@@ -31,19 +31,27 @@ end
 
 ## 2. Execute ou use a referência
 
-No Ubuntu/WSL2, com `ORCA_DIR` configurado no tutorial, abra o terminal na pasta extraída:
+**Ubuntu / WSL2:**
+
+Entre na **pasta extraída do exercício**, onde estão o input e seus arquivos auxiliares. Com a [instalação concluída](../../tutoriais/01-wsl2-ubuntu-orca.md), execute:
 
 ```bash
-"$ORCA_DIR/orca" proton_shared.inp > proton_shared.out 2>&1
-tail -n 12 proton_shared.out
+orca proton_shared.inp > proton_shared.out &
 ```
 
-No PowerShell, ajuste o caminho da sua instalação:
+Espere o cálculo encerrar antes de iniciar outro. Os resultados ficam nessa mesma pasta; veja [como acompanhar a execução](../README.md#como-executar).
 
-```powershell
-& 'C:\ORCA_6.1.1\orca.exe' proton_shared.inp > proton_shared.out 2>&1
-Get-Content proton_shared.out -Tail 12
+<details markdown="1"><summary>Windows nativo</summary>
+
+Abra o **Prompt de Comando (`cmd`) na pasta extraída**, com ORCA e MS-MPI já [configurados no Path](../../tutoriais/02-windows-orca-msmpi.md):
+
+```bat
+orca proton_shared.inp > proton_shared.out
 ```
+
+Espere o prompt voltar antes de iniciar outro cálculo. Os arquivos de resultado ficam nessa mesma pasta.
+
+</details>
 
 Execute um cálculo por vez. A referência completou **2 ps em 123,847 s**; a otimização anterior levou 2,375 s. São tempos observados em ORCA 6.1.1/xTB 6.7.1, WSL2, Intel Core Ultra 9 185H, PAL8 solicitado, e podem mudar em outro computador. Se a espera comprometer o bloco, passe aos dados prontos.
 

@@ -28,25 +28,17 @@ end
 </code></pre>
 <details>
 <summary>Executar no Ubuntu / WSL2</summary>
-<p>Extraia o pacote e abra o Ubuntu nessa pasta. Com <code>ORCA_DIR</code> configurado no guia, copie:</p>
-<pre><code class="language-bash">(
-  test -x &quot;$ORCA_DIR/orca&quot; || { echo &quot;Configure ORCA_DIR primeiro.&quot;; exit 1; }
-  pasta=$(mktemp -d ./execucao-XXXXXX) || exit 1
-  cp dimero_xtb2_2ps.inp dimero_b97.xyz &quot;$pasta/&quot; || exit 1
-  cd &quot;$pasta&quot; || exit 1
-  &quot;$ORCA_DIR/orca&quot; dimero_xtb2_2ps.inp &gt; dimero_xtb2_2ps.out 2&gt;&amp;1
-  tail -n 12 dimero_xtb2_2ps.out
-  echo &quot;Resultados: $PWD&quot;
-)
+<p>Entre na <strong>pasta extraída do exercício</strong>, onde estão o input e seus arquivos auxiliares. Com a <a href="https://github.com/HenriqueCSJ/AIMD-6WPPQG-UERJ/blob/main/tutoriais/01-wsl2-ubuntu-orca.md">instalação concluída</a>, execute:</p>
+<pre><code class="language-bash">orca dimero_xtb2_2ps.inp &gt; dimero_xtb2_2ps.out &amp;
 </code></pre>
-<p>Abra <code>explorer.exe .</code> e localize a pasta <code>execucao-…</code>. Carregue <strong><code>dimero_xtb2_2ps.out</code></strong>, <strong><code>dimero_xtb2_2ps-md-ener.csv</code></strong> e <strong><code>dimero_xtb2_2ps-traj.xyz</code></strong> no laboratório. Execute um cálculo por vez.</p>
+<p>Espere o cálculo encerrar antes de iniciar outro. Os resultados ficam nessa mesma pasta; veja <a href="../index.html#como-executar">como acompanhar a execução</a>.</p>
 </details>
 <details>
 <summary>Alternativa: Windows nativo</summary>
-<p>Extraia o pacote em uma pasta nova. Abra o PowerShell nela e ajuste o caminho:</p>
-<pre><code class="language-powershell">&amp; 'C:\ORCA_6.1.1\orca.exe' dimero_xtb2_2ps.inp &gt; dimero_xtb2_2ps.out 2&gt;&amp;1
-Get-Content dimero_xtb2_2ps.out -Tail 12
+<p>Abra o <strong>Prompt de Comando (<code>cmd</code>) na pasta extraída</strong>, com ORCA e MS-MPI já <a href="https://github.com/HenriqueCSJ/AIMD-6WPPQG-UERJ/blob/main/tutoriais/02-windows-orca-msmpi.md">configurados no Path</a>:</p>
+<pre><code class="language-bat">orca dimero_xtb2_2ps.inp &gt; dimero_xtb2_2ps.out
 </code></pre>
+<p>Espere o prompt voltar antes de iniciar outro cálculo. Os arquivos de resultado ficam nessa mesma pasta.</p>
 </details>
 <h2 id="3-observe-meca-explique">3. Observe, meça, explique</h2>
 <p><a href="../../visualizador/index.html?exemplo=water&amp;aba=trajetoria">Abrir referência em 3D</a></p>
@@ -77,4 +69,4 @@ Get-Content dimero_xtb2_2ps.out -Tail 12
 </ul>
 <p><a href="https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html">Manual ORCA: dinâmica molecular</a>.</p>
 <p><a href="resultados/preparar_dimero_b97/preparar_dimero_b97.out">Preparação do dímero</a>. Geometria convergida na otimização; não foi feita análise de frequências.</p>
-<p>Métodos: <a href="../../tutoriais/05-xtb-solvator.md">preparar XTB2 no ORCA</a> · <a href="https://www.faccts.de/docs/orca/6.1/manual/contents/modelchemistries/3cmethods.html">B97-3c das referências DFT</a>.</p><nav class="endnav" aria-label="Próxima etapa"><a href="../index.html">← Percurso</a><a href="../3-xtb2-etanol/index.html">Etanol: controle →</a></nav></main></div><footer>Henrique de Castro Silva Junior e Virginia Camila Rufino Ferreira · ORCA 6.1.1 · Materiais e dados locais; links externos levam à documentação oficial.</footer></body></html>
+<p>Métodos: <a href="https://github.com/HenriqueCSJ/AIMD-6WPPQG-UERJ/blob/main/tutoriais/05-xtb-solvator.md">preparar XTB2 no ORCA</a> · <a href="https://www.faccts.de/docs/orca/6.1/manual/contents/modelchemistries/3cmethods.html">B97-3c das referências DFT</a>.</p><nav class="endnav" aria-label="Próxima etapa"><a href="../index.html">← Percurso</a><a href="../3-xtb2-etanol/index.html">Etanol: controle →</a></nav></main></div><footer>Henrique de Castro Silva Junior e Virginia Camila Rufino Ferreira · ORCA 6.1.1 · Materiais e dados locais; links externos levam à documentação oficial.</footer></body></html>

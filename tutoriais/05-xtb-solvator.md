@@ -10,21 +10,19 @@ Nos inputs do minicurso usaremos **`! XTB2`**, acrescentando `ALPB(water)` quand
 
 Crie uma pasta de execução nova e copie para ela o input [agua_solvator_external.inp](../inputs/03-solvatacao/pilotos-validacao/agua_solvator_external.inp). O arquivo já contém uma molécula de água; SOLVATOR acrescenta outras duas. Execute somente este cálculo, em serial.
 
-**Bash / Ubuntu**, após carregar o ambiente do [guia WSL2](01-wsl2-ubuntu-orca.md):
+Entre na pasta do input. **Ubuntu / WSL2:**
 
 ```bash
-"$ORCA_DIR/orca" agua_solvator_external.inp > agua_solvator_external.out 2>&1
-tail -n 25 agua_solvator_external.out
-head -n 2 agua_solvator_external.solvator.xyz
+orca agua_solvator_external.inp > agua_solvator_external.out &
 ```
 
-**PowerShell / Windows nativo**, ajustando o caminho caso a instalação seja diferente:
+**Windows nativo — Prompt de Comando (`cmd`):**
 
-```powershell
-& 'C:\ORCA_6.1.1\orca.exe' agua_solvator_external.inp > agua_solvator_external.out 2>&1
-Get-Content agua_solvator_external.out -Tail 25
-Get-Content agua_solvator_external.solvator.xyz -TotalCount 2
+```bat
+orca agua_solvator_external.inp > agua_solvator_external.out
 ```
+
+Espere o cálculo terminar. No Ubuntu, `tail -f agua_solvator_external.out` acompanha a saída; Ctrl+C sai apenas do acompanhamento. No Windows, espere o prompt voltar. Não inicie outro cálculo enquanto este estiver ativo.
 
 Confira `ORCA TERMINATED NORMALLY`, o término normal do SOLVATOR e o arquivo final com **9 átomos** na primeira linha. Abra esse XYZ no Avogadro. A montagem não é uma trajetória de MD: é uma condição inicial para um cálculo posterior.
 
@@ -32,14 +30,14 @@ O piloto Linux/WSL2 terminou normalmente em 7,385 s neste computador; esse tempo
 
 ## 2. Somente se o ORCA não encontrar o xTB
 
-O [manual da interface xTB](https://www.faccts.de/docs/orca/6.1/manual/contents/modelchemistries/semiempirical.html) orienta instalar a versão 6.7.1 ou posterior e disponibilizar o executável como `otool_xtb` junto ao ORCA. Para reproduzir o ambiente ensaiado, use 6.7.1 no Linux.
+Para Linux, o [manual da interface xTB](https://www.faccts.de/docs/orca/6.1/manual/contents/modelchemistries/semiempirical.html) orienta instalar a versão 6.7.1 ou posterior e disponibilizar o executável como `otool_xtb` junto ao ORCA. Para reproduzir o ambiente ensaiado, use 6.7.1 no Linux.
 
 ### WSL2 / Ubuntu — rota recomendada
 
 1. Confira se já existe e funciona:
 
    ```bash
-   "$ORCA_DIR/otool_xtb" --version
+   otool_xtb --version
    ```
 
 2. Se estiver ausente, obtenha o [pacote oficial xTB 6.7.1 para Linux x86-64](https://github.com/grimme-lab/xtb/releases/download/v6.7.1/xtb-6.7.1-linux-x86_64.tar.xz), listado na [página da versão](https://github.com/grimme-lab/xtb/releases/tag/v6.7.1). Extraia o arquivo em uma pasta de software dentro do Linux e localize o executável `bin/xtb`.
@@ -48,16 +46,23 @@ O [manual da interface xTB](https://www.faccts.de/docs/orca/6.1/manual/contents/
    ```bash
    cp -n /CAMINHO/DO/XTB/bin/xtb "$ORCA_DIR/otool_xtb"
    chmod u+x "$ORCA_DIR/otool_xtb"
-   "$ORCA_DIR/otool_xtb" --version
+   otool_xtb --version
    ```
 
 4. Repita o teste SOLVATOR em uma pasta nova. Se aparecer uma biblioteca ausente, confira a mensagem e as instruções da distribuição oficial; não considere a instalação concluída apenas porque o arquivo foi copiado.
 
-### Windows nativo — alternativa a conferir
+### Windows nativo
 
-A [página oficial da versão](https://github.com/grimme-lab/xtb/releases/tag/v6.7.1) oferece o [arquivo Windows x86-64](https://github.com/grimme-lab/xtb/releases/download/v6.7.1/xtb-6.7.1pre-windows-x86_64.zip), identificado no nome como **6.7.1pre**. Esse pacote não é o mesmo binário Linux testado pelos ministrantes.
+O instalador do ORCA 6.1 configura **`XTBEXE`** para o executável xTB fornecido. Primeiro confira no Prompt de Comando novo:
 
-Extraia o pacote, localize `xtb.exe` e disponibilize-o como `otool_xtb.exe` na pasta do ORCA. Preserve qualquer instalação que já funcione. O manual do ORCA também orienta copiar **`libiomp5md.dll`** da distribuição xTB para a pasta do ORCA; confira os arquivos e as instruções do pacote oficial. Não obtenha DLLs de sites avulsos. Depois repita o teste da seção 1. Se a dependência não estiver resolvida, use a rota WSL2 recomendada ou leve a mensagem completa para o apoio de instalação.
+```bat
+echo %XTBEXE%
+"%XTBEXE%" --version
+```
+
+Se XTB2 já funciona, mantenha essa instalação. Se precisar instalar outra versão, obtenha o pacote oficial na [página do xTB 6.7.1](https://github.com/grimme-lab/xtb/releases/tag/v6.7.1); o [arquivo Windows](https://github.com/grimme-lab/xtb/releases/download/v6.7.1/xtb-6.7.1pre-windows-x86_64.zip) está identificado como **6.7.1pre**, diferente do binário Linux ensaiado. Extraia-o com suas bibliotecas. Em **Variáveis de ambiente**, ajuste `XTBEXE` para o caminho completo do **arquivo `xtb.exe` real**, não apenas da pasta. Abra um terminal novo e repita o teste.
+
+Esta é a orientação da [instalação oficial do ORCA 6.1](https://www.faccts.de/docs/orca/6.1/manual/contents/quickstartguide/installation.html#how-do-i-install-the-xtb-module). No Linux o nome esperado é `otool_xtb`; no Windows, mantenha a distribuição fornecida e use `XTBEXE`. Não baixe DLLs de sites avulsos. A rota Windows continua dependente de passar no teste local.
 
 ## 3. Diagnóstico rápido
 

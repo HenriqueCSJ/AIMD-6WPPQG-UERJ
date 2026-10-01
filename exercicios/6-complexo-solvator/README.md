@@ -45,43 +45,25 @@ end
 
 <details markdown="1"><summary>Executar no Ubuntu / WSL2 — recomendado</summary>
 
-Extraia o pacote em uma pasta e abra o terminal Ubuntu **nessa pasta**, onde estão o input e o XYZ. Com `ORCA_DIR` configurado no tutorial, copie o bloco inteiro. Ele cria uma execução nova e devolve o terminal à pasta inicial.
+Entre na **pasta extraída do exercício**, onde estão o input e seus arquivos auxiliares. Com a [instalação concluída](../../tutoriais/01-wsl2-ubuntu-orca.md), execute:
 
 ```bash
-(
-  test -x "$ORCA_DIR/orca" || { echo "Configure ORCA_DIR antes de executar."; exit 1; }
-  pasta=$(mktemp -d ./execucao-XXXXXX) || exit 1
-  cp zn_solvator.inp zn_en.xyz "$pasta/" || exit 1
-  cd "$pasta" || exit 1
-  "$ORCA_DIR/orca" zn_solvator.inp > zn_solvator.out 2>&1
-  tail -n 5 zn_solvator.out
-  echo "Resultados: $PWD"
-)
+orca zn_solvator.inp > zn_solvator.out &
 ```
 
-Procure **`ORCA TERMINATED NORMALLY`**. Abra `explorer.exe .` para localizar a nova pasta `execucao-…` e carregar os arquivos no aplicativo. Execute um cálculo por vez; o ORCA gerencia o paralelismo de `PAL8`.
+Espere o cálculo encerrar antes de iniciar outro. Os resultados ficam nessa mesma pasta; veja [como acompanhar a execução](../README.md#como-executar).
 
 </details>
 
 <details markdown="1"><summary>Alternativa: executar no Windows nativo</summary>
 
-Extraia o pacote, abra o PowerShell nessa pasta e ajuste o caminho do ORCA. Esta rota exige ORCA/MS-MPI já testados na instalação.
+Abra o **Prompt de Comando (`cmd`) na pasta extraída**, com ORCA e MS-MPI já [configurados no Path](../../tutoriais/02-windows-orca-msmpi.md):
 
-```powershell
-& {
-  $orca = 'C:\ORCA_6.1.1\orca.exe'
-  if (-not (Test-Path -LiteralPath $orca)) { throw 'Ajuste o caminho do ORCA.' }
-  $pasta = Join-Path $PWD ('execucao-' + [guid]::NewGuid().ToString('N'))
-  New-Item -ItemType Directory -Path $pasta | Out-Null
-  Copy-Item -LiteralPath 'zn_solvator.inp', 'zn_en.xyz' -Destination $pasta -ErrorAction Stop
-  Push-Location $pasta
-  try {
-    & $orca zn_solvator.inp > zn_solvator.out 2>&1
-    Get-Content zn_solvator.out -Tail 5
-    Get-Location
-  } finally { Pop-Location }
-}
+```bat
+orca zn_solvator.inp > zn_solvator.out
 ```
+
+Espere o prompt voltar antes de iniciar outro cálculo. Os arquivos de resultado ficam nessa mesma pasta.
 
 </details>
 
@@ -122,43 +104,25 @@ end
 
 <details markdown="1"><summary>Executar no Ubuntu / WSL2 — recomendado</summary>
 
-Extraia o pacote em uma pasta e abra o terminal Ubuntu **nessa pasta**, onde estão o input e o XYZ. Com `ORCA_DIR` configurado no tutorial, copie o bloco inteiro. Ele cria uma execução nova e devolve o terminal à pasta inicial.
+Entre na **pasta extraída do exercício**, onde estão o input e seus arquivos auxiliares. Com a [instalação concluída](../../tutoriais/01-wsl2-ubuntu-orca.md), execute:
 
 ```bash
-(
-  test -x "$ORCA_DIR/orca" || { echo "Configure ORCA_DIR antes de executar."; exit 1; }
-  pasta=$(mktemp -d ./execucao-XXXXXX) || exit 1
-  cp zn_solvator_2aguas.inp zn_en.xyz "$pasta/" || exit 1
-  cd "$pasta" || exit 1
-  "$ORCA_DIR/orca" zn_solvator_2aguas.inp > zn_solvator_2aguas.out 2>&1
-  tail -n 5 zn_solvator_2aguas.out
-  echo "Resultados: $PWD"
-)
+orca zn_solvator_2aguas.inp > zn_solvator_2aguas.out &
 ```
 
-Procure **`ORCA TERMINATED NORMALLY`**. Abra `explorer.exe .` para localizar a nova pasta `execucao-…` e carregar os arquivos no aplicativo. Execute um cálculo por vez; o ORCA gerencia o paralelismo de `PAL8`.
+Espere o cálculo encerrar antes de iniciar outro. Os resultados ficam nessa mesma pasta; veja [como acompanhar a execução](../README.md#como-executar).
 
 </details>
 
 <details markdown="1"><summary>Alternativa: executar no Windows nativo</summary>
 
-Extraia o pacote, abra o PowerShell nessa pasta e ajuste o caminho do ORCA. Esta rota exige ORCA/MS-MPI já testados na instalação.
+Abra o **Prompt de Comando (`cmd`) na pasta extraída**, com ORCA e MS-MPI já [configurados no Path](../../tutoriais/02-windows-orca-msmpi.md):
 
-```powershell
-& {
-  $orca = 'C:\ORCA_6.1.1\orca.exe'
-  if (-not (Test-Path -LiteralPath $orca)) { throw 'Ajuste o caminho do ORCA.' }
-  $pasta = Join-Path $PWD ('execucao-' + [guid]::NewGuid().ToString('N'))
-  New-Item -ItemType Directory -Path $pasta | Out-Null
-  Copy-Item -LiteralPath 'zn_solvator_2aguas.inp', 'zn_en.xyz' -Destination $pasta -ErrorAction Stop
-  Push-Location $pasta
-  try {
-    & $orca zn_solvator_2aguas.inp > zn_solvator_2aguas.out 2>&1
-    Get-Content zn_solvator_2aguas.out -Tail 5
-    Get-Location
-  } finally { Pop-Location }
-}
+```bat
+orca zn_solvator_2aguas.inp > zn_solvator_2aguas.out
 ```
+
+Espere o prompt voltar antes de iniciar outro cálculo. Os arquivos de resultado ficam nessa mesma pasta.
 
 </details>
 

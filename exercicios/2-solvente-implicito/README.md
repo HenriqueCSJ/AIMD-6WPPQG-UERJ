@@ -37,32 +37,25 @@ end
 
 <details markdown="1"><summary>Reprodução após a aula: Ubuntu / WSL2</summary>
 
-Extraia o pacote e abra o Ubuntu nessa pasta. Com `ORCA_DIR` configurado no guia, copie:
+Entre na **pasta extraída do exercício**, onde estão o input e seus arquivos auxiliares. Com a [instalação concluída](../../tutoriais/01-wsl2-ubuntu-orca.md), execute:
 
 ```bash
-(
-  test -x "$ORCA_DIR/orca" || { echo "Configure ORCA_DIR primeiro."; exit 1; }
-  pasta=$(mktemp -d ./execucao-XXXXXX) || exit 1
-  cp dimero_b97_cpcm.inp dimero_b97.xyz "$pasta/" || exit 1
-  cd "$pasta" || exit 1
-  "$ORCA_DIR/orca" dimero_b97_cpcm.inp > dimero_b97_cpcm.out 2>&1
-  tail -n 12 dimero_b97_cpcm.out
-  echo "Resultados: $PWD"
-)
+orca dimero_b97_cpcm.inp > dimero_b97_cpcm.out &
 ```
 
-Abra `explorer.exe .` e localize a pasta `execucao-…`. Carregue **`dimero_b97_cpcm.out`**, **`dimero_b97_cpcm-md-ener.csv`** e **`dimero_b97_cpcm-traj.xyz`** no laboratório. Execute um cálculo por vez.
+Espere o cálculo encerrar antes de iniciar outro. Os resultados ficam nessa mesma pasta; veja [como acompanhar a execução](../README.md#como-executar).
 
 </details>
 
 <details markdown="1"><summary>Reprodução após a aula: Windows nativo</summary>
 
-Extraia o pacote em uma pasta nova. Abra o PowerShell nela e ajuste o caminho:
+Abra o **Prompt de Comando (`cmd`) na pasta extraída**, com ORCA e MS-MPI já [configurados no Path](../../tutoriais/02-windows-orca-msmpi.md):
 
-```powershell
-& 'C:\ORCA_6.1.1\orca.exe' dimero_b97_cpcm.inp > dimero_b97_cpcm.out 2>&1
-Get-Content dimero_b97_cpcm.out -Tail 12
+```bat
+orca dimero_b97_cpcm.inp > dimero_b97_cpcm.out
 ```
+
+Espere o prompt voltar antes de iniciar outro cálculo. Os arquivos de resultado ficam nessa mesma pasta.
 
 </details>
 

@@ -26,25 +26,17 @@ end
 </code></pre>
 <details>
 <summary>Executar no Ubuntu / WSL2</summary>
-<p>Extraia o pacote e abra o Ubuntu nessa pasta. Com <code>ORCA_DIR</code> configurado no guia, copie:</p>
-<pre><code class="language-bash">(
-  test -x &quot;$ORCA_DIR/orca&quot; || { echo &quot;Configure ORCA_DIR primeiro.&quot;; exit 1; }
-  pasta=$(mktemp -d ./execucao-XXXXXX) || exit 1
-  cp etanol_instavel.inp etanol.xyz &quot;$pasta/&quot; || exit 1
-  cd &quot;$pasta&quot; || exit 1
-  &quot;$ORCA_DIR/orca&quot; etanol_instavel.inp &gt; etanol_instavel.out 2&gt;&amp;1
-  tail -n 12 etanol_instavel.out
-  echo &quot;Resultados: $PWD&quot;
-)
+<p>Entre na <strong>pasta extraída do exercício</strong>, onde estão o input e seus arquivos auxiliares. Com a <a href="https://github.com/HenriqueCSJ/AIMD-6WPPQG-UERJ/blob/main/tutoriais/01-wsl2-ubuntu-orca.md">instalação concluída</a>, execute:</p>
+<pre><code class="language-bash">orca etanol_instavel.inp &gt; etanol_instavel.out &amp;
 </code></pre>
-<p>Abra <code>explorer.exe .</code> e localize a pasta <code>execucao-…</code>. Carregue <strong><code>etanol_instavel.out</code></strong>, <strong><code>etanol_instavel-md-ener.csv</code></strong> e <strong><code>etanol_instavel-traj.xyz</code></strong> no laboratório. Execute um cálculo por vez.</p>
+<p>Espere o cálculo encerrar antes de iniciar outro. Os resultados ficam nessa mesma pasta; veja <a href="../index.html#como-executar">como acompanhar a execução</a>.</p>
 </details>
 <details>
 <summary>Alternativa: Windows nativo</summary>
-<p>Extraia o pacote em uma pasta nova. Abra o PowerShell nela e ajuste o caminho:</p>
-<pre><code class="language-powershell">&amp; 'C:\ORCA_6.1.1\orca.exe' etanol_instavel.inp &gt; etanol_instavel.out 2&gt;&amp;1
-Get-Content etanol_instavel.out -Tail 12
+<p>Abra o <strong>Prompt de Comando (<code>cmd</code>) na pasta extraída</strong>, com ORCA e MS-MPI já <a href="https://github.com/HenriqueCSJ/AIMD-6WPPQG-UERJ/blob/main/tutoriais/02-windows-orca-msmpi.md">configurados no Path</a>:</p>
+<pre><code class="language-bat">orca etanol_instavel.inp &gt; etanol_instavel.out
 </code></pre>
+<p>Espere o prompt voltar antes de iniciar outro cálculo. Os arquivos de resultado ficam nessa mesma pasta.</p>
 </details>
 <h2 id="2-leia-os-avisos-da-propria-trajetoria">2. Leia os avisos da própria trajetória</h2>
 <p>No filme, use <strong>0,25×</strong> ou avance quadro a quadro para examinar a degradação; o quadro 31 corresponde a 75 fs. A velocidade de reprodução não altera a simulação.</p>
@@ -79,25 +71,17 @@ end
 </code></pre>
 <details>
 <summary>Executar no Ubuntu / WSL2</summary>
-<p>Extraia o pacote e abra o Ubuntu nessa pasta. Com <code>ORCA_DIR</code> configurado no guia, copie:</p>
-<pre><code class="language-bash">(
-  test -x &quot;$ORCA_DIR/orca&quot; || { echo &quot;Configure ORCA_DIR primeiro.&quot;; exit 1; }
-  pasta=$(mktemp -d ./execucao-XXXXXX) || exit 1
-  cp etanol_corrigido.inp etanol.xyz &quot;$pasta/&quot; || exit 1
-  cd &quot;$pasta&quot; || exit 1
-  &quot;$ORCA_DIR/orca&quot; etanol_corrigido.inp &gt; etanol_corrigido.out 2&gt;&amp;1
-  tail -n 12 etanol_corrigido.out
-  echo &quot;Resultados: $PWD&quot;
-)
+<p>Entre na <strong>pasta extraída do exercício</strong>, onde estão o input e seus arquivos auxiliares. Com a <a href="https://github.com/HenriqueCSJ/AIMD-6WPPQG-UERJ/blob/main/tutoriais/01-wsl2-ubuntu-orca.md">instalação concluída</a>, execute:</p>
+<pre><code class="language-bash">orca etanol_corrigido.inp &gt; etanol_corrigido.out &amp;
 </code></pre>
-<p>Abra <code>explorer.exe .</code> e localize a pasta <code>execucao-…</code>. Carregue <strong><code>etanol_corrigido.out</code></strong>, <strong><code>etanol_corrigido-md-ener.csv</code></strong> e <strong><code>etanol_corrigido-traj.xyz</code></strong> no laboratório. Execute um cálculo por vez.</p>
+<p>Espere o cálculo encerrar antes de iniciar outro. Os resultados ficam nessa mesma pasta; veja <a href="../index.html#como-executar">como acompanhar a execução</a>.</p>
 </details>
 <details>
 <summary>Alternativa: Windows nativo</summary>
-<p>Extraia o pacote em uma pasta nova. Abra o PowerShell nela e ajuste o caminho:</p>
-<pre><code class="language-powershell">&amp; 'C:\ORCA_6.1.1\orca.exe' etanol_corrigido.inp &gt; etanol_corrigido.out 2&gt;&amp;1
-Get-Content etanol_corrigido.out -Tail 12
+<p>Abra o <strong>Prompt de Comando (<code>cmd</code>) na pasta extraída</strong>, com ORCA e MS-MPI já <a href="https://github.com/HenriqueCSJ/AIMD-6WPPQG-UERJ/blob/main/tutoriais/02-windows-orca-msmpi.md">configurados no Path</a>:</p>
+<pre><code class="language-bat">orca etanol_corrigido.inp &gt; etanol_corrigido.out
 </code></pre>
+<p>Espere o prompt voltar antes de iniciar outro cálculo. Os arquivos de resultado ficam nessa mesma pasta.</p>
 </details>
 <p>Na correção, o ORCA termina normalmente e a amplitude máximo–mínimo de E é cerca de <strong>0,30 kJ/mol</strong>, em vez do crescimento da execução instável. Desmarque a falha para enxergar essa escala pequena. Verifique também a duração e as distâncias; término normal sozinho não basta.</p>
 <p><strong>Não use um termostato para esconder o erro de integração.</strong> Reduzir o timestep e repetir de um estado íntegro é a correção demonstrada. Aumentar somente o limite de ciclos SCF não resolve a causa deste caso.</p>

@@ -29,6 +29,9 @@ def render(folder,title,source,index,filename='index.html'):
             href=href[:-len('apoio.md')]+'apoio.html'
         elif href.endswith('roteiro-4h.md') and resolved.parent==EX:
             href=href[:-len('roteiro-4h.md')]+'roteiro-4h.html'
+        elif href.endswith('.md') and resolved.parent==ROOT/'tutoriais':
+            # Pages serves Markdown as text; open the readable GitHub guide.
+            href='https://github.com/HenriqueCSJ/AIMD-6WPPQG-UERJ/blob/main/'+resolved.relative_to(ROOT).as_posix()
         return 'href="'+href+tail+'"'
     body=re.sub(r'href="([^"]+)"',local_link,body)
     endnav=''
