@@ -45,12 +45,20 @@
     const secondsScale=10**format.secondsExponent;
     return {fs:`${fixedNumber(time,format.fsDigits)} fs`,ps:`${fixedNumber(time/1000,format.psDigits)} ps`,s:`${fixedNumber(time*1e-15/secondsScale,format.secondsDigits)} × 10${exponentText(format.secondsExponent)} s`};
   }
-  function playbackDuration(frames){
-    if(frames.length<5)return 2000;
-    const first=frames[0].time,last=frames.at(-1).time;
-    // Same physical span gets the same visual pace, regardless of dump stride.
-    const span=Number.isFinite(first)&&Number.isFinite(last)&&last>first?(last-first)*7.6:Math.max(0,frames.length-41)*4;
-    return Math.min(8000,Math.max(1200,1200+span));
+  function playbackDuration(){
+    const seconds=Number($('playback-duration').value);
+    return ([8,15,30,60,120].includes(seconds)?seconds:60)*1000;
+  }
+  function playbackSpeed(){return Math.max(.05,Number($('playback-speed').value)||1);}
+  function renderPlaybackControls(run=currentTrajectory()){
+    const frames=run?.xyz?.frames||[],staticOnly=frames.length<2,note=document.querySelector('.playback-note');
+    for(const id of ['play-button','playback-duration','playback-speed'])$(id).disabled=staticOnly;
+    note.textContent=staticOnly?(frames.length?'Estrutura estática: um único quadro.':'Carregue uma trajetória para reproduzir o movimento.'):`Um ciclo completo leva ${(playbackDuration()/1000/playbackSpeed()).toLocaleString('pt-BR',{maximumFractionDigits:1})} s de reprodução. O tempo físico abaixo vem do XYZ. Use as setas para examinar cada quadro.`;
+    if(run?.xyz?.previewStride)note.textContent+=` Prévia: 1 a cada ${run.xyz.previewStride} quadros originais, mais o último. Carregue o XYZ completo para ver todos.`;
+  }
+  function updatePlaybackSettings(){
+    // Keep the current phase and frame: only the rate of subsequent ticks changes.
+    state.playback.baseDuration=playbackDuration();renderPlaybackControls();
   }
   function ensureTrajectoryReadouts(){
     const timeline=$('frame-time');
@@ -419,10 +427,10 @@
   }
   function renderTrajectory(){
     const run=currentTrajectory(),has=!!run?.xyz;$('trajectory-empty').hidden=has;$('trajectory-content').hidden=!has;
-    $('reset-view').disabled=!has;
+    $('reset-view').disabled=!has;renderPlaybackControls(run);
     if(!has){
       stop();clearContactShapes();state.viewer?.removeAllModels();state.viewer?.removeAllShapes();state.viewer?.removeAllLabels();state.viewer?.render();state.model=null;state.viewRun=null;state.frame=0;state.selectedAtom=null;
-      $('play-button').disabled=true;$('playback-speed').disabled=true;renderStageSummary([],'trajectory-stage-summary');
+      renderStageSummary([],'trajectory-stage-summary');
       $('trajectory-empty').innerHTML=!visible().length?'<strong>Marque uma simulação acima.</strong>As caixas selecionam os cálculos disponíveis nas três abas.':'<strong>O movimento está no arquivo XYZ.</strong>Carregue nome-traj.xyz para uma simulação marcada. O .out e o CSV de energias não contêm necessariamente as coordenadas de todos os passos.';return;
     }
     renderStageSummary([run],'trajectory-stage-summary',run.xyz.frames[state.frame]?.time);
@@ -432,10 +440,8 @@
       if(changedRun){state.frame=0;state.selectedAtom=null;state.viewRun=run.id;state.timeFormat=timeFormat(run.xyz.frames);ensureTrajectoryReadouts();$('frame-slider').value='0';state.viewer.removeAllModels();state.viewer.removeAllLabels();state.model=state.viewer.addModel();}
       if(changedRun)drawWall(run);
       renderHighlights(run,changedRun);
-      $('frame-slider').max=run.xyz.frames.length-1;$('frame-number').max=run.xyz.frames.length;$('play-button').disabled=run.xyz.frames.length<2;$('playback-speed').disabled=run.xyz.frames.length<2;
+      $('frame-slider').max=run.xyz.frames.length-1;$('frame-number').max=run.xyz.frames.length;
       ensureTrajectoryReadouts();renderContactLegend(run);
-      const note=document.querySelector('.playback-note');note.textContent=run.xyz.frames.length<2?'Estrutura estática: um único quadro.':`A 1×, um ciclo leva ${(playbackDuration(run.xyz.frames)/1000).toLocaleString('pt-BR',{maximumFractionDigits:1})} s de reprodução. O tempo físico abaixo vem do XYZ. Use as setas para examinar cada quadro.`;
-      if(run.xyz.previewStride)note.textContent+=` Prévia: 1 a cada ${run.xyz.previewStride} quadros originais, mais o último. Carregue o XYZ completo para ver todos.`;
       $('trajectory-status').hidden=!metadata(run).failed;$('trajectory-status').textContent=metadata(run).failed?'Cálculo interrompido com erro. Estes quadros são parciais: a distorção não é evidência confiável de reação.':'';
       state.viewer.resize();renderTrajectoryChart(run);drawFrame(changedRun);
     }catch(error){state.viewRun=null;stop();console.error('Falha ao desenhar a trajetória',run.key,error);$('trajectory-content').hidden=true;$('trajectory-empty').hidden=false;$('trajectory-empty').textContent='Não foi possível desenhar esta trajetória. Tente abrir o exemplo novamente; se persistir, confira se o navegador permite WebGL. Gráficos e medidas geométricas continuam disponíveis.';}
@@ -495,11 +501,11 @@
   function play(){
     if(state.playing){stop();return;}
     const run=currentTrajectory(),frameCount=run?.xyz?.frames.length||0;if(!run?.xyz||frameCount<2)return;
-    state.playing=true;state.playback={runId:run.id,startFrame:state.frame,baseDuration:playbackDuration(run.xyz.frames),phase:0,lastTimestamp:null};$('play-button').textContent='Ⅱ Pausar';
+    state.playing=true;state.playback={runId:run.id,startFrame:state.frame,baseDuration:playbackDuration(),phase:0,lastTimestamp:null};$('play-button').textContent='Ⅱ Pausar';
     const tick=timestamp=>{
       if(!state.playing||state.playback.runId!==run.id)return;
       if(state.playback.lastTimestamp===null){state.playback.lastTimestamp=timestamp;state.timer=requestAnimationFrame(tick);return;}
-      const elapsed=Math.max(0,timestamp-state.playback.lastTimestamp);state.playback.lastTimestamp=timestamp;const speed=Math.max(.05,Number($('playback-speed').value)||1);
+      const elapsed=Math.max(0,timestamp-state.playback.lastTimestamp);state.playback.lastTimestamp=timestamp;const speed=playbackSpeed();
       state.playback.phase=(state.playback.phase+elapsed/state.playback.baseDuration*speed)%1;
       const next=(state.playback.startFrame+Math.floor(state.playback.phase*frameCount))%frameCount;
       if(next!==state.frame){state.frame=next;drawFrame();}
@@ -601,6 +607,7 @@
   for(const key of ['kinetic','potential','total'])$('trajectory-show-'+key).addEventListener('change',()=>{const run=currentTrajectory();if(run?.xyz)renderTrajectoryChart(run);});
   document.addEventListener('keydown',expandedKeys);
   $('frame-slider').addEventListener('input',()=>seekFrame(Number($('frame-slider').value)));$('play-button').addEventListener('click',play);
+  for(const id of ['playback-duration','playback-speed'])$(id).addEventListener('change',updatePlaybackSettings);
   $('previous-frame').addEventListener('click',()=>seekFrame(state.frame-1));$('next-frame').addEventListener('click',()=>seekFrame(state.frame+1));
   $('frame-number').addEventListener('change',()=>seekFrame($('frame-number').valueAsNumber-1));$('frame-number').addEventListener('keydown',event=>{if(event.key==='Enter'){event.preventDefault();seekFrame($('frame-number').valueAsNumber-1);}});
   $('goto-distances').addEventListener('click',()=>{const run=currentTrajectory();if(run)$('distance-run').value=run.id;changeTab('distance');});

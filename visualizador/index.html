@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="app.css?v=20261001-temperature1">
   <script defer src="orca-parser.js?v=20260929-chemistry2"></script><script defer src="charts.js?v=20261001-interactions1"></script><script defer src="geometry.js?v=20260929-chemistry2"></script>
   <script defer src="highlight-selection.js?v=20261001-temperature1"></script>
-  <script defer src="vendor/3Dmol-min.js"></script><script defer src="examples.js?v=20261001-course"></script><script defer src="example-loader.js?v=20260929-loading1"></script><script defer src="app.js?v=20261001-temperature1"></script>
+  <script defer src="vendor/3Dmol-min.js"></script><script defer src="examples.js?v=20261001-course"></script><script defer src="example-loader.js?v=20260929-loading1"></script><script defer src="app.js?v=20261001-playback1"></script>
 </head>
 <body>
 <a class="skip" href="#main">Ir para o conteúdo</a>
@@ -139,6 +139,7 @@
               <button type="button" class="button primary" id="play-button">▶ Reproduzir</button>
               <button type="button" class="button" id="next-frame" aria-label="Próximo quadro" title="Próximo quadro">→</button>
             </div>
+            <label class="playback-setting">Duração a 1×<select id="playback-duration"><option value="8">8 s</option><option value="15">15 s</option><option value="30">30 s</option><option value="60" selected>60 s</option><option value="120">120 s</option></select></label>
             <label class="playback-setting">Velocidade<select id="playback-speed"><option value="0.25">0,25×</option><option value="0.5">0,5×</option><option value="1" selected>1×</option><option value="2">2×</option><option value="4">4×</option></select></label>
             <label class="playback-setting">Ir ao quadro<input id="frame-number" type="number" min="1" max="1" step="1" value="1" inputmode="numeric"></label>
             <div class="timeline-control"><label class="sr-only" for="frame-slider">Quadro da trajetória</label><input id="frame-slider" type="range" min="0" max="0" value="0"><output id="frame-time"></output></div>

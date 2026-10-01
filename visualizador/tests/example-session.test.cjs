@@ -35,12 +35,13 @@ class Element{
 function session({inspectState=false,search='?exemplo=__test_no_auto__'}={}){
   const html=fs.readFileSync(path.join(viewer,'index.html'),'utf8'),nodes={};
   for(const match of html.matchAll(/<([\w-]+)\b[^>]*\bid="([^"]+)"[^>]*>/g))nodes[match[2]]=new Element(match[1]);
-  for(const [id,value] of Object.entries({'energy-mode':'delta','energy-unit':'kj','time-unit':'fs','distance-source':'xyz','geometry-type':'distance','highlight-kind':'atom','highlight-color':'#e6007e','highlight-size':'1.6','highlight-atom':'0'}))nodes[id].value=value;
+  for(const [id,value] of Object.entries({'energy-mode':'delta','energy-unit':'kj','time-unit':'fs','distance-source':'xyz','geometry-type':'distance','highlight-kind':'atom','highlight-color':'#e6007e','highlight-size':'1.6','highlight-atom':'0','playback-duration':'60','playback-speed':'1'}))nodes[id].value=value;
   nodes['distance-source'].append(...['xyz','colvars'].map(value=>Object.assign(new Element('option'),{value})));
   const checkboxes=['total','potential','kinetic'].map(value=>Object.assign(new Element('input'),{value,checked:true}));
   for(const key of ['kinetic','potential','total'])nodes['trajectory-show-'+key].checked=true;
   const tabs=['energy','trajectory','distance'].map(tab=>Object.assign(nodes['tab-'+tab],{dataset:{tab}}));
-  const card=new Element(),requests=[],cancelled=[],documentListeners={};
+  const card=new Element(),playbackNote=new Element(),requests=[],cancelled=[],documentListeners={},animationFrames=new Map();let animationId=0;
+  const animationTick=timestamp=>{const callbacks=[...animationFrames.values()];animationFrames.clear();for(const callback of callbacks)callback(timestamp);};
   class RendererDouble{
     constructor(node,options){this.node=node;this.options=options;this.currentTime=null;node.chart=options;node.chartRenderer=this;}
     setCursorX(value){this.currentTime=value;this.node.chartCursor=value;}
@@ -48,9 +49,9 @@ function session({inspectState=false,search='?exemplo=__test_no_auto__'}={}){
   const context=vm.createContext({
     console,URLSearchParams,location:{search},OrcaReader,Geometry,HighlightSelection,TrajectoryTime:{index:timeIndex},
     chartNumber:value=>String(value),ScientificChart:RendererDouble,
-    cancelAnimationFrame(id){cancelled.push(id);},requestAnimationFrame(){return 1;},setTimeout,clearTimeout,
+    cancelAnimationFrame(id){cancelled.push(id);animationFrames.delete(id);},requestAnimationFrame(callback){const id=++animationId;animationFrames.set(id,callback);return id;},setTimeout,clearTimeout,
     document:{body:new Element('body'),getElementById:id=>nodes[id],createElement:tag=>new Element(tag),addEventListener(type,callback){documentListeners[type]=callback;},
-      querySelector:selector=>selector==='.example-card'?card:null,
+      querySelector:selector=>selector==='.example-card'?card:selector==='.playback-note'?playbackNote:null,
       querySelectorAll:selector=>selector==='[data-tab]'?tabs:selector==='[name="energy-series"]:checked'?checkboxes.filter(box=>box.checked):selector==='[name="energy-series"]'?checkboxes:[]},
     addEventListener(){},AIMD_EXAMPLES:{presets:{water:true}},AIMDExampleLoader:{loadPreset:key=>{const pending=deferred();requests.push({key,...pending});return pending.promise;}}
   });
@@ -66,7 +67,7 @@ function session({inspectState=false,search='?exemplo=__test_no_auto__'}={}){
   const choose=(key,trajectory=false)=>{nodes['example-select'].value=key;return nodes[trajectory?'example-button':'example-energy-button'].fire('click');};
   const toggle=(index,checked)=>{const box=nodes.runs.querySelectorAll('[data-run]')[index];box.checked=checked;box.fire('change');};
   const remove=index=>nodes.runs.querySelectorAll('[data-remove]')[index].fire('click');
-  return {html,nodes,requests,choose,toggle,remove,cancelled,document:context.document,key:event=>documentListeners.keydown(event),state:context.__testState,highlightHooks:context.__testHighlights,trajectoryHooks:context.__testTrajectory};
+  return {html,nodes,requests,choose,toggle,remove,cancelled,animationTick,playbackNote,document:context.document,key:event=>documentListeners.keydown(event),state:context.__testState,highlightHooks:context.__testHighlights,trajectoryHooks:context.__testTrajectory};
 }
 function preset(key,{staticOnly=false,frames,energyRows}={}){
   const xyz={elements:['O','H'],frames:frames||[{time:0,step:0,coords:[[0,0,0],[0,0,1]]}],warnings:[]};
@@ -405,4 +406,53 @@ test('missing temperature leaves the energy chart usable without inventing zero 
   assert.equal(ui.state.temperatureIndex.exact(0,{step:0}),null);
   assert.equal(ui.state.trajectoryTemperatureChart,null);
   assert.ok(ui.nodes['trajectory-energy-chart'].chart.series[0].points.every(point=>Number.isFinite(point.y)));
+});
+
+async function playbackSession(){
+  const ui=session({inspectState:true}),load=ui.choose('movement',true);
+  const frames=Array.from({length:1000},(_,i)=>({time:i*.25,step:i,coords:[[0,0,0],[0,0,1+i*.0001]]}));
+  ui.requests[0].resolve(preset('movement',{frames}));await load;return ui;
+}
+
+test('default playback takes sixty seconds per cycle and preserves original frame times',async()=>{
+  const ui=await playbackSession(),before=ui.state.runs[0].xyz.frames.map(frame=>frame.time);
+  assert.match(ui.html,/<option value="60" selected>60 s<\/option>/);
+  assert.equal(ui.nodes['playback-duration'].disabled,false);
+  assert.match(ui.playbackNote.textContent,/60 s de reprodução/);
+  ui.nodes['play-button'].fire('click');ui.animationTick(1000);
+  ui.animationTick(16000);assert.equal(ui.state.frame,250);
+  ui.animationTick(61000);assert.equal(ui.state.frame,0);
+  assert.deepEqual(ui.state.runs[0].xyz.frames.map(frame=>frame.time),before);
+});
+
+test('chosen duration is divided by the speed multiplier in both playback and its note',async()=>{
+  const ui=await playbackSession();
+  ui.nodes['playback-duration'].value='30';ui.nodes['playback-duration'].fire('change');
+  ui.nodes['playback-speed'].value='2';ui.nodes['playback-speed'].fire('change');
+  assert.match(ui.playbackNote.textContent,/15 s de reprodução/);
+  ui.nodes['play-button'].fire('click');ui.animationTick(0);
+  ui.animationTick(7500);assert.equal(ui.state.frame,500);
+  ui.animationTick(15000);assert.equal(ui.state.frame,0);
+});
+
+test('changing duration or speed during playback retains phase and current frame',async()=>{
+  const ui=await playbackSession();ui.nodes['play-button'].fire('click');ui.animationTick(0);
+  ui.animationTick(15000);assert.equal(ui.state.frame,250);
+  ui.nodes['playback-duration'].value='120';ui.nodes['playback-duration'].fire('change');
+  assert.equal(ui.state.frame,250);assert.equal(ui.state.playback.phase,.25);assert.equal(ui.state.playing,true);
+  assert.match(ui.playbackNote.textContent,/120 s de reprodução/);
+  ui.animationTick(45000);assert.equal(ui.state.frame,500);
+  ui.nodes['playback-speed'].value='2';ui.nodes['playback-speed'].fire('change');
+  assert.equal(ui.state.frame,500);assert.equal(ui.state.playback.phase,.5);
+  assert.match(ui.playbackNote.textContent,/60 s de reprodução/);
+  ui.animationTick(75000);assert.equal(ui.state.frame,0);
+});
+
+test('static structures disable playback controls and explain why they do not animate',async()=>{
+  const ui=session({inspectState:true}),load=ui.choose('solvator',true);
+  ui.requests[0].resolve(preset('solvator',{staticOnly:true}));await load;
+  for(const id of ['play-button','playback-duration','playback-speed'])assert.equal(ui.nodes[id].disabled,true);
+  assert.equal(ui.playbackNote.textContent,'Estrutura estática: um único quadro.');
+  ui.nodes['play-button'].fire('click');ui.animationTick(60000);
+  assert.equal(ui.state.playing,false);assert.equal(ui.state.frame,0);
 });
