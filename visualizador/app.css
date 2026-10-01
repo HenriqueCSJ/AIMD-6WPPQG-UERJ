@@ -130,3 +130,16 @@ body.trajectory-open{overflow:hidden}
 .button.highlight-launcher{background:#9b0058;color:white;border-color:#9b0058}
 .button.highlight-launcher:hover,.button.highlight-launcher[aria-expanded=true]{background:#730042;border-color:#730042}
 @media(max-width:600px){.molecule-tools .highlight-launcher{order:2;width:100%}}
+
+/* Two linked traces keep independent physical units and one time axis. */
+.trajectory-energy-card,.trajectory-temperature-card{padding:12px 16px 8px;margin:0 0 10px}
+.trajectory-temperature-card .chart-heading{align-items:center;gap:8px}
+.trajectory-temperature-card select{font-size:12px;padding:6px 26px 6px 9px;min-height:36px}
+.trajectory-energy-status,.trajectory-temperature-status{font-size:11px;color:var(--teal);font-variant-numeric:tabular-nums;min-height:18px;line-height:1.4;margin:8px 0 0}
+.trajectory-temperature-card .chart{min-height:0}
+.trajectory-temperature-card .chart-legend{display:none}
+#trajectory-temperature-note,#trajectory-energy-note{font-size:11px;line-height:1.4;margin:5px 0 0}
+#trajectory-temperature-empty{padding:12px 0;line-height:1.6}
+@media(max-width:600px){.trajectory-energy-card,.trajectory-temperature-card{padding:14px 12px 10px}}
+
+.tabs button{scroll-margin-top:18px}

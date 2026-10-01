@@ -24,7 +24,7 @@
 
 ### Um laboratório no seu navegador
 
-Veja a trajetória em uma área ampliável, gire ou arraste a molécula e acompanhe o quadro atual nas curvas de energia cinética, potencial e total. Meça também distâncias, ângulos e diedros. Abra um exemplo pronto ou carregue `.out`, `-md-ener.csv` e `-traj.xyz`. **Seus arquivos são lidos localmente**, sem conta e sem instalação.
+O laboratório abre na trajetória 3D. Gire ou arraste a molécula, amplie a área e acompanhe o quadro atual nas curvas de energia cinética, potencial, total e temperatura. Meça também distâncias, ângulos e diedros. Abra um exemplo pronto ou carregue `.out`, `-md-ener.csv` e `-traj.xyz`. **Seus arquivos são lidos localmente**, sem conta e sem instalação.
 
 <a href="https://henriquecsj.github.io/AIMD-6WPPQG-UERJ/visualizador/?exemplo=complex&amp;aba=trajetoria"><img src="assets/laboratorio-energia-preview.jpg" width="960" alt="Prévia real do laboratório de trajetórias: complexo de zinco, águas, parede e contatos tracejados. Clique para abrir o exemplo interativo."></a>
 

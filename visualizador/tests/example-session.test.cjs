@@ -5,6 +5,7 @@ const fs=require('node:fs');
 const path=require('node:path');
 const vm=require('node:vm');
 const OrcaReader=require('../orca-parser.js'),Geometry=require('../geometry.js'),HighlightSelection=require('../highlight-selection.js');
+const {timeIndex}=require('../charts.js');
 const viewer=path.resolve(__dirname,'..');
 const deferred=()=>{let resolve,reject;const promise=new Promise((a,b)=>{resolve=a;reject=b;});return {promise,resolve,reject};};
 class Element{
@@ -31,41 +32,73 @@ class Element{
   querySelectorAll(selector){if(selector==='a[href],button,input,select,textarea,[tabindex]'){const found=[];for(const child of this.children){if(child.tabIndex>=0)found.push(child);found.push(...child.querySelectorAll(selector));}return found;}return this.controls.filter(control=>selector==='[data-run]'?control.dataset.run:selector==='[data-remove]'?control.dataset.remove:false);}
   scrollIntoView(){}
 }
-function session({inspectState=false}={}){
+function session({inspectState=false,search='?exemplo=__test_no_auto__'}={}){
   const html=fs.readFileSync(path.join(viewer,'index.html'),'utf8'),nodes={};
   for(const match of html.matchAll(/<([\w-]+)\b[^>]*\bid="([^"]+)"[^>]*>/g))nodes[match[2]]=new Element(match[1]);
   for(const [id,value] of Object.entries({'energy-mode':'delta','energy-unit':'kj','time-unit':'fs','distance-source':'xyz','geometry-type':'distance','highlight-kind':'atom','highlight-color':'#e6007e','highlight-size':'1.6','highlight-atom':'0'}))nodes[id].value=value;
   nodes['distance-source'].append(...['xyz','colvars'].map(value=>Object.assign(new Element('option'),{value})));
   const checkboxes=['total','potential','kinetic'].map(value=>Object.assign(new Element('input'),{value,checked:true}));
+  for(const key of ['kinetic','potential','total'])nodes['trajectory-show-'+key].checked=true;
   const tabs=['energy','trajectory','distance'].map(tab=>Object.assign(nodes['tab-'+tab],{dataset:{tab}}));
   const card=new Element(),requests=[],cancelled=[],documentListeners={};
+  class RendererDouble{
+    constructor(node,options){this.node=node;this.options=options;this.currentTime=null;node.chart=options;node.chartRenderer=this;}
+    setCursorX(value){this.currentTime=value;this.node.chartCursor=value;}
+  }
   const context=vm.createContext({
-    console,URLSearchParams,location:{search:''},OrcaReader,Geometry,HighlightSelection,
-    chartNumber:value=>String(value),ScientificChart:class{constructor(node,options){node.chart=options;}},
+    console,URLSearchParams,location:{search},OrcaReader,Geometry,HighlightSelection,TrajectoryTime:{index:timeIndex},
+    chartNumber:value=>String(value),ScientificChart:RendererDouble,
     cancelAnimationFrame(id){cancelled.push(id);},requestAnimationFrame(){return 1;},setTimeout,clearTimeout,
     document:{body:new Element('body'),getElementById:id=>nodes[id],createElement:tag=>new Element(tag),addEventListener(type,callback){documentListeners[type]=callback;},
       querySelector:selector=>selector==='.example-card'?card:null,
       querySelectorAll:selector=>selector==='[data-tab]'?tabs:selector==='[name="energy-series"]:checked'?checkboxes.filter(box=>box.checked):selector==='[name="energy-series"]'?checkboxes:[]},
-    addEventListener(){},AIMDExampleLoader:{loadPreset:key=>{const pending=deferred();requests.push({key,...pending});return pending.promise;}}
+    addEventListener(){},AIMD_EXAMPLES:{presets:{water:true}},AIMDExampleLoader:{loadPreset:key=>{const pending=deferred();requests.push({key,...pending});return pending.promise;}}
   });
   context.window=context;
   for(const node of Object.values(nodes))node.ownerDocument=context.document;context.document.body.ownerDocument=context.document;
   nodes.molecule.tabIndex=0;
   let source=fs.readFileSync(path.join(viewer,'app.js'),'utf8');
   // A test-only bridge supplies a renderer double without creating WebGL.
-  if(inspectState)source=source.replace(/\}\)\(\);\s*$/,'globalThis.__testState=state;globalThis.__testHighlights={drawHighlights,selectTrajectoryAtom};})();');
+  if(inspectState)source=source.replace(/\}\)\(\);\s*$/,'globalThis.__testState=state;globalThis.__testHighlights={drawHighlights,selectTrajectoryAtom};globalThis.__testTrajectory={renderTrajectoryChart,updateTrajectoryCursor};})();');
   vm.runInContext(source,context);
-  const choose=(key,trajectory=false)=>{nodes['example-select'].value=key;return nodes[trajectory?'example-trajectory-button':'example-button'].fire('click');};
+  // Preserve the old helper meaning: `true` opens Trajectory 3D through the
+  // primary action, while the default opens the explicit energy comparison.
+  const choose=(key,trajectory=false)=>{nodes['example-select'].value=key;return nodes[trajectory?'example-button':'example-energy-button'].fire('click');};
   const toggle=(index,checked)=>{const box=nodes.runs.querySelectorAll('[data-run]')[index];box.checked=checked;box.fire('change');};
   const remove=index=>nodes.runs.querySelectorAll('[data-remove]')[index].fire('click');
-  return {nodes,requests,choose,toggle,remove,cancelled,document:context.document,key:event=>documentListeners.keydown(event),state:context.__testState,highlightHooks:context.__testHighlights};
+  return {html,nodes,requests,choose,toggle,remove,cancelled,document:context.document,key:event=>documentListeners.keydown(event),state:context.__testState,highlightHooks:context.__testHighlights,trajectoryHooks:context.__testTrajectory};
 }
-function preset(key,{staticOnly=false}={}){
-  const xyz={elements:['O','H'],frames:[{time:0,step:0,coords:[[0,0,0],[0,0,1]]}],warnings:[]};
+function preset(key,{staticOnly=false,frames,energyRows}={}){
+  const xyz={elements:['O','H'],frames:frames||[{time:0,step:0,coords:[[0,0,0],[0,0,1]]}],warnings:[]};
   const run={key,label:key,files:[],warnings:[],xyz};
-  if(!staticOnly)run.energy={rows:[{time:0,step:0,total:-1,potential:-1.1,kinetic:.1,temperature:300}],warnings:[]};
+  if(!staticOnly)run.energy={rows:energyRows||[{time:0,step:0,total:-1,potential:-1.1,kinetic:.1,temperature:300}],warnings:[]};
   return {config:{runs:[key]},runs:[run]};
 }
+
+test('the trajectory tab is first and a no-query laboratory opens water in trajectory mode',async()=>{
+  const ui=session({search:'',inspectState:true});
+  assert.ok(ui.html.indexOf('id="tab-trajectory"')<ui.html.indexOf('id="tab-energy"'));
+  assert.equal(ui.requests.length,1);assert.equal(ui.requests[0].key,'water');
+  const load=ui.requests[0].promise;ui.requests[0].resolve(preset('water'));await load;await new Promise(setImmediate);
+  assert.equal(ui.state.tab,'trajectory');assert.equal(ui.nodes['trajectory-run'].options.length,1);
+});
+
+test('the main example action defaults to trajectory while explicit tabs remain respected',async()=>{
+  const trajectory=session({inspectState:true}),trajectoryLoad=trajectory.choose('water',true);
+  trajectory.requests[0].resolve(preset('water'));await trajectoryLoad;
+  assert.equal(trajectory.state.tab,'trajectory');
+  for(const [search,expected] of [['?exemplo=water&aba=energias','energy'],['?exemplo=water&aba=geometria','distance']]){
+    const ui=session({search,inspectState:true}),load=ui.requests[0].promise;
+    assert.equal(ui.requests[0].key,'water');ui.requests[0].resolve(preset('water'));await load;await new Promise(setImmediate);
+    assert.equal(ui.state.tab,expected);
+  }
+});
+
+test('the primary example action falls back to energy when the preset has no XYZ',async()=>{
+  const ui=session({inspectState:true}),load=ui.choose('energy-only',true);
+  ui.requests[0].resolve({config:{runs:['energy-only']},runs:[{key:'energy-only',label:'energy-only',files:[],warnings:[],energy:{rows:[{time:0,step:0,total:-1,potential:-1.1,kinetic:.1,temperature:300}],warnings:[]}}]});
+  await load;assert.equal(ui.state.tab,'energy');
+});
 
 test('a slower earlier preset cannot overwrite the newer selection',async()=>{
   const ui=session(),first=ui.choose('old'),second=ui.choose('new');
@@ -205,6 +238,17 @@ test('an XYZ added to a previously unchecked energy run reactivates that run',as
   assert.equal(ui.nodes['trajectory-run'].value,ui.nodes['trajectory-run'].options[0].value);
 });
 
+test('a CSV without its own XYZ stays in energy mode beside a reference trajectory',async()=>{
+  const ui=session({inspectState:true}),example=ui.choose('water',true);
+  ui.requests[0].resolve(preset('water'));await example;
+  assert.ok(ui.state.runs.some(run=>run.reference&&run.xyz));
+  await ui.nodes['file-input'].fire('change',{target:{files:[{name:'water-md-ener.csv',size:50,text:async()=>'# Step; Sim. Time; E_Tot\n0;0;-1\n1;.5;-.9\n'}]}});
+  const upload=ui.state.runs.find(run=>!run.reference);
+  assert.ok(upload?.energy);
+  assert.equal(upload?.xyz,undefined);
+  assert.equal(ui.state.tab,'energy');
+});
+
 function expandedSession(){
   const ui=session(),panel=ui.nodes['panel-trajectory'],workspace=ui.nodes.workspace,background=ui.nodes['clear-button'],previouslyInert=new Element();
   previouslyInert.inert=true;
@@ -292,4 +336,73 @@ test('the shared-proton shortcut marks H2 only for the identified course referen
   ui.nodes['highlight-proton'].fire('click');assert.deepEqual(Array.from(ui.state.runs[0].highlights[0].indices),[2]);
   ui.state.runs[0].reference=false;ui.state.runs[0].highlights=[];ui.nodes['highlight-proton'].fire('click');
   assert.equal(ui.state.runs[0].highlights.length,0);
+});
+
+test('trajectory temperature is rendered from T alone, preserving gaps and segments',async()=>{
+  const frames=[
+    {time:0,step:0,segment:0,coords:[[0,0,0],[0,0,1]]},
+    {time:.8,step:1,segment:0,coords:[[0,0,0],[0,0,1]]},
+    {time:1.2,step:2,segment:1,coords:[[0,0,0],[0,0,1]]},
+    {time:1.5,step:3,segment:1,coords:[[0,0,0],[0,0,1]]}
+  ];
+  const energyRows=[
+    {time:0,step:0,segment:0,temperature:300},
+    {time:.8,step:1,segment:0,temperature:315},
+    {time:1.2,step:2,segment:1,temperature:null},
+    {time:1.5,step:3,segment:1,temperature:330}
+  ];
+  const ui=session({inspectState:true}),load=ui.choose('temperature-only',true);
+  ui.requests[0].resolve(preset('temperature-only',{frames,energyRows}));await load;
+  const run=ui.state.runs[0];ui.nodes['trajectory-temperature-mode'].value='delta';ui.trajectoryHooks.renderTrajectoryChart(run);
+  const temperature=ui.nodes['trajectory-temperature-chart'].chart;
+  assert.equal(ui.nodes['trajectory-energy-chart'].hidden,true);
+  assert.equal(ui.nodes['trajectory-temperature-chart'].hidden,false);
+  assert.equal(ui.state.hasTrajectoryTemperature,true);
+  assert.equal(ui.state.temperatureIndex.exact(1.2,{step:2}),null);
+  assert.ok(ui.state.trajectoryTemperatureChart);
+  assert.equal(temperature.series.length,1);
+  assert.deepEqual(temperature.series[0].points.map(point=>[point.x,point.y,point.segment]),[
+    [0,0,0],[.8,15,0],[1.2,null,1],[1.5,30,1]
+  ]);
+  assert.equal(temperature.series[0].points.some(point=>point.y===0),true);
+  assert.equal(run.energy.rows[2].temperature,null);
+});
+
+test('temperature and energy cursors match the same recorded time and step',async()=>{
+  const frames=[
+    {time:.25,step:1,segment:0,coords:[[0,0,0],[0,0,1]]},
+    {time:.75,step:3,segment:0,coords:[[0,0,0],[0,0,1]]},
+    {time:1.25,step:5,segment:1,coords:[[0,0,0],[0,0,1]]}
+  ];
+  const energyRows=[
+    {time:.2,step:1,segment:0,total:-1,potential:-1.1,kinetic:.1,temperature:300},
+    {time:.8,step:3,segment:0,total:-.9,potential:-1,kinetic:.1,temperature:310},
+    {time:1.25,step:5,segment:1,total:-.8,potential:-.9,kinetic:.1,temperature:320}
+  ];
+  const ui=session({inspectState:true}),load=ui.choose('aligned',true);
+  ui.requests[0].resolve(preset('aligned',{frames,energyRows}));await load;
+  const run=ui.state.runs[0];ui.trajectoryHooks.renderTrajectoryChart(run);
+  assert.equal(ui.state.temperatureIndex.exact(.75,{step:3}),run.energy.rows[1]);
+  assert.equal(ui.state.energyIndex.exact(.75,{step:3}),run.energy.rows[1]);
+  ui.state.frame=1;ui.trajectoryHooks.updateTrajectoryCursor(run);
+  assert.equal(ui.state.trajectoryChart.currentTime,.75);
+  assert.equal(ui.state.trajectoryTemperatureChart.currentTime,.75);
+});
+
+test('missing temperature leaves the energy chart usable without inventing zero values',async()=>{
+  const energyRows=[
+    {time:0,step:0,total:-1,potential:-1.1,kinetic:.1},
+    {time:1,step:1,total:-.9,potential:-1,kinetic:.1}
+  ];
+  const ui=session({inspectState:true}),load=ui.choose('energy-only',true);
+  ui.requests[0].resolve(preset('energy-only',{energyRows}));await load;
+  const run=ui.state.runs[0];ui.trajectoryHooks.renderTrajectoryChart(run);
+  assert.equal(ui.nodes['trajectory-energy-chart'].hidden,false);
+  assert.equal(ui.nodes['trajectory-temperature-chart'].hidden,true);
+  assert.equal(ui.nodes['trajectory-temperature-empty'].hidden,false);
+  assert.match(ui.nodes['trajectory-temperature-status'].textContent,/temperatura/i);
+  assert.equal(ui.state.hasTrajectoryTemperature,false);
+  assert.equal(ui.state.temperatureIndex.exact(0,{step:0}),null);
+  assert.equal(ui.state.trajectoryTemperatureChart,null);
+  assert.ok(ui.nodes['trajectory-energy-chart'].chart.series[0].points.every(point=>Number.isFinite(point.y)));
 });

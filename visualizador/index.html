@@ -4,10 +4,10 @@
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="Leia resultados de dinâmica molecular do ORCA: energias, temperatura, trajetórias e medidas geométricas. Tudo no seu navegador.">
   <title>Laboratório de trajetórias · AIMD com ORCA</title>
-  <link rel="stylesheet" href="app.css?v=20261001-highlights2">
+  <link rel="stylesheet" href="app.css?v=20261001-temperature1">
   <script defer src="orca-parser.js?v=20260929-chemistry2"></script><script defer src="charts.js?v=20261001-interactions1"></script><script defer src="geometry.js?v=20260929-chemistry2"></script>
-  <script defer src="highlight-selection.js?v=20261001-highlights2"></script>
-  <script defer src="vendor/3Dmol-min.js"></script><script defer src="examples.js?v=20261001-course"></script><script defer src="example-loader.js?v=20260929-loading1"></script><script defer src="app.js?v=20261001-highlights2"></script>
+  <script defer src="highlight-selection.js?v=20261001-temperature1"></script>
+  <script defer src="vendor/3Dmol-min.js"></script><script defer src="examples.js?v=20261001-course"></script><script defer src="example-loader.js?v=20260929-loading1"></script><script defer src="app.js?v=20261001-temperature1"></script>
 </head>
 <body>
 <a class="skip" href="#main">Ir para o conteúdo</a>
@@ -19,7 +19,7 @@
   <section class="intro" aria-labelledby="app-title">
     <p class="eyebrow">LABORATÓRIO DE TRAJETÓRIAS</p>
     <h1 id="app-title">Do cálculo à interpretação.</h1>
-    <p>Carregue os resultados. Veja o movimento, acompanhe a energia e faça perguntas à sua simulação.</p>
+    <p>Carregue os resultados. Veja o movimento, acompanhe energias e temperatura e faça perguntas à sua simulação.</p>
   </section>
 
   <section class="start-grid" aria-label="Carregar uma simulação">
@@ -64,7 +64,7 @@
           <option value="aluminum">Al³⁺/amônia · Referência com ajuste SCC</option>
         </optgroup>
       </select>
-      <div class="example-actions"><button class="button secondary" id="example-button" type="button">Explorar exemplo <span aria-hidden="true">→</span></button><button class="button" id="example-trajectory-button" type="button">Ver trajetória 3D</button></div>
+      <div class="example-actions"><button class="button secondary" id="example-button" type="button">Abrir trajetória <span aria-hidden="true">→</span></button><button class="button" id="example-energy-button" type="button">Comparar energias</button></div>
       <p id="example-load-status" class="muted small" role="status" aria-live="polite" hidden></p><button class="button small-button" id="example-retry" type="button" hidden>Tentar novamente</button>
       <p class="muted small">Siga “Durante a aula”. Os opcionais ficam para explorar depois; todos os exemplos usam resultados reais já calculados.</p>
     </div>
@@ -76,12 +76,12 @@
     <div id="runs" class="run-list" aria-label="Simulações carregadas"></div>
     <p class="small muted">As caixas selecionam os cálculos nas três abas. Com mais de um marcado, escolha no campo <strong>Simulação</strong> qual trajetória ou geometria observar.</p>
     <div class="tabs" role="tablist" aria-label="O que deseja observar?">
-      <button type="button" role="tab" id="tab-energy" aria-selected="true" aria-controls="panel-energy" data-tab="energy">01 <span>Energia e temperatura</span></button>
-      <button type="button" role="tab" id="tab-trajectory" aria-selected="false" aria-controls="panel-trajectory" tabindex="-1" data-tab="trajectory">02 <span>Trajetória 3D</span></button>
+      <button type="button" role="tab" id="tab-trajectory" aria-selected="true" aria-controls="panel-trajectory" data-tab="trajectory">01 <span>Trajetória 3D</span></button>
+      <button type="button" role="tab" id="tab-energy" aria-selected="false" aria-controls="panel-energy" tabindex="-1" data-tab="energy">02 <span>Energia e temperatura</span></button>
       <button type="button" role="tab" id="tab-distance" aria-selected="false" aria-controls="panel-distance" tabindex="-1" data-tab="distance">03 <span>Geometria</span></button>
     </div>
 
-    <section id="panel-energy" role="tabpanel" aria-labelledby="tab-energy">
+    <section id="panel-energy" role="tabpanel" aria-labelledby="tab-energy" hidden>
       <div class="toolbar">
         <label>Mostrar energia como<select id="energy-mode"><option value="delta">Variação desde o início (Δ)</option><option value="absolute">Valor absoluto</option></select></label>
         <label>Unidade de energia<select id="energy-unit"><option value="kj">kJ/mol</option><option value="eh">Hartree (Eh)</option></select></label>
@@ -101,7 +101,7 @@
       <aside class="interpret" id="energy-guide"></aside>
     </section>
 
-    <section id="panel-trajectory" role="tabpanel" aria-labelledby="tab-trajectory" hidden>
+    <section id="panel-trajectory" role="tabpanel" aria-labelledby="tab-trajectory">
       <div class="toolbar"><label>Simulação<select id="trajectory-run"></select></label><button type="button" class="button small-button" id="reset-view">Centralizar</button><label class="check-label"><input id="proximity-lines" type="checkbox" checked> Traços de proximidade</label><label class="check-label"><input id="atom-labels" type="checkbox"> Mostrar índices</label><label class="check-label"><input id="hydrogen-bonds" type="checkbox" checked> Ligações H</label><label class="check-label"><input id="coordination-contacts" type="checkbox" checked> Coordenação</label><label class="contact-cutoff-control">Corte metal–N/O (Å)<input id="coordination-cutoff" type="number" min="2" max="3.5" step="0.1" value="2.6" inputmode="decimal"></label></div>
       <p class="contact-heuristic">Contatos tracejados são sugestões geométricas por quadro: não inferem ordem de ligação, protonação nem a química de aceitador/coordenação a partir do XYZ. O corte metal–N/O é genérico e ajustável.</p>
       <p id="trajectory-status" class="trajectory-status" hidden></p><div id="trajectory-stage-summary" class="stage-summary" hidden></div><div id="trajectory-empty" class="empty" hidden></div>
@@ -148,6 +148,10 @@
         </div>
         <aside class="trajectory-aside">
           <section class="chart-card trajectory-energy-card" aria-labelledby="trajectory-energy-title"><div class="chart-heading"><h3 id="trajectory-energy-title">Energias e movimento</h3><label class="sr-only" for="trajectory-energy-mode">Escala das energias junto à trajetória</label><select id="trajectory-energy-mode"><option value="delta">Variação ΔE</option><option value="absolute">Energia absoluta</option></select></div><fieldset class="series-controls trajectory-series"><legend class="sr-only">Energias visíveis junto à trajetória</legend><label><input id="trajectory-show-kinetic" type="checkbox" checked> Cinética · K</label><label><input id="trajectory-show-potential" type="checkbox" checked> Potencial · U</label><label><input id="trajectory-show-total" type="checkbox" checked> Total · E</label></fieldset><p id="trajectory-energy-status" class="trajectory-energy-status"></p><div id="trajectory-energy-chart" class="chart"></div><p id="trajectory-energy-empty" class="small muted" hidden></p><p id="trajectory-energy-note" class="small muted">As energias e o XYZ são associados pelo tempo físico registrado nos arquivos.</p></section>
+          <section class="chart-card trajectory-temperature-card" aria-labelledby="trajectory-temperature-title">
+            <div class="chart-heading"><h3 id="trajectory-temperature-title">Temperatura</h3><label class="sr-only" for="trajectory-temperature-mode">Escala da temperatura junto à trajetória</label><select id="trajectory-temperature-mode"><option value="absolute">Temperatura (K)</option><option value="delta">Variação ΔT</option></select></div>
+            <p id="trajectory-temperature-status" class="trajectory-temperature-status"></p><div id="trajectory-temperature-chart" class="chart"></div><p id="trajectory-temperature-empty" class="small muted" hidden></p><p id="trajectory-temperature-note" class="small muted">A linha escura acompanha a trajetória no tempo físico.</p>
+          </section>
           <div class="frame-readouts"><span class="eyebrow">NO QUADRO ATUAL · VALORES ORIGINAIS</span><div id="frame-values"></div><div id="atom-info" class="atom-info">Selecione um átomo para ver seu índice e suas coordenadas.</div></div><div class="interpret"><h3>Observe o movimento</h3><p>O que vibra? O que gira? O solvente se reorganiza?</p><p>A velocidade da animação é uma escolha de reprodução; o tempo físico aparece abaixo da molécula.</p><button class="text-button" type="button" id="goto-distances">Medir uma geometria →</button></div>
         </aside>
       </div>
@@ -171,6 +175,6 @@
   <section id="welcome-guide" class="welcome-guide"><div><span>01</span><h3>Carregue</h3><p>O CSV traz a série completa. O .out acrescenta as condições do cálculo. O XYZ traz o movimento.</p></div><div><span>02</span><h3>Compare</h3><p>Sobreponha simulações para observar o timestep, o termostato ou a presença de solvente.</p></div><div><span>03</span><h3>Interprete</h3><p>Use uma curva e uma observação da trajetória para responder à pergunta do exercício.</p></div></section>
 </main>
 <footer><span>Henrique de Castro Silva Junior · Virginia Camila Rufino Ferreira</span><span>ORCA 6.1 · <a href="https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html" target="_blank" rel="noopener noreferrer">Manual de dinâmica ↗</a></span></footer>
-<dialog id="help-dialog"><button type="button" class="dialog-close text-button" id="close-help" aria-label="Fechar ajuda">✕</button><p class="eyebrow">COMECE AQUI</p><h2>Do arquivo ao movimento, em três passos.</h2><ol><li>Selecione <strong>nome-traj.xyz</strong> para abrir a trajetória 3D. Você pode começar por esse arquivo sozinho.</li><li>Arraste a molécula para girar, use a roda para ampliar e clique em <strong>Reproduzir</strong>. As setas avançam quadro a quadro; o campo <strong>Ir ao quadro</strong> e a barra escolhem uma posição da trajetória.</li><li>Junte <strong>nome-md-ener.csv</strong> para as energias e a temperatura e <strong>nome.out</strong> para reconhecer método e termostato. Arquivos com o mesmo nome-base são associados. Para comparar cálculos, carregue os arquivos de cada um.</li></ol><p>A velocidade de reprodução não muda o tempo físico. Uma geometria XYZ com apenas um quadro pode ser girada e ampliada, mas não contém uma animação.</p><p>No WSL, abra a pasta do cálculo no Explorador do Windows com <code>explorer.exe .</code> e selecione os arquivos nessa pasta.</p><p>Arquivos são processados neste navegador e não são enviados a um servidor. Fechar ou recarregar a página limpa a sessão. Os exemplos também funcionam na cópia local, sem internet.</p><p class="small muted">O .out pode omitir passos intermediários. Um arquivo com término normal não comprova equilíbrio ou qualidade do método. O aplicativo não executa ORCA e não estima energias livres.</p><button class="button primary" type="button" id="help-done">Entendi</button></dialog>
+<dialog id="help-dialog"><button type="button" class="dialog-close text-button" id="close-help" aria-label="Fechar ajuda">✕</button><p class="eyebrow">COMECE AQUI</p><h2>Do arquivo ao movimento, em três passos.</h2><ol><li>Selecione <strong>nome-traj.xyz</strong> para abrir a trajetória 3D. Você pode começar por esse arquivo sozinho.</li><li>Arraste a molécula para girar, use a roda para ampliar e clique em <strong>Reproduzir</strong>. As setas avançam quadro a quadro; o campo <strong>Ir ao quadro</strong> e a barra escolhem uma posição da trajetória.</li><li>Junte <strong>nome-md-ener.csv</strong> para as curvas de energia e temperatura sincronizadas com a trajetória e <strong>nome.out</strong> para reconhecer método e termostato. Arquivos com o mesmo nome-base são associados. Para comparar cálculos, carregue os arquivos de cada um.</li></ol><p>A velocidade de reprodução não muda o tempo físico. Uma geometria XYZ com apenas um quadro pode ser girada e ampliada, mas não contém uma animação.</p><p>No WSL, abra a pasta do cálculo no Explorador do Windows com <code>explorer.exe .</code> e selecione os arquivos nessa pasta.</p><p>Arquivos são processados neste navegador e não são enviados a um servidor. Fechar ou recarregar a página limpa a sessão. Os exemplos também funcionam na cópia local, sem internet.</p><p class="small muted">O .out pode omitir passos intermediários. Um arquivo com término normal não comprova equilíbrio ou qualidade do método. O aplicativo não executa ORCA e não estima energias livres.</p><button class="button primary" type="button" id="help-done">Entendi</button></dialog>
 <noscript><p class="message">Ative JavaScript neste navegador para ler os arquivos e desenhar os gráficos.</p></noscript>
 </body></html>
