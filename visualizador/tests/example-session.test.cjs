@@ -33,7 +33,7 @@ class Element{
   querySelectorAll(selector){if(selector==='a[href],button,input,select,textarea,[tabindex]'){const found=[];for(const child of this.children){if(child.tabIndex>=0)found.push(child);found.push(...child.querySelectorAll(selector));}return found;}return this.controls.filter(control=>selector==='[data-run]'?control.dataset.run:selector==='[data-remove]'?control.dataset.remove:false);}
   scrollIntoView(){}
 }
-function session({inspectState=false,search='?exemplo=__test_no_auto__'}={}){
+function session({inspectState=false,search='?exemplo=__test_no_auto__',presets={water:true}}={}){
   const html=fs.readFileSync(path.join(viewer,'index.html'),'utf8'),nodes={};
   for(const match of html.matchAll(/<([\w-]+)\b[^>]*\bid="([^"]+)"[^>]*>/g))nodes[match[2]]=new Element(match[1]);
   for(const [id,value] of Object.entries({'energy-mode':'delta','energy-unit':'kj','time-unit':'fs','distance-source':'xyz','geometry-type':'distance','highlight-kind':'atom','highlight-color':'#e6007e','highlight-size':'1.6','highlight-atom':'0','playback-duration':'60','playback-speed':'1'}))nodes[id].value=value;
@@ -54,7 +54,7 @@ function session({inspectState=false,search='?exemplo=__test_no_auto__'}={}){
     document:{body:new Element('body'),getElementById:id=>nodes[id],createElement:tag=>new Element(tag),addEventListener(type,callback){documentListeners[type]=callback;},
       querySelector:selector=>selector==='.example-card'?card:selector==='.playback-note'?playbackNote:null,
       querySelectorAll:selector=>selector==='[data-tab]'?tabs:selector==='[name="energy-series"]:checked'?checkboxes.filter(box=>box.checked):selector==='[name="energy-series"]'?checkboxes:[]},
-    addEventListener(){},AIMD_EXAMPLES:{presets:{water:true}},AIMDExampleLoader:{loadPreset:key=>{const pending=deferred();requests.push({key,...pending});return pending.promise;}}
+    addEventListener(){},AIMD_EXAMPLES:{presets},AIMDExampleLoader:{loadPreset:key=>{const pending=deferred();requests.push({key,...pending});return pending.promise;}}
   });
   context.window=context;
   for(const node of Object.values(nodes))node.ownerDocument=context.document;context.document.body.ownerDocument=context.document;
@@ -93,6 +93,16 @@ test('the main example action defaults to trajectory while explicit tabs remain 
     const ui=session({search,inspectState:true}),load=ui.requests[0].promise;
     assert.equal(ui.requests[0].key,'water');ui.requests[0].resolve(preset('water'));await load;await new Promise(setImmediate);
     assert.equal(ui.state.tab,expected);
+  }
+});
+
+test('retained reference deep links open trajectories without adding menu options',async()=>{
+  for(const key of ['proton_shared_short','water_short','ethanol_short']){
+    const ui=session({search:`?exemplo=${key}&aba=trajetoria`,inspectState:true,presets:{[key]:true}});
+    assert.doesNotMatch(ui.html,new RegExp(`<option\\b[^>]*value="${key}"`));
+    assert.equal(ui.requests.length,1);assert.equal(ui.requests[0].key,key);
+    const load=ui.requests[0].promise;ui.requests[0].resolve(preset(key));await load;await new Promise(setImmediate);
+    assert.equal(ui.state.tab,'trajectory');assert.equal(ui.nodes['trajectory-run'].options.length,1);
   }
 });
 
@@ -414,11 +424,64 @@ test('missing temperature leaves the energy chart usable without inventing zero 
   assert.ok(ui.nodes['trajectory-energy-chart'].chart.series[0].points.every(point=>Number.isFinite(point.y)));
 });
 
-async function playbackSession(){
+async function playbackSession(stages,{stride=1}={}){
   const ui=session({inspectState:true}),load=ui.choose('movement',true);
   const frames=Array.from({length:1000},(_,i)=>({time:i*.25,step:i,coords:[[0,0,0],[0,0,1+i*.0001]]}));
-  ui.requests[0].resolve(preset('movement',{frames}));await load;return ui;
+  const data=preset('movement',{frames:frames.filter((frame,i)=>i%stride===0||i===frames.length-1)});if(stages)data.runs[0].metadata={stages};
+  if(stride>1)Object.assign(data.runs[0].xyz,{previewStride:stride,originalFrameCount:frames.length});
+  ui.requests[0].resolve(data);await load;return ui;
 }
+
+test('stage playback defaults to full, loops only retained interval frames and preserves the physical clock',async()=>{
+  const ui=await playbackSession([{startFs:0,endFs:49.75,label:'Hidratação'},{startFs:50,endFs:99.75,label:'Encontro'}]);
+  assert.equal(ui.nodes['playback-interval'].value,'full');assert.equal(ui.nodes['playback-interval-field'].hidden,false);
+  assert.equal(ui.nodes['playback-interval'].options.length,3);
+  const before=JSON.stringify(ui.state.runs[0].xyz.frames);
+  ui.nodes['playback-interval'].value='stage-1';ui.nodes['playback-interval'].fire('change');
+  assert.equal(ui.state.frame,200);assert.equal(ui.state.playing,false);assert.match(ui.playbackNote.textContent,/Encontro/);
+  ui.nodes['play-button'].fire('click');ui.animationTick(0);ui.animationTick(30000);
+  assert.equal(ui.state.frame,300);assert.equal(ui.state.runs[0].xyz.frames[ui.state.frame].time,75);
+  ui.animationTick(59999);assert.equal(ui.state.frame,399);ui.animationTick(60000);assert.equal(ui.state.frame,200);
+  assert.equal(JSON.stringify(ui.state.runs[0].xyz.frames),before);
+});
+
+test('stage pause, manual whole-trajectory inspection, duration and interval changes stay within the selected range on replay',async()=>{
+  const ui=await playbackSession([{startFs:50,endFs:99.75,label:'Encontro'},{startFs:100,endFs:149.75,label:'Continuação'}]);
+  ui.nodes['playback-interval'].value='stage-0';ui.nodes['playback-interval'].fire('change');
+  ui.nodes['play-button'].fire('click');ui.animationTick(0);ui.animationTick(15000);assert.equal(ui.state.frame,250);
+  ui.nodes['play-button'].fire('click');ui.animationTick(45000);assert.equal(ui.state.frame,250);assert.equal(ui.state.playing,false);
+  ui.nodes['play-button'].fire('click');ui.animationTick(45000);ui.animationTick(60000);assert.equal(ui.state.frame,300);
+  ui.nodes['playback-duration'].value='30';ui.nodes['playback-duration'].fire('change');
+  assert.equal(ui.state.frame,300);ui.animationTick(67500);assert.equal(ui.state.frame,350);
+  ui.nodes['playback-interval'].value='stage-1';ui.nodes['playback-interval'].fire('change');
+  assert.equal(ui.state.playing,false);assert.equal(ui.state.frame,400);ui.animationTick(97500);assert.equal(ui.state.frame,400);
+  ui.nodes['frame-slider'].value='900';ui.nodes['frame-slider'].fire('input');assert.equal(ui.state.frame,900);
+  ui.nodes['previous-frame'].fire('click');assert.equal(ui.state.frame,899);
+  ui.nodes['play-button'].fire('click');assert.equal(ui.state.frame,400);ui.animationTick(100000);ui.animationTick(115000);assert.equal(ui.state.frame,500);
+  ui.nodes['playback-interval'].value='full';ui.nodes['playback-interval'].fire('change');assert.equal(ui.state.frame,0);assert.equal(ui.state.playing,false);
+});
+
+test('stage playback on a sampled preview uses only existing frames inside the physical boundaries',async()=>{
+  const ui=await playbackSession([{startFs:50.1,endFs:54.9,label:'Trecho entre amostras'}],{stride:5}),run=ui.state.runs[0];
+  const before=JSON.stringify(run.xyz);
+  assert.match(ui.playbackNote.textContent,/Prévia: 1 a cada 5 quadros/);
+  ui.nodes['playback-interval'].value='stage-0';ui.nodes['playback-interval'].fire('change');
+  assert.equal(run.xyz.frames[ui.state.frame].time,51.25);
+  ui.nodes['play-button'].fire('click');ui.animationTick(0);ui.animationTick(20000);assert.equal(run.xyz.frames[ui.state.frame].time,52.5);
+  ui.animationTick(40000);assert.equal(run.xyz.frames[ui.state.frame].time,53.75);
+  ui.animationTick(60000);assert.equal(run.xyz.frames[ui.state.frame].time,51.25);
+  assert.equal(JSON.stringify(run.xyz),before,'Preview frames and timestamps are never interpolated or rewritten');
+  ui.nodes['frame-slider'].value=String(run.xyz.frames.length-1);ui.nodes['frame-slider'].fire('input');
+  assert.equal(run.xyz.frames[ui.state.frame].time,249.75,'The exact final off-grid frame remains manually accessible');
+});
+
+test('invalid or unsampled stages are omitted and a different run restores full playback',async()=>{
+  const ui=await playbackSession([null,{startFs:null,endFs:10},{startFs:20,endFs:10},{startFs:300,endFs:400},{startFs:0,endFs:.1},{startFs:50,endFs:99.75,label:'Válida'}]);
+  assert.deepEqual(ui.nodes['playback-interval'].options.map(option=>option.value),['full','stage-5']);
+  ui.nodes['playback-interval'].value='stage-5';ui.nodes['playback-interval'].fire('change');
+  const load=ui.choose('other',true);ui.requests.at(-1).resolve(preset('other'));await load;
+  assert.equal(ui.nodes['playback-interval'].value,'full');assert.equal(ui.nodes['playback-interval-field'].hidden,true);assert.equal(ui.state.playing,false);
+});
 
 test('default playback takes sixty seconds per cycle and preserves original frame times',async()=>{
   const ui=await playbackSession(),before=ui.state.runs[0].xyz.frames.map(frame=>frame.time);
@@ -485,6 +548,22 @@ async function renderingSession(){
   for(const name of ['time-fs','time-ps','time-s','temperature','kinetic','potential','total','atoms'])ui.nodes['frame-'+name]=new Element();
   return {...ui,counts,labels,shapes,liveAtoms:()=>atoms};
 }
+
+test('stage playback and manual seeking retain matching physical energy and temperature cursors',async()=>{
+  const ui=await renderingSession(),run=ui.state.runs[0],original=run.xyz.frames[0].coords;
+  run.xyz.frames=Array.from({length:10},(_,step)=>({step,time:step*.25,coords:original.map(p=>[p[0]+step*.01,p[1],p[2]])}));
+  run.energy.rows=run.xyz.frames.map(frame=>({time:frame.time,step:frame.step,total:-1,potential:-1.1,kinetic:.1,temperature:300}));
+  run.metadata={stages:[{startFs:.5,endFs:1.25,label:'Trecho'}]};
+  ui.trajectoryHooks.renderTrajectoryChart(run);ui.nodes['playback-duration'].fire('change');
+  ui.nodes['playback-interval'].value='stage-0';ui.nodes['playback-interval'].fire('change');
+  ui.nodes['play-button'].fire('click');ui.animationTick(0);ui.animationTick(30000);
+  assert.equal(ui.state.frame,4);assert.equal(ui.nodes['trajectory-energy-chart'].chartCursor,1);assert.equal(ui.nodes['trajectory-temperature-chart'].chartCursor,1);
+  assert.match(ui.nodes['trajectory-energy-status'].textContent,/1 fs/);assert.match(ui.nodes['trajectory-temperature-status'].textContent,/300 K/);
+  assert.equal(ui.liveAtoms()[0].x,run.xyz.frames[4].coords[0][0]);
+  ui.nodes['frame-slider'].value='8';ui.nodes['frame-slider'].fire('input');
+  assert.equal(ui.state.playing,false);assert.equal(ui.state.frame,8);
+  assert.equal(ui.nodes['trajectory-energy-chart'].chartCursor,2);assert.equal(ui.nodes['trajectory-temperature-chart'].chartCursor,2);
+});
 
 test('all atom indices reuse textures and model objects across frames, then release on disable',async()=>{
   const ui=await renderingSession(),run=ui.state.runs[0],original=JSON.stringify(run.xyz);

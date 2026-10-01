@@ -50,15 +50,43 @@
     return ([8,15,30,60,120].includes(seconds)?seconds:60)*1000;
   }
   function playbackSpeed(){return Math.max(.05,Number($('playback-speed').value)||1);}
+  function playbackRange(){return state.playbackRanges?.find(range=>range.key===$('playback-interval').value)||state.playbackRanges?.[0];}
+  function renderPlaybackIntervals(run){
+    const frames=run?.xyz?.frames||[],select=$('playback-interval'),selected=state.playbackRangeRun===run?.id?select.value:'full';
+    const ranges=[{key:'full',start:0,end:frames.length-1,label:'Trajetória completa'}];
+    // Ranges address the retained frames; source times, chart domains and manual
+    // navigation remain unchanged. Invalid or unsampled stages are not offered.
+    if(frames.length>1&&frames.every((frame,i)=>Number.isFinite(frame.time)&&(!i||frame.time>=frames[i-1].time))){
+      const numeric=value=>value===null||value===undefined||value===''?NaN:Number(value);
+      const stages=metadata(run).stages;
+      for(const [index,stage] of (Array.isArray(stages)?stages:[]).entries()){
+        if(!stage||typeof stage!=='object')continue;
+        const startFs=numeric(stage.startFs),endFs=numeric(stage.endFs);if(!Number.isFinite(startFs)||!Number.isFinite(endFs)||endFs<=startFs)continue;
+        const start=frames.findIndex(frame=>frame.time>=startFs-1e-9);if(start<0)continue;
+        let end=start-1;for(let i=start;i<frames.length&&frames[i].time<=endFs+1e-9;i++)end=i;
+        if(end<=start)continue;
+        ranges.push({key:`stage-${index}`,start,end,label:`${stage.label||`Etapa ${stage.index??index+1}`} · ${num(startFs,8)}–${num(endFs,8)} fs`});
+      }
+    }
+    state.playbackRanges=ranges;state.playbackRangeRun=run?.id??null;
+    select.replaceChildren();for(const range of ranges){const option=document.createElement('option');option.value=range.key;option.textContent=range.label;select.append(option);}
+    select.value=ranges.some(range=>range.key===selected)?selected:'full';select.disabled=ranges.length<2;$('playback-interval-field').hidden=ranges.length<2;
+  }
   function renderPlaybackControls(run=currentTrajectory()){
-    const frames=run?.xyz?.frames||[],staticOnly=frames.length<2,note=document.querySelector('.playback-note');
+    renderPlaybackIntervals(run);
+    const frames=run?.xyz?.frames||[],staticOnly=frames.length<2,note=document.querySelector('.playback-note'),range=playbackRange();
     for(const id of ['play-button','playback-duration','playback-speed'])$(id).disabled=staticOnly;
     note.textContent=staticOnly?(frames.length?'Estrutura estática: um único quadro.':'Carregue uma trajetória para reproduzir o movimento.'):`Um ciclo completo leva ${(playbackDuration()/1000/playbackSpeed()).toLocaleString('pt-BR',{maximumFractionDigits:1})} s de reprodução. O tempo físico abaixo vem do XYZ. Use as setas para examinar cada quadro.`;
+    if(range?.key!=='full'&&!staticOnly)note.textContent+=` Repetindo: ${range.label}. As setas, o número do quadro e os gráficos permitem examinar a trajetória completa.`;
     if(run?.xyz?.previewStride)note.textContent+=` Prévia: 1 a cada ${run.xyz.previewStride} quadros originais, mais o último. Carregue o XYZ completo para ver todos.`;
   }
   function updatePlaybackSettings(){
     // Keep the current phase and frame: only the rate of subsequent ticks changes.
     state.playback.baseDuration=playbackDuration();renderPlaybackControls();
+  }
+  function changePlaybackInterval(){
+    stop();const range=playbackRange();if(!range||range.end<0)return;
+    state.frame=range.start;renderPlaybackControls();drawFrame();
   }
   function ensureTrajectoryReadouts(){
     const timeline=$('frame-time');
@@ -284,6 +312,7 @@
   function clearTrajectoryScene(){
     clearAtomLabels();clearContactShapes();state.viewer?.removeAllModels();state.viewer?.removeAllShapes();state.viewer?.render();
     state.model=null;state.viewRun=null;state.renderAtoms=null;state.renderFrame=null;state.styleKey=null;state.frameGeometry=null;
+    state.playbackRanges=[];state.playbackRangeRun=null;
     state.trajectoryChart=null;state.trajectoryTemperatureChart=null;state.energyIndex=null;state.temperatureIndex=null;state.frameIndex=null;
   }
   function geometryForFrame(run,frame){
@@ -553,14 +582,16 @@
   function seekFrame(index){stop();const run=currentTrajectory();if(!run?.xyz)return;if(!Number.isFinite(index)){$('frame-number').value=state.frame+1;return;}state.frame=Math.max(0,Math.min(run.xyz.frames.length-1,Math.round(index)));drawFrame();}
   function play(){
     if(state.playing){stop();return;}
-    const run=currentTrajectory(),frameCount=run?.xyz?.frames.length||0;if(!run?.xyz||frameCount<2)return;
+    const run=currentTrajectory();if(!run?.xyz)return;
+    const range=playbackRange()||{start:0,end:run.xyz.frames.length-1},frameCount=range.end-range.start+1;if(frameCount<2)return;
+    if(state.frame<range.start||state.frame>range.end){state.frame=range.start;drawFrame();}
     state.playing=true;state.playback={runId:run.id,startFrame:state.frame,baseDuration:playbackDuration(),phase:0,lastTimestamp:null};$('play-button').textContent='Ⅱ Pausar';
     const tick=timestamp=>{
       if(!state.playing||state.playback.runId!==run.id)return;
       if(state.playback.lastTimestamp===null){state.playback.lastTimestamp=timestamp;state.timer=requestAnimationFrame(tick);return;}
       const elapsed=Math.max(0,timestamp-state.playback.lastTimestamp);state.playback.lastTimestamp=timestamp;const speed=playbackSpeed();
       state.playback.phase=(state.playback.phase+elapsed/state.playback.baseDuration*speed)%1;
-      const next=(state.playback.startFrame+Math.floor(state.playback.phase*frameCount))%frameCount;
+      const next=range.start+(state.playback.startFrame-range.start+Math.floor(state.playback.phase*frameCount))%frameCount;
       if(next!==state.frame){state.frame=next;drawFrame();}
       state.timer=requestAnimationFrame(tick);
     };
@@ -661,6 +692,7 @@
   document.addEventListener('keydown',expandedKeys);
   $('frame-slider').addEventListener('input',()=>seekFrame(Number($('frame-slider').value)));$('play-button').addEventListener('click',play);
   for(const id of ['playback-duration','playback-speed'])$(id).addEventListener('change',updatePlaybackSettings);
+  $('playback-interval').addEventListener('change',changePlaybackInterval);
   $('previous-frame').addEventListener('click',()=>seekFrame(state.frame-1));$('next-frame').addEventListener('click',()=>seekFrame(state.frame+1));
   $('frame-number').addEventListener('change',()=>seekFrame($('frame-number').valueAsNumber-1));$('frame-number').addEventListener('keydown',event=>{if(event.key==='Enter'){event.preventDefault();seekFrame($('frame-number').valueAsNumber-1);}});
   $('goto-distances').addEventListener('click',()=>{const run=currentTrajectory();if(run)$('distance-run').value=run.id;changeTab('distance');});

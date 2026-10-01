@@ -31,11 +31,15 @@ test('startup manifest contains no trajectories and only the requested calculati
   assert.equal(Object.keys(store.runs).length,1);
 });
 
-test('every exposed preset resolves all retained runs and original download links',async()=>{
+test('menu presets and retained direct links resolve all runs and original download links',async()=>{
   const {store,loader}=bundledLoader();
   const selector=read('index.html').match(/<select id="example-select">([\s\S]*?)<\/select>/)[1];
   const exposed=[...selector.matchAll(/<option value="([^"]+)"/g)].map(match=>match[1]);
-  assert.deepEqual(Object.keys(store.presets).sort(),exposed.sort());
+  const directLinks=['proton_shared_short','water_short','ethanol_short'];
+  assert.deepEqual(Object.keys(store.presets).sort(),[...exposed,...directLinks].sort());
+  assert.deepEqual(Array.from(store.presets.chelation.runs),['chelation']);
+  assert.equal(store.presets.chelation_previous,undefined);
+  assert.equal(store.sources.chelation_continuous,undefined,'Unaccepted candidate data is not part of the published manifest');
   for(const [key,preset] of Object.entries(store.presets)){
     const {runs}=await loader.loadPreset(key);
     assert.equal(runs.length,preset.runs.length,key);
