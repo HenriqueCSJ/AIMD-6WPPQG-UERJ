@@ -29,6 +29,7 @@ class Element{
   get innerHTML(){return this.html;}
   set value(value){this.selectedValue=String(value);}
   get value(){return this.selectedValue;}
+  querySelector(selector){return this.children.find(child=>selector.startsWith('.')?child.className===selector.slice(1):selector.startsWith('#')?child.id===selector.slice(1):false)||null;}
   querySelectorAll(selector){if(selector==='a[href],button,input,select,textarea,[tabindex]'){const found=[];for(const child of this.children){if(child.tabIndex>=0)found.push(child);found.push(...child.querySelectorAll(selector));}return found;}return this.controls.filter(control=>selector==='[data-run]'?control.dataset.run:selector==='[data-remove]'?control.dataset.remove:false);}
   scrollIntoView(){}
 }
@@ -60,14 +61,14 @@ function session({inspectState=false,search='?exemplo=__test_no_auto__'}={}){
   nodes.molecule.tabIndex=0;
   let source=fs.readFileSync(path.join(viewer,'app.js'),'utf8');
   // A test-only bridge supplies a renderer double without creating WebGL.
-  if(inspectState)source=source.replace(/\}\)\(\);\s*$/,'globalThis.__testState=state;globalThis.__testHighlights={drawHighlights,selectTrajectoryAtom};globalThis.__testTrajectory={renderTrajectoryChart,updateTrajectoryCursor};})();');
+  if(inspectState)source=source.replace(/\}\)\(\);\s*$/,'globalThis.__testState=state;globalThis.__testHighlights={drawHighlights,selectTrajectoryAtom};globalThis.__testTrajectory={renderTrajectoryChart,updateTrajectoryCursor};globalThis.__testRendering={drawFrame,clearTrajectoryScene,drawContactSuggestions};})();');
   vm.runInContext(source,context);
   // Preserve the old helper meaning: `true` opens Trajectory 3D through the
   // primary action, while the default opens the explicit energy comparison.
   const choose=(key,trajectory=false)=>{nodes['example-select'].value=key;return nodes[trajectory?'example-button':'example-energy-button'].fire('click');};
   const toggle=(index,checked)=>{const box=nodes.runs.querySelectorAll('[data-run]')[index];box.checked=checked;box.fire('change');};
   const remove=index=>nodes.runs.querySelectorAll('[data-remove]')[index].fire('click');
-  return {html,nodes,requests,choose,toggle,remove,cancelled,animationTick,playbackNote,document:context.document,key:event=>documentListeners.keydown(event),state:context.__testState,highlightHooks:context.__testHighlights,trajectoryHooks:context.__testTrajectory};
+  return {html,nodes,requests,choose,toggle,remove,cancelled,animationTick,playbackNote,document:context.document,key:event=>documentListeners.keydown(event),state:context.__testState,highlightHooks:context.__testHighlights,trajectoryHooks:context.__testTrajectory,renderHooks:context.__testRendering};
 }
 function preset(key,{staticOnly=false,frames,energyRows}={}){
   const xyz={elements:['O','H'],frames:frames||[{time:0,step:0,coords:[[0,0,0],[0,0,1]]}],warnings:[]};
@@ -460,4 +461,59 @@ test('static structures disable playback controls and explain why they do not an
   assert.equal(ui.playbackNote.textContent,'Estrutura estática: um único quadro.');
   ui.nodes['play-button'].fire('click');ui.animationTick(60000);
   assert.equal(ui.state.playing,false);assert.equal(ui.state.frame,0);
+});
+
+async function renderingSession(){
+  const ui=session({inspectState:true}),pending=ui.choose('water-grid',true);
+  const elements=[],coords=[];for(let i=0;i<32;i++){elements.push('O','H','H');coords.push([i*2.8,0,0],[i*2.8+.96,0,0],[i*2.8-.24,.93,0]);}
+  const frames=[0,1].map(step=>({step,time:step*.5,coords:coords.map(p=>[p[0]+step*.1,p[1],p[2]])}));
+  const data=preset('water-grid',{frames});data.runs[0].xyz.elements=elements;
+  ui.requests[0].resolve(data);await pending;
+  const counts={addedAtoms:0,clickable:0,render:0,labelsCreated:0,labelsDisposed:0,labelBatchesRemoved:0,shapesCreated:0,shapesRemoved:0},labels=[],shapes=[];
+  let atoms=[];
+  const model={addAtoms(input){counts.addedAtoms++;atoms=input.map(a=>({...a}));},selectedAtoms(){return atoms;},setClickable(){counts.clickable++;},setStyle(){}};
+  const viewer={
+    render(){counts.render++;},removeAllModels(){atoms=[];},removeAllShapes(){},
+    addLabel(text,style,selection,noshow){assert.equal(noshow,true,'Labels must be added without per-atom scene draws');counts.labelsCreated++;const label={text,style,sprite:{position:{set(x,y,z){this.x=x;this.y=y;this.z=z;}}},dispose(){counts.labelsDisposed++;this.disposed=true;}};labels.push(label);return label;},
+    removeAllLabels(){counts.labelBatchesRemoved++;},
+    addShape(style){counts.shapesCreated++;const shape={style,cylinders:[],addDashedCylinders(cylinders){this.cylinders.push(...cylinders);},finalize(){this.finalized=true;}};shapes.push(shape);return shape;},
+    removeShape(){counts.shapesRemoved++;}
+  };
+  Object.assign(ui.state,{viewer,model,timeFormat:{fsDigits:1,psDigits:4,secondsExponent:-15,secondsDigits:1}});
+  ui.nodes['frame-time'].dataset.ready='1';ui.nodes['frame-values'].dataset.ready='1';
+  for(const name of ['frame-index','frame-time-value']){const span=new Element('span');span.className=name;ui.nodes['frame-time'].append(span);}
+  for(const name of ['time-fs','time-ps','time-s','temperature','kinetic','potential','total','atoms'])ui.nodes['frame-'+name]=new Element();
+  return {...ui,counts,labels,shapes,liveAtoms:()=>atoms};
+}
+
+test('all atom indices reuse textures and model objects across frames, then release on disable',async()=>{
+  const ui=await renderingSession(),run=ui.state.runs[0],original=JSON.stringify(run.xyz);
+  ui.nodes['atom-labels'].checked=true;ui.nodes['proximity-lines'].checked=true;
+  ui.renderHooks.drawFrame();const atoms=ui.liveAtoms(),labels=ui.state.labelRecords.map(record=>record.label);
+  assert.equal(ui.counts.labelsCreated,96);assert.equal(ui.counts.render,1);assert.equal(ui.counts.addedAtoms,1);assert.equal(ui.counts.clickable,1);
+  ui.state.frame=1;ui.renderHooks.drawFrame();
+  assert.equal(ui.liveAtoms(),atoms);assert.equal(ui.counts.addedAtoms,1);assert.equal(ui.counts.clickable,1);
+  assert.equal(ui.counts.labelsCreated,96);assert.equal(ui.counts.labelsDisposed,0);assert.equal(ui.counts.render,2);
+  for(let i=0;i<96;i++){assert.equal(ui.state.labelRecords[i].label,labels[i]);assert.equal(labels[i].sprite.position.x,run.xyz.frames[1].coords[i][0]);assert.equal(labels[i].style.position.x,atoms[i].x);}
+  assert.equal(JSON.stringify(run.xyz),original,'Source positions and times remain untouched');
+  ui.nodes['atom-labels'].checked=false;ui.renderHooks.drawFrame();
+  assert.equal(ui.counts.labelsDisposed,96);assert.equal(ui.counts.labelBatchesRemoved,1);assert.equal(ui.state.labelRecords.length,0);
+  ui.renderHooks.drawFrame();assert.equal(ui.counts.labelsDisposed,96);
+});
+
+test('contact cylinders are grouped by kind and not rebuilt for an index-only toggle',async()=>{
+  const ui=await renderingSession(),run=ui.state.runs[0];ui.nodes['hydrogen-bonds'].checked=true;
+  ui.renderHooks.drawFrame();const expected=Geometry.hydrogenBonds(run.xyz.elements,run.xyz.frames[0].coords);
+  assert.ok(expected.length>1);assert.equal(ui.counts.shapesCreated,1);assert.equal(ui.shapes[0].cylinders.length,expected.length);assert.equal(ui.shapes[0].finalized,true);
+  ui.nodes['atom-labels'].checked=true;ui.renderHooks.drawFrame();assert.equal(ui.counts.shapesCreated,1);assert.equal(ui.counts.shapesRemoved,0);
+  ui.state.frame=1;ui.renderHooks.drawFrame();assert.equal(ui.counts.shapesCreated,2);assert.equal(ui.counts.shapesRemoved,1);
+  ui.nodes['hydrogen-bonds'].checked=false;ui.renderHooks.drawFrame();assert.equal(ui.counts.shapesRemoved,2);
+});
+
+test('clearing a loaded session releases labels, models, contact shapes and cached frame references',async()=>{
+  const ui=await renderingSession();ui.nodes['atom-labels'].checked=true;ui.nodes['hydrogen-bonds'].checked=true;ui.nodes['proximity-lines'].checked=true;ui.renderHooks.drawFrame();
+  ui.nodes['clear-button'].fire('click');
+  assert.equal(ui.counts.labelsDisposed,96);assert.equal(ui.counts.shapesRemoved,1);
+  assert.equal(ui.state.model,null);assert.equal(ui.state.renderAtoms,null);assert.equal(ui.state.renderFrame,null);assert.equal(ui.state.frameGeometry,null);assert.equal(ui.state.labelRecords.length,0);
+  assert.equal(ui.nodes.workspace.hidden,true);
 });

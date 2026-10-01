@@ -15,7 +15,7 @@
   const timeFactor=()=>({fs:1,ps:1e-3,s:1e-15}[$('time-unit').value]);
   const energyFactor=()=>$('energy-unit').value==='eh'?1:R.HARTREE_TO_KJMOL;
   const energyUnit=()=>$('energy-unit').value==='eh'?'Eh':'kJ/mol';
-  Object.assign(state,{trajectoryChart:null,trajectoryTemperatureChart:null,energyIndex:null,temperatureIndex:null,frameIndex:null,interaction:'rotate',panGesture:null,expandedReturnFocus:null,expandedBackground:[]});
+  Object.assign(state,{trajectoryChart:null,trajectoryTemperatureChart:null,energyIndex:null,temperatureIndex:null,frameIndex:null,interaction:'rotate',panGesture:null,expandedReturnFocus:null,expandedBackground:[],renderAtoms:null,renderFrame:null,styleKey:null,frameGeometry:null,contactKey:null,labelKey:null,labelRecords:[]});
   function decimalPlaces(value){
     const magnitude=Math.abs(value);if(!Number.isFinite(magnitude)||magnitude===0)return 0;
     for(let places=0;places<=8;places++){const scale=10**places;if(Math.abs(magnitude*scale-Math.round(magnitude*scale))<=1e-7*Math.max(1,magnitude*scale))return places;}
@@ -125,7 +125,7 @@
       // Keep uploaded files and the current display until every requested run exists.
       // Parsed reference data are read-only; only the session wrapper is modified.
       const references=runs.map(src=>{const run=Object.assign(makeRun(src.key,src.label,true),src,{exampleKey:src.key,visible:true});run.color=referenceColors[src.key]||run.color;return run;});
-      stop();clearContactShapes();state.runs=state.runs.filter(r=>!r.reference);state.runs.forEach(r=>r.visible=false);state.runs.push(...references);state.viewRun=null;
+      stop();clearTrajectoryScene();state.runs=state.runs.filter(r=>!r.reference);state.runs.forEach(r=>r.visible=false);state.runs.push(...references);
       document.querySelectorAll('[name="energy-series"]').forEach(c=>c.checked=config.runs.length>1?c.value==='total':true);
       $('energy-mode').value='delta';$('time-unit').value='fs';$('energy-window-from').value='';$('energy-window-to').value='';state.tab=preferredTab||(references.some(run=>run.xyz)?'trajectory':'energy');renderAll(references[0].id);
       const staticOnly=references.every(run=>run.xyz?.frames.length===1&&!energy(run)?.rows.length);
@@ -150,7 +150,7 @@
     }
   }
   function renderAll(preferredTrajectory){
-    const loaded=state.runs.length>0;$('workspace').hidden=!loaded;$('welcome-guide').hidden=loaded;document.body.classList.toggle('loaded',loaded);if(!loaded){stop();const expanded=$('expand-trajectory').getAttribute('aria-expanded')==='true';expandTrajectory(false,false);if(expanded)$('upload-button').focus();return;}
+    const loaded=state.runs.length>0;$('workspace').hidden=!loaded;$('welcome-guide').hidden=loaded;document.body.classList.toggle('loaded',loaded);if(!loaded){stop();clearTrajectoryScene();const expanded=$('expand-trajectory').getAttribute('aria-expanded')==='true';expandTrajectory(false,false);if(expanded)$('upload-button').focus();return;}
     renderRuns();updateRunSelectors(preferredTrajectory);renderDetails();changeTab(state.tab);
   }
   function changeTab(tab){stop();state.tab=tab;const expanded=$('expand-trajectory').getAttribute('aria-expanded')==='true';if(tab!=='trajectory')expandTrajectory(false,false);for(const name of ['energy','trajectory','distance']){$('panel-'+name).hidden=name!==tab;$('tab-'+name).setAttribute('aria-selected',name===tab);$('tab-'+name).tabIndex=name===tab?0:-1;}if(expanded&&tab!=='trajectory')$('tab-'+tab).focus();
@@ -274,22 +274,42 @@
     if(!host)return;if(!groups.length){host.hidden=true;host.replaceChildren();return;}
     host.hidden=false;host.innerHTML='<p class="stage-summary-caption">Programa do input; confira até onde há dados.</p>'+groups.map(({run,stages})=>`<div class="stage-run"><strong>${esc(run.label)}</strong><div class="stage-chips">${stages.map((stage,index)=>{const numeric=value=>value===null||value===undefined||value===''?NaN:Number(value),start=numeric(stage.startFs),end=numeric(stage.endFs),last=index===stages.length-1,active=Number.isFinite(actualTime)&&Number.isFinite(start)&&actualTime>=start-1e-9&&(!Number.isFinite(end)||(last?actualTime<=end+1e-9:actualTime<end-1e-9));return `<span class="stage-chip${active?' active':''}" title="Etapa ${stage.index??index+1}"><b>${stage.index??index+1}</b><span>${stageTime(start)} → ${stageTime(end)}</span><em>${esc(stageTarget(stage))}</em></span>`;}).join('')}</div></div>`).join('');
   }
-  function clearContactShapes(){if(!state.viewer){state.contactShapes=[];return;}for(const shape of state.contactShapes){try{state.viewer.removeShape(shape);}catch(error){/* an already removed shape is harmless */}}state.contactShapes=[];}
-  function contactLine(start,end,kind){
-    if(!state.viewer)return;
-    // Thin WebGL line widths are commonly ignored, so use 3Dmol's dashed
-    // cylinder primitive for a visible contact while keeping each returned
-    // shape in the contact-only cleanup list.
-    const styles=kind==='hbond'?{color:'#0b8f86',radius:.025,dashLength:.18,gapLength:.11}:{color:'#7551a2',radius:.04,dashLength:.18,gapLength:.11};
-    const shape=state.viewer.addCylinder({start:{x:start[0],y:start[1],z:start[2]},end:{x:end[0],y:end[1],z:end[2]},dashed:true,...styles});
-    if(shape)state.contactShapes.push(shape);
+  function clearContactShapes(){state.contactKey=null;if(!state.viewer){state.contactShapes=[];return;}for(const shape of state.contactShapes)state.viewer.removeShape(shape);state.contactShapes=[];}
+  function clearAtomLabels(){
+    // 3Dmol 2.5.5 removeAllLabels removes sprites but does not dispose their
+    // texture/material. Dispose our retained labels first, then remove in one batch.
+    if(state.labelRecords.length){for(const record of state.labelRecords)record.label.dispose();state.viewer?.removeAllLabels();}
+    state.labelRecords=[];state.labelKey=null;
+  }
+  function clearTrajectoryScene(){
+    clearAtomLabels();clearContactShapes();state.viewer?.removeAllModels();state.viewer?.removeAllShapes();state.viewer?.render();
+    state.model=null;state.viewRun=null;state.renderAtoms=null;state.renderFrame=null;state.styleKey=null;state.frameGeometry=null;
+    state.trajectoryChart=null;state.trajectoryTemperatureChart=null;state.energyIndex=null;state.temperatureIndex=null;state.frameIndex=null;
+  }
+  function geometryForFrame(run,frame){
+    if(state.frameGeometry?.run!==run||state.frameGeometry?.frame!==frame)state.frameGeometry={run,frame,bonds:null,hydrogen:null,coordination:new Map()};
+    return state.frameGeometry;
+  }
+  function frameBonds(run,frame){const cached=geometryForFrame(run,frame);return cached.bonds||(cached.bonds=G.inferCovalentBonds(run.xyz.elements,frame.coords));}
+  function contactBatch(contacts,coords,kind){
+    if(!contacts.length)return;
+    const color=kind==='hbond'?'#0b8f86':'#7551a2',shape=state.viewer.addShape({color}),cylinders=[];
+    for(const contact of contacts){const a=coords[kind==='hbond'?contact.hydrogen:contact.metal],b=coords[kind==='hbond'?contact.acceptor:contact.ligand];
+      cylinders.push({start:{x:a[0],y:a[1],z:a[2]},end:{x:b[0],y:b[1],z:b[2]},radius:kind==='hbond'?.025:.04,dashLength:.18,gapLength:.11,color});
+    }
+    // The local batch primitive generates the same cylinders, computing their
+    // enclosing bounds once instead of rescanning the growing mesh per contact.
+    shape.addDashedCylinders(cylinders);shape.finalize();state.contactShapes.push(shape);
   }
   function coordinationCutoff(){const input=$('coordination-cutoff'),raw=Number(input?.value);const value=Math.max(2,Math.min(3.5,Number.isFinite(raw)?raw:2.6));if(input&&String(raw)!==String(value))input.value=value.toFixed(1);return value;}
   function drawContactSuggestions(run,frame){
-    clearContactShapes();const xyz=run?.xyz;if(!xyz)return;
-    const bonds=G.inferCovalentBonds(xyz.elements,frame.coords);
-    if($('hydrogen-bonds')?.checked)for(const contact of G.hydrogenBonds(xyz.elements,frame.coords,{bonds}))contactLine(frame.coords[contact.hydrogen],frame.coords[contact.acceptor],'hbond');
-    if($('coordination-contacts')?.checked)for(const contact of G.coordinationContacts(xyz.elements,frame.coords,{cutoff:coordinationCutoff()}))contactLine(frame.coords[contact.metal],frame.coords[contact.ligand],'coordination');
+    const xyz=run?.xyz;if(!xyz)return;
+    const hydrogen=$('hydrogen-bonds')?.checked,coordination=$('coordination-contacts')?.checked,cutoff=coordination?coordinationCutoff():null;
+    const key=`${run.id}:${state.frame}:${hydrogen}:${coordination}:${cutoff}`;if(state.contactKey===key)return;
+    clearContactShapes();const cached=geometryForFrame(run,frame);
+    if(hydrogen){if(!cached.hydrogen)cached.hydrogen=G.hydrogenBonds(xyz.elements,frame.coords,{bonds:frameBonds(run,frame)});contactBatch(cached.hydrogen,frame.coords,'hbond');}
+    if(coordination){if(!cached.coordination.has(cutoff))cached.coordination.set(cutoff,G.coordinationContacts(xyz.elements,frame.coords,{cutoff}));contactBatch(cached.coordination.get(cutoff),frame.coords,'coordination');}
+    state.contactKey=key;
   }
   function renderContactLegend(run){
     const legend=$('molecule-legend');if(!legend||!run?.xyz)return;
@@ -429,7 +449,7 @@
     const run=currentTrajectory(),has=!!run?.xyz;$('trajectory-empty').hidden=has;$('trajectory-content').hidden=!has;
     $('reset-view').disabled=!has;renderPlaybackControls(run);
     if(!has){
-      stop();clearContactShapes();state.viewer?.removeAllModels();state.viewer?.removeAllShapes();state.viewer?.removeAllLabels();state.viewer?.render();state.model=null;state.viewRun=null;state.frame=0;state.selectedAtom=null;
+      stop();clearTrajectoryScene();state.frame=0;state.selectedAtom=null;
       renderStageSummary([],'trajectory-stage-summary');
       $('trajectory-empty').innerHTML=!visible().length?'<strong>Marque uma simulação acima.</strong>As caixas selecionam os cálculos disponíveis nas três abas.':'<strong>O movimento está no arquivo XYZ.</strong>Carregue nome-traj.xyz para uma simulação marcada. O .out e o CSV de energias não contêm necessariamente as coordenadas de todos os passos.';return;
     }
@@ -437,7 +457,7 @@
     if(!window.$3Dmol){$('trajectory-content').hidden=true;$('trajectory-empty').hidden=false;$('trajectory-empty').textContent='O visualizador molecular não foi carregado. Mantenha a pasta vendor junto ao aplicativo. As distâncias continuam disponíveis.';return;}
     try{if(!state.viewer){state.viewer=$3Dmol.createViewer($('molecule'),{backgroundColor:'white',orthographic:true,antialias:true});state.viewer.setProjection('orthographic');state.initialView=state.viewer.getView().slice();}
       const changedRun=state.viewRun!==run.id;
-      if(changedRun){state.frame=0;state.selectedAtom=null;state.viewRun=run.id;state.timeFormat=timeFormat(run.xyz.frames);ensureTrajectoryReadouts();$('frame-slider').value='0';state.viewer.removeAllModels();state.viewer.removeAllLabels();state.model=state.viewer.addModel();}
+      if(changedRun){clearAtomLabels();state.frame=0;state.selectedAtom=null;state.viewRun=run.id;state.timeFormat=timeFormat(run.xyz.frames);ensureTrajectoryReadouts();$('frame-slider').value='0';state.viewer.removeAllModels();state.model=state.viewer.addModel();state.renderAtoms=null;state.renderFrame=null;state.styleKey=null;state.frameGeometry=null;}
       if(changedRun)drawWall(run);
       renderHighlights(run,changedRun);
       $('frame-slider').max=run.xyz.frames.length-1;$('frame-number').max=run.xyz.frames.length;
@@ -446,25 +466,58 @@
       state.viewer.resize();renderTrajectoryChart(run);drawFrame(changedRun);
     }catch(error){state.viewRun=null;stop();console.error('Falha ao desenhar a trajetória',run.key,error);$('trajectory-content').hidden=true;$('trajectory-empty').hidden=false;$('trajectory-empty').textContent='Não foi possível desenhar esta trajetória. Tente abrir o exemplo novamente; se persistir, confira se o navegador permite WebGL. Gráficos e medidas geométricas continuam disponíveis.';}
   }
+  function drawAtomLabels(run,atoms,highlighted){
+    const showIndices=$('atom-labels').checked;
+    const key=JSON.stringify([run.id,showIndices,highlights(run)]);
+    if(state.labelKey!==key){
+      clearAtomLabels();
+      const add=(index,text,style)=>{
+        const a=atoms[index],position={x:a.x,y:a.y,z:a.z};
+        // Fourth argument suppresses the per-label scene draw. Render once,
+        // after every atom, label and contact has reached the same frame.
+        const label=state.viewer.addLabel(text,{...style,position,inFront:true},undefined,true);
+        state.labelRecords.push({index,label,position});
+      };
+      if(showIndices)for(let i=0;i<atoms.length;i++)add(i,`${atoms[i].elem} ${i}`,{fontColor:'#17313e',backgroundColor:'white',backgroundOpacity:.7,fontSize:highlighted.has(i)?14:11,borderThickness:highlighted.has(i)?1:0,borderColor:highlighted.get(i)||'#17313e'});
+      else{
+        if(run.reference&&run.key.includes('_longo')&&atoms[25]?.elem==='O')add(25,'O 25',{fontColor:'#9c382c',backgroundColor:'white',backgroundOpacity:.85,fontSize:12,borderThickness:0});
+        for(const group of highlights(run)){const atom=atoms[group.anchor];if(atom&&highlighted.get(group.anchor)===group.color)add(group.anchor,`${atom.elem} ${group.anchor}${group.indices.length>1?` · ${group.indices.length} átomos`:''}`,{screenOffset:{x:12,y:12},fontColor:'#172f40',backgroundColor:'white',backgroundOpacity:.9,fontSize:14,borderColor:group.color,borderThickness:1});}
+      }
+      state.labelKey=key;
+    }
+    // Move the retained 3Dmol sprite; setLabelStyle would recreate its texture.
+    for(const {index,label,position} of state.labelRecords){const a=atoms[index];position.x=a.x;position.y=a.y;position.z=a.z;label.sprite.position.set(a.x,a.y,a.z);}
+  }
   function drawFrame(fit=false){
     const run=currentTrajectory();if(!run?.xyz||!state.viewer||!state.model)return;const xyz=run.xyz,frame=xyz.frames[state.frame];
-    const atoms=frame.coords.map((c,i)=>({elem:xyz.elements[i],x:c[0],y:c[1],z:c[2],serial:i,index:i,bonds:[],bondOrder:[]}));
+    const proximity=$('proximity-lines').checked,changedFrame=state.renderFrame!==frame;
+    let atoms=state.renderAtoms;
+    if(!atoms){
+      state.model.addAtoms(frame.coords.map((c,i)=>({elem:xyz.elements[i],x:c[0],y:c[1],z:c[2],serial:i,index:i,bonds:[],bondOrder:[]})));
+      // addAtoms clones its inputs; retain the model's own atom references.
+      atoms=state.renderAtoms=state.model.selectedAtoms({});
+      state.model.setClickable({},true,atom=>selectTrajectoryAtom(atom.serial));
+    }
     // Display-only proximity graph, recomputed from this frame. No metal bonds,
     // bond orders, or connectivity claims are imported from the XYZ format.
-    if($('proximity-lines').checked){const radii={H:.31,B:.84,C:.76,N:.71,O:.66,F:.57,P:1.07,S:1.05,Cl:1.02,Br:1.2,I:1.39};
-      for(let a=0;a<atoms.length;a++)for(let b=a+1;b<atoms.length;b++){const ra=radii[atoms[a].elem],rb=radii[atoms[b].elem];if(!ra||!rb)continue;const d=Math.hypot(...frame.coords[a].map((x,j)=>x-frame.coords[b][j]));if(d>.35&&d<1.2*(ra+rb)){atoms[a].bonds.push(b);atoms[a].bondOrder.push(1);atoms[b].bonds.push(a);atoms[b].bondOrder.push(1);}}
+    const modelKey=JSON.stringify([proximity,highlights(run),highlightSettings(run)]),restyle=state.styleKey!==modelKey;
+    if(changedFrame||restyle){
+      for(let i=0;i<atoms.length;i++){const a=atoms[i],c=frame.coords[i];a.x=c[0];a.y=c[1];a.z=c[2];a.bonds=[];a.bondOrder=[];}
+      if(proximity)for(const [a,b] of frameBonds(run,frame)){atoms[a].bonds.push(b);atoms[a].bondOrder.push(1);atoms[b].bonds.push(a);atoms[b].bondOrder.push(1);}
+      // Invalidate only the drawing cache. Preserve atom objects, styles and
+      // callbacks; 3Dmol also resets hit-test geometry here for the new frame.
+      state.model.setStyle({}, {}, true);
     }
-    state.model.removeAtoms(state.model.selectedAtoms({}));state.model.addAtoms(atoms);
-    state.model.setStyle({},{sphere:{radius:.37}});
-    for(const element of new Set(xyz.elements)){const color=elementColors[element]||'#8a8990',style={sphere:{radius:elementRadii[element]||.42,color}};if($('proximity-lines').checked)style.stick={radius:.075,color};state.model.setStyle({elem:element},style);}
-    if(isWaterCage(xyz))state.model.setStyle({elem:'C'},$('proximity-lines').checked?{stick:{radius:.035,color:'#8c999e'},sphere:{radius:.075,color:'#8c999e'}}:{sphere:{radius:.075,color:'#8c999e'}});
-    const highlighted=drawHighlights(run,atoms);
-    state.viewer.removeAllLabels();
-    if($('atom-labels').checked)atoms.forEach((a,i)=>state.viewer.addLabel(`${a.elem} ${i}`,{position:a,fontColor:'#17313e',backgroundColor:'white',backgroundOpacity:.7,fontSize:highlighted.has(i)?14:11,borderThickness:highlighted.has(i)?1:0,borderColor:highlighted.get(i)||'#17313e',inFront:true}));
-    else if(run.reference&&run.key.includes('_longo')&&atoms[25]?.elem==='O')state.viewer.addLabel('O 25',{position:atoms[25],fontColor:'#9c382c',backgroundColor:'white',backgroundOpacity:.85,fontSize:12,borderThickness:0,inFront:true});
-    if(!$('atom-labels').checked)for(const group of highlights(run)){const atom=atoms[group.anchor];if(atom&&highlighted.get(group.anchor)===group.color)state.viewer.addLabel(`${atom.elem} ${group.anchor}${group.indices.length>1?` · ${group.indices.length} átomos`:''}`,{position:atom,screenOffset:{x:12,y:12},fontColor:'#172f40',backgroundColor:'white',backgroundOpacity:.9,fontSize:14,borderColor:group.color,borderThickness:1,inFront:true});}
+    if(restyle){
+      state.model.setStyle({},{sphere:{radius:.37}});
+      for(const element of new Set(xyz.elements)){const color=elementColors[element]||'#8a8990',style={sphere:{radius:elementRadii[element]||.42,color}};if(proximity)style.stick={radius:.075,color};state.model.setStyle({elem:element},style);}
+      if(isWaterCage(xyz))state.model.setStyle({elem:'C'},proximity?{stick:{radius:.035,color:'#8c999e'},sphere:{radius:.075,color:'#8c999e'}}:{sphere:{radius:.075,color:'#8c999e'}});
+      drawHighlights(run,atoms);state.styleKey=modelKey;
+    }
+    state.renderFrame=frame;
+    drawAtomLabels(run,atoms,highlightColors(run));
     drawContactSuggestions(run,frame);
-    state.viewer.setClickable({},true,atom=>selectTrajectoryAtom(atom.serial));renderAtomInfo();
+    renderAtomInfo();
     if(fit)resetView();else state.viewer.render();
     ensureTrajectoryReadouts();const timeline=physicalTimeValues(frame.time),frameLabel=$('frame-time').querySelector('.frame-index'),timeLabel=$('frame-time').querySelector('.frame-time-value');
     $('frame-slider').value=state.frame;$('frame-number').value=state.frame+1;$('previous-frame').disabled=state.frame===0;$('next-frame').disabled=state.frame===xyz.frames.length-1;frameLabel.textContent=`Quadro ${state.frame+1}/${xyz.frames.length}`;timeLabel.textContent=frame.time===null||frame.time===undefined?'tempo não informado':timeline.fs;

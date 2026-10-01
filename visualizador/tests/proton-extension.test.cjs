@@ -70,5 +70,6 @@ test('main and short proton presets remain distinct and the new manifest uses lo
  const html=read('visualizador/index.html');
  assert.match(html,/<option value="proton_shared">[^<]*10 ps<\/option>/);
  assert.match(html,/<optgroup label="Opcionais e referências">\s*<option value="proton_shared_short">[^<]*2 ps<\/option>/);
- assert.match(html,/examples\.js\?v=20261001-longproton1/);assert.match(html,/app\.js\?v=20261001-longproton1/);
+ assert.match(html,/examples\.js\?v=20261001-longproton1/);assert.match(html,/app\.js\?v=20261001-performance1/);
+ assert.match(html,/geometry\.js\?v=20261001-performance1/);assert.match(html,/vendor\/3Dmol-min\.js\?v=20261001-performance1/);
 });

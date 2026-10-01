@@ -19,6 +19,43 @@
   const clamp=(value,min,max)=>Math.max(min,Math.min(max,value));
   const element=e=>String(e??'').trim().replace(/^([A-Za-z])[A-Za-z]*/,(_,first)=>first+String(e??'').trim().slice(1).toLowerCase());
 
+  const validPoint=p=>p&&Number.isFinite(p.x)&&Number.isFinite(p.y)&&Number.isFinite(p.z);
+  const pointsFor=(elements,coords)=>Array.from({length:elements.length},(_,i)=>point(coords[i]));
+  const pointDistance=(a,b)=>Math.hypot(a.x-b.x,a.y-b.y,a.z-b.z);
+
+  /* Broad-phase neighbor search only: the original distance/angle comparisons
+     below remain authoritative. Candidate indices are sorted to retain the
+     original donor/hydrogen/acceptor and atom-pair iteration order. */
+  function spatialNeighbors(points,indices,radius){
+    const valid=indices.filter(i=>validPoint(points[i]));
+    // Tiny sets do not benefit from hashing. Unbounded/extreme coordinates use
+    // the exact scan, avoiding unsafe integer cells or enormous query loops.
+    if(valid.length<32||!(radius>0)||!Number.isFinite(radius))return p=>validPoint(p)?valid:[];
+    const cellSize=radius,cells=new Map(),key=(x,y,z)=>x+','+y+','+z;
+    for(const i of valid){
+      const p=points[i],cell=[Math.floor(p.x/cellSize),Math.floor(p.y/cellSize),Math.floor(p.z/cellSize)];
+      if(!cell.every(value=>Number.isSafeInteger(value)&&Math.abs(value)<2**48))return p=>validPoint(p)?valid:[];
+      const name=key(...cell),bucket=cells.get(name);if(bucket)bucket.push(i);else cells.set(name,[i]);
+    }
+    return p=>{
+      if(!validPoint(p))return [];
+      const ranges=[];
+      for(const value of [p.x,p.y,p.z]){
+        // Pad the query bounds conservatively for floating-point cancellation
+        // and division at exact cutoff/cell boundaries, then apply exact tests.
+        const margin=8*Number.EPSILON*Math.max(Math.abs(value),radius);
+        const lo=Math.floor((value-radius-margin)/cellSize),hi=Math.floor((value+radius+margin)/cellSize);
+        if(!Number.isSafeInteger(lo)||!Number.isSafeInteger(hi)||hi-lo>4)return valid;
+        ranges.push([lo,hi]);
+      }
+      const found=[];
+      for(let x=ranges[0][0];x<=ranges[0][1];x++)for(let y=ranges[1][0];y<=ranges[1][1];y++)for(let z=ranges[2][0];z<=ranges[2][1];z++){
+        const bucket=cells.get(key(x,y,z));if(bucket)for(const index of bucket)found.push(index);
+      }
+      return found.sort((a,b)=>a-b);
+    };
+  }
+
   function distance(a,b){
     const pa=point(a),pb=point(b);
     if(!finitePoint([pa.x,pa.y,pa.z])||!finitePoint([pb.x,pb.y,pb.z]))return null;
@@ -56,13 +93,27 @@
   }
 
   function inferCovalentBonds(elements,coords,options={}){
-    const els=elements.map(element),scale=Number.isFinite(options.scale)?options.scale:1.20,min=Number.isFinite(options.minimum)?options.minimum:.35,pairs=[];
-    for(let a=0;a<els.length;a++)for(let b=a+1;b<els.length;b++){
+    const els=elements.map(element),points=pointsFor(els,coords);
+    return covalentBonds(els,points,options);
+  }
+
+  function covalentBonds(els,points,options){
+    const scale=Number.isFinite(options.scale)?options.scale:1.20,min=Number.isFinite(options.minimum)?options.minimum:.35,pairs=[],indices=[],radii=els.map(e=>COVALENT_RADII[e]);
+    let maxRadius=0,positiveRadii=true;
+    for(let i=0;i<els.length;i++){
       // The viewer never infers a metal bond from XYZ. This graph is only for
       // finding a D-H arm and excluding a covalent D-A pair in the H-bond heuristic.
-      if(METALS.has(els[a])||METALS.has(els[b]))continue;
-      const ra=COVALENT_RADII[els[a]],rb=COVALENT_RADII[els[b]],d=distance(coords[a],coords[b]);
-      if(ra&&rb&&d!==null&&d>min&&d<scale*(ra+rb))pairs.push([a,b]);
+      if(METALS.has(els[i])||!radii[i]||!validPoint(points[i]))continue;
+      indices.push(i);
+      if(typeof radii[i]!=='number'||!Number.isFinite(radii[i])||radii[i]<=0)positiveRadii=false;
+      else maxRadius=Math.max(maxRadius,radii[i]);
+    }
+    if(positiveRadii&&scale<=0)return pairs;
+    const nearby=spatialNeighbors(points,indices,positiveRadii?scale*(2*maxRadius):NaN);
+    for(const a of indices)for(const b of nearby(points[a])){
+      if(b<=a)continue;
+      const d=pointDistance(points[a],points[b]);
+      if(d>min&&d<scale*(radii[a]+radii[b]))pairs.push([a,b]);
     }
     return pairs;
   }
@@ -74,17 +125,21 @@
   }
 
   function hydrogenBonds(elements,coords,options={}){
-    const els=elements.map(element),hMax=Number.isFinite(options.hydrogenAcceptorCutoff)?options.hydrogenAcceptorCutoff:2.5,dMax=Number.isFinite(options.donorAcceptorCutoff)?options.donorAcceptorCutoff:3.5,minAngle=Number.isFinite(options.minimumAngle)?options.minimumAngle:150,bonds=Array.isArray(options.bonds)?normaliseBonds(options.bonds):inferCovalentBonds(els,coords,options),neighbors=adjacency(els.length,bonds),results=[];
+    const els=elements.map(element),points=pointsFor(els,coords),hMax=Number.isFinite(options.hydrogenAcceptorCutoff)?options.hydrogenAcceptorCutoff:2.5,dMax=Number.isFinite(options.donorAcceptorCutoff)?options.donorAcceptorCutoff:3.5,minAngle=Number.isFinite(options.minimumAngle)?options.minimumAngle:150,bonds=Array.isArray(options.bonds)?normaliseBonds(options.bonds):covalentBonds(els,points,options),neighbors=adjacency(els.length,bonds),results=[];
+    if(hMax<0||dMax<0)return results;
+    const acceptors=[];for(let i=0;i<els.length;i++)if(ACCEPTORS.has(els[i]))acceptors.push(i);
+    const nearby=spatialNeighbors(points,acceptors,hMax);
     for(let donor=0;donor<els.length;donor++){
-      if(!ACCEPTORS.has(els[donor]))continue;
+      if(!ACCEPTORS.has(els[donor])||!validPoint(points[donor]))continue;
       for(const hydrogen of neighbors[donor]){
-        if(els[hydrogen]!=='H')continue;
-        for(let acceptor=0;acceptor<els.length;acceptor++){
-          if(!ACCEPTORS.has(els[acceptor])||acceptor===donor||acceptor===hydrogen)continue;
+        if(els[hydrogen]!=='H'||!validPoint(points[hydrogen]))continue;
+        for(const acceptor of nearby(points[hydrogen])){
+          if(acceptor===donor||acceptor===hydrogen)continue;
           if(neighbors[donor].has(acceptor)||neighbors[hydrogen].has(acceptor))continue;
-          const hA=distance(coords[hydrogen],coords[acceptor]),dA=distance(coords[donor],coords[acceptor]),dha=angle(coords[donor],coords[hydrogen],coords[acceptor]);
-          if(hA===null||dA===null||dha===null)continue;
-          if(hA<=hMax&&dA<=dMax&&dha>=minAngle)results.push({donor,hydrogen,acceptor,hydrogenAcceptor:hA,donorAcceptor:dA,angle:dha});
+          const hA=pointDistance(points[hydrogen],points[acceptor]);if(hA>hMax)continue;
+          const dA=pointDistance(points[donor],points[acceptor]);if(dA>dMax)continue;
+          const dha=angle(points[donor],points[hydrogen],points[acceptor]);
+          if(dha!==null&&dha>=minAngle)results.push({donor,hydrogen,acceptor,hydrogenAcceptor:hA,donorAcceptor:dA,angle:dha});
         }
       }
     }
@@ -92,12 +147,13 @@
   }
 
   function coordinationContacts(elements,coords,options={}){
-    const els=elements.map(element),cutoff=clamp(Number.isFinite(options.cutoff)?options.cutoff:2.6,2,3.5),results=[];
+    const els=elements.map(element),points=pointsFor(els,coords),cutoff=clamp(Number.isFinite(options.cutoff)?options.cutoff:2.6,2,3.5),results=[],acceptors=[];
+    for(let i=0;i<els.length;i++)if(ACCEPTORS.has(els[i]))acceptors.push(i);
+    const nearby=spatialNeighbors(points,acceptors,cutoff);
     for(let metal=0;metal<els.length;metal++){
-      if(!METALS.has(els[metal]))continue;
-      for(let ligand=0;ligand<els.length;ligand++){
-        if(!ACCEPTORS.has(els[ligand]))continue;
-        const d=distance(coords[metal],coords[ligand]);if(d!==null&&d>1e-12&&d<=cutoff)results.push({metal,ligand,distance:d,cutoff});
+      if(!METALS.has(els[metal])||!validPoint(points[metal]))continue;
+      for(const ligand of nearby(points[metal])){
+        const d=pointDistance(points[metal],points[ligand]);if(d>1e-12&&d<=cutoff)results.push({metal,ligand,distance:d,cutoff});
       }
     }
     return results;

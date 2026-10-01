@@ -69,6 +69,10 @@ Os testes automatizados conferem parsing, unidades, falhas, reinícios, programa
 
 ## Reprodução e novos exemplos
 
+Os índices são desenhados em lote e seus rótulos acompanham os átomos sem recriar texturas a cada quadro. Desligar os índices ou limpar a sessão libera esses recursos. O modelo molecular mantém os mesmos objetos de átomos, atualizando posições e a conectividade geométrica de cada quadro. As buscas de contatos usam vizinhanças espaciais; os cortes, resultados e ordem das medidas permanecem iguais aos da busca completa.
+
+Os traços de contatos são agrupados por tipo, com limites calculados uma vez por lote. O bundle local de 3Dmol 2.5.5 contém correções de descarte e esse método de lote, documentados em [vendor/PATCHES.md](vendor/PATCHES.md). Ao atualizar a biblioteca, preserve ou revalide essas correções. Os testes de ciclo de vida conferem o descarte real dos buffers; os de geometria comparam os resultados com a implementação de referência. Para medir as buscas separadamente: `node visualizador/tests/geometry-benchmark.cjs 1000`, a partir da raiz do repositório.
+
 As referências principais do dímero neutro e do etanol NVE têm **5 ps**; a do próton compartilhado tem **10 ps**. Cada uma conserva o trecho original e acrescenta uma continuação por restart, com todos os quadros disponíveis. As referências curtas permanecem em **Opcionais e referências**; as comparações de timestep e de termostato continuam usando seus dados originais. O maior tempo de simulação e a duração da reprodução são controles diferentes.
 
 O tempo físico usa campos estáveis em fs, ps e segundos, com precisão fixa durante cada trajetória. A reprodução acompanha o relógio do navegador e começa com um ciclo de **60 s a 1×**, independentemente do número de quadros. A nota sob os controles informa a duração efetiva: 60 s a 0,5× produzem um ciclo de 120 s; a 2×, de 30 s. Mudar a duração ou a velocidade durante a reprodução preserva a posição atual. Isso não prolonga a simulação nem altera os tempos do XYZ. O navegador pode pular quadros de exibição quando o desenho demora; as setas permitem inspeção individual dos quadros carregados.
