@@ -8,7 +8,7 @@
 
 ## 1. Comece com as moléculas afastadas
 
-No quadro inicial, todas as distâncias **Zn–O são 3,1 Å**. Os dois N da en estão a **6,50 e 6,60 Å** do Zn. Nenhuma água começa dentro do corte geométrico de coordenação de 2,6 Å do visualizador.
+Na atividade da parede, o complexo já tinha ligantes coordenados. Aqui vamos observar a formação da primeira camada a partir de águas afastadas e, depois, o encontro com a en. No quadro inicial, todas as distâncias **Zn–O são 3,1 Å**. Os dois N da en estão a **6,50 e 6,60 Å** do Zn. Nenhuma água começa dentro do corte geométrico de coordenação de 2,6 Å do visualizador.
 
 Essa é uma montagem deliberadamente fora do equilíbrio. As águas já interagem com o íon a essa distância, mas a primeira camada ainda não está formada. A en começa em uma conformação otimizada isoladamente; não há restrições Zn–N ou Zn–O que determinem quem deve se coordenar.
 

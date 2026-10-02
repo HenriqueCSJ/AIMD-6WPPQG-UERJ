@@ -77,11 +77,11 @@ function preset(key,{staticOnly=false,frames,energyRows}={}){
   return {config:{runs:[key]},runs:[run]};
 }
 
-test('the trajectory tab is first and a no-query laboratory opens water in trajectory mode',async()=>{
-  const ui=session({search:'',inspectState:true});
+test('the trajectory tab is first and a no-query laboratory opens isolated water in trajectory mode',async()=>{
+  const ui=session({search:'',inspectState:true,presets:{water_single:true}});
   assert.ok(ui.html.indexOf('id="tab-trajectory"')<ui.html.indexOf('id="tab-energy"'));
-  assert.equal(ui.requests.length,1);assert.equal(ui.requests[0].key,'water');
-  const load=ui.requests[0].promise;ui.requests[0].resolve(preset('water'));await load;await new Promise(setImmediate);
+  assert.equal(ui.requests.length,1);assert.equal(ui.requests[0].key,'water_single');
+  const load=ui.requests[0].promise;ui.requests[0].resolve(preset('water_single'));await load;await new Promise(setImmediate);
   assert.equal(ui.state.tab,'trajectory');assert.equal(ui.nodes['trajectory-run'].options.length,1);
 });
 

@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="app.css?v=20261001-temperature1">
   <script defer src="orca-parser.js?v=20260929-chemistry2"></script><script defer src="charts.js?v=20261001-sequence1"></script><script defer src="geometry.js?v=20261001-performance1"></script>
   <script defer src="highlight-selection.js?v=20261001-temperature1"></script>
-  <script defer src="vendor/3Dmol-min.js?v=20261001-performance1"></script><script defer src="examples.js?v=20261001-sequence1"></script><script defer src="example-loader.js?v=20260929-loading1"></script><script defer src="app.js?v=20261001-sequence1"></script>
+  <script defer src="vendor/3Dmol-min.js?v=20261001-performance1"></script><script defer src="examples.js?v=20261001-sequence1"></script><script defer src="example-loader.js?v=20260929-loading1"></script><script defer src="app.js?v=20261002-water1"></script>
 </head>
 <body>
 <a class="skip" href="#main">Ir para o conteúdo</a>
@@ -36,7 +36,8 @@
       <label class="sr-only" for="example-select">Exemplo do minicurso</label>
       <select id="example-select">
         <optgroup label="Durante a aula · cinco blocos">
-          <option value="water" selected>01 · Dímero de água: ligação H · 5 ps</option>
+          <option value="water_single" selected>01a · Água isolada: movimento e energia · 20 fs</option>
+          <option value="water">01b · Dímero de água: ligação H · 5 ps</option>
           <option value="ethanol">02a · Etanol: NVE · 5 ps</option>
           <option value="timestep">02b · Timestep: instabilidade e correção</option>
           <option value="thermostat">03 · Etanol: aquecer e resfriar</option>
@@ -59,14 +60,13 @@
           <option value="thermostat_compare">Etanol · NVE × termostato</option>
           <option value="complex_short">Parede · Referência curta</option>
           <option value="water_dft">DFT · Dímero já calculado</option>
-          <option value="water_single">DFT · Água isolada</option>
           <option value="solvent_single">DFT · Água isolada: vácuo × CPCM</option>
           <option value="aluminum">Al³⁺/amônia · Referência com ajuste SCC</option>
         </optgroup>
       </select>
       <div class="example-actions"><button class="button secondary" id="example-button" type="button">Abrir trajetória <span aria-hidden="true">→</span></button><button class="button" id="example-energy-button" type="button">Comparar energias</button></div>
       <p id="example-load-status" class="muted small" role="status" aria-live="polite" hidden></p><button class="button small-button" id="example-retry" type="button" hidden>Tentar novamente</button>
-      <p class="muted small">Siga “Durante a aula”. Os opcionais ficam para explorar depois; todos os exemplos usam resultados reais já calculados.</p>
+      <p class="muted small">Comece pela água isolada e siga “Durante a aula”. Explore os opcionais depois, no seu ritmo.</p>
     </div>
   </section>
 

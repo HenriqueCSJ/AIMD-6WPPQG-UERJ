@@ -8,13 +8,11 @@
 
 ## 1. Escolha a medida certa
 
-Uma animação pode esconder a diferença entre a molécula inteira girar e uma rotação **interna**. Para o H da hidroxila, acompanhe o diedro **C 0–C 1–O 2–H 8**, em graus. Ele não muda se girarmos apenas a câmera ou a molécula como um corpo rígido.
+Na água, comprimentos e ângulos descrevem os movimentos internos. O etanol acrescenta uma rotação em torno de C–O; para distingui-la do movimento da molécula inteira, precisamos de um diedro. Uma animação pode esconder a diferença entre a molécula inteira girar e uma rotação **interna**. Para o H da hidroxila, acompanhe o diedro **C 0–C 1–O 2–H 8**, em graus. Ele não muda se girarmos apenas a câmera ou a molécula como um corpo rígido.
 
 Vamos começar com uma trajetória curta, sem termostato: ela será o controle para o timestep e para as etapas de temperatura. `Initvel 300_K` inicializa velocidades; não mantém o sistema a 300 K.
 
-O laboratório também oferece **5 ps de NVE**, por continuação dos 0,5 ps originais a partir do checkpoint, com as mesmas posições, velocidades, timestep de 0,5 fs e ausência de termostato. A referência ampliada preserva **10001 quadros originais**. O input abaixo continua produzindo os 0,5 ps do controle; as comparações de timestep e termostato conservam essa série curta para manter os dados pareados.
-
-A continuação levou **136,1 s nesta máquina**, além dos 15,8 s originais. Nos 5 ps completos, o diedro C 0–C 1–O 2–H 8 varia de **−79,5° a −28,0°**, sem troca de região conformacional observada. A amplitude de Etotal é **0,549 kJ/mol**.
+O input produz **0,5 ps** para as comparações de timestep e termostato. Abra depois os **5 ps** para investigar como a janela de observação muda o que conseguimos encontrar, mantendo a condição NVE.
 
 ## 2. Execute
 
@@ -88,7 +86,15 @@ As faixas numéricas abaixo descrevem o **controle original de 0,5 ps**. Examine
 
 **Interpretação:** uma molécula pode vibrar e permanecer na mesma região conformacional durante toda uma trajetória curta. Ausência de troca em 0,5 ps não mede a barreira nem prova que outra conformação seja inacessível. A faixa angular, o tempo passado em cada região e a integridade das ligações respondem a perguntas diferentes.
 
-**Por que XTB2 aqui?** O custo baixo permite repetir e prolongar o cálculo durante a aula. É GFN2-xTB, um modelo semiempírico de estrutura eletrônica; não devemos interpretar sua energia como uma energia DFT.
+O protocolo usa GFN2-xTB, um modelo semiempírico de estrutura eletrônica. Com esse controle em mãos, vamos alterar somente o timestep para investigar a qualidade da integração; depois, mudaremos o programa de temperatura para acompanhar outras orientações.
+
+<details markdown="1"><summary>Observar por mais tempo: continuação de 0,5 até 5 ps</summary>
+
+O laboratório também oferece **5 ps de NVE**, por continuação dos 0,5 ps originais a partir do checkpoint, com as mesmas posições, velocidades, timestep de 0,5 fs e ausência de termostato. A referência ampliada contém **10001 quadros**. O input da atividade produz os 0,5 ps do controle; as comparações de timestep e termostato conservam essa série curta para manter os dados pareados.
+
+A continuação levou **136,1 s nesta máquina**, além dos 15,8 s originais. Nos 5 ps completos, o diedro C 0–C 1–O 2–H 8 varia de **−79,5° a −28,0°**, sem troca de região conformacional observada. A amplitude de Etotal é **0,549 kJ/mol**.
+
+</details>
 
 ## Resultados e manual
 

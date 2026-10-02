@@ -2,23 +2,23 @@
 
 [← Voltar à atividade](README.md) · [Abrir o aplicativo](../../visualizador/index.html)
 
-Esta página reúne as explicações extensas, preparações e **resultados originais de referência**. Os inputs completos que os produziram permanecem em cada pasta `resultados`. A atividade principal usa inputs concisos; os comentários foram reduzidos. No exercício 7, as medidas passam para o aplicativo e `Walls` substitui o alias antigo `Cell`.
+A água isolada oferece uma comparação simples do campo de reação: as mesmas três posições iniciais evoluem no vácuo ou com CPCM. Use os resultados abaixo para distinguir a alteração das forças da adição de moléculas explícitas.
 
 ## Entenda as escolhas
 
 O solvente é representado como um meio contínuo que modifica a energia e as forças. **CPCM não é termostato e não é parede de confinamento.** Não esperamos uma diferença visual necessariamente grande em apenas 20 fs. A diferença entre energias instantâneas dos dois cálculos não é uma energia livre de solvatação.
 
-Abra o [Laboratório de trajetórias](../../visualizador/index.html) e carregue o `*-md-ener.csv`, o `.out` e o `*-traj.xyz` deste cálculo. O aplicativo prepara os gráficos de energia/temperatura e a animação. Na aba **Distâncias**, escolha dois átomos; a medida é calculada do XYZ. O CSV original usa fs, Hartree e K; a conversão de unidades fica explícita na tela.
+Abra o [Laboratório de trajetórias](../../visualizador/index.html) e carregue o `*-md-ener.csv`, o `.out` e o `*-traj.xyz` deste cálculo. O aplicativo prepara os gráficos de energia/temperatura e a animação. Na aba **Geometria**, escolha dois átomos; a medida é calculada do XYZ. O CSV original usa fs, Hartree e K; a conversão de unidades fica explícita na tela.
 
 **Controle sem CPCM:** [CSV do exercício 1](../1-agua-dft/resultados/agua_dft/agua_dft-md-ener.csv).
 
 ## Resultados de referência
 
-Estes arquivos são saídas reais, preservadas sem suavização dos dados. Os tempos incluem a inicialização do programa e correspondem a uma execução por caso em um Intel Core Ultra 9 185H; não são uma promessa para todos os computadores. Se seu cálculo atrasar, use a referência e identifique-a como tal.
+Os tempos abaixo incluem a inicialização do ORCA e foram medidos em um Intel Core Ultra 9 185H. Use-os para organizar a reprodução; o desempenho varia entre computadores.
 
 ### agua_cpcm
 
-Término normal: **sim**. Tempo medido: **77.66 s**, com PAL8.
+Tempo de execução: **77.66 s**, com PAL8.
 
 - [Saída completa](resultados/agua_cpcm/agua_cpcm.out)
 - [Energias e temperatura — CSV](resultados/agua_cpcm/agua_cpcm-md-ener.csv)

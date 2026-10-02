@@ -14,4 +14,4 @@ O gap inicial foi aproximadamente 0,128 eV; as ocupações HOMO/LUMO, 1,844/0,15
 
 O controle com 0,5 fs repete os mesmos 2 ps, semente e modelo. As duas trajetórias mostram a mesma transferência com recrossamentos iniciais e separação dos produtos. Não são réplicas estatísticas independentes, e os tempos de evento não representam constantes cinéticas.
 
-Não foi adicionado ALPB(water): fazê-lo definiria outra comparação química. Também não adicionamos parede para manter artificialmente os produtos próximos. Os logs SCC completos estão preservados no diretório local de preparação; os outputs, estruturas, energias e análises usados na aula estão nos links da atividade.
+Neste agregado isolado, os produtos podem se afastar livremente. Acrescentar ALPB ou parede mudaria as condições químicas; para estudar apenas a convergência SCC, mantenha o modelo e ajuste o controle eletrônico descrito acima. Os outputs e medidas estão nos links da atividade.

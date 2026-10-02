@@ -13,7 +13,8 @@ import zipfile
 ROOT = Path(__file__).resolve().parents[1]
 EX = ROOT / 'exercicios'
 INLINE = {
-    '1-agua-dft': {'agua_dft': 'agua', 'preparar_agua': 'agua_inicial',
+    '1-agua-dft': {'agua_xtb2_nve': 'agua', 'agua_xtb2_csvr': 'agua',
+                   'agua_dft': 'agua', 'preparar_agua': 'agua_inicial',
                    'dimero_b97': 'dimero_b97', 'dimero_xtb2_2ps': 'dimero_b97'},
     '2-solvente-implicito': {'agua_cpcm': 'agua', 'dimero_b97_cpcm': 'dimero_b97'},
     '3-xtb2-etanol': {'etanol_nve': 'etanol', 'preparar_etanol': 'etanol_inicial'},

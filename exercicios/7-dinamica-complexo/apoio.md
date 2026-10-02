@@ -2,13 +2,13 @@
 
 [← Voltar à atividade](README.md) · [Abrir o aplicativo](../../visualizador/index.html)
 
-Esta página reúne as explicações extensas, preparações e **resultados originais de referência**. Os inputs completos que os produziram permanecem em cada pasta `resultados`. A atividade principal usa inputs concisos; os comentários foram reduzidos. No exercício 7, as medidas passam para o aplicativo e `Walls` substitui o alias antigo `Cell`.
+Estes controles de 0,5 ps mostram como ler o relógio de um restart e medir coordenação e afastamento. Compare-os com a janela de 2 ps da atividade principal para investigar por que a duração da observação importa ao avaliar a parede.
 
 ## Entenda as escolhas
 
-A contagem de átomos no ORCA começa em **zero**. Aqui Zn é o átomo 0; os N do ligante são 1 e 4. As primeiras águas têm O em 13, 16, 19 e 22; confira a lista completa no arquivo de índices. A parede de MD é uma força repulsiva suave fora da região definida por `Cell`, não uma caixa periódica. Se nenhum átomo atingir a fronteira, não haverá evidência de retenção pelo confinamento.
+A contagem de átomos no ORCA começa em **zero**. Aqui Zn é o átomo 0; os N do ligante são 1 e 4. As primeiras águas têm O em 13, 16, 19 e 22; confira a lista completa no arquivo de índices. A parede de MD é uma força repulsiva suave fora da região definida por `Walls` (a grafia `Cell` também aparece nos inputs dessas referências), não uma caixa periódica. Se nenhum átomo atingir a fronteira, não haverá evidência de retenção pelo confinamento.
 
-Abra o [Laboratório de trajetórias](../../visualizador/index.html) e carregue o `*-md-ener.csv`, o `.out` e o `*-traj.xyz` deste cálculo. O aplicativo prepara os gráficos de energia/temperatura e a animação. Na aba **Distâncias**, escolha dois átomos; a medida é calculada do XYZ. O CSV original usa fs, Hartree e K; a conversão de unidades fica explícita na tela.
+Abra o [Laboratório de trajetórias](../../visualizador/index.html) e carregue o `*-md-ener.csv`, o `.out` e o `*-traj.xyz` deste cálculo. O aplicativo prepara os gráficos de energia/temperatura e a animação. Na aba **Geometria**, escolha dois átomos; a medida é calculada do XYZ. O CSV original usa fs, Hartree e K; a conversão de unidades fica explícita na tela.
 
 [Índices dos átomos](estruturas/indices-atomos.txt) · [Geometria relaxada antes da preparação térmica](../6-complexo-solvator/resultados/relaxar_solvato/relaxar_solvato.xyz).
 
@@ -20,11 +20,11 @@ Abra o [Laboratório de trajetórias](../../visualizador/index.html) e carregue 
 
 ## Resultados de referência
 
-Estes arquivos são saídas reais, preservadas sem suavização dos dados. Os tempos incluem a inicialização do programa e correspondem a uma execução por caso em um Intel Core Ultra 9 185H; não são uma promessa para todos os computadores. Se seu cálculo atrasar, use a referência e identifique-a como tal.
+Os tempos abaixo incluem a inicialização do ORCA e foram medidos em um Intel Core Ultra 9 185H. Use-os para organizar a reprodução; o desempenho varia entre computadores.
 
 ### zn_parede
 
-Término normal: **sim**. Tempo medido: **26.12 s**, com PAL8.
+Tempo de execução: **26.12 s**, com PAL8.
 
 - [Saída completa](resultados/zn_parede/zn_parede.out)
 - [Energias e temperatura — CSV](resultados/zn_parede/zn_parede-md-ener.csv)
@@ -39,7 +39,7 @@ O CSV contém **1001 registros**, de **100 a 600 fs**, cobrindo **500 fs nesta e
 
 ### zn_sem_parede
 
-Término normal: **sim**. Tempo medido: **25.80 s**, com PAL8.
+Tempo de execução: **25.80 s**, com PAL8.
 
 - [Saída completa](resultados/zn_sem_parede/zn_sem_parede.out)
 - [Energias e temperatura — CSV](resultados/zn_sem_parede/zn_sem_parede-md-ener.csv)
@@ -94,7 +94,7 @@ end
 
 ### preparacao_termica
 
-Término normal: **sim**. Tempo medido: **6.24 s**, com PAL8.
+Tempo de execução: **6.24 s**, com PAL8.
 
 - [Saída completa](resultados/preparacao_termica/preparacao_termica.out)
 - [Energias e temperatura — CSV](resultados/preparacao_termica/preparacao_termica-md-ener.csv)

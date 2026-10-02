@@ -2,23 +2,23 @@
 
 [← Voltar à atividade](README.md) · [Abrir o aplicativo](../../visualizador/index.html)
 
-Esta página reúne as explicações extensas, preparações e **resultados originais de referência**. Os inputs completos que os produziram permanecem em cada pasta `resultados`. A atividade principal usa inputs concisos; os comentários foram reduzidos. No exercício 7, as medidas passam para o aplicativo e `Walls` substitui o alias antigo `Cell`.
+Compare os controles de 0,25 e 2 fs pela mesma duração física, 500 fs. A energia revela erros de integração mesmo quando o programa chega ao fim; o caso de 2,5 fs da atividade principal permite acompanhar a degradação até a falha.
 
 ## Entenda as escolhas
 
 O passo precisa resolver os movimentos mais rápidos, especialmente ligações envolvendo H. **Oscilação limitada e deriva sistemática são diferentes.** Um único valor final próximo do inicial pode esconder oscilações grandes; examine a série inteira. O CSV arredonda as energias, de modo que diferenças na última casa decimal exigem cuidado. Não usar um termostato para esconder a instabilidade.
 
-Abra o [Laboratório de trajetórias](../../visualizador/index.html) e carregue o `*-md-ener.csv`, o `.out` e o `*-traj.xyz` deste cálculo. O aplicativo prepara os gráficos de energia/temperatura e a animação. Na aba **Distâncias**, escolha dois átomos; a medida é calculada do XYZ. O CSV original usa fs, Hartree e K; a conversão de unidades fica explícita na tela.
+Abra o [Laboratório de trajetórias](../../visualizador/index.html) e carregue o `*-md-ener.csv`, o `.out` e o `*-traj.xyz` deste cálculo. O aplicativo prepara os gráficos de energia/temperatura e a animação. Na aba **Geometria**, escolha dois átomos; a medida é calculada do XYZ. O CSV original usa fs, Hartree e K; a conversão de unidades fica explícita na tela.
 
 **Controle reutilizado:** [Baixar input ORCA](../3-xtb2-etanol/inputs/etanol_nve.inp) · [Baixar geometria inicial (.xyz)](../3-xtb2-etanol/estruturas/etanol.xyz) (opcional para executar; as coordenadas já estão no input), [CSV NVE](../3-xtb2-etanol/resultados/etanol_nve/etanol_nve-md-ener.csv) e [trajetória NVE](../3-xtb2-etanol/resultados/etanol_nve/etanol_nve-traj.xyz). A geometria inicial é idêntica à deste exercício.
 
 ## Resultados de referência
 
-Estes arquivos são saídas reais, preservadas sem suavização dos dados. Os tempos incluem a inicialização do programa e correspondem a uma execução por caso em um Intel Core Ultra 9 185H; não são uma promessa para todos os computadores. Se seu cálculo atrasar, use a referência e identifique-a como tal.
+Os tempos abaixo incluem a inicialização do ORCA e foram medidos em um Intel Core Ultra 9 185H. Use-os para organizar a reprodução; o desempenho varia entre computadores.
 
 ### etanol_dt025
 
-Término normal: **sim**. Tempo medido: **44.87 s**, com PAL8.
+Tempo de execução: **44.87 s**, com PAL8.
 
 - [Saída completa](resultados/etanol_dt025/etanol_dt025.out)
 - [Energias e temperatura — CSV](resultados/etanol_dt025/etanol_dt025-md-ener.csv)
@@ -32,7 +32,7 @@ O CSV contém **2001 registros**, de **0 a 500 fs**, cobrindo **500 fs nesta eta
 
 ### etanol_dt200
 
-Término normal: **sim**. Tempo medido: **5.63 s**, com PAL8.
+Tempo de execução: **5.63 s**, com PAL8.
 
 - [Saída completa](resultados/etanol_dt200/etanol_dt200.out)
 - [Energias e temperatura — CSV](resultados/etanol_dt200/etanol_dt200-md-ener.csv)

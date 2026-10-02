@@ -8,6 +8,8 @@
 
 ## 1. Programe uma história contínua
 
+Na água, distinguimos velocidades iniciais e troca de energia com o banho. No etanol, vamos usar essa troca para explorar uma rotação interna: acompanharemos o diedro C–C–O–H ao aquecer e resfriar. O timestep permanece em 0,5 fs, como na correção do bloco anterior.
+
 O ORCA executa o `%md` **linha por linha**. Um `Run` avança a trajetória com as condições correntes; o próximo continua das posições e velocidades deixadas pelo anterior. Aqui **não repetimos `Initvel`**: não sorteamos uma nova trajetória a cada etapa.
 
 - **0–0,5 ps:** alvo de 300 K, início da termalização.
@@ -97,7 +99,7 @@ Espere o prompt voltar antes de iniciar outro cálculo. Os arquivos de resultado
 
 **O que não medimos:** barreira de rotação, populações de equilíbrio ou cinética a 300 K. O aquecimento é uma intervenção deliberada para ampliar o movimento na aula; esta única trajetória não demonstra que ele foi necessário ou suficiente para cada transição.
 
-O cálculo levou **150,1 s** com PAL8 nesta máquina. Se atrasar, use a referência e mantenha a discussão. O [controle anterior NVE × CSVR a 300 K](../../visualizador/index.html?exemplo=thermostat_compare) continua disponível para isolar o efeito de ligar um banho com a mesma duração.
+O cálculo levou **150,1 s** com PAL8 nesta máquina. Se atrasar, use a referência e mantenha a discussão. Para isolar a presença do banho, retome a [comparação pareada NVE × CSVR a 300 K](../../visualizador/index.html?exemplo=thermostat_compare). Aqui a pergunta é outra: como a orientação interna responde a um programa de temperatura ao longo do tempo?
 
 ## Resultados e manual
 

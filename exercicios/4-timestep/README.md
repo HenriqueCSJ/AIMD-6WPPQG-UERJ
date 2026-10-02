@@ -8,7 +8,7 @@
 
 ## 1. Aumente o passo — de propósito
 
-Use **2,5 fs**, mantendo a geometria inicial, a semente e o alvo de **500 fs = 5 × 10⁻¹³ s**. A referência registra **131 quadros, até 325 fs**, e termina com erro. Não chegamos ao alvo.
+O controle anterior mostrou como a molécula se move com timestep de 0,5 fs. Agora teste a integração: use **2,5 fs**, mantendo a geometria inicial, a semente e o alvo de **500 fs = 5 × 10⁻¹³ s**. A referência registra **131 quadros, até 325 fs**, e termina com erro. Não chegamos ao alvo.
 
 [Baixar pacote](aula-etanol_instavel.zip) · [Baixar input ORCA](inputs/etanol_instavel.inp) · [Baixar geometria inicial (.xyz)](estruturas/etanol.xyz) (opcional para executar; as coordenadas já estão no input)
 
@@ -146,7 +146,7 @@ Na correção, o ORCA termina normalmente e a amplitude máximo–mínimo de E �
 
 [Comparar 0,25 / 0,5 / 2 fs](../../visualizador/index.html?exemplo=timestep_accuracy). Todos completaram 500 fs, mas o passo de 2 fs tem amplitude de energia de aproximadamente 6,63 kJ/mol. Há erro relevante mesmo sem abortar.
 
-O [exemplo anterior de 5 fs](../../visualizador/index.html?exemplo=timestep_abrupt) fica como apoio: ele falha em apenas 15 fs. A nova atividade usa 2,5 fs para permitir observar a degradação durante mais tempo.
+O [teste de 5 fs](../../visualizador/index.html?exemplo=timestep_abrupt) falha em apenas 15 fs. Compare com 2,5 fs: neste último caso, há mais tempo para reconhecer a degradação da energia antes do erro final.
 
 </details>
 

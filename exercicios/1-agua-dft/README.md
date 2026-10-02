@@ -1,22 +1,138 @@
-# 01 · Uma ligação H em movimento
+# 01 · Água: da molécula à ligação H
 
 [← Percurso](../README.md) · [Laboratório de trajetórias](../../visualizador/index.html)
 
-**25 min · duas águas · 6 átomos · XTB2 · execução da aula: 2 ps · referência ampliada: 5 ps**
+**25 min · 01a: água isolada → 01b: dímero · observe a referência DFT e execute com XTB2**
 
-> **Pergunta:** As duas águas permanecem doadora e aceptora durante toda a dinâmica?
+Começamos por uma molécula de água. Com três átomos, podemos acompanhar cada ligação O–H e o ângulo H–O–H e relacionar essas medidas à troca entre energia cinética e potencial. Depois, comparamos duas dinâmicas para entender o controle da temperatura. Ao passar ao dímero, essas mesmas ferramentas ajudam a investigar uma ligação H entre moléculas.
 
-## 1. Prepare o par de moléculas
+[01a · Água isolada](#agua-isolada) → [01b · Duas águas](#dimero)
 
-Uma água começa como doadora da ligação H. Vamos observar a reorientação: **uma água pode passar de doadora a aceptora da ligação H?** A estrutura já foi relaxada com B97-3c; a otimização é fornecida, não precisa ser repetida na aula.
+<a id="agua-isolada"></a>
+
+## 01a · Água: movimento, energia e temperatura
+
+> **Pergunta:** O que muda quando a molécula pode trocar energia com um banho térmico?
+
+### Comece pelo movimento de três átomos
+
+[Abrir água isolada em 3D](../../visualizador/index.html?exemplo=water_single&aba=trajetoria) · [Pacote da referência DFT](aula-agua_dft.zip) · [Input DFT](inputs/agua_dft.inp) · [Geometria inicial (.xyz)](estruturas/agua.xyz) (opcional para executar; as coordenadas já estão no input)
+
+A referência BLYP/def2-SVP mostra **20 fs em 41 quadros**, com timestep de 0,5 fs e sem termostato. Abra os resultados fornecidos; não é preciso repetir DFT durante a aula. A geometria inicial foi otimizada nesse mesmo nível. Em dinâmica, cada passo responde às forças: ele não é uma nova otimização da molécula.
+
+1. Em **Geometria**, meça **O 0–H 1**, **O 0–H 2** e o ângulo **1–0–2**. Avance os quadros e identifique uma mudança de comprimento ou ângulo; girar a câmera não altera essas medidas.
+2. Mostre **K, U e E** e procure um trecho em que K diminui. O que acontece com U? Em NVE, avalie a variação de E enquanto K e U trocam energia.
+3. Acompanhe a temperatura. Ela é estimada a partir da energia cinética, segundo a convenção do programa. Em três átomos, grandes flutuações são esperadas: `Initvel 300_K` prepara velocidades, mas não mantém T em 300 K.
+
+**Registre:** uma medida geométrica, uma observação de K/U e a duração física de 20 fs. A reprodução em 60 segundos apenas torna o movimento visível; não aumenta o tempo simulado. Você pode conferir os valores e a preparação no [apoio da água](apoio.md).
+
+### Compare velocidades iniciais e controle térmico
+
+Vamos iniciar **duas dinâmicas XTB2 da mesma geometria e com a mesma semente**, ambas com velocidades preparadas a 100 K. O primeiro caso evolui sem banho; no segundo, CSVR troca energia com um banho cujo alvo é 300 K. Assim, a comparação isola a presença do termostato. Não compare DFT/NVE com XTB2/CSVR para atribuir uma diferença apenas ao banho.
+
+São **inputs preparados para 500 fs = 0,5 ps**, ainda sem resultados ou custo medido. Execute um cálculo por vez, em pastas separadas. Se a espera ocupar o bloco, abra a [comparação pronta NVE × CSVR do etanol](../../visualizador/index.html?exemplo=thermostat_compare&aba=trajetoria) e retome a execução depois.
+
+**Sem banho — NVE:** [Baixar pacote](aula-agua_xtb2_nve.zip) · [Baixar input ORCA](inputs/agua_xtb2_nve.inp) · [Baixar geometria inicial (.xyz)](estruturas/agua.xyz) (opcional para executar; as coordenadas já estão no input)
+
+<!-- input-source: inputs/agua_xtb2_nve.inp -->
+```text
+# Agua isolada: comparar ausencia e presenca de banho termico.
+! MD XTB2 PAL8
+%maxcore 256
+
+%md
+  Randomize 42
+  Initvel 100_K
+  Timestep 0.5_fs
+  Thermostat None
+  Dump Position Stride 1 Filename "agua_xtb2_nve-traj.xyz"
+  Run 1000
+end
+* xyz 0 1
+  O          -0.00000000000561      0.00000000000000     -0.07350969363937
+  H           0.76032823354949      0.00000000000000      0.54103884681985
+  H          -0.76032823354388      0.00000000000000      0.54103884681952
+*
+```
+
+**Com banho — CSVR:** [Baixar pacote](aula-agua_xtb2_csvr.zip) · [Baixar input ORCA](inputs/agua_xtb2_csvr.inp) · [Baixar geometria inicial (.xyz)](estruturas/agua.xyz) (opcional para executar; as coordenadas já estão no input)
+
+<!-- input-source: inputs/agua_xtb2_csvr.inp -->
+```text
+# Agua isolada: comparar ausencia e presenca de banho termico.
+! MD XTB2 PAL8
+%maxcore 256
+
+%md
+  Randomize 42
+  Initvel 100_K
+  Timestep 0.5_fs
+  Thermostat CSVR 300_K Timecon 100_fs
+  Dump Position Stride 1 Filename "agua_xtb2_csvr-traj.xyz"
+  Run 1000
+end
+* xyz 0 1
+  O          -0.00000000000561      0.00000000000000     -0.07350969363937
+  H           0.76032823354949      0.00000000000000      0.54103884681985
+  H          -0.76032823354388      0.00000000000000      0.54103884681952
+*
+```
+
+<details markdown="1"><summary>Execute o par no Ubuntu / WSL2 ou Windows nativo</summary>
+
+No Ubuntu / WSL2, entre na pasta do primeiro pacote e execute:
+
+```bash
+orca agua_xtb2_nve.inp > agua_xtb2_nve.out &
+```
+
+Espere encerrar; depois entre na pasta do segundo pacote:
+
+```bash
+orca agua_xtb2_csvr.inp > agua_xtb2_csvr.out &
+```
+
+No Windows nativo, abra o **Prompt de Comando (`cmd`)** na pasta correspondente e execute, um de cada vez:
+
+```bat
+orca agua_xtb2_nve.inp > agua_xtb2_nve.out
+```
+
+```bat
+orca agua_xtb2_csvr.inp > agua_xtb2_csvr.out
+```
+
+Veja a [preparação do ambiente](../../tutoriais/README.md) e [como acompanhar cada execução](../README.md#como-executar). Os nomes distintos evitam misturar saídas dos dois protocolos.
+
+</details>
+
+Carregue juntos os `.out`, `-md-ener.csv` e `-traj.xyz` que produzir e marque os dois casos no laboratório. Compare **E**, **K** e **T** nas mesmas marcas de tempo. Em NVE, procure conservação aproximada de E; com CSVR, examine a troca de energia com o banho. O alvo de 300 K não fixa a temperatura de cada passo nem exige aquecimento monotônico. NVE também não mantém a temperatura inicial de 100 K. A janela de 500 fs corresponde a cinco constantes de acoplamento de 100 fs; isso, sozinho, não demonstra equilíbrio. [Manual ORCA: termostatos](https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html#thermostat).
+
+### Do movimento molecular ao IV e Raman
+
+A água, uma molécula não linear, tem **três modos vibracionais**: deformação angular, estiramento simétrico e estiramento antissimétrico. Eles descrevem movimentos coletivos na aproximação harmônica; a trajetória térmica combina movimentos e não separa necessariamente cada modo.
+
+Para a **água gasosa**, os fundamentais experimentais são aproximadamente **1595, 3657 e 3756 cm⁻¹**, nessa ordem. São referências experimentais, diferentes de frequências harmônicas calculadas e das bandas da água líquida. [NIST: vibrações da água](https://webbook.nist.gov/cgi/cbook.cgi?ID=C7732185&Mask=880&Units=SI).
+
+No **IV**, a atividade depende da variação do momento de dipolo durante a vibração; no **Raman**, da variação da polarizabilidade. A frequência indica onde aparece a banda, enquanto a intensidade depende dessas propriedades. Uma ligação que parece oscilar mais no filme não tem, por isso, uma banda mais intensa. [ORCA: frequências e propriedades vibracionais](https://www.faccts.de/docs/orca/6.1/manual/contents/spectroscopyproperties/vibrations.html).
+
+**Para discutir:** que informação ainda precisaríamos calcular para passar deste movimento a um espectro IV ou Raman? Na rota harmônica, precisamos da Hessiana, dos modos e das derivadas das propriedades; na rota dinâmica, de séries de dipolo/polarizabilidade e suas correlações, com amostragem suficiente. O XYZ contém posições, e 20 fs não fornecem um espectro vibracional confiável. Uma FFT de O–H, sozinha, não fornece intensidades IV ou Raman. [TRAVIS: espectros a partir de dinâmica](https://www.travis-analyzer.de/files/travis_ir_raman.pdf).
+
+Com as medidas internas da água em mãos, acrescente a segunda molécula e procure o que muda entre elas.
+
+<a id="dimero"></a>
+
+## 01b · Duas águas: uma ligação H em movimento
+
+### Prepare o par de moléculas
+
+Na água isolada, medimos os movimentos internos. Ao acrescentar uma segunda molécula, também precisamos medir a distância e a orientação entre elas. Uma água começa como doadora da ligação H. Vamos observar a reorientação: **uma água pode passar de doadora a aceptora da ligação H?** A estrutura já foi relaxada com B97-3c; a otimização é fornecida, não precisa ser repetida na aula.
 
 Vamos executar **2 ps = 2 × 10⁻¹² s** com XTB2, sem termostato. Essa execução original levou **56,5 s nesta máquina**. A geometria inicial é a mesma da comparação DFT fornecida; não é apresentada como um mínimo de XTB2. Este dímero isolado não representa água líquida.
 
-O laboratório abre a **referência ampliada de 5 ps**: os 2 ps originais seguidos por mais 3 ps a partir do checkpoint, preservando posições, velocidades, timestep de 0,5 fs e NVE. São **10001 quadros originais**, sem interpolação ou redução. O protocolo curto de 2 ps abaixo permanece disponível para a execução em aula; a referência de 2 ps continua disponível separadamente.
+Abra primeiro os 2 ps para acompanhar a troca de doador e aceptor. Depois, use a referência de 5 ps para perguntar se uma janela maior revela contatos ou orientações que o trecho curto não mostra.
 
-A continuação levou **91,1 s nesta máquina**, além dos 56,5 s originais. Nos 5 ps completos, O···O varia de **2,617 a 3,511 Å** e a amplitude de Etotal é **0,260 kJ/mol**. Cada H permanece associado à sua água no acompanhamento pelo O mais próximo.
-
-## 2. Execute
+### Execute o dímero
 
 [Baixar pacote](aula-dimero_xtb2_2ps.zip) · [Baixar input ORCA](inputs/dimero_xtb2_2ps.inp) · [Baixar geometria inicial (.xyz)](estruturas/dimero_b97.xyz) (opcional para executar; as coordenadas já estão no input)
 
@@ -69,7 +185,7 @@ Espere o prompt voltar antes de iniciar outro cálculo. Os arquivos de resultado
 
 </details>
 
-## 3. Observe, meça, explique
+### Observe, meça, explique
 
 [Abrir referência de 5 ps em 3D](../../visualizador/index.html?exemplo=water&aba=trajetoria) · [Abrir os 2 ps originais](../../visualizador/index.html?exemplo=water_short&aba=trajetoria)
 
@@ -78,13 +194,19 @@ Espere o prompt voltar antes de iniciar outro cálculo. Os arquivos de resultado
 3. Em **Energia**, mostre K, U e E. Alongar/comprimir as ligações modifica U; o movimento altera K. A energia total deve variar pouco neste caso sem banho.
 4. Avance pelos primeiros 50 fs e depois por toda a trajetória. Identifique qual O doa H e qual aceita. Meça também os contatos partindo dos H 4 e 5 da segunda água.
 
-**Nos 2 ps originais XTB2:** O···O varia de **2,633 a 3,511 Å**; as quatro ligações covalentes O–H permanecem entre **0,914 e 1,020 Å**. O 0 começa como doador; perto de 50 fs, o O 3 aparece como doador. Há outras alternâncias ao longo dos 2 ps. Essas faixas descrevem o trecho original; use a extensão para investigar se a faixa observada aumenta quando a janela chega a 5 ps.
-
 **Interpretação:** as moléculas giram e reorganizam o contato intermolecular. A troca de doador/aceptor **não é transferência de próton**: cada H continua ligado à sua água. O desaparecimento do traço H ao cruzar um corte geométrico não prova dissociação irreversível.
+
+Uma única trajetória permite acompanhar reorientações, mas não medir populações de equilíbrio ou taxas de troca. Para discutir o termostato, lembre-se da água isolada: em NVE, a temperatura instantânea também pode flutuar enquanto a energia total varia pouco.
+
+<details markdown="1"><summary>Conferir medidas e energia depois da observação</summary>
+
+**Nos 2 ps originais XTB2:** O···O varia de **2,633 a 3,511 Å**; as quatro ligações covalentes O–H permanecem entre **0,914 e 1,020 Å**. O 0 começa como doador; perto de 50 fs, o O 3 aparece como doador. Há outras alternâncias ao longo dos 2 ps. Essas faixas descrevem o trecho original; use a extensão para investigar se a faixa observada aumenta quando a janela chega a 5 ps.
 
 Na análise dos 2 ps originais, o critério operacional foi H···O < 2,4 Å e O–H···O > 130°. Os cortes ajustáveis do visualizador podem deslocar o instante em que o traço aparece. A amplitude de Etotal nesse trecho foi **0,194 kJ/mol**; examine a curva inteira, não apenas a diferença entre início e fim. Em NVE, a temperatura instantânea deste sistema de seis átomos pode variar bastante. A referência ampliada identifica o restart em 2000 fs e mantém os valores físicos originais de energia e temperatura.
 
-**Limite:** uma única trajetória não fornece populações de equilíbrio ou taxas de troca. O tempo medido de **56,5 s** não é garantia para outros computadores. Se ultrapassar **2 min durante a aula**, abra a referência e continue a análise.
+O tempo medido de **56,5 s** não é garantia para outros computadores. Se ultrapassar **2 min durante a aula**, abra a referência e continue a análise.
+
+</details>
 
 <details markdown="1"><summary>Comparação DFT já calculada</summary>
 
@@ -94,11 +216,13 @@ Não execute DFT durante a aula. A referência curta B97-3c simulou **60 fs** em
 
 </details>
 
-<details markdown="1"><summary>E a molécula de água isolada?</summary>
 
-Ela continua como [referência adicional já calculada](../../visualizador/index.html?exemplo=water_single): mede-se O–H e H–O–H e observa-se a troca K/U. É útil para distinguir vibração de otimização. **Não há ligação H intermolecular, solvente explícito, conformação interna complexa ou reação neste modelo.** Os 20 fs originais não servem para extrair um espectro vibracional confiável. Por isso ela saiu do percurso principal.
 
-[Pacote antigo](aula-agua_dft.zip) · [Resultados e preparação anteriores](apoio.md).
+<details markdown="1"><summary>Como continuar o dímero de 2 até 5 ps</summary>
+
+O laboratório abre a **referência ampliada de 5 ps**: os 2 ps originais seguidos por mais 3 ps a partir do checkpoint, preservando posições, velocidades, timestep de 0,5 fs e NVE. São **10001 quadros originais**, sem interpolação ou redução. O protocolo curto de 2 ps da atividade está disponível para a execução em aula; a referência de 2 ps permite comparar a mesma janela.
+
+A continuação levou **91,1 s nesta máquina**, além dos 56,5 s originais. Nos 5 ps completos, O···O varia de **2,617 a 3,511 Å** e a amplitude de Etotal é **0,260 kJ/mol**. Cada H permanece associado à sua água no acompanhamento pelo O mais próximo.
 
 </details>
 

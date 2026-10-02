@@ -32,7 +32,7 @@ O laboratório abre na trajetória 3D. Gire ou arraste a molécula, amplie a ár
 
 ### Durante a aula: cinco blocos
 
-1. **[Dímero de água](exercicios/1-agua-dft/README.md)** — ligação H, reorientação e medidas.
+1. **[Água: da molécula à ligação H](exercicios/1-agua-dft/README.md)** — [01a: movimento, energia e temperatura](exercicios/1-agua-dft/README.md#agua-isolada) → [01b: dímero e reorientação](exercicios/1-agua-dft/README.md#dimero).
 2. **[Etanol e timestep](exercicios/3-xtb2-etanol/README.md)** — controle, instabilidade e correção.
 3. **[Aquecer e resfriar](exercicios/5-termostato/README.md)** — termostato, diedro e etapas contínuas.
 4. **[Zn–en](exercicios/6-complexo-solvator/README.md)** — SOLVATOR, parede e [formação do quelato](exercicios/11-formacao-quelato/README.md) com trajetória pronta.
@@ -40,7 +40,7 @@ O laboratório abre na trajetória 3D. Gire ou arraste a molécula, amplie a ár
 
 **[Opcionais e referências](exercicios/README.md#opcionais-e-referencias):** DFT/CPCM, gotas protonadas de 300 a 600 K, água em C₆₀ e outros controles. A lista do laboratório separa estes materiais do percurso da aula.
 
-Os cálculos ao vivo usam **GFN2-xTB (`XTB2`)** desde o primeiro exercício. **DFT fica como comparação já calculada**, sem espera durante a aula. Os resultados fornecidos permitem acompanhar a aula mesmo quando uma execução local demora.
+A abertura usa uma trajetória DFT de água isolada já calculada para aprender as medidas e relacionar movimento, energia e temperatura. As execuções propostas usam **GFN2-xTB (`XTB2`)**: o primeiro par compara NVE e CSVR; depois passamos à ligação H no dímero. A água também introduz a relação entre vibração, IV e Raman. Os resultados fornecidos permitem acompanhar a aula mesmo quando uma execução local demora.
 
 **[Baixar os materiais (.zip)](https://github.com/HenriqueCSJ/AIMD-6WPPQG-UERJ/archive/refs/heads/main.zip)** · [Roteiro e horários](exercicios/roteiro-4h.md) · [Downloads oficiais](tutoriais/04-links-e-referencias.md)
 

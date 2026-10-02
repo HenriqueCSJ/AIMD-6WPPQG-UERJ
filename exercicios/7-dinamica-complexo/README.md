@@ -4,13 +4,11 @@
 
 **Parte do bloco Zn–en (45 min com SOLVATOR) · Zn²⁺–etilenodiamina + águas · 43 átomos**
 
-**Extensão opcional:** [veja as águas inicialmente afastadas se coordenarem ao Zn](hidratacao.html), com a en ainda distante. Há uma referência de 250 fs para a hidratação e outra de 5 ps para acompanhar o encontro; a segunda ainda não forma o quelato. A comparação com/sem parede abaixo continua usando o complexo já formado.
-
-> **Pergunta:** como impedir que águas da camada externa se afastem da região simulada?
+> **Pergunta:** manter uma água perto do complexo significa coordená-la ao Zn?
 
 ## 1. Compare a mesma condição inicial
 
-As duas trajetórias partem do **mesmo arquivo de reinício**, com as mesmas posições e velocidades, após 100 fs de preparação. Ambas usam XTB2/ALPB(water), CSVR a 300 K, timestep de 0,5 fs e mais **2 ps = 2 × 10⁻¹² s**. Apenas a parede muda. O relógio vai de 100 a 2100 fs.
+O SOLVATOR construiu uma camada externa de águas. Agora acompanhe sua permanência ao redor do complexo e compare retenção espacial com coordenação direta. As duas trajetórias partem do **mesmo arquivo de reinício**, com as mesmas posições e velocidades, após 100 fs de preparação. Ambas usam XTB2/ALPB(water), CSVR a 300 K, timestep de 0,5 fs e mais **2 ps = 2 × 10⁻¹² s**. Apenas a parede muda. O relógio vai de 100 a 2100 fs.
 
 ALPB modifica o ambiente eletrostático; não impede uma água explícita de se afastar. A parede acrescenta uma força restauradora quando um átomo ultrapassa o raio escolhido.
 
@@ -136,13 +134,15 @@ Espere o prompt voltar antes de iniciar outro cálculo. Os arquivos de resultado
 
 </details>
 
-## Resultados reais
+## Resultados para comparar
 
 - **zn_parede_longo:** [input usado](resultados/zn_parede_longo/zn_parede_longo.inp) · [saída](resultados/zn_parede_longo/zn_parede_longo.out) · [energias](resultados/zn_parede_longo/zn_parede_longo-md-ener.csv) · [trajetória](resultados/zn_parede_longo/zn_parede_longo-traj.xyz).
 - **zn_sem_parede_longo:** [input usado](resultados/zn_sem_parede_longo/zn_sem_parede_longo.inp) · [saída](resultados/zn_sem_parede_longo/zn_sem_parede_longo.out) · [energias](resultados/zn_sem_parede_longo/zn_sem_parede_longo-md-ener.csv) · [trajetória](resultados/zn_sem_parede_longo/zn_sem_parede_longo-traj.xyz).
 
-As referências antigas de 0,5 ps permanecem em [apoio](apoio.md) e no [aplicativo](../../visualizador/index.html?exemplo=complex_short). **Manual:** [Paredes, seção Cell](https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html#cell) · [Restart](https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html#restart). O ORCA 6.1.1 usado aceita a grafia `Walls`.
+Para uma janela mais curta, compare os controles de 0,5 ps no [apoio](apoio.md) e no [aplicativo](../../visualizador/index.html?exemplo=complex_short). **Manual:** [Paredes, seção Cell](https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html#cell) · [Restart](https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html#restart). O ORCA 6.1.1 usado aceita a grafia `Walls`.
 
+
+**Extensão opcional:** [veja as águas inicialmente afastadas se coordenarem ao Zn](hidratacao.html), com a en ainda distante. Há uma referência de 250 fs para a hidratação e outra de 5 ps para acompanhar o encontro; a segunda ainda não forma o quelato. A comparação com/sem parede desta atividade usa o complexo já formado.
 
 ## No retorno do intervalo
 

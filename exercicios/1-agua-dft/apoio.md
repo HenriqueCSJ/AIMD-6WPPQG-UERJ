@@ -2,21 +2,25 @@
 
 [← Voltar à atividade](README.md) · [Abrir o aplicativo](../../visualizador/index.html)
 
-Esta página reúne as explicações extensas, preparações e **resultados originais de referência**. Os inputs completos que os produziram permanecem em cada pasta `resultados`. A atividade principal usa inputs concisos; os comentários foram reduzidos. No exercício 7, as medidas passam para o aplicativo e `Walls` substitui o alias antigo `Cell`.
+Use este apoio para relacionar o passo de integração, a energia e a temperatura da água isolada. A preparação da geometria e os dados DFT permitem conferir as medidas realizadas em 01a.
 
 ## Entenda as escolhas
 
 `Timestep 0.5_fs` avança meio femtossegundo a cada passo. `Run 40` produz **20 fs = 0,020 ps = 2 × 10⁻¹⁴ s**. `Randomize 42` fixa a semente de inicialização; `Initvel 300_K` prepara velocidades, e `Thermostat None` deixa a trajetória sem banho térmico. As posições não são otimizadas a cada passo: as forças determinam a aceleração.
 
-Abra o [Laboratório de trajetórias](../../visualizador/index.html) e carregue o `*-md-ener.csv`, o `.out` e o `*-traj.xyz` deste cálculo. O aplicativo prepara os gráficos de energia/temperatura e a animação. Na aba **Distâncias**, escolha dois átomos; a medida é calculada do XYZ. O CSV original usa fs, Hartree e K; a conversão de unidades fica explícita na tela.
+Abra o [Laboratório de trajetórias](../../visualizador/index.html) e carregue o `*-md-ener.csv`, o `.out` e o `*-traj.xyz` deste cálculo. O aplicativo prepara os gráficos de energia/temperatura e a animação. Na aba **Geometria**, escolha dois átomos; a medida é calculada do XYZ. O CSV original usa fs, Hartree e K; a conversão de unidades fica explícita na tela.
+
+## Temperatura e modos vibracionais
+
+Os três modos vibracionais da água não são os graus de liberdade usados no cálculo de temperatura. Nesta referência, o ORCA declara **9 graus de liberdade ativos** (3 átomos × 3), embora remova movimentos do centro de massa e velocidade angular na inicialização. Para reproduzir o termômetro, siga a convenção registrada no output; não substitua esse número pelos três modos normais.
 
 ## Resultados de referência
 
-Estes arquivos são saídas reais, preservadas sem suavização dos dados. Os tempos incluem a inicialização do programa e correspondem a uma execução por caso em um Intel Core Ultra 9 185H; não são uma promessa para todos os computadores. Se seu cálculo atrasar, use a referência e identifique-a como tal.
+Os tempos abaixo incluem a inicialização do ORCA e foram medidos em um Intel Core Ultra 9 185H. Use-os para organizar a reprodução; o desempenho varia entre computadores.
 
 ### agua_dft
 
-Término normal: **sim**. Tempo medido: **80.62 s**, com PAL8.
+Tempo de execução: **80.62 s**, com PAL8.
 
 - [Saída completa](resultados/agua_dft/agua_dft.out)
 - [Energias e temperatura — CSV](resultados/agua_dft/agua_dft-md-ener.csv)
@@ -54,7 +58,7 @@ H  -0.7586020000  0.0000000000  0.5042840000
 
 ### preparar_agua
 
-Término normal: **sim**. Tempo medido: **18.36 s**, com PAL8. O critério de convergência da otimização foi atingido.
+Tempo de execução: **18.36 s**, com PAL8. O critério de convergência da otimização foi atingido.
 
 - [Saída completa](resultados/preparar_agua/preparar_agua.out)
 - [Geometria final — XYZ](resultados/preparar_agua/preparar_agua.xyz)

@@ -6,7 +6,7 @@
 
 > **Pergunta:** aumentar a temperatura garante que a protonação se propague por mais moléculas?
 
-O modelo contém H₃O⁺ + 31 H₂O, com XTB2/ALPB(water), termostato CSVR e parede suave de raio 8,5 Å. Os quatro casos compartilham **o mesmo trecho de 0–500 fs e o mesmo checkpoint de partida**. Cada ramo acrescenta 2 ps; não são quatro preparações independentes. O ramo de 600 K não continua o de 500 K.
+Em H₅O₂⁺, acompanhamos um H compartilhado entre dois O e distinguimos cruzamento de permanência. Nesta gota, investigue também a identidade dos O hospedeiros ao longo de passagens sucessivas. O modelo contém H₃O⁺ + 31 H₂O, com XTB2/ALPB(water), termostato CSVR e parede suave de raio 8,5 Å. Os quatro casos compartilham **o mesmo trecho de 0–500 fs e o mesmo checkpoint de partida**. Cada ramo acrescenta 2 ps; não são quatro preparações independentes. O ramo de 600 K não continua o de 500 K.
 
 ## 1. Escolha um exemplo
 
@@ -20,6 +20,8 @@ Cada link carrega somente a temperatura selecionada. Os ZIPs incluem o par compl
 De 0 a 500 fs, o alvo comum é 300 K. De 500 a 1000 fs, os ramos quentes elevam o alvo até 400, 500 ou 600 K; depois o mantêm até 2500 fs. O controle permanece a 300 K. A temperatura instantânea oscila em torno de um alvo que, durante a rampa, muda com o tempo.
 
 ## 2. Compare movimentos e permanência
+
+A prévia seleciona **um a cada cinco quadros**, mais o último: use o XYZ completo para investigar recrossamentos rápidos.
 
 Todos os índices abaixo começam em **zero**, como no aplicativo. A identificação do O hospedeiro usa a proximidade geométrica dos H; não é uma medida de carga eletrônica.
 
@@ -36,7 +38,7 @@ A gota se reorganiza e dispersa parcialmente; a parede suave permite penetraçã
 
 Compare a temperatura realizada, a permanência no novo O e o estado do agregado. Definir uma região de compartilhamento, por exemplo diferença das duas menores distâncias O–H abaixo de 0,15 Å, altera o tempo atribuído a uma residência inequívoca. Cruzar o ponto médio e permanecer no novo lado são perguntas diferentes.
 
-Cada trajetória completa tem **5001 quadros, espaçados de 0,5 fs**, e 10001 registros de energia. A prévia seleciona **um a cada cinco quadros**, mais o último: use o XYZ completo para investigar recrossamentos rápidos. Os comentários XYZ preservam o tempo físico; o CSV mantém os valores impressos e as referências da quantidade conservada de cada etapa. Não interprete offsets de restart/Run como saltos físicos.
+Cada trajetória completa tem **5001 quadros, espaçados de 0,5 fs**, e 10001 registros de energia. A prévia tem resolução mais espaçada que o XYZ completo. Os comentários XYZ preservam o tempo físico; o CSV mantém os valores impressos e as referências da quantidade conservada de cada etapa. Não interprete offsets de restart/Run como saltos físicos.
 
 ## Inputs e consulta
 

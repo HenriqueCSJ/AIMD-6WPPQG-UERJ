@@ -6,11 +6,9 @@
 
 > **Pergunta da atividade:** Como acrescentar águas explícitas a um complexo já preparado?
 
-Para observar a formação da primeira camada de águas, abra também [Zn, águas e en inicialmente afastados](../7-dinamica-complexo/hidratacao.html). O SOLVATOR desta atividade parte de um complexo preparado; não mostra sua formação por dinâmica.
-
 ## 1. Prepare
 
-O ponto de partida tem Zn, etilenodiamina e quatro águas: **25 átomos**. O SOLVATOR acrescentará seis águas, chegando a **43 átomos**. O banho contínuo ALPB permanece.
+No dímero, duas águas permitiam medir uma ligação H. Ao redor de um metal, precisamos distinguir águas diretamente coordenadas e águas da camada externa. O ponto de partida tem Zn, etilenodiamina e quatro águas: **25 átomos**. O SOLVATOR acrescentará seis águas, chegando a **43 átomos**. ALPB(water) representa o solvente implícito; as águas acrescentadas representam moléculas explícitas. O controle térmico será definido na dinâmica da próxima atividade.
 
 [Baixar os arquivos da atividade](aula-zn_solvator.zip) · [Baixar a estrutura](estruturas/zn_en.xyz)
 
@@ -130,11 +128,13 @@ Espere o prompt voltar antes de iniciar outro cálculo. Os arquivos de resultado
 
 </details>
 
+Para observar a formação da primeira camada de águas, abra também [Zn, águas e en inicialmente afastados](../7-dinamica-complexo/hidratacao.html). O SOLVATOR desta atividade parte de um complexo preparado; não mostra sua formação por dinâmica.
+
 **Na próxima atividade**, use a estrutura relaxada e o reinício fornecidos. Não é preciso executar otimização e preparação térmica durante a aula.
 
 <details markdown="1"><summary>Referências, preparação e explicações adicionais</summary>
 
-Resultados reais já calculados com PAL8. O input completo de cada referência está ao lado da saída; as séries não foram substituídas por simulações novas.
+Compare a estrutura inicial com a montagem de seis águas ou com a alternativa de duas águas. Os inputs abaixo permitem reproduzir cada construção.
 
 - **zn_solvator:** [input completo usado](resultados/zn_solvator/zn_solvator.inp) · [saída](resultados/zn_solvator/zn_solvator.out) · [estrutura](resultados/zn_solvator/zn_solvator.solvator.xyz).
 - **zn_solvator_2aguas:** [input completo usado](resultados/zn_solvator_2aguas/zn_solvator_2aguas.inp) · [saída](resultados/zn_solvator_2aguas/zn_solvator_2aguas.out) · [estrutura](resultados/zn_solvator_2aguas/zn_solvator_2aguas.solvator.xyz).
@@ -145,7 +145,7 @@ Resultados reais já calculados com PAL8. O input completo de cada referência e
 
 **Manual:** [SOLVATOR](https://www.faccts.de/docs/orca/6.1/manual/contents/structurereactivity/solvator.html).
 
-**Antes de avançar:** anote uma mudança no input, uma observação e uma conclusão que esta trajetória ainda não permite.
+**Antes de avançar:** anote uma mudança no input, uma observação e uma conclusão que esta estrutura ainda não permite.
 
 ## Inputs das variantes e preparações
 

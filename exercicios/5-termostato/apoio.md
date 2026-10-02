@@ -2,23 +2,23 @@
 
 [← Voltar à atividade](README.md) · [Abrir o aplicativo](../../visualizador/index.html)
 
-Esta página reúne as explicações extensas, preparações e **resultados originais de referência**. Os inputs completos que os produziram permanecem em cada pasta `resultados`. A atividade principal usa inputs concisos; os comentários foram reduzidos. No exercício 7, as medidas passam para o aplicativo e `Walls` substitui o alias antigo `Cell`.
+Antes das rampas de aquecimento e resfriamento, isole o efeito do banho: compare etanol NVE e CSVR a 300 K, ambos por 0,5 ps. Essa comparação retoma a pergunta da água com uma molécula que também possui rotação interna.
 
 ## Entenda as escolhas
 
 `Initvel 300_K` prepara a condição inicial. O termostato permite troca de energia com um banho a 300 K; portanto, **K + U não precisa ser constante em NVT**. A temperatura instantânea deve flutuar. O acoplamento de 100 fs = 0,1 ps = 10⁻¹³ s define a escala de atuação do banho, não a duração total da trajetória. Esta pequena molécula e este intervalo curto não demonstram amostragem canônica convergida.
 
-Abra o [Laboratório de trajetórias](../../visualizador/index.html) e carregue o `*-md-ener.csv`, o `.out` e o `*-traj.xyz` deste cálculo. O aplicativo prepara os gráficos de energia/temperatura e a animação. Na aba **Distâncias**, escolha dois átomos; a medida é calculada do XYZ. O CSV original usa fs, Hartree e K; a conversão de unidades fica explícita na tela.
+Abra o [Laboratório de trajetórias](../../visualizador/index.html) e carregue o `*-md-ener.csv`, o `.out` e o `*-traj.xyz` deste cálculo. O aplicativo prepara os gráficos de energia/temperatura e a animação. Na aba **Geometria**, escolha dois átomos; a medida é calculada do XYZ. O CSV original usa fs, Hartree e K; a conversão de unidades fica explícita na tela.
 
 **Controle reutilizado:** [Baixar input ORCA](../3-xtb2-etanol/inputs/etanol_nve.inp) · [Baixar geometria inicial (.xyz)](../3-xtb2-etanol/estruturas/etanol.xyz) (opcional para executar; as coordenadas já estão no input), [CSV NVE](../3-xtb2-etanol/resultados/etanol_nve/etanol_nve-md-ener.csv) e [trajetória NVE](../3-xtb2-etanol/resultados/etanol_nve/etanol_nve-traj.xyz). A geometria inicial é idêntica à deste exercício.
 
 ## Resultados de referência
 
-Estes arquivos são saídas reais, preservadas sem suavização dos dados. Os tempos incluem a inicialização do programa e correspondem a uma execução por caso em um Intel Core Ultra 9 185H; não são uma promessa para todos os computadores. Se seu cálculo atrasar, use a referência e identifique-a como tal.
+Os tempos abaixo incluem a inicialização do ORCA e foram medidos em um Intel Core Ultra 9 185H. Use-os para organizar a reprodução; o desempenho varia entre computadores.
 
 ### etanol_csvr
 
-Término normal: **sim**. Tempo medido: **13.61 s**, com PAL8.
+Tempo de execução: **13.61 s**, com PAL8.
 
 - [Saída completa](resultados/etanol_csvr/etanol_csvr.out)
 - [Energias e temperatura — CSV](resultados/etanol_csvr/etanol_csvr-md-ener.csv)

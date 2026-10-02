@@ -2,21 +2,21 @@
 
 [← Voltar à atividade](README.md) · [Abrir o aplicativo](../../visualizador/index.html)
 
-Esta página reúne as explicações extensas, preparações e **resultados originais de referência**. Os inputs completos que os produziram permanecem em cada pasta `resultados`. A atividade principal usa inputs concisos; os comentários foram reduzidos. No exercício 7, as medidas passam para o aplicativo e `Walls` substitui o alias antigo `Cell`.
+O controle de etanol ajuda a distinguir vibração de O–H e libração da hidroxila. Consulte a preparação da geometria e as medidas desta janela de 0,5 ps antes de comparar timestep ou termostato.
 
 ## Entenda as escolhas
 
 **1.000 × 0,5 fs = 500 fs = 0,5 ps = 5 × 10⁻¹³ s.** Este caso não usa termostato, solvente nem parede. Não compare energias absolutas de DFT e XTB2 como se tivessem o mesmo zero. Uma trajetória curta de uma molécula isolada não representa, por si só, etanol líquido.
 
-Abra o [Laboratório de trajetórias](../../visualizador/index.html) e carregue o `*-md-ener.csv`, o `.out` e o `*-traj.xyz` deste cálculo. O aplicativo prepara os gráficos de energia/temperatura e a animação. Na aba **Distâncias**, escolha dois átomos; a medida é calculada do XYZ. O CSV original usa fs, Hartree e K; a conversão de unidades fica explícita na tela.
+Abra o [Laboratório de trajetórias](../../visualizador/index.html) e carregue o `*-md-ener.csv`, o `.out` e o `*-traj.xyz` deste cálculo. O aplicativo prepara os gráficos de energia/temperatura e a animação. Na aba **Geometria**, escolha dois átomos; a medida é calculada do XYZ. O CSV original usa fs, Hartree e K; a conversão de unidades fica explícita na tela.
 
 ## Resultados de referência
 
-Estes arquivos são saídas reais, preservadas sem suavização dos dados. Os tempos incluem a inicialização do programa e correspondem a uma execução por caso em um Intel Core Ultra 9 185H; não são uma promessa para todos os computadores. Se seu cálculo atrasar, use a referência e identifique-a como tal.
+Os tempos abaixo incluem a inicialização do ORCA e foram medidos em um Intel Core Ultra 9 185H. Use-os para organizar a reprodução; o desempenho varia entre computadores.
 
 ### etanol_nve
 
-Término normal: **sim**. Tempo medido: **15.76 s**, com PAL8.
+Tempo de execução: **15.76 s**, com PAL8.
 
 - [Saída completa](resultados/etanol_nve/etanol_nve.out)
 - [Energias e temperatura — CSV](resultados/etanol_nve/etanol_nve-md-ener.csv)
@@ -60,7 +60,7 @@ H   1.4671415467  1.1550476549  0.0848139491
 
 ### preparar_etanol
 
-Término normal: **sim**. Tempo medido: **0.62 s**, com PAL8. O critério de convergência da otimização foi atingido.
+Tempo de execução: **0.62 s**, com PAL8. O critério de convergência da otimização foi atingido.
 
 - [Saída completa](resultados/preparar_etanol/preparar_etanol.out)
 - [Geometria final — XYZ](resultados/preparar_etanol/preparar_etanol.xyz)

@@ -2,7 +2,7 @@
 
 [← Voltar à atividade](README.md) · [Abrir o aplicativo](../../visualizador/index.html)
 
-Esta página reúne as explicações extensas, preparações e **resultados originais de referência**. Os inputs completos que os produziram permanecem em cada pasta `resultados`. A atividade principal usa inputs concisos; os comentários foram reduzidos. No exercício 7, as medidas passam para o aplicativo e `Walls` substitui o alias antigo `Cell`.
+A montagem com SOLVATOR acrescenta águas ao redor de um complexo preparado. Consulte aqui a otimização do soluto, o relaxamento do agregado e as estruturas que alimentam a dinâmica; montagem e trajetória respondem a perguntas diferentes.
 
 ## Entenda as escolhas
 
@@ -10,11 +10,11 @@ Esta página reúne as explicações extensas, preparações e **resultados orig
 
 ## Resultados de referência
 
-Estes arquivos são saídas reais, preservadas sem suavização dos dados. Os tempos incluem a inicialização do programa e correspondem a uma execução por caso em um Intel Core Ultra 9 185H; não são uma promessa para todos os computadores. Se seu cálculo atrasar, use a referência e identifique-a como tal.
+Os tempos abaixo incluem a inicialização do ORCA e foram medidos em um Intel Core Ultra 9 185H. Use-os para organizar a reprodução; o desempenho varia entre computadores.
 
 ### zn_solvator
 
-Término normal: **sim**. Tempo medido: **201.59 s**, com PAL8.
+Tempo de execução: **201.59 s**, com PAL8.
 
 - [Saída completa](resultados/zn_solvator/zn_solvator.out)
 - [Estrutura solvatada — XYZ](resultados/zn_solvator/zn_solvator.solvator.xyz)
@@ -23,7 +23,7 @@ Término normal: **sim**. Tempo medido: **201.59 s**, com PAL8.
 
 ### zn_solvator_2aguas
 
-Término normal: **sim**. Tempo medido: **64.41 s**, com PAL8.
+Tempo de execução: **64.41 s**, com PAL8.
 
 - [Saída completa](resultados/zn_solvator_2aguas/zn_solvator_2aguas.out)
 - [Estrutura solvatada — XYZ](resultados/zn_solvator_2aguas/zn_solvator_2aguas.solvator.xyz)
@@ -54,7 +54,7 @@ Estes cálculos já foram feitos pelos ministrantes. Não são novas execuções
 
 ### preparar_complexo
 
-Término normal: **sim**. Tempo medido: **3.89 s**, com PAL8. O critério de convergência da otimização foi atingido.
+Tempo de execução: **3.89 s**, com PAL8. O critério de convergência da otimização foi atingido.
 
 - [Saída completa](resultados/preparar_complexo/preparar_complexo.out)
 - [Geometria final — XYZ](resultados/preparar_complexo/preparar_complexo.xyz)
@@ -82,7 +82,7 @@ Término normal: **sim**. Tempo medido: **3.89 s**, com PAL8. O critério de con
 
 ### relaxar_solvato
 
-Término normal: **sim**. Tempo medido: **20.79 s**, com PAL8. O critério de convergência da otimização foi atingido.
+Tempo de execução: **20.79 s**, com PAL8. O critério de convergência da otimização foi atingido.
 
 - [Saída completa](resultados/relaxar_solvato/relaxar_solvato.out)
 - [Geometria final — XYZ](resultados/relaxar_solvato/relaxar_solvato.xyz)

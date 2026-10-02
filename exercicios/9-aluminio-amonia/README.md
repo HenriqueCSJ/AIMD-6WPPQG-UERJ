@@ -1,14 +1,12 @@
 # Referência opcional · Al³⁺, água e amônia
 
-> **Fora do percurso da aula.** Estes resultados XTB2 exigem um ajuste de convergência. A reprodução DFT foi interrompida e não é uma referência completa. Para o caso reativo ao vivo, use [H₅O₂⁺](../10-proton-compartilhado/README.md).
-
 [← Percurso](../README.md) · [Abrir as duas trajetórias](../../visualizador/index.html?exemplo=aluminum&aba=trajetoria)
 
 **15 min · XTB2 · 23 átomos · 2 ps = 2 × 10⁻¹² s**
 
 > **Pergunta:** a amônia se liga ao alumínio ou recebe um próton de uma água coordenada?
 
-Partimos da geometria fornecida: Al³⁺, seis águas e uma NH₃ afastada. Substituímos BLYP/D3/def2-SVP por **XTB2**. Não acrescentamos solvente implícito, parede nem otimização inicial. É um agregado isolado, com carga total +3 e multiplicidade 1.
+No dímero neutro, uma troca de contato não significava transferência de H. No complexo de Zn, distinguimos vizinhança de coordenação. Use agora essas duas perguntas para investigar Al³⁺, seis águas e uma NH₃ afastada com **XTB2**. Não acrescentamos solvente implícito, parede nem otimização inicial. É um agregado isolado, com carga total +3 e multiplicidade 1.
 
 ## 1. Execute
 
@@ -16,9 +14,9 @@ Partimos da geometria fornecida: Al³⁺, seis águas e uma NH₃ afastada. Subs
 
 Para reproduzir esta referência opcional, prefira **0,5 fs**; o pacote de **1 fs** conserva o passo do exemplo proposto para comparação. Ambos chegam a 2 ps. Execute apenas um e abra a outra referência pronta.
 
-**Atenção ao terceiro arquivo:** cada pacote contém o input, a geometria e `scc.inp`. Mantenha os três na mesma pasta. A troca direta para XTB2, sem esse ajuste de convergência, falhou antes da dinâmica nesta geometria. [Entenda e consulte a tentativa preservada](apoio.md).
+**Atenção ao terceiro arquivo:** cada pacote contém o input, a geometria e `scc.inp`. Mantenha os três na mesma pasta. A troca direta para XTB2, sem esse ajuste de convergência, falhou antes da dinâmica nesta geometria. [Entenda o ajuste e consulte o diagnóstico](apoio.md).
 
-<details markdown="1" open><summary>Input de 0,5 fs · recomendado para a execução em aula</summary>
+<details markdown="1" open><summary>Input de 0,5 fs · recomendado para reprodução</summary>
 
 [Baixar input ORCA](inputs/al_agua_nh3_dt05.inp) · [Baixar geometria inicial (.xyz)](estruturas/al_agua_nh3.xyz) (obrigatório; manter na mesma pasta do input) · [Baixar scc.inp obrigatório](inputs/scc.inp) (manter junto do input e do XYZ)
 
@@ -169,6 +167,8 @@ O Al³⁺ atua como ácido de Lewis e favorece a acidez da água coordenada; a a
 Berendsen com acoplamento de 20 fs foi mantido do exemplo proposto. É forte acoplamento e não gera a distribuição canônica exata. A geometria inicial não foi equilibrada; o gap eletrônico inicial pequeno produz ocupações fracionárias no xTB. Por isso, esta é uma **demonstração exploratória de reação**, não uma medida de pKa, barreira, velocidade ou comportamento do Al³⁺ em solução. A diferença de energia potencial entre os extremos inclui relaxação, transferência e separação; não é uma entalpia de reação.
 
 ## Resultados e leitura
+
+As referências abaixo são XTB2. A tentativa DFT foi interrompida; não há uma trajetória DFT completa para esta comparação.
 
 - **0,5 fs:** [output](resultados/al_agua_nh3_dt05/al_agua_nh3_dt05.out) · [energias](resultados/al_agua_nh3_dt05/al_agua_nh3_dt05-md-ener.csv) · [trajetória](resultados/al_agua_nh3_dt05/al_agua_nh3_dt05-traj.xyz) · [medidas e eventos](resultados/al_agua_nh3_dt05/analysis.json).
 - **1 fs:** [output](resultados/al_agua_nh3_scc/al_agua_nh3_scc.out) · [energias](resultados/al_agua_nh3_scc/al_agua_nh3_scc-md-ener.csv) · [trajetória](resultados/al_agua_nh3_scc/al_agua_nh3_scc-traj.xyz) · [medidas e eventos](resultados/al_agua_nh3_scc/analysis.json).

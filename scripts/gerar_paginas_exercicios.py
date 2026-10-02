@@ -4,7 +4,7 @@ import html,re
 import markdown
 ROOT=Path(__file__).resolve().parents[1]
 EX=ROOT/'exercicios'
-COURSE=[('1-agua-dft','Dímero de água'),('3-xtb2-etanol','Etanol: controle'),('4-timestep','Timestep e correção'),('5-termostato','Aquecer e resfriar'),('6-complexo-solvator','Zn–en: SOLVATOR'),('7-dinamica-complexo','Zn–en: parede'),('11-formacao-quelato','Zn–en: formar o quelato'),('10-proton-compartilhado','Um próton entre duas águas')]
+COURSE=[('1-agua-dft','Água: molécula e dímero'),('3-xtb2-etanol','Etanol: controle'),('4-timestep','Timestep e correção'),('5-termostato','Aquecer e resfriar'),('6-complexo-solvator','Zn–en: SOLVATOR'),('7-dinamica-complexo','Zn–en: parede'),('11-formacao-quelato','Zn–en: formar o quelato'),('10-proton-compartilhado','Um próton entre duas águas')]
 OPTIONAL=[('2-solvente-implicito','DFT e solvente contínuo'),('12-gota-protonada','Gota protonada: 300–600 K'),('8-agua-no-fulereno','Água dentro de C₆₀'),('9-aluminio-amonia','Al³⁺/amônia: referência')]
 LESSONS=COURSE+OPTIONAL
 BADGES=['01','02a','02b','03','04a','04b','04c','05']+['↗']*len(OPTIONAL)

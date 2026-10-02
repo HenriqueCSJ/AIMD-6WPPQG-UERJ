@@ -4,11 +4,11 @@
 
 **10 min · análise de resultados fornecidos · DFT / CPCM(water)**
 
-> **Pergunta:** Ativar água como solvente acrescenta novas ligações de hidrogênio?
+> **Pergunta:** Ativar água como solvente acrescenta novas ligações H?
 
 ## 1. Mude apenas o ambiente
 
-Compare as duas referências DFT fornecidas: elas usam as mesmas seis coordenadas, semente, método e duração de 60 fs. A diferença no input é `CPCM(water)` na primeira linha. O campo de reação do meio contínuo modifica energia e forças; **as duas águas explícitas continuam sendo as únicas moléculas presentes**.
+No dímero, a ligação H depende da posição das duas moléculas. Agora vamos perguntar como um ambiente polar modifica esse movimento sem acrescentar moléculas. Compare as duas referências DFT fornecidas: elas usam as mesmas seis coordenadas, semente, método e duração de 60 fs. A diferença no input é `CPCM(water)` na primeira linha. O campo de reação do meio contínuo modifica energia e forças; **as duas águas explícitas continuam sendo as únicas moléculas presentes**.
 
 ## 2. Abra as referências prontas
 
@@ -87,7 +87,7 @@ Espere o prompt voltar antes de iniciar outro cálculo. Os arquivos de resultado
 
 [Manual ORCA: dinâmica molecular](https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html).
 
-[Água isolada/CPCM: referência anterior](apoio.md).
+[Compare também a água isolada no vácuo e com CPCM](apoio.md).
 
 ## Inputs das variantes e preparações
 

@@ -163,7 +163,7 @@
       document.querySelectorAll('[name="energy-series"]').forEach(c=>c.checked=config.runs.length>1?c.value==='total':true);
       $('energy-mode').value='delta';$('time-unit').value='fs';$('energy-window-from').value='';$('energy-window-to').value='';state.tab=preferredTab||(references.some(run=>run.xyz)?'trajectory':'energy');renderAll(references[0].id);
       const staticOnly=references.every(run=>run.xyz?.frames.length===1&&!energy(run)?.rows.length);
-      message(staticOnly?'Estruturas de referência carregadas. SOLVATOR mostra geometrias antes e depois da solvatação; este exemplo não contém uma dinâmica, energias ao longo do tempo ou animação. Escolha a estrutura no campo Simulação.':'Exemplo de referência carregado. São dados reais calculados pelos ministrantes; não são uma execução feita por você.',true);
+      message(staticOnly?'Estruturas de referência carregadas. SOLVATOR mostra geometrias antes e depois da solvatação; este exemplo não contém uma dinâmica, energias ao longo do tempo ou animação. Escolha a estrutura no campo Simulação.':'Referência da aula carregada. Explore a trajetória e compare suas medidas.',true);
       $(state.tab==='trajectory'?'tab-trajectory':'workspace').scrollIntoView({block:'start',behavior:'smooth'});
     }catch(error){
       if(request!==state.exampleRequest)return;
@@ -714,5 +714,5 @@
   $('help-button').addEventListener('click',()=>$('help-dialog').showModal());for(const id of ['close-help','help-done'])$(id).addEventListener('click',()=>$('help-dialog').close());
   let resizeTimer;window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(()=>{if(state.tab==='energy'&&state.runs.length)renderEnergy();else if(state.tab==='distance'&&state.runs.length)renderDistances();if(state.tab==='trajectory')resizeTrajectory();else state.viewer?.resize();},150);});
   document.addEventListener('visibilitychange',()=>{if(document.hidden)stop();});
-  const query=new URLSearchParams(location.search),requested=query.get('exemplo')||'water',requestedTab=new Map([['energias','energy'],['trajetoria','trajectory'],['distancias','distance'],['geometria','distance']]).get(query.get('aba'));if(requestedTab)state.tab=requestedTab;if(requested&&window.AIMD_EXAMPLES?.presets[requested]){$('example-select').value=requested;loadExample(requested,requestedTab);}
+  const query=new URLSearchParams(location.search),requested=query.get('exemplo')||'water_single',requestedTab=new Map([['energias','energy'],['trajetoria','trajectory'],['distancias','distance'],['geometria','distance']]).get(query.get('aba'));if(requestedTab)state.tab=requestedTab;if(requested&&window.AIMD_EXAMPLES?.presets[requested]){$('example-select').value=requested;loadExample(requested,requestedTab);}
 })();

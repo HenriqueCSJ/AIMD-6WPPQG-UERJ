@@ -17,7 +17,7 @@ const specs=[
  ['dimero_xtb2_2ps','Dímero de água · XTB2 · 2 ps','1-agua-dft'],
  ['dimero_b97','Dímero de água · DFT','1-agua-dft'],
  ['dimero_b97_cpcm','Dímero de água · DFT/CPCM','2-solvente-implicito'],
- ['agua_dft','Água · DFT','1-agua-dft'],
+ ['agua_dft','01a · Água isolada · DFT · 20 fs','1-agua-dft'],
  ['agua_cpcm','Água · CPCM','2-solvente-implicito'],
  ['etanol_nve_5ps','Etanol · 0,5 fs · NVE · 5 ps','3-xtb2-etanol'],
  ['etanol_nve','Etanol · 0,5 fs · NVE','3-xtb2-etanol'],
