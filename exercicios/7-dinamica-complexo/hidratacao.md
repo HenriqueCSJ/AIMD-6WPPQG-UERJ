@@ -25,6 +25,9 @@ Essa é uma montagem deliberadamente fora do equilíbrio. As águas já interage
 
 <details markdown="1"><summary>Input completo e comentado · executar em cerca de 40 s na máquina de referência</summary>
 
+[Baixar input ORCA](inputs/controle_dt025_31A.inp) · [Baixar geometria inicial (.xyz)](estruturas/zn_aguas_en_31A.xyz) (obrigatório; manter na mesma pasta do input)
+
+<!-- input-source: inputs/controle_dt025_31A.inp -->
 ```text
 # Aguas inicialmente afastadas: observar a hidratacao do Zn.
 ! MD XTB2 ALPB(water) PAL8
@@ -72,6 +75,9 @@ Ative também **Ligações H**. Distinga aproximação à camada de águas, cont
 
 <details markdown="1"><summary>Input de 5 ps · duas etapas no mesmo cálculo</summary>
 
+[Baixar input ORCA](inputs/hidratacao_associacao_31A.inp) · [Baixar geometria inicial (.xyz)](estruturas/zn_aguas_en_31A.xyz) (obrigatório; manter na mesma pasta do input)
+
+<!-- input-source: inputs/hidratacao_associacao_31A.inp -->
 ```text
 # Montagem fora do equilibrio: aguas a 3.1 A; en a pelo menos 6.5 A.
 ! MD XTB2 ALPB(water) PAL8

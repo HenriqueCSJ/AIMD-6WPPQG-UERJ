@@ -17,7 +17,9 @@
 </ul>
 <p><strong>São alvos do termostato.</strong> A temperatura instantânea flutua e não acompanha uma linha perfeita, sobretudo em nove átomos. Durante as rampas, não há um único estado NVT estacionário.</p>
 <h2 id="2-execute-e-acompanhe-as-etapas">2. Execute e acompanhe as etapas</h2>
-<p><a href="aula-etanol_etapas.zip">Baixar pacote</a> · <a href="inputs/etanol_etapas.inp">Input</a> · <a href="estruturas/etanol.xyz">Estrutura</a></p>
+<p><a href="aula-etanol_etapas.zip">Baixar pacote</a> · <a href="inputs/etanol_etapas.inp" download="etanol_etapas.inp">Baixar input ORCA</a> · <a href="estruturas/etanol.xyz" download="etanol.xyz">Baixar geometria inicial (.xyz)</a> (opcional para executar; as coordenadas já estão no input)</p>
+<!-- input-source: inputs/etanol_etapas.inp -->
+
 <pre><code class="language-text"># Exemplo didatico; oito processos solicitados.
 ! MD XTB2 PAL8
 %maxcore 256
@@ -41,7 +43,17 @@
   # 4.5-5 ps: continuar a 300 K, sem reiniciar velocidades.
   Run 1000
 end
-* xyzfile 0 1 etanol.xyz
+* xyz 0 1
+  C          -0.90144100150192      0.17625125426761     -0.03297153896772
+  C           0.46936125625488     -0.49209041813779     -0.04596375886747
+  O           1.46256276612237      0.28843917261435      0.57717031816153
+  H          -0.88148499664442      1.09990657237907     -0.61006530877166
+  H          -1.64361180355502     -0.48789343144170     -0.46692815539801
+  H          -1.19233363929951      0.41110994548345      0.98810024770280
+  H           0.76068917865250     -0.72317969030966     -1.08182288177168
+  H           0.44081648762406     -1.42618852781151      0.51953633130848
+  H           1.48544175234705      1.15364512295618      0.15294474650374
+*
 </code></pre>
 <details>
 <summary>Executar no Ubuntu / WSL2</summary>
@@ -70,7 +82,11 @@ end
 <p>O cálculo levou <strong>150,1 s</strong> com PAL8 nesta máquina. Se atrasar, use a referência e mantenha a discussão. O <a href="../../visualizador/index.html?exemplo=thermostat_compare">controle anterior NVE × CSVR a 300 K</a> continua disponível para isolar o efeito de ligar um banho com a mesma duração.</p>
 <h2 id="resultados-e-manual">Resultados e manual</h2>
 <ul>
-<li><strong>etanol_etapas:</strong> <a href="resultados/etanol_etapas/etanol_etapas.out">saída</a> · <a href="resultados/etanol_etapas/etanol_etapas.inp">input usado</a> · <a href="resultados/etanol_etapas/etanol_etapas-md-ener.csv">energias</a> · <a href="resultados/etanol_etapas/etanol_etapas-traj.xyz">trajetória</a> · <a href="resultados/etanol_etapas/execucao.json">tempo de execução</a>.</li>
+<li><strong>etanol_etapas:</strong> <a href="resultados/etanol_etapas/etanol_etapas.out">saída</a> · <a href="resultados/etanol_etapas/etanol_etapas.inp" download="etanol_etapas.inp">input usado</a> · <a href="resultados/etanol_etapas/etanol_etapas-md-ener.csv">energias</a> · <a href="resultados/etanol_etapas/etanol_etapas-traj.xyz" download="etanol_etapas-traj.xyz">trajetória</a> · <a href="resultados/etanol_etapas/execucao.json">tempo de execução</a>.</li>
 </ul>
 <p><a href="https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html">Manual ORCA: dinâmica molecular</a>.</p>
-<p><a href="https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html#input-format">Execução sequencial dos comandos</a> · <a href="https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html#thermostat">Thermostat e Ramp</a>.</p><nav class="endnav" aria-label="Próxima etapa"><a href="../4-timestep/index.html">← Timestep e correção</a><a href="../6-complexo-solvator/index.html">Zn–en: SOLVATOR →</a></nav></main></div><footer>Henrique de Castro Silva Junior e Virginia Camila Rufino Ferreira · ORCA 6.1.1 · Materiais e dados locais; links externos levam à documentação oficial.</footer></body></html>
+<p><a href="https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html#input-format">Execução sequencial dos comandos</a> · <a href="https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html#thermostat">Thermostat e Ramp</a>.</p>
+<h2 id="inputs-das-variantes-e-preparacoes">Inputs das variantes e preparações</h2>
+<ul>
+<li><strong>etanol_csvr:</strong> <a href="inputs/etanol_csvr.inp" download="etanol_csvr.inp">Baixar input ORCA</a> · <a href="estruturas/etanol.xyz" download="etanol.xyz">Baixar geometria inicial (.xyz)</a> (opcional para executar; as coordenadas já estão no input).</li>
+</ul><nav class="endnav" aria-label="Próxima etapa"><a href="../4-timestep/index.html">← Timestep e correção</a><a href="../6-complexo-solvator/index.html">Zn–en: SOLVATOR →</a></nav></main></div><footer>Henrique de Castro Silva Junior e Virginia Camila Rufino Ferreira · ORCA 6.1.1 · Materiais e dados locais; links externos levam à documentação oficial.</footer></body></html>

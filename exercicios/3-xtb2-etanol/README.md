@@ -18,8 +18,9 @@ A continuação levou **136,1 s nesta máquina**, além dos 15,8 s originais. No
 
 ## 2. Execute
 
-[Baixar pacote](aula-etanol_nve.zip) · [Input](inputs/etanol_nve.inp) · [Estrutura](estruturas/etanol.xyz)
+[Baixar pacote](aula-etanol_nve.zip) · [Baixar input ORCA](inputs/etanol_nve.inp) · [Baixar geometria inicial (.xyz)](estruturas/etanol.xyz) (opcional para executar; as coordenadas já estão no input)
 
+<!-- input-source: inputs/etanol_nve.inp -->
 ```text
 # Etanol com GFN2-xTB, sem banho termico (NVE).
 ! MD XTB2 PAL8
@@ -36,8 +37,18 @@ A continuação levou **136,1 s nesta máquina**, além dos 15,8 s originais. No
   Run 1000
 end
 
-# Carga 0, multiplicidade 1; XYZ na mesma pasta.
-* xyzfile 0 1 etanol.xyz
+# Carga 0, multiplicidade 1; coordenadas abaixo; XYZ separado opcional.
+* xyz 0 1
+  C          -0.90144100150192      0.17625125426761     -0.03297153896772
+  C           0.46936125625488     -0.49209041813779     -0.04596375886747
+  O           1.46256276612237      0.28843917261435      0.57717031816153
+  H          -0.88148499664442      1.09990657237907     -0.61006530877166
+  H          -1.64361180355502     -0.48789343144170     -0.46692815539801
+  H          -1.19233363929951      0.41110994548345      0.98810024770280
+  H           0.76068917865250     -0.72317969030966     -1.08182288177168
+  H           0.44081648762406     -1.42618852781151      0.51953633130848
+  H           1.48544175234705      1.15364512295618      0.15294474650374
+*
 ```
 
 <details markdown="1"><summary>Executar no Ubuntu / WSL2</summary>
@@ -85,3 +96,9 @@ As faixas numéricas abaixo descrevem o **controle original de 0,5 ps**. Examine
 - **etanol_nve:** [saída](resultados/etanol_nve/etanol_nve.out) · [input usado](resultados/etanol_nve/etanol_nve.inp) · [energias](resultados/etanol_nve/etanol_nve-md-ener.csv) · [trajetória](resultados/etanol_nve/etanol_nve-traj.xyz) · [tempo de execução](resultados/etanol_nve/execucao.json).
 
 [Manual ORCA: dinâmica molecular](https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html).
+
+## Inputs das variantes e preparações
+
+- **preparar_etanol:** [Baixar input ORCA](inputs/preparar_etanol.inp) · [Baixar geometria inicial (.xyz)](estruturas/etanol_inicial.xyz) (opcional para executar; as coordenadas já estão no input).
+
+**Continuação de 0,5 até 5 ps:** [Baixar input ORCA](resultados/etanol_nve_5ps/etapas/ethanol_00500_05000fs.inp) · [Baixar geometria inicial (.xyz)](resultados/etanol_nve_5ps/etapas/ethanol_restart.xyz) (obrigatório; manter na mesma pasta do input) · [Baixar checkpoint obrigatório](resultados/etanol_nve_5ps/etapas/etanol_nve.mdrestart) (fornece o estado de continuação; manter junto do input). O XYZ isolado não substitui o checkpoint.

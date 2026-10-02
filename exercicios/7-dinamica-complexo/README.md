@@ -16,8 +16,9 @@ ALPB modifica o ambiente eletrostático; não impede uma água explícita de se 
 
 ## 2. Execute com parede
 
-[Pacote para executar](aula-zn_parede_longo.zip) · [Input](inputs/zn_parede_longo.inp)
+[Pacote para executar](aula-zn_parede_longo.zip) · [Baixar input ORCA](inputs/zn_parede_longo.inp) · [Baixar geometria inicial (.xyz)](estruturas/zn_solvato.xyz) (obrigatório; manter na mesma pasta do input) · [Baixar checkpoint obrigatório](estruturas/preparacao_termica.mdrestart) (fornece o estado de continuação; manter junto do input)
 
+<!-- input-source: inputs/zn_parede_longo.inp -->
 ```text
 # Complexo com XTB2/ALPB; PAL8 = 8 threads do xTB.
 ! MD XTB2 ALPB(water) PAL8
@@ -86,8 +87,9 @@ Nesta execução, a distância final Zn 0–O 25 foi **9.13 Å sem parede** e **
 
 <details markdown="1"><summary>Executar também o controle sem parede</summary>
 
-[Pacote para executar](aula-zn_sem_parede_longo.zip) · [Input](inputs/zn_sem_parede_longo.inp)
+[Pacote para executar](aula-zn_sem_parede_longo.zip) · [Baixar input ORCA](inputs/zn_sem_parede_longo.inp) · [Baixar geometria inicial (.xyz)](estruturas/zn_solvato.xyz) (obrigatório; manter na mesma pasta do input) · [Baixar checkpoint obrigatório](estruturas/preparacao_termica.mdrestart) (fornece o estado de continuação; manter junto do input)
 
+<!-- input-source: inputs/zn_sem_parede_longo.inp -->
 ```text
 # Controle: mesmo estado inicial, agora sem parede.
 ! MD XTB2 ALPB(water) PAL8
@@ -145,3 +147,11 @@ As referências antigas de 0,5 ps permanecem em [apoio](apoio.md) e no [aplicati
 ## No retorno do intervalo
 
 [04c · Identificar a formação do quelato](../11-formacao-quelato/README.md): use a trajetória pronta de outro sistema, com aproximação inicial guiada, para acompanhar os dois N da mesma en e a saída de duas águas.
+
+## Inputs das variantes e preparações
+
+- **controle_dt025_31A:** [Baixar input ORCA](inputs/controle_dt025_31A.inp) · [Baixar geometria inicial (.xyz)](estruturas/zn_aguas_en_31A.xyz) (obrigatório; manter na mesma pasta do input).
+- **hidratacao_associacao_31A:** [Baixar input ORCA](inputs/hidratacao_associacao_31A.inp) · [Baixar geometria inicial (.xyz)](estruturas/zn_aguas_en_31A.xyz) (obrigatório; manter na mesma pasta do input).
+- **preparacao_termica:** [Baixar input ORCA](inputs/preparacao_termica.inp) · [Baixar geometria inicial (.xyz)](estruturas/zn_solvato.xyz) (obrigatório; manter na mesma pasta do input).
+- **zn_parede:** [Baixar input ORCA](inputs/zn_parede.inp) · [Baixar geometria inicial (.xyz)](estruturas/zn_solvato.xyz) (obrigatório; manter na mesma pasta do input) · [Baixar checkpoint obrigatório](estruturas/preparacao_termica.mdrestart) (fornece o estado de continuação; manter junto do input).
+- **zn_sem_parede:** [Baixar input ORCA](inputs/zn_sem_parede.inp) · [Baixar geometria inicial (.xyz)](estruturas/zn_solvato.xyz) (obrigatório; manter na mesma pasta do input) · [Baixar checkpoint obrigatório](estruturas/preparacao_termica.mdrestart) (fornece o estado de continuação; manter junto do input).

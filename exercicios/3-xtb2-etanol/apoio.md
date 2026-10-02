@@ -34,24 +34,28 @@ Estes cálculos já foram feitos pelos ministrantes. Não são novas execuções
 
 <details markdown="1"><summary>Input e resultados: preparar_etanol</summary>
 
-[Baixar input](resultados/preparar_etanol/preparar_etanol.inp) · [Baixar estrutura de partida](estruturas/etanol_inicial.xyz)
+[Baixar input ORCA](inputs/preparar_etanol.inp) · [Baixar geometria inicial (.xyz)](estruturas/etanol_inicial.xyz) (opcional para executar; as coordenadas já estão no input)
 
+[Input original usado na referência](resultados/preparar_etanol/preparar_etanol.inp).
+
+<!-- input-source: inputs/preparar_etanol.inp -->
 ```text
-# Minicurso AIMD / ORCA 6.1.1 - preparar_etanol
-# Estas linhas de comentario explicam as escolhas e nao alteram o calculo.
-# Execute um caso por vez; mantenha o arquivo XYZ na pasta de execucao.
-
-# Relaxa a geometria. PAL8 solicita oito recursos. XTB2 chama GFN2-xTB
-# externo; PAL8 tambem define suas threads.
+# Apoio: otimiza o etanol com GFN2-xTB.
 ! XTB2 Opt TightOpt PAL8
-
-# Memoria em MB por processo. 256 x 8 = 2048 MB de orcamento, alem de memoria
-# adicional.
 %maxcore 256
 
-# Le o XYZ: carga total 0, multiplicidade 1. O nome do arquivo deve coincidir
-# exatamente.
-* xyzfile 0 1 etanol_inicial.xyz
+# Carga 0, multiplicidade 1; coordenadas abaixo; XYZ separado opcional.
+* xyz 0 1
+C  -0.8883105789  0.1670031805 -0.0273158886
+C   0.4657530425 -0.5115589698 -0.0367953327
+O   1.4310747879  0.3229162225  0.5866699934
+H  -0.8487409911  1.1174800549 -0.5695241286
+H  -1.6471213402 -0.4704427172 -0.4896365992
+H  -1.1963971221  0.3978445473  0.9977232020
+H   0.7919970008 -0.7224282495 -1.0597258424
+H   0.4246036544 -1.4558617236  0.5137906469
+H   1.4671415467  1.1550476549  0.0848139491
+*
 ```
 
 ### preparar_etanol

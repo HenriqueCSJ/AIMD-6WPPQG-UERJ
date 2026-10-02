@@ -11,7 +11,9 @@
 <h2 id="2-abra-as-referencias-prontas">2. Abra as referências prontas</h2>
 <p>Na aula, <strong>não execute este cálculo DFT</strong>. Compare os resultados de vácuo e CPCM fornecidos abaixo, ambos de 60 fs. A referência CPCM levou cerca de 5 min 24 s nesta máquina. O input fica disponível para leitura e reprodução depois da aula.</p>
 <p>Não compare diretamente a trajetória XTB2 de 2 ps da atividade 1 com a DFT/CPCM para atribuir diferenças só ao solvente: nessa comparação também mudariam o método e a duração.</p>
-<p><a href="aula-dimero_b97_cpcm.zip">Baixar pacote</a> · <a href="inputs/dimero_b97_cpcm.inp">Input</a> · <a href="estruturas/dimero_b97.xyz">Estrutura</a></p>
+<p><a href="aula-dimero_b97_cpcm.zip">Baixar pacote</a> · <a href="inputs/dimero_b97_cpcm.inp" download="dimero_b97_cpcm.inp">Baixar input ORCA</a> · <a href="estruturas/dimero_b97.xyz" download="dimero_b97.xyz">Baixar geometria inicial (.xyz)</a> (opcional para executar; as coordenadas já estão no input)</p>
+<!-- input-source: inputs/dimero_b97_cpcm.inp -->
+
 <pre><code class="language-text"># Exemplo didatico; oito processos solicitados.
 ! MD B97-3c TightSCF CPCM(water) PAL8
 %maxcore 256
@@ -25,7 +27,14 @@
   # 60 fs: observar vibracao e geometria da ligacao H.
   Run 120
 end
-* xyzfile 0 1 dimero_b97.xyz
+* xyz 0 1
+  O          -0.07963526387957     -0.01964165075209     -0.00000000264085
+  H           0.88823357664041      0.04103734930643      0.00000002901791
+  H          -0.37106168405382      0.89703962065287     -0.00000002440793
+  O           2.88291572564215      0.11999069039073     -0.00000000005029
+  H           3.28977384105638      0.54578697932583      0.76197145433409
+  H           3.28977380459444      0.54578701107623     -0.76197145625293
+*
 </code></pre>
 <details>
 <summary>Reprodução após a aula: Ubuntu / WSL2</summary>
@@ -53,7 +62,11 @@ end
 <p><strong>Não concluir:</strong> a diferença entre duas energias instantâneas não é ΔG de solvatação. Começamos da geometria relaxada no vácuo, e a trajetória CPCM curta inclui a resposta inicial à troca de ambiente.</p>
 <h2 id="resultados-e-manual">Resultados e manual</h2>
 <ul>
-<li><strong>dimero_b97_cpcm:</strong> <a href="resultados/dimero_b97_cpcm/dimero_b97_cpcm.out">saída</a> · <a href="resultados/dimero_b97_cpcm/dimero_b97_cpcm.inp">input usado</a> · <a href="resultados/dimero_b97_cpcm/dimero_b97_cpcm-md-ener.csv">energias</a> · <a href="resultados/dimero_b97_cpcm/dimero_b97_cpcm-traj.xyz">trajetória</a> · <a href="resultados/dimero_b97_cpcm/execucao.json">tempo de execução</a>.</li>
+<li><strong>dimero_b97_cpcm:</strong> <a href="resultados/dimero_b97_cpcm/dimero_b97_cpcm.out">saída</a> · <a href="resultados/dimero_b97_cpcm/dimero_b97_cpcm.inp" download="dimero_b97_cpcm.inp">input usado</a> · <a href="resultados/dimero_b97_cpcm/dimero_b97_cpcm-md-ener.csv">energias</a> · <a href="resultados/dimero_b97_cpcm/dimero_b97_cpcm-traj.xyz" download="dimero_b97_cpcm-traj.xyz">trajetória</a> · <a href="resultados/dimero_b97_cpcm/execucao.json">tempo de execução</a>.</li>
 </ul>
 <p><a href="https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html">Manual ORCA: dinâmica molecular</a>.</p>
-<p><a href="apoio.html">Água isolada/CPCM: referência anterior</a>.</p><nav class="endnav" aria-label="Voltar"><a href="../index.html">← Percurso da aula</a><a href="../index.html#opcionais-e-referencias">Outros opcionais →</a></nav></main></div><footer>Henrique de Castro Silva Junior e Virginia Camila Rufino Ferreira · ORCA 6.1.1 · Materiais e dados locais; links externos levam à documentação oficial.</footer></body></html>
+<p><a href="apoio.html">Água isolada/CPCM: referência anterior</a>.</p>
+<h2 id="inputs-das-variantes-e-preparacoes">Inputs das variantes e preparações</h2>
+<ul>
+<li><strong>agua_cpcm:</strong> <a href="inputs/agua_cpcm.inp" download="agua_cpcm.inp">Baixar input ORCA</a> · <a href="estruturas/agua.xyz" download="agua.xyz">Baixar geometria inicial (.xyz)</a> (opcional para executar; as coordenadas já estão no input).</li>
+</ul><nav class="endnav" aria-label="Voltar"><a href="../index.html">← Percurso da aula</a><a href="../index.html#opcionais-e-referencias">Outros opcionais →</a></nav></main></div><footer>Henrique de Castro Silva Junior e Virginia Camila Rufino Ferreira · ORCA 6.1.1 · Materiais e dados locais; links externos levam à documentação oficial.</footer></body></html>

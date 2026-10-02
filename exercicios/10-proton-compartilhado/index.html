@@ -10,9 +10,12 @@
 <p><strong>Para observar com calma:</strong> o laboratório abre agora a referência completa de <strong>10 ps</strong>, com <strong>40001 quadros</strong>. Um ciclo de reprodução começa em <strong>60 s</strong>; escolha <strong>120 s</strong> em <strong>Duração a 1×</strong>, ou reduza <strong>Velocidade</strong>, para acompanhar cada passagem por mais tempo. Esses controles não alteram o tempo físico.</p>
 <p>O input curto abaixo continua disponível para executar os primeiros <strong>2 ps</strong> durante a aula. A referência longa preserva esses mesmos 2 ps e acrescenta <strong>8 ps por restart</strong>, sem reinicializar posições ou velocidades.</p>
 <h2 id="1-prepare">1. Prepare</h2>
-<p><a href="aula-proton_shared.zip">Pacote para executar</a> · <a href="inputs/proton_shared.inp">Input comentado</a> · <a href="estruturas/h5o2_otimizado.xyz">Geometria otimizada</a></p>
+<p><a href="aula-proton_shared.zip">Pacote para executar</a> · <a href="inputs/proton_shared.inp" download="proton_shared.inp">Baixar input ORCA</a> · <a href="estruturas/h5o2_otimizado.xyz" download="h5o2_otimizado.xyz">Baixar geometria inicial (.xyz)</a> (opcional para executar; as coordenadas já estão no input)</p>
 <p>Extraia o pacote numa pasta nova. Os índices do aplicativo começam em <strong>zero</strong>: <strong>O 0, O 1 e H 2</strong> compõem a unidade O–H–O; H 3–6 são os demais hidrogênios. A carga total é +1 e a multiplicidade é 1.</p>
-<pre><code class="language-text">! MD XTB2 PAL8
+<!-- input-source: inputs/proton_shared.inp -->
+
+<pre><code class="language-text"># H5O2+ a 300 K: 2 ps, sem solvente, parede ou forca de transferencia.
+! MD XTB2 PAL8
 %maxcore 256
 %md
   # 8000 passos x 0.25 fs = 2000 fs = 2 ps.
@@ -23,7 +26,16 @@
   Initvel 300_K
   Run 8000
 end
-* xyzfile 1 1 h5o2_otimizado.xyz
+# Carga +1, singlete; sete atomos previamente otimizados.
+* xyz 1 1
+  O          -1.19345817074522      0.17646804906572      0.17122190484488
+  O           1.21572526872885     -0.16865453348367     -0.17845947003107
+  H           0.01115351685316      0.00384993107425     -0.00349933898496
+  H          -1.65026203146322      0.50127324929764     -0.62030260894495
+  H          -1.64922809634862     -0.61740672709059      0.49171722161426
+  H           1.67249409653824     -0.49384095241469      0.61293048397896
+  H           1.67157541643680      0.62531098355134     -0.49860819247712
+*
 </code></pre>
 <h2 id="2-execute-ou-use-a-referencia">2. Execute ou use a referência</h2>
 <p><strong>Ubuntu / WSL2:</strong></p>
@@ -63,14 +75,19 @@ end
 <h2 id="arquivos-e-consulta">Arquivos e consulta</h2>
 <ul>
 <li>
-<p><strong>10 ps:</strong> <a href="resultados/proton_shared_10ps/proton_shared_10ps-traj.xyz">XYZ completo</a>, <a href="resultados/proton_shared_10ps/proton_shared_10ps-md-ener.csv">energias e temperatura</a>, <a href="resultados/proton_shared_10ps/curso.json">etapas e condições</a>, <a href="resultados/proton_shared_10ps/etapas/z02_02000_10000fs.out">saída da continuação</a> e <a href="resultados/proton_shared_10ps/verificacao.json">conferência numérica</a>.
+<p><strong>10 ps:</strong> <a href="resultados/proton_shared_10ps/proton_shared_10ps-traj.xyz" download="proton_shared_10ps-traj.xyz">XYZ completo</a>, <a href="resultados/proton_shared_10ps/proton_shared_10ps-md-ener.csv">energias e temperatura</a>, <a href="resultados/proton_shared_10ps/curso.json">etapas e condições</a>, <a href="resultados/proton_shared_10ps/etapas/z02_02000_10000fs.out">saída da continuação</a> e <a href="resultados/proton_shared_10ps/verificacao.json">conferência numérica</a>.
 <strong>2 ps originais</strong>, preservados abaixo:</p>
 </li>
 <li>
-<p><a href="resultados/proton_shared/proton_shared.out">Saída ORCA</a> · <a href="resultados/proton_shared/proton_shared-md-ener.csv">Energias</a> · <a href="resultados/proton_shared/proton_shared-traj.xyz">Trajetória completa</a>.</p>
+<p><a href="resultados/proton_shared/proton_shared.out">Saída ORCA</a> · <a href="resultados/proton_shared/proton_shared-md-ener.csv">Energias</a> · <a href="resultados/proton_shared/proton_shared-traj.xyz" download="proton_shared-traj.xyz">Trajetória completa</a>.</p>
 </li>
-<li><a href="resultados/proton_shared/proton_shared.inp">Input original da referência</a> · <a href="resultados/proton_shared/execucao.json">Registro de execução</a>. Os resultados foram copiados com um nome comum para facilitar o carregamento; as séries não foram interpoladas.</li>
-<li><a href="inputs/z00_otimizar.inp">Input da otimização</a> · <a href="estruturas/h5o2_inicial.xyz">Geometria inicial</a> · <a href="resultados/otimizacao/z00_otimizar.out">Saída da otimização</a>.</li>
+<li><a href="resultados/proton_shared/proton_shared.inp" download="proton_shared.inp">Input original da referência</a> · <a href="resultados/proton_shared/execucao.json">Registro de execução</a>. Os resultados foram copiados com um nome comum para facilitar o carregamento; as séries não foram interpoladas.</li>
+<li><a href="inputs/z00_otimizar.inp" download="z00_otimizar.inp">Baixar input ORCA</a> · <a href="estruturas/h5o2_inicial.xyz" download="h5o2_inicial.xyz">Baixar geometria inicial (.xyz)</a> (opcional para executar; as coordenadas já estão no input) · <a href="resultados/otimizacao/z00_otimizar.out">Saída da otimização</a>.</li>
 <li><a href="https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html">Manual ORCA 6.1: dinâmica molecular, timestep e termostatos</a>.</li>
 </ul>
-<p><strong>Entrega da dupla:</strong> anote um cruzamento com retorno e explique como a conclusão muda ao exigir persistência.</p><nav class="endnav" aria-label="Próxima etapa"><a href="../11-formacao-quelato/index.html">← Zn–en: formar o quelato</a><a href="../index.html#opcionais-e-referencias">Explorar os opcionais →</a></nav></main></div><footer>Henrique de Castro Silva Junior e Virginia Camila Rufino Ferreira · ORCA 6.1.1 · Materiais e dados locais; links externos levam à documentação oficial.</footer></body></html>
+<p><strong>Entrega da dupla:</strong> anote um cruzamento com retorno e explique como a conclusão muda ao exigir persistência.</p>
+<h2 id="inputs-das-variantes-e-preparacoes">Inputs das variantes e preparações</h2>
+<ul>
+<li><strong>z01_dinamica — etapa após a otimização; usa a geometria otimizada:</strong> <a href="inputs/z01_dinamica.inp" download="z01_dinamica.inp">Baixar input ORCA</a> · <a href="estruturas/h5o2_otimizado.xyz" download="h5o2_otimizado.xyz">Baixar geometria inicial (.xyz)</a> (obrigatório; manter na mesma pasta do input).</li>
+</ul>
+<p><strong>Continuação de 2 até 10 ps:</strong> <a href="resultados/proton_shared_10ps/etapas/z02_02000_10000fs.inp" download="z02_02000_10000fs.inp">Baixar input ORCA</a> · <a href="resultados/proton_shared_10ps/etapas/h5o2_restart_2ps.xyz" download="h5o2_restart_2ps.xyz">Baixar geometria inicial (.xyz)</a> (obrigatório; manter na mesma pasta do input) · <a href="resultados/proton_shared_10ps/etapas/z01_dinamica.mdrestart" download="z01_dinamica.mdrestart">Baixar checkpoint obrigatório</a> (fornece o estado de continuação; manter junto do input). O XYZ isolado não substitui o checkpoint.</p><nav class="endnav" aria-label="Próxima etapa"><a href="../11-formacao-quelato/index.html">← Zn–en: formar o quelato</a><a href="../index.html#opcionais-e-referencias">Explorar os opcionais →</a></nav></main></div><footer>Henrique de Castro Silva Junior e Virginia Camila Rufino Ferreira · ORCA 6.1.1 · Materiais e dados locais; links externos levam à documentação oficial.</footer></body></html>

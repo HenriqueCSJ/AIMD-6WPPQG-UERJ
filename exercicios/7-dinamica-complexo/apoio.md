@@ -60,72 +60,33 @@ Os dois N permaneceram próximos ao Zn nesta referência com parede: aproximadam
 
 Uma trajetória de **100 fs = 0,1 ps = 10⁻¹³ s** prepara o estado inicial comum. Não é uma execução adicional obrigatória nem uma demonstração de equilíbrio convergido.
 
-[Baixar input](resultados/preparacao_termica/preparacao_termica.inp) · [Baixar estrutura relaxada e centralizada](estruturas/zn_solvato.xyz) · [Baixar reinício usado nos dois controles](estruturas/preparacao_termica.mdrestart)
+[Baixar input ORCA](inputs/preparacao_termica.inp) · [Baixar geometria inicial (.xyz)](estruturas/zn_solvato.xyz) (obrigatório; manter na mesma pasta do input) · [Baixar reinício usado nos dois controles](estruturas/preparacao_termica.mdrestart)
 
 <details markdown="1"><summary>Ver input comentado da preparação</summary>
 
+[Input original usado na referência](resultados/preparacao_termica/preparacao_termica.inp).
+
+<!-- input-source: inputs/preparacao_termica.inp -->
 ```text
-# Minicurso AIMD / ORCA 6.1.1 - preparacao_termica
-# Estas linhas de comentario explicam as escolhas e nao alteram o calculo.
-# Execute um caso por vez; mantenha o arquivo XYZ na pasta de execucao.
-
-# Integra o movimento dos nucleos. PAL8 solicita oito recursos. XTB2 chama
-# GFN2-xTB externo; PAL8 tambem define suas threads. ALPB(water) representa o
-# ambiente continuo.
+# Apoio: prepara o estado comum para os dois controles.
 ! MD XTB2 ALPB(water) PAL8
-
-# Memoria em MB por processo. 256 x 8 = 2048 MB de orcamento, alem de memoria
-# adicional.
 %maxcore 256
 
-# Parametros da dinamica: as unidades sao explicitas em cada linha.
 %md
-  # Passo de integracao em femtossegundos. 1 fs = 1e-15 s.
   Timestep 0.5_fs
-  # Semente fixa para repetir a preparacao aleatoria no mesmo ambiente.
   Randomize 42
-  # Inicializa velocidades na temperatura indicada; nao substitui um
-  # termostato.
+  # Velocidades iniciais; nao mantem a temperatura fixa.
   Initvel 300_K
-  # Banho CSVR a 300 K; Timecon 100 fs regula o acoplamento. A temperatura
-  # pode flutuar.
+  # Banho a 300 K; acoplamento em 100 fs.
   Thermostat CSVR 300_K Timecon 100_fs
-  # Parede harmonica esferica; centro e raio em angstrom. Spring em kJ mol-1
-  # A-2; nao e caixa periodica.
-  Cell Sphere 0, 0, 0, 6.0_A Spring 10.0
-  # Distancia Zn(0)-N(1), sem impor restricao. Os indices comecam em zero.
-  Manage_Colvar Define 1 Distance Atom 0 Atom 1
-  # Distancia Zn(0)-N(4), sem impor restricao. Os indices comecam em zero.
-  Manage_Colvar Define 2 Distance Atom 0 Atom 4
-  # Distancia Zn(0)-O(13), sem impor restricao. Os indices comecam em zero.
-  Manage_Colvar Define 3 Distance Atom 0 Atom 13
-  # Distancia Zn(0)-O(16), sem impor restricao. Os indices comecam em zero.
-  Manage_Colvar Define 4 Distance Atom 0 Atom 16
-  # Distancia Zn(0)-O(19), sem impor restricao. Os indices comecam em zero.
-  Manage_Colvar Define 5 Distance Atom 0 Atom 19
-  # Distancia Zn(0)-O(22), sem impor restricao. Os indices comecam em zero.
-  Manage_Colvar Define 6 Distance Atom 0 Atom 22
-  # Distancia Zn(0)-O(25), sem impor restricao. Os indices comecam em zero.
-  Manage_Colvar Define 7 Distance Atom 0 Atom 25
-  # Distancia Zn(0)-O(28), sem impor restricao. Os indices comecam em zero.
-  Manage_Colvar Define 8 Distance Atom 0 Atom 28
-  # Distancia Zn(0)-O(31), sem impor restricao. Os indices comecam em zero.
-  Manage_Colvar Define 9 Distance Atom 0 Atom 31
-  # Distancia Zn(0)-O(34), sem impor restricao. Os indices comecam em zero.
-  Manage_Colvar Define 10 Distance Atom 0 Atom 34
-  # Distancia Zn(0)-O(37), sem impor restricao. Os indices comecam em zero.
-  Manage_Colvar Define 11 Distance Atom 0 Atom 37
-  # Distancia Zn(0)-O(40), sem impor restricao. Os indices comecam em zero.
-  Manage_Colvar Define 12 Distance Atom 0 Atom 40
-  # Grava um quadro XYZ por passo. O nome identifica esta trajetoria.
+  # Parede suave: centro (0,0,0), raio 6 A.
+  Walls Sphere 0, 0, 0, 6.0_A Spring 10.0
   Dump Position Stride 1 Filename "preparacao_termica-traj.xyz"
-  # Numero de passos desta etapa. Duracao fisica = numero de passos x
-  # timestep.
+  # 200 x 0.5 fs = 100 fs (1e-13 s).
   Run 200
 end
 
-# Le o XYZ: carga total 2, multiplicidade 1. O nome do arquivo deve coincidir
-# exatamente.
+# Carga 2, multiplicidade 1; XYZ na mesma pasta.
 * xyzfile 2 1 zn_solvato.xyz
 ```
 

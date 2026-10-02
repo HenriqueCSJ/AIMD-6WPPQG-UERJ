@@ -14,8 +14,9 @@ Voltamos à água do começo da aula, agora dentro de C₆₀. **H₂O@C₆₀ �
 
 ## 2. Execute ou abra a referência
 
-[Pacote para executar](aula-agua_c60.zip) · [Input](inputs/agua_c60.inp)
+[Pacote para executar](aula-agua_c60.zip) · [Baixar input ORCA](inputs/agua_c60.inp) · [Baixar geometria inicial (.xyz)](estruturas/agua_c60.xyz) (obrigatório; manter na mesma pasta do input)
 
+<!-- input-source: inputs/agua_c60.inp -->
 ```text
 # Agua encapsulada: todos os atomos da gaiola se movem.
 ! MD XTB2 PAL8
@@ -76,7 +77,7 @@ Esta trajetória curta não descreve a entrada da água através de uma gaiola i
 
 - **agua_c60:** [input usado](resultados/agua_c60/agua_c60.inp) · [saída](resultados/agua_c60/agua_c60.out) · [energias](resultados/agua_c60/agua_c60-md-ener.csv) · [trajetória](resultados/agua_c60/agua_c60-traj.xyz).
 
-- [Input de otimização](inputs/preparar_agua_c60.inp) · [estrutura inicial](estruturas/agua_c60_inicial.xyz) · [saída da otimização](resultados/preparar_agua_c60/preparar_agua_c60.out).
+- [Baixar input ORCA](inputs/preparar_agua_c60.inp) · [Baixar geometria inicial (.xyz)](estruturas/agua_c60_inicial.xyz) (obrigatório; manter na mesma pasta do input) · [saída da otimização](resultados/preparar_agua_c60/preparar_agua_c60.out).
 - [ASE: código e coordenadas do C₆₀](https://docs.ase-lib.org/_modules/ase/build/molecule.html).
 - [Kurotobi e Murata, Science 2011: síntese de H₂O@C₆₀](https://doi.org/10.1126/science.1206376).
 - [Manual ORCA: dinâmica molecular](https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html).

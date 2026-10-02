@@ -8,9 +8,11 @@
 </blockquote>
 <p>Voltamos à água do começo da aula, agora dentro de C₆₀. <strong>H₂O@C₆₀ é um sistema sintetizado experimentalmente</strong>, não apenas uma montagem gráfica. Aqui estudamos um modelo isolado com GFN2-xTB: a água começa dentro da gaiola, e todos os 63 átomos podem se mover.</p>
 <h2 id="1-prepare">1. Prepare</h2>
-<p><a href="estruturas/agua_c60.xyz">Baixar a geometria relaxada</a>. Os índices <strong>0, 1 e 2</strong> são O, H e H; os <strong>3–62</strong> são os carbonos. A gaiola foi obtida da base de moléculas do ASE e o conjunto foi relaxado com XTB2 antes da dinâmica. Não se trata de coordenadas experimentais refinadas.</p>
+<p><a href="estruturas/agua_c60.xyz" download="agua_c60.xyz">Baixar a geometria relaxada</a>. Os índices <strong>0, 1 e 2</strong> são O, H e H; os <strong>3–62</strong> são os carbonos. A gaiola foi obtida da base de moléculas do ASE e o conjunto foi relaxado com XTB2 antes da dinâmica. Não se trata de coordenadas experimentais refinadas.</p>
 <h2 id="2-execute-ou-abra-a-referencia">2. Execute ou abra a referência</h2>
-<p><a href="aula-agua_c60.zip">Pacote para executar</a> · <a href="inputs/agua_c60.inp">Input</a></p>
+<p><a href="aula-agua_c60.zip">Pacote para executar</a> · <a href="inputs/agua_c60.inp" download="agua_c60.inp">Baixar input ORCA</a> · <a href="estruturas/agua_c60.xyz" download="agua_c60.xyz">Baixar geometria inicial (.xyz)</a> (obrigatório; manter na mesma pasta do input)</p>
+<!-- input-source: inputs/agua_c60.inp -->
+
 <pre><code class="language-text"># Agua encapsulada: todos os atomos da gaiola se movem.
 ! MD XTB2 PAL8
 %maxcore 256
@@ -56,10 +58,10 @@ end
 <h2 id="arquivos-e-preparacao">Arquivos e preparação</h2>
 <ul>
 <li>
-<p><strong>agua_c60:</strong> <a href="resultados/agua_c60/agua_c60.inp">input usado</a> · <a href="resultados/agua_c60/agua_c60.out">saída</a> · <a href="resultados/agua_c60/agua_c60-md-ener.csv">energias</a> · <a href="resultados/agua_c60/agua_c60-traj.xyz">trajetória</a>.</p>
+<p><strong>agua_c60:</strong> <a href="resultados/agua_c60/agua_c60.inp" download="agua_c60.inp">input usado</a> · <a href="resultados/agua_c60/agua_c60.out">saída</a> · <a href="resultados/agua_c60/agua_c60-md-ener.csv">energias</a> · <a href="resultados/agua_c60/agua_c60-traj.xyz" download="agua_c60-traj.xyz">trajetória</a>.</p>
 </li>
 <li>
-<p><a href="inputs/preparar_agua_c60.inp">Input de otimização</a> · <a href="estruturas/agua_c60_inicial.xyz">estrutura inicial</a> · <a href="resultados/preparar_agua_c60/preparar_agua_c60.out">saída da otimização</a>.</p>
+<p><a href="inputs/preparar_agua_c60.inp" download="preparar_agua_c60.inp">Baixar input ORCA</a> · <a href="estruturas/agua_c60_inicial.xyz" download="agua_c60_inicial.xyz">Baixar geometria inicial (.xyz)</a> (obrigatório; manter na mesma pasta do input) · <a href="resultados/preparar_agua_c60/preparar_agua_c60.out">saída da otimização</a>.</p>
 </li>
 <li><a href="https://docs.ase-lib.org/_modules/ase/build/molecule.html">ASE: código e coordenadas do C₆₀</a>.</li>
 <li><a href="https://doi.org/10.1126/science.1206376">Kurotobi e Murata, Science 2011: síntese de H₂O@C₆₀</a>.</li>

@@ -20,8 +20,9 @@ O ORCA executa o `%md` **linha por linha**. Um `Run` avança a trajetória com a
 
 ## 2. Execute e acompanhe as etapas
 
-[Baixar pacote](aula-etanol_etapas.zip) · [Input](inputs/etanol_etapas.inp) · [Estrutura](estruturas/etanol.xyz)
+[Baixar pacote](aula-etanol_etapas.zip) · [Baixar input ORCA](inputs/etanol_etapas.inp) · [Baixar geometria inicial (.xyz)](estruturas/etanol.xyz) (opcional para executar; as coordenadas já estão no input)
 
+<!-- input-source: inputs/etanol_etapas.inp -->
 ```text
 # Exemplo didatico; oito processos solicitados.
 ! MD XTB2 PAL8
@@ -46,7 +47,17 @@ O ORCA executa o `%md` **linha por linha**. Um `Run` avança a trajetória com a
   # 4.5-5 ps: continuar a 300 K, sem reiniciar velocidades.
   Run 1000
 end
-* xyzfile 0 1 etanol.xyz
+* xyz 0 1
+  C          -0.90144100150192      0.17625125426761     -0.03297153896772
+  C           0.46936125625488     -0.49209041813779     -0.04596375886747
+  O           1.46256276612237      0.28843917261435      0.57717031816153
+  H          -0.88148499664442      1.09990657237907     -0.61006530877166
+  H          -1.64361180355502     -0.48789343144170     -0.46692815539801
+  H          -1.19233363929951      0.41110994548345      0.98810024770280
+  H           0.76068917865250     -0.72317969030966     -1.08182288177168
+  H           0.44081648762406     -1.42618852781151      0.51953633130848
+  H           1.48544175234705      1.15364512295618      0.15294474650374
+*
 ```
 
 <details markdown="1"><summary>Executar no Ubuntu / WSL2</summary>
@@ -95,3 +106,7 @@ O cálculo levou **150,1 s** com PAL8 nesta máquina. Se atrasar, use a referên
 [Manual ORCA: dinâmica molecular](https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html).
 
 [Execução sequencial dos comandos](https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html#input-format) · [Thermostat e Ramp](https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html#thermostat).
+
+## Inputs das variantes e preparações
+
+- **etanol_csvr:** [Baixar input ORCA](inputs/etanol_csvr.inp) · [Baixar geometria inicial (.xyz)](estruturas/etanol.xyz) (opcional para executar; as coordenadas já estão no input).

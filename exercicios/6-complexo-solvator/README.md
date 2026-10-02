@@ -12,7 +12,7 @@ Para observar a formação da primeira camada de águas, abra também [Zn, água
 
 O ponto de partida tem Zn, etilenodiamina e quatro águas: **25 átomos**. O SOLVATOR acrescentará seis águas, chegando a **43 átomos**. O banho contínuo ALPB permanece.
 
-[Baixar os arquivos da atividade](aula-zn_solvator.zip) · [Abrir a estrutura](estruturas/zn_en.xyz)
+[Baixar os arquivos da atividade](aula-zn_solvator.zip) · [Baixar a estrutura](estruturas/zn_en.xyz)
 
 Extraia o pacote. Ele contém o input e os arquivos que precisam ficar juntos. Use uma pasta para esta atividade.
 
@@ -20,8 +20,9 @@ Extraia o pacote. Ele contém o input e os arquivos que precisam ficar juntos. U
 
 Salve este conteúdo como **`zn_solvator.inp`**; ele já está no pacote.
 
-[Baixar input](inputs/zn_solvator.inp) · [Baixar pacote com os arquivos necessários](aula-zn_solvator.zip)
+[Baixar input ORCA](inputs/zn_solvator.inp) · [Baixar geometria inicial (.xyz)](estruturas/zn_en.xyz) (obrigatório; manter na mesma pasta do input) · [Baixar pacote com os arquivos necessários](aula-zn_solvator.zip)
 
+<!-- input-source: inputs/zn_solvator.inp -->
 ```text
 # SOLVATOR: acrescenta aguas explicitas ao complexo.
 ! XTB2 ALPB(water) PAL8
@@ -84,8 +85,9 @@ Ative **Coordenação** e **Ligações H** no visualizador. Identifique os dois 
 
 Troque seis por duas águas para praticar em menos tempo: o resultado tem 31 átomos. Execute somente uma versão. Na etapa 04b todos usarão o sistema fornecido de 43 átomos.
 
-[Baixar input](inputs/zn_solvator_2aguas.inp) · [Baixar pacote com os arquivos necessários](aula-zn_solvator_2aguas.zip)
+[Baixar input ORCA](inputs/zn_solvator_2aguas.inp) · [Baixar geometria inicial (.xyz)](estruturas/zn_en.xyz) (obrigatório; manter na mesma pasta do input) · [Baixar pacote com os arquivos necessários](aula-zn_solvator_2aguas.zip)
 
+<!-- input-source: inputs/zn_solvator_2aguas.inp -->
 ```text
 # Alternativa curta: acrescenta somente duas aguas.
 ! XTB2 ALPB(water) PAL8
@@ -144,3 +146,8 @@ Resultados reais já calculados com PAL8. O input completo de cada referência e
 **Manual:** [SOLVATOR](https://www.faccts.de/docs/orca/6.1/manual/contents/structurereactivity/solvator.html).
 
 **Antes de avançar:** anote uma mudança no input, uma observação e uma conclusão que esta trajetória ainda não permite.
+
+## Inputs das variantes e preparações
+
+- **preparar_complexo:** [Baixar input ORCA](inputs/preparar_complexo.inp) · [Baixar geometria inicial (.xyz)](estruturas/zn_en_inicial.xyz) (obrigatório; manter na mesma pasta do input).
+- **relaxar_solvato:** [Baixar input ORCA](inputs/relaxar_solvato.inp) · [Baixar geometria inicial (.xyz)](estruturas/zn_solvator.xyz) (obrigatório; manter na mesma pasta do input).

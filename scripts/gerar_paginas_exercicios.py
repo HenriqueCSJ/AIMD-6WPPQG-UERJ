@@ -32,7 +32,11 @@ def render(folder,title,source,index,filename='index.html'):
         elif href.endswith('.md') and resolved.parent==ROOT/'tutoriais':
             # Pages serves Markdown as text; open the readable GitHub guide.
             href='https://github.com/HenriqueCSJ/AIMD-6WPPQG-UERJ/blob/main/'+resolved.relative_to(ROOT).as_posix()
-        return 'href="'+href+tail+'"'
+        # Same-origin text files should download with their actual filename.
+        download=''
+        if not tail and resolved.suffix.lower() in ('.inp','.xyz','.mdrestart'):
+            download=' download="'+html.escape(resolved.name,quote=True)+'"'
+        return 'href="'+href+tail+'"'+download
     body=re.sub(r'href="([^"]+)"',local_link,body)
     endnav=''
     if index and index<=len(COURSE):

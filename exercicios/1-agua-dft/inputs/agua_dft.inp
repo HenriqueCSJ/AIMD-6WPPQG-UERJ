@@ -13,5 +13,9 @@
   Run 40
 end
 
-# Carga 0, multiplicidade 1; XYZ na mesma pasta.
-* xyzfile 0 1 agua.xyz
+# Carga 0, multiplicidade 1; coordenadas abaixo; XYZ separado opcional.
+* xyz 0 1
+  O          -0.00000000000561      0.00000000000000     -0.07350969363937
+  H           0.76032823354949      0.00000000000000      0.54103884681985
+  H          -0.76032823354388      0.00000000000000      0.54103884681952
+*

@@ -11,7 +11,9 @@
 <p>As duas trajetórias partem do <strong>mesmo arquivo de reinício</strong>, com as mesmas posições e velocidades, após 100 fs de preparação. Ambas usam XTB2/ALPB(water), CSVR a 300 K, timestep de 0,5 fs e mais <strong>2 ps = 2 × 10⁻¹² s</strong>. Apenas a parede muda. O relógio vai de 100 a 2100 fs.</p>
 <p>ALPB modifica o ambiente eletrostático; não impede uma água explícita de se afastar. A parede acrescenta uma força restauradora quando um átomo ultrapassa o raio escolhido.</p>
 <h2 id="2-execute-com-parede">2. Execute com parede</h2>
-<p><a href="aula-zn_parede_longo.zip">Pacote para executar</a> · <a href="inputs/zn_parede_longo.inp">Input</a></p>
+<p><a href="aula-zn_parede_longo.zip">Pacote para executar</a> · <a href="inputs/zn_parede_longo.inp" download="zn_parede_longo.inp">Baixar input ORCA</a> · <a href="estruturas/zn_solvato.xyz" download="zn_solvato.xyz">Baixar geometria inicial (.xyz)</a> (obrigatório; manter na mesma pasta do input) · <a href="estruturas/preparacao_termica.mdrestart" download="preparacao_termica.mdrestart">Baixar checkpoint obrigatório</a> (fornece o estado de continuação; manter junto do input)</p>
+<!-- input-source: inputs/zn_parede_longo.inp -->
+
 <pre><code class="language-text"># Complexo com XTB2/ALPB; PAL8 = 8 threads do xTB.
 ! MD XTB2 ALPB(water) PAL8
 %maxcore 256
@@ -62,7 +64,8 @@ end
 <p><strong>O ganho:</strong> conservar uma região finita de solvente explícito ao redor do sistema durante a demonstração. <strong>O custo:</strong> forças artificiais nas bordas alteram o movimento; raio pequeno ou parede muito rígida podem distorcer a estrutura e exigir timestep menor. Aqui a perda de uma água significa afastamento no modelo de aglomerado, não uma taxa de evaporação de solução macroscópica.</p>
 <details>
 <summary>Executar também o controle sem parede</summary>
-<p><a href="aula-zn_sem_parede_longo.zip">Pacote para executar</a> · <a href="inputs/zn_sem_parede_longo.inp">Input</a></p>
+<p><a href="aula-zn_sem_parede_longo.zip">Pacote para executar</a> · <a href="inputs/zn_sem_parede_longo.inp" download="zn_sem_parede_longo.inp">Baixar input ORCA</a> · <a href="estruturas/zn_solvato.xyz" download="zn_solvato.xyz">Baixar geometria inicial (.xyz)</a> (obrigatório; manter na mesma pasta do input) · <a href="estruturas/preparacao_termica.mdrestart" download="preparacao_termica.mdrestart">Baixar checkpoint obrigatório</a> (fornece o estado de continuação; manter junto do input)</p>
+<!-- input-source: inputs/zn_sem_parede_longo.inp -->
 <pre><code class="language-text"># Controle: mesmo estado inicial, agora sem parede.
 ! MD XTB2 ALPB(water) PAL8
 %maxcore 256
@@ -99,9 +102,17 @@ end
 </details>
 <h2 id="resultados-reais">Resultados reais</h2>
 <ul>
-<li><strong>zn_parede_longo:</strong> <a href="resultados/zn_parede_longo/zn_parede_longo.inp">input usado</a> · <a href="resultados/zn_parede_longo/zn_parede_longo.out">saída</a> · <a href="resultados/zn_parede_longo/zn_parede_longo-md-ener.csv">energias</a> · <a href="resultados/zn_parede_longo/zn_parede_longo-traj.xyz">trajetória</a>.</li>
-<li><strong>zn_sem_parede_longo:</strong> <a href="resultados/zn_sem_parede_longo/zn_sem_parede_longo.inp">input usado</a> · <a href="resultados/zn_sem_parede_longo/zn_sem_parede_longo.out">saída</a> · <a href="resultados/zn_sem_parede_longo/zn_sem_parede_longo-md-ener.csv">energias</a> · <a href="resultados/zn_sem_parede_longo/zn_sem_parede_longo-traj.xyz">trajetória</a>.</li>
+<li><strong>zn_parede_longo:</strong> <a href="resultados/zn_parede_longo/zn_parede_longo.inp" download="zn_parede_longo.inp">input usado</a> · <a href="resultados/zn_parede_longo/zn_parede_longo.out">saída</a> · <a href="resultados/zn_parede_longo/zn_parede_longo-md-ener.csv">energias</a> · <a href="resultados/zn_parede_longo/zn_parede_longo-traj.xyz" download="zn_parede_longo-traj.xyz">trajetória</a>.</li>
+<li><strong>zn_sem_parede_longo:</strong> <a href="resultados/zn_sem_parede_longo/zn_sem_parede_longo.inp" download="zn_sem_parede_longo.inp">input usado</a> · <a href="resultados/zn_sem_parede_longo/zn_sem_parede_longo.out">saída</a> · <a href="resultados/zn_sem_parede_longo/zn_sem_parede_longo-md-ener.csv">energias</a> · <a href="resultados/zn_sem_parede_longo/zn_sem_parede_longo-traj.xyz" download="zn_sem_parede_longo-traj.xyz">trajetória</a>.</li>
 </ul>
 <p>As referências antigas de 0,5 ps permanecem em <a href="apoio.html">apoio</a> e no <a href="../../visualizador/index.html?exemplo=complex_short">aplicativo</a>. <strong>Manual:</strong> <a href="https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html#cell">Paredes, seção Cell</a> · <a href="https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html#restart">Restart</a>. O ORCA 6.1.1 usado aceita a grafia <code>Walls</code>.</p>
 <h2 id="no-retorno-do-intervalo">No retorno do intervalo</h2>
-<p><a href="../11-formacao-quelato/index.html">04c · Identificar a formação do quelato</a>: use a trajetória pronta de outro sistema, com aproximação inicial guiada, para acompanhar os dois N da mesma en e a saída de duas águas.</p><nav class="endnav" aria-label="Próxima etapa"><a href="../6-complexo-solvator/index.html">← Zn–en: SOLVATOR</a><a href="../11-formacao-quelato/index.html">Zn–en: formar o quelato →</a></nav></main></div><footer>Henrique de Castro Silva Junior e Virginia Camila Rufino Ferreira · ORCA 6.1.1 · Materiais e dados locais; links externos levam à documentação oficial.</footer></body></html>
+<p><a href="../11-formacao-quelato/index.html">04c · Identificar a formação do quelato</a>: use a trajetória pronta de outro sistema, com aproximação inicial guiada, para acompanhar os dois N da mesma en e a saída de duas águas.</p>
+<h2 id="inputs-das-variantes-e-preparacoes">Inputs das variantes e preparações</h2>
+<ul>
+<li><strong>controle_dt025_31A:</strong> <a href="inputs/controle_dt025_31A.inp" download="controle_dt025_31A.inp">Baixar input ORCA</a> · <a href="estruturas/zn_aguas_en_31A.xyz" download="zn_aguas_en_31A.xyz">Baixar geometria inicial (.xyz)</a> (obrigatório; manter na mesma pasta do input).</li>
+<li><strong>hidratacao_associacao_31A:</strong> <a href="inputs/hidratacao_associacao_31A.inp" download="hidratacao_associacao_31A.inp">Baixar input ORCA</a> · <a href="estruturas/zn_aguas_en_31A.xyz" download="zn_aguas_en_31A.xyz">Baixar geometria inicial (.xyz)</a> (obrigatório; manter na mesma pasta do input).</li>
+<li><strong>preparacao_termica:</strong> <a href="inputs/preparacao_termica.inp" download="preparacao_termica.inp">Baixar input ORCA</a> · <a href="estruturas/zn_solvato.xyz" download="zn_solvato.xyz">Baixar geometria inicial (.xyz)</a> (obrigatório; manter na mesma pasta do input).</li>
+<li><strong>zn_parede:</strong> <a href="inputs/zn_parede.inp" download="zn_parede.inp">Baixar input ORCA</a> · <a href="estruturas/zn_solvato.xyz" download="zn_solvato.xyz">Baixar geometria inicial (.xyz)</a> (obrigatório; manter na mesma pasta do input) · <a href="estruturas/preparacao_termica.mdrestart" download="preparacao_termica.mdrestart">Baixar checkpoint obrigatório</a> (fornece o estado de continuação; manter junto do input).</li>
+<li><strong>zn_sem_parede:</strong> <a href="inputs/zn_sem_parede.inp" download="zn_sem_parede.inp">Baixar input ORCA</a> · <a href="estruturas/zn_solvato.xyz" download="zn_solvato.xyz">Baixar geometria inicial (.xyz)</a> (obrigatório; manter na mesma pasta do input) · <a href="estruturas/preparacao_termica.mdrestart" download="preparacao_termica.mdrestart">Baixar checkpoint obrigatório</a> (fornece o estado de continuação; manter junto do input).</li>
+</ul><nav class="endnav" aria-label="Próxima etapa"><a href="../6-complexo-solvator/index.html">← Zn–en: SOLVATOR</a><a href="../11-formacao-quelato/index.html">Zn–en: formar o quelato →</a></nav></main></div><footer>Henrique de Castro Silva Junior e Virginia Camila Rufino Ferreira · ORCA 6.1.1 · Materiais e dados locais; links externos levam à documentação oficial.</footer></body></html>

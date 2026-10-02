@@ -16,8 +16,9 @@ Na aula, **não execute este cálculo DFT**. Compare os resultados de vácuo e C
 
 Não compare diretamente a trajetória XTB2 de 2 ps da atividade 1 com a DFT/CPCM para atribuir diferenças só ao solvente: nessa comparação também mudariam o método e a duração.
 
-[Baixar pacote](aula-dimero_b97_cpcm.zip) · [Input](inputs/dimero_b97_cpcm.inp) · [Estrutura](estruturas/dimero_b97.xyz)
+[Baixar pacote](aula-dimero_b97_cpcm.zip) · [Baixar input ORCA](inputs/dimero_b97_cpcm.inp) · [Baixar geometria inicial (.xyz)](estruturas/dimero_b97.xyz) (opcional para executar; as coordenadas já estão no input)
 
+<!-- input-source: inputs/dimero_b97_cpcm.inp -->
 ```text
 # Exemplo didatico; oito processos solicitados.
 ! MD B97-3c TightSCF CPCM(water) PAL8
@@ -32,7 +33,14 @@ Não compare diretamente a trajetória XTB2 de 2 ps da atividade 1 com a DFT/CPC
   # 60 fs: observar vibracao e geometria da ligacao H.
   Run 120
 end
-* xyzfile 0 1 dimero_b97.xyz
+* xyz 0 1
+  O          -0.07963526387957     -0.01964165075209     -0.00000000264085
+  H           0.88823357664041      0.04103734930643      0.00000002901791
+  H          -0.37106168405382      0.89703962065287     -0.00000002440793
+  O           2.88291572564215      0.11999069039073     -0.00000000005029
+  H           3.28977384105638      0.54578697932583      0.76197145433409
+  H           3.28977380459444      0.54578701107623     -0.76197145625293
+*
 ```
 
 <details markdown="1"><summary>Reprodução após a aula: Ubuntu / WSL2</summary>
@@ -80,3 +88,7 @@ Espere o prompt voltar antes de iniciar outro cálculo. Os arquivos de resultado
 [Manual ORCA: dinâmica molecular](https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html).
 
 [Água isolada/CPCM: referência anterior](apoio.md).
+
+## Inputs das variantes e preparações
+
+- **agua_cpcm:** [Baixar input ORCA](inputs/agua_cpcm.inp) · [Baixar geometria inicial (.xyz)](estruturas/agua.xyz) (opcional para executar; as coordenadas já estão no input).

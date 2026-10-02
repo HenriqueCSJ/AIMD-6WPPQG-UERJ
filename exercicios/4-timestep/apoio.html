@@ -6,7 +6,7 @@
 <h2 id="entenda-as-escolhas">Entenda as escolhas</h2>
 <p>O passo precisa resolver os movimentos mais rápidos, especialmente ligações envolvendo H. <strong>Oscilação limitada e deriva sistemática são diferentes.</strong> Um único valor final próximo do inicial pode esconder oscilações grandes; examine a série inteira. O CSV arredonda as energias, de modo que diferenças na última casa decimal exigem cuidado. Não usar um termostato para esconder a instabilidade.</p>
 <p>Abra o <a href="../../visualizador/index.html">Laboratório de trajetórias</a> e carregue o <code>*-md-ener.csv</code>, o <code>.out</code> e o <code>*-traj.xyz</code> deste cálculo. O aplicativo prepara os gráficos de energia/temperatura e a animação. Na aba <strong>Distâncias</strong>, escolha dois átomos; a medida é calculada do XYZ. O CSV original usa fs, Hartree e K; a conversão de unidades fica explícita na tela.</p>
-<p><strong>Controle reutilizado:</strong> <a href="../3-xtb2-etanol/inputs/etanol_nve.inp">input NVE de 0,5 fs</a>, <a href="../3-xtb2-etanol/resultados/etanol_nve/etanol_nve-md-ener.csv">CSV NVE</a> e <a href="../3-xtb2-etanol/resultados/etanol_nve/etanol_nve-traj.xyz">trajetória NVE</a>. A geometria inicial é idêntica à deste exercício.</p>
+<p><strong>Controle reutilizado:</strong> <a href="../3-xtb2-etanol/inputs/etanol_nve.inp" download="etanol_nve.inp">Baixar input ORCA</a> · <a href="../3-xtb2-etanol/estruturas/etanol.xyz" download="etanol.xyz">Baixar geometria inicial (.xyz)</a> (opcional para executar; as coordenadas já estão no input), <a href="../3-xtb2-etanol/resultados/etanol_nve/etanol_nve-md-ener.csv">CSV NVE</a> e <a href="../3-xtb2-etanol/resultados/etanol_nve/etanol_nve-traj.xyz" download="etanol_nve-traj.xyz">trajetória NVE</a>. A geometria inicial é idêntica à deste exercício.</p>
 <h2 id="resultados-de-referencia">Resultados de referência</h2>
 <p>Estes arquivos são saídas reais, preservadas sem suavização dos dados. Os tempos incluem a inicialização do programa e correspondem a uma execução por caso em um Intel Core Ultra 9 185H; não são uma promessa para todos os computadores. Se seu cálculo atrasar, use a referência e identifique-a como tal.</p>
 <h3 id="etanol_dt025">etanol_dt025</h3>
@@ -14,8 +14,8 @@
 <ul>
 <li><a href="resultados/etanol_dt025/etanol_dt025.out">Saída completa</a></li>
 <li><a href="resultados/etanol_dt025/etanol_dt025-md-ener.csv">Energias e temperatura — CSV</a></li>
-<li><a href="resultados/etanol_dt025/etanol_dt025-traj.xyz">Trajetória — XYZ</a></li>
-<li><a href="resultados/etanol_dt025/etanol_dt025.mdrestart">Estado de reinício</a></li>
+<li><a href="resultados/etanol_dt025/etanol_dt025-traj.xyz" download="etanol_dt025-traj.xyz">Trajetória — XYZ</a></li>
+<li><a href="resultados/etanol_dt025/etanol_dt025.mdrestart" download="etanol_dt025.mdrestart">Estado de reinício</a></li>
 <li><a href="resultados/etanol_dt025/execucao.json">Registro da execução</a></li>
 </ul>
 <p>O CSV contém <strong>2001 registros</strong>, de <strong>0 a 500 fs</strong>, cobrindo <strong>500 fs nesta etapa</strong>. A diferença final E(t) − E(início da etapa) é <strong>-9e-06 Eh</strong>; o intervalo máximo–mínimo de E é <strong>3.8e-05 Eh</strong>. A temperatura variou de <strong>47.4 a 300.0 K</strong>. São descrições desta trajetória, não estimativas de equilíbrio.</p>
@@ -25,8 +25,8 @@
 <ul>
 <li><a href="resultados/etanol_dt200/etanol_dt200.out">Saída completa</a></li>
 <li><a href="resultados/etanol_dt200/etanol_dt200-md-ener.csv">Energias e temperatura — CSV</a></li>
-<li><a href="resultados/etanol_dt200/etanol_dt200-traj.xyz">Trajetória — XYZ</a></li>
-<li><a href="resultados/etanol_dt200/etanol_dt200.mdrestart">Estado de reinício</a></li>
+<li><a href="resultados/etanol_dt200/etanol_dt200-traj.xyz" download="etanol_dt200-traj.xyz">Trajetória — XYZ</a></li>
+<li><a href="resultados/etanol_dt200/etanol_dt200.mdrestart" download="etanol_dt200.mdrestart">Estado de reinício</a></li>
 <li><a href="resultados/etanol_dt200/execucao.json">Registro da execução</a></li>
 </ul>
 <p>O CSV contém <strong>251 registros</strong>, de <strong>0 a 500 fs</strong>, cobrindo <strong>500 fs nesta etapa</strong>. A diferença final E(t) − E(início da etapa) é <strong>0.00102 Eh</strong>; o intervalo máximo–mínimo de E é <strong>0.00253 Eh</strong>. A temperatura variou de <strong>46.9 a 300.0 K</strong>. São descrições desta trajetória, não estimativas de equilíbrio.</p>

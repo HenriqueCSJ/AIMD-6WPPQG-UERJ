@@ -13,8 +13,8 @@
 <ul>
 <li><a href="resultados/agua_dft/agua_dft.out">Saída completa</a></li>
 <li><a href="resultados/agua_dft/agua_dft-md-ener.csv">Energias e temperatura — CSV</a></li>
-<li><a href="resultados/agua_dft/agua_dft-traj.xyz">Trajetória — XYZ</a></li>
-<li><a href="resultados/agua_dft/agua_dft.mdrestart">Estado de reinício</a></li>
+<li><a href="resultados/agua_dft/agua_dft-traj.xyz" download="agua_dft-traj.xyz">Trajetória — XYZ</a></li>
+<li><a href="resultados/agua_dft/agua_dft.mdrestart" download="agua_dft.mdrestart">Estado de reinício</a></li>
 <li><a href="resultados/agua_dft/execucao.json">Registro da execução</a></li>
 </ul>
 <p>O CSV contém <strong>41 registros</strong>, de <strong>0 a 20 fs</strong>, cobrindo <strong>20 fs nesta etapa</strong>. A diferença final E(t) − E(início da etapa) é <strong>5e-06 Eh</strong>; o intervalo máximo–mínimo de E é <strong>2.9e-05 Eh</strong>. A temperatura variou de <strong>3.1 a 300.0 K</strong>. São descrições desta trajetória, não estimativas de equilíbrio.</p>
@@ -23,28 +23,25 @@
 <p>Estes cálculos já foram feitos pelos ministrantes. Não são novas execuções obrigatórias na aula. A otimização fornece uma geometria convergida no critério escolhido; sem análise vibracional, não afirmamos que ela seja um mínimo confirmado por frequências.</p>
 <details>
 <summary>Input e resultados: preparar_agua</summary>
-<p><a href="resultados/preparar_agua/preparar_agua.inp">Baixar input</a> · <a href="estruturas/agua_inicial.xyz">Baixar estrutura de partida</a></p>
-<pre><code class="language-text"># Minicurso AIMD / ORCA 6.1.1 - preparar_agua
-# Estas linhas de comentario explicam as escolhas e nao alteram o calculo.
-# Execute um caso por vez; mantenha o arquivo XYZ na pasta de execucao.
-
-# Relaxa a geometria. PAL8 solicita oito recursos. BLYP/def2-SVP e o nivel
-# DFT; TightSCF aperta a convergencia eletronica.
+<p><a href="inputs/preparar_agua.inp" download="preparar_agua.inp">Baixar input ORCA</a> · <a href="estruturas/agua_inicial.xyz" download="agua_inicial.xyz">Baixar geometria inicial (.xyz)</a> (opcional para executar; as coordenadas já estão no input)</p>
+<p><a href="resultados/preparar_agua/preparar_agua.inp" download="preparar_agua.inp">Input original usado na referência</a>.</p>
+<!-- input-source: inputs/preparar_agua.inp -->
+<pre><code class="language-text"># Apoio: otimiza a agua no nivel DFT usado na dinamica.
 ! BLYP def2-SVP TightSCF Opt PAL8
-
-# Memoria em MB por processo. 256 x 8 = 2048 MB de orcamento, alem de memoria
-# adicional.
 %maxcore 256
 
-# Le o XYZ: carga total 0, multiplicidade 1. O nome do arquivo deve coincidir
-# exatamente.
-* xyzfile 0 1 agua_inicial.xyz
+# Carga 0, multiplicidade 1; coordenadas abaixo; XYZ separado opcional.
+* xyz 0 1
+O   0.0000000000  0.0000000000  0.0000000000
+H   0.7586020000  0.0000000000  0.5042840000
+H  -0.7586020000  0.0000000000  0.5042840000
+*
 </code></pre>
 <h3 id="preparar_agua">preparar_agua</h3>
 <p>Término normal: <strong>sim</strong>. Tempo medido: <strong>18.36 s</strong>, com PAL8. O critério de convergência da otimização foi atingido.</p>
 <ul>
 <li><a href="resultados/preparar_agua/preparar_agua.out">Saída completa</a></li>
-<li><a href="resultados/preparar_agua/preparar_agua.xyz">Geometria final — XYZ</a></li>
+<li><a href="resultados/preparar_agua/preparar_agua.xyz" download="preparar_agua.xyz">Geometria final — XYZ</a></li>
 <li><a href="resultados/preparar_agua/execucao.json">Registro da execução</a></li>
 </ul>
 </details>

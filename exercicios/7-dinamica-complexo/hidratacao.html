@@ -20,6 +20,8 @@
 <p><strong>O que se observa nesta referência:</strong> o primeiro O cruza 2,6 Å em 36,5 fs. Aos 100 fs, os O 10, 13, 19, 22, 25 e 28 formam a primeira camada geométrica. A evolução dura <strong>250 fs = 0,25 ps = 2,5 × 10⁻¹³ s</strong>. Não use esses tempos como constantes cinéticas de hidratação em solução: a configuração inicial foi construída e o aglomerado é pequeno.</p>
 <details>
 <summary>Input completo e comentado · executar em cerca de 40 s na máquina de referência</summary>
+<p><a href="inputs/controle_dt025_31A.inp" download="controle_dt025_31A.inp">Baixar input ORCA</a> · <a href="estruturas/zn_aguas_en_31A.xyz" download="zn_aguas_en_31A.xyz">Baixar geometria inicial (.xyz)</a> (obrigatório; manter na mesma pasta do input)</p>
+<!-- input-source: inputs/controle_dt025_31A.inp -->
 <pre><code class="language-text"># Aguas inicialmente afastadas: observar a hidratacao do Zn.
 ! MD XTB2 ALPB(water) PAL8
 %maxcore 256
@@ -51,6 +53,8 @@ end
 <p>Ative também <strong>Ligações H</strong>. Distinga aproximação à camada de águas, contatos com o solvente e coordenação direta ao metal. A ausência de quelação em uma trajetória curta não demonstra que o complexo seja desfavorável: encontro, orientação e substituição têm de ser amostrados.</p>
 <details>
 <summary>Input de 5 ps · duas etapas no mesmo cálculo</summary>
+<p><a href="inputs/hidratacao_associacao_31A.inp" download="hidratacao_associacao_31A.inp">Baixar input ORCA</a> · <a href="estruturas/zn_aguas_en_31A.xyz" download="zn_aguas_en_31A.xyz">Baixar geometria inicial (.xyz)</a> (obrigatório; manter na mesma pasta do input)</p>
+<!-- input-source: inputs/hidratacao_associacao_31A.inp -->
 <pre><code class="language-text"># Montagem fora do equilibrio: aguas a 3.1 A; en a pelo menos 6.5 A.
 ! MD XTB2 ALPB(water) PAL8
 %maxcore 256
@@ -75,8 +79,8 @@ end
 <p>Tempo medido: <strong>8 min 54 s</strong> com PAL8 na máquina de referência. Para a aula ao vivo, execute o caso curto e use o resultado longo já disponível para interpretação.</p>
 </details>
 <h2 id="arquivos-e-interpretacao">Arquivos e interpretação</h2>
-<p><strong>250 fs:</strong> <a href="resultados/controle_dt025_31A/controle_dt025_31A.out">output</a> · <a href="resultados/controle_dt025_31A/controle_dt025_31A-md-ener.csv">energias e temperatura</a> · <a href="resultados/controle_dt025_31A/controle_dt025_31A-traj.xyz">trajetória completa</a>.</p>
-<p><strong>5 ps:</strong> <a href="resultados/hidratacao_associacao_31A/hidratacao_associacao_31A.out">output</a> · <a href="resultados/hidratacao_associacao_31A/hidratacao_associacao_31A-md-ener.csv">energias e temperatura</a> · <a href="resultados/hidratacao_associacao_31A/hidratacao_associacao_31A-traj.xyz">trajetória completa</a> · <a href="estruturas/zn_aguas_en_31A.xyz">estrutura inicial</a>.</p>
+<p><strong>250 fs:</strong> <a href="resultados/controle_dt025_31A/controle_dt025_31A.out">output</a> · <a href="resultados/controle_dt025_31A/controle_dt025_31A-md-ener.csv">energias e temperatura</a> · <a href="resultados/controle_dt025_31A/controle_dt025_31A-traj.xyz" download="controle_dt025_31A-traj.xyz">trajetória completa</a>.</p>
+<p><strong>5 ps:</strong> <a href="resultados/hidratacao_associacao_31A/hidratacao_associacao_31A.out">output</a> · <a href="resultados/hidratacao_associacao_31A/hidratacao_associacao_31A-md-ener.csv">energias e temperatura</a> · <a href="resultados/hidratacao_associacao_31A/hidratacao_associacao_31A-traj.xyz" download="hidratacao_associacao_31A-traj.xyz">trajetória completa</a> · <a href="estruturas/zn_aguas_en_31A.xyz" download="zn_aguas_en_31A.xyz">estrutura inicial</a>.</p>
 <p>Os traços do visualizador são contatos geométricos instantâneos, não ordens de ligação. Para acompanhar a identidade das águas na análise da referência, usamos entrada abaixo de 2,6 Å e saída acima de 3,0 Å, evitando contar vibrações no limite como trocas repetidas. A carga total +2 do input não fixa cargas formais em átomos ou fragmentos.</p>
 <p><strong>Pergunta para discutir:</strong> por que uma camada de águas pode se formar rapidamente, enquanto a entrada de um ligante quelante demora mais? Use distâncias e a integridade da molécula para responder; não basta ver um N passar perto do Zn.</p>
 <p><a href="https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html">Manual ORCA — dinâmica molecular, termostatos, reinício e paredes</a> · <a href="https://www.faccts.de/docs/orca/6.1/manual/contents/modelchemistries/semiempirical.html">Métodos xTB no ORCA</a>.</p><nav class="endnav" aria-label="Próxima etapa"><a href="../6-complexo-solvator/index.html">← Zn–en: SOLVATOR</a><a href="../11-formacao-quelato/index.html">Zn–en: formar o quelato →</a></nav></main></div><footer>Henrique de Castro Silva Junior e Virginia Camila Rufino Ferreira · ORCA 6.1.1 · Materiais e dados locais; links externos levam à documentação oficial.</footer></body></html>

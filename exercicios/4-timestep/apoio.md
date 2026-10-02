@@ -10,7 +10,7 @@ O passo precisa resolver os movimentos mais rápidos, especialmente ligações e
 
 Abra o [Laboratório de trajetórias](../../visualizador/index.html) e carregue o `*-md-ener.csv`, o `.out` e o `*-traj.xyz` deste cálculo. O aplicativo prepara os gráficos de energia/temperatura e a animação. Na aba **Distâncias**, escolha dois átomos; a medida é calculada do XYZ. O CSV original usa fs, Hartree e K; a conversão de unidades fica explícita na tela.
 
-**Controle reutilizado:** [input NVE de 0,5 fs](../3-xtb2-etanol/inputs/etanol_nve.inp), [CSV NVE](../3-xtb2-etanol/resultados/etanol_nve/etanol_nve-md-ener.csv) e [trajetória NVE](../3-xtb2-etanol/resultados/etanol_nve/etanol_nve-traj.xyz). A geometria inicial é idêntica à deste exercício.
+**Controle reutilizado:** [Baixar input ORCA](../3-xtb2-etanol/inputs/etanol_nve.inp) · [Baixar geometria inicial (.xyz)](../3-xtb2-etanol/estruturas/etanol.xyz) (opcional para executar; as coordenadas já estão no input), [CSV NVE](../3-xtb2-etanol/resultados/etanol_nve/etanol_nve-md-ener.csv) e [trajetória NVE](../3-xtb2-etanol/resultados/etanol_nve/etanol_nve-traj.xyz). A geometria inicial é idêntica à deste exercício.
 
 ## Resultados de referência
 

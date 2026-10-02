@@ -14,11 +14,13 @@ O input curto abaixo continua disponível para executar os primeiros **2 ps** du
 
 ## 1. Prepare
 
-[Pacote para executar](aula-proton_shared.zip) · [Input comentado](inputs/proton_shared.inp) · [Geometria otimizada](estruturas/h5o2_otimizado.xyz)
+[Pacote para executar](aula-proton_shared.zip) · [Baixar input ORCA](inputs/proton_shared.inp) · [Baixar geometria inicial (.xyz)](estruturas/h5o2_otimizado.xyz) (opcional para executar; as coordenadas já estão no input)
 
 Extraia o pacote numa pasta nova. Os índices do aplicativo começam em **zero**: **O 0, O 1 e H 2** compõem a unidade O–H–O; H 3–6 são os demais hidrogênios. A carga total é +1 e a multiplicidade é 1.
 
+<!-- input-source: inputs/proton_shared.inp -->
 ```text
+# H5O2+ a 300 K: 2 ps, sem solvente, parede ou forca de transferencia.
 ! MD XTB2 PAL8
 %maxcore 256
 %md
@@ -30,7 +32,16 @@ Extraia o pacote numa pasta nova. Os índices do aplicativo começam em **zero**
   Initvel 300_K
   Run 8000
 end
-* xyzfile 1 1 h5o2_otimizado.xyz
+# Carga +1, singlete; sete atomos previamente otimizados.
+* xyz 1 1
+  O          -1.19345817074522      0.17646804906572      0.17122190484488
+  O           1.21572526872885     -0.16865453348367     -0.17845947003107
+  H           0.01115351685316      0.00384993107425     -0.00349933898496
+  H          -1.65026203146322      0.50127324929764     -0.62030260894495
+  H          -1.64922809634862     -0.61740672709059      0.49171722161426
+  H           1.67249409653824     -0.49384095241469      0.61293048397896
+  H           1.67157541643680      0.62531098355134     -0.49860819247712
+*
 ```
 
 ## 2. Execute ou use a referência
@@ -101,7 +112,13 @@ A referência longa do aplicativo contém todos os **40001 quadros**, espaçados
 
 - [Saída ORCA](resultados/proton_shared/proton_shared.out) · [Energias](resultados/proton_shared/proton_shared-md-ener.csv) · [Trajetória completa](resultados/proton_shared/proton_shared-traj.xyz).
 - [Input original da referência](resultados/proton_shared/proton_shared.inp) · [Registro de execução](resultados/proton_shared/execucao.json). Os resultados foram copiados com um nome comum para facilitar o carregamento; as séries não foram interpoladas.
-- [Input da otimização](inputs/z00_otimizar.inp) · [Geometria inicial](estruturas/h5o2_inicial.xyz) · [Saída da otimização](resultados/otimizacao/z00_otimizar.out).
+- [Baixar input ORCA](inputs/z00_otimizar.inp) · [Baixar geometria inicial (.xyz)](estruturas/h5o2_inicial.xyz) (opcional para executar; as coordenadas já estão no input) · [Saída da otimização](resultados/otimizacao/z00_otimizar.out).
 - [Manual ORCA 6.1: dinâmica molecular, timestep e termostatos](https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html).
 
 **Entrega da dupla:** anote um cruzamento com retorno e explique como a conclusão muda ao exigir persistência.
+
+## Inputs das variantes e preparações
+
+- **z01_dinamica — etapa após a otimização; usa a geometria otimizada:** [Baixar input ORCA](inputs/z01_dinamica.inp) · [Baixar geometria inicial (.xyz)](estruturas/h5o2_otimizado.xyz) (obrigatório; manter na mesma pasta do input).
+
+**Continuação de 2 até 10 ps:** [Baixar input ORCA](resultados/proton_shared_10ps/etapas/z02_02000_10000fs.inp) · [Baixar geometria inicial (.xyz)](resultados/proton_shared_10ps/etapas/h5o2_restart_2ps.xyz) (obrigatório; manter na mesma pasta do input) · [Baixar checkpoint obrigatório](resultados/proton_shared_10ps/etapas/z01_dinamica.mdrestart) (fornece o estado de continuação; manter junto do input). O XYZ isolado não substitui o checkpoint.

@@ -36,27 +36,19 @@ Estes cálculos já foram feitos pelos ministrantes. Não são novas execuções
 
 <details markdown="1"><summary>Input e resultados: preparar_complexo</summary>
 
-[Baixar input](resultados/preparar_complexo/preparar_complexo.inp) · [Baixar estrutura de partida](estruturas/zn_en_inicial.xyz)
+[Baixar input ORCA](inputs/preparar_complexo.inp) · [Baixar geometria inicial (.xyz)](estruturas/zn_en_inicial.xyz) (obrigatório; manter na mesma pasta do input)
 
+[Input original usado na referência](resultados/preparar_complexo/preparar_complexo.inp).
+
+<!-- input-source: inputs/preparar_complexo.inp -->
 ```text
-# Minicurso AIMD / ORCA 6.1.1 - preparar_complexo
-# Estas linhas de comentario explicam as escolhas e nao alteram o calculo.
-# Execute um caso por vez; mantenha o arquivo XYZ na pasta de execucao.
-
-# Relaxa a geometria. PAL8 solicita oito recursos. XTB2 chama GFN2-xTB
-# externo; PAL8 tambem define suas threads. ALPB(water) representa o ambiente
-# continuo.
+# Apoio: relaxa o complexo em solvente continuo.
 ! XTB2 ALPB(water) Opt TightOpt PAL8
-
-# Memoria em MB por processo. 256 x 8 = 2048 MB de orcamento, alem de memoria
-# adicional.
 %maxcore 256
 
-# Limite de ciclos da otimizacao; conferir se o criterio de convergencia foi
-# realmente atingido.
 %geom MaxIter 300 end
-# Le o XYZ: carga total 2, multiplicidade 1. O nome do arquivo deve coincidir
-# exatamente.
+
+# Carga 2, multiplicidade 1; XYZ na mesma pasta.
 * xyzfile 2 1 zn_en_inicial.xyz
 ```
 
@@ -72,27 +64,19 @@ Término normal: **sim**. Tempo medido: **3.89 s**, com PAL8. O critério de con
 
 <details markdown="1"><summary>Input e resultados: relaxar_solvato</summary>
 
-[Baixar input](resultados/relaxar_solvato/relaxar_solvato.inp) · [Baixar estrutura de partida](estruturas/zn_solvator.xyz)
+[Baixar input ORCA](inputs/relaxar_solvato.inp) · [Baixar geometria inicial (.xyz)](estruturas/zn_solvator.xyz) (obrigatório; manter na mesma pasta do input)
 
+[Input original usado na referência](resultados/relaxar_solvato/relaxar_solvato.inp).
+
+<!-- input-source: inputs/relaxar_solvato.inp -->
 ```text
-# Minicurso AIMD / ORCA 6.1.1 - relaxar_solvato
-# Estas linhas de comentario explicam as escolhas e nao alteram o calculo.
-# Execute um caso por vez; mantenha o arquivo XYZ na pasta de execucao.
-
-# Relaxa a geometria. PAL8 solicita oito recursos. XTB2 chama GFN2-xTB
-# externo; PAL8 tambem define suas threads. ALPB(water) representa o ambiente
-# continuo.
+# Apoio: relaxa todos os atomos depois do SOLVATOR.
 ! XTB2 ALPB(water) Opt TightOpt PAL8
-
-# Memoria em MB por processo. 256 x 8 = 2048 MB de orcamento, alem de memoria
-# adicional.
 %maxcore 256
 
-# Limite de ciclos da otimizacao; conferir se o criterio de convergencia foi
-# realmente atingido.
 %geom MaxIter 300 end
-# Le o XYZ: carga total 2, multiplicidade 1. O nome do arquivo deve coincidir
-# exatamente.
+
+# Carga 2, multiplicidade 1; XYZ na mesma pasta.
 * xyzfile 2 1 zn_solvator.xyz
 ```
 

@@ -2,5 +2,9 @@
 ! BLYP def2-SVP TightSCF Opt PAL8
 %maxcore 256
 
-# Carga 0, multiplicidade 1; XYZ na mesma pasta.
-* xyzfile 0 1 agua_inicial.xyz
+# Carga 0, multiplicidade 1; coordenadas abaixo; XYZ separado opcional.
+* xyz 0 1
+O   0.0000000000  0.0000000000  0.0000000000
+H   0.7586020000  0.0000000000  0.5042840000
+H  -0.7586020000  0.0000000000  0.5042840000
+*

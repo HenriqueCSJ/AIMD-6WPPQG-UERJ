@@ -20,6 +20,9 @@ Para reproduzir esta referência opcional, prefira **0,5 fs**; o pacote de **1 f
 
 <details markdown="1" open><summary>Input de 0,5 fs · recomendado para a execução em aula</summary>
 
+[Baixar input ORCA](inputs/al_agua_nh3_dt05.inp) · [Baixar geometria inicial (.xyz)](estruturas/al_agua_nh3.xyz) (obrigatório; manter na mesma pasta do input) · [Baixar scc.inp obrigatório](inputs/scc.inp) (manter junto do input e do XYZ)
+
+<!-- input-source: inputs/al_agua_nh3_dt05.inp -->
 ```text
 # Caso fornecido: Al3+ + 6 aguas + NH3, agora com XTB2.
 ! MD XTB2 PAL8
@@ -47,6 +50,9 @@ end
 
 <details markdown="1"><summary>Input de 1 fs · passo do exemplo original</summary>
 
+[Baixar input ORCA](inputs/al_agua_nh3_scc.inp) · [Baixar geometria inicial (.xyz)](estruturas/al_agua_nh3.xyz) (obrigatório; manter na mesma pasta do input) · [Baixar scc.inp obrigatório](inputs/scc.inp) (manter junto do input e do XYZ)
+
+<!-- input-source: inputs/al_agua_nh3_scc.inp -->
 ```text
 # Caso fornecido: Al3+ + 6 aguas + NH3, agora com XTB2.
 ! MD XTB2 PAL8

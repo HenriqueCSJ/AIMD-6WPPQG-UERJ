@@ -40,8 +40,11 @@ Cada trajetória completa tem **5001 quadros, espaçados de 0,5 fs**, e 10001 re
 
 ## Inputs e consulta
 
-- [Preparação dinâmica comum de 0,5 ps](inputs/p03_equilibrar.inp) · [geometria fornecida](estruturas/gota_equilibrar.xyz) · [restart comum](inputs/p03_equilibrar.mdrestart).
-- [Controle 300 K](inputs/p04_observar.inp) · [ramo 400 K](inputs/h01_aquecer.inp) · [ramo 500 K](inputs/t500_gota.inp) · [ramo 600 K](inputs/t600_gota.inp).
+- **Preparação dinâmica comum de 0,5 ps:** [Baixar input ORCA](inputs/p03_equilibrar.inp) · [Baixar geometria inicial (.xyz)](estruturas/gota_equilibrar.xyz) (obrigatório; manter na mesma pasta do input) · [Checkpoint produzido, usado pelos quatro ramos](inputs/p03_equilibrar.mdrestart).
+- **Controle 300 K:** [Baixar input ORCA](inputs/p04_observar.inp) · [Baixar geometria inicial (.xyz)](estruturas/gota_equilibrar.xyz) (obrigatório; manter na mesma pasta do input) · [Baixar checkpoint obrigatório](inputs/p03_equilibrar.mdrestart) (fornece o estado de continuação; manter junto do input).
+- **Ramo 400 K:** [Baixar input ORCA](inputs/h01_aquecer.inp) · [Baixar geometria inicial (.xyz)](estruturas/gota_equilibrar.xyz) (obrigatório; manter na mesma pasta do input) · [Baixar checkpoint obrigatório](inputs/p03_equilibrar.mdrestart) (fornece o estado de continuação; manter junto do input).
+- **Ramo 500 K:** [Baixar input ORCA](inputs/t500_gota.inp) · [Baixar geometria inicial (.xyz)](estruturas/gota_equilibrar.xyz) (obrigatório; manter na mesma pasta do input) · [Baixar checkpoint obrigatório](inputs/p03_equilibrar.mdrestart) (fornece o estado de continuação; manter junto do input).
+- **Ramo 600 K:** [Baixar input ORCA](inputs/t600_gota.inp) · [Baixar geometria inicial (.xyz)](estruturas/gota_equilibrar.xyz) (obrigatório; manter na mesma pasta do input) · [Baixar checkpoint obrigatório](inputs/p03_equilibrar.mdrestart) (fornece o estado de continuação; manter junto do input).
 - [Saída do prefixo](resultados/etapas/p03_equilibrar.out) · [300 K](resultados/etapas/p04_observar.out) · [400 K](resultados/etapas/h01_aquecer.out) · [500 K](resultados/etapas/t500_gota.out) · [600 K](resultados/etapas/t600_gota.out).
 - Os ramos de 400/500/600 K levaram, respectivamente, **556,566 / 598,407 / 601,037 s** para 2 ps adicionais na máquina de referência. Não é necessário executá-los durante a aula. Para uma reprodução posterior, use uma pasta separada por ramo, copie o mesmo restart comum para cada uma e execute um cálculo por vez.
 - [Manual ORCA 6.1: termostatos, rampa e restart](https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html) · [SOLVATOR: construção de solvatação explícita](https://www.faccts.de/docs/orca/6.1/manual/contents/structurereactivity/solvator.html).

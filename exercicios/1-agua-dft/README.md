@@ -12,14 +12,15 @@ Uma água começa como doadora da ligação H. Vamos observar a reorientação: 
 
 Vamos executar **2 ps = 2 × 10⁻¹² s** com XTB2, sem termostato. Essa execução original levou **56,5 s nesta máquina**. A geometria inicial é a mesma da comparação DFT fornecida; não é apresentada como um mínimo de XTB2. Este dímero isolado não representa água líquida.
 
-O laboratório abre a **referência ampliada de 5 ps**: os 2 ps originais seguidos por mais 3 ps a partir do checkpoint, preservando posições, velocidades, timestep de 0,5 fs e NVE. São **10001 quadros originais**, sem interpolação ou redução. O input curto abaixo permanece igual para a execução em aula; a referência de 2 ps continua disponível separadamente.
+O laboratório abre a **referência ampliada de 5 ps**: os 2 ps originais seguidos por mais 3 ps a partir do checkpoint, preservando posições, velocidades, timestep de 0,5 fs e NVE. São **10001 quadros originais**, sem interpolação ou redução. O protocolo curto de 2 ps abaixo permanece disponível para a execução em aula; a referência de 2 ps continua disponível separadamente.
 
 A continuação levou **91,1 s nesta máquina**, além dos 56,5 s originais. Nos 5 ps completos, O···O varia de **2,617 a 3,511 Å** e a amplitude de Etotal é **0,260 kJ/mol**. Cada H permanece associado à sua água no acompanhamento pelo O mais próximo.
 
 ## 2. Execute
 
-[Baixar pacote](aula-dimero_xtb2_2ps.zip) · [Input](inputs/dimero_xtb2_2ps.inp) · [Estrutura](estruturas/dimero_b97.xyz)
+[Baixar pacote](aula-dimero_xtb2_2ps.zip) · [Baixar input ORCA](inputs/dimero_xtb2_2ps.inp) · [Baixar geometria inicial (.xyz)](estruturas/dimero_b97.xyz) (opcional para executar; as coordenadas já estão no input)
 
+<!-- input-source: inputs/dimero_xtb2_2ps.inp -->
 ```text
 # Duas aguas: 2 ps = 2e-12 s, sem banho termico nem parede.
 ! MD XTB2 PAL8
@@ -34,7 +35,14 @@ A continuação levou **91,1 s nesta máquina**, além dos 56,5 s originais. Nos
   # Geometria inicial compartilhada com a demonstracao DFT.
   Run 4000
 end
-* xyzfile 0 1 dimero_b97.xyz
+* xyz 0 1
+  O          -0.07963526387957     -0.01964165075209     -0.00000000264085
+  H           0.88823357664041      0.04103734930643      0.00000002901791
+  H          -0.37106168405382      0.89703962065287     -0.00000002440793
+  O           2.88291572564215      0.11999069039073     -0.00000000005029
+  H           3.28977384105638      0.54578697932583      0.76197145433409
+  H           3.28977380459444      0.54578701107623     -0.76197145625293
+*
 ```
 
 <details markdown="1"><summary>Executar no Ubuntu / WSL2</summary>
@@ -82,7 +90,7 @@ Na análise dos 2 ps originais, o critério operacional foi H···O < 2,4 Å e 
 
 Não execute DFT durante a aula. A referência curta B97-3c simulou **60 fs** em **275,5 s** nesta máquina; ela permite comparar a geometria e o custo com XTB2. Compare apenas a janela comum de 0–60 fs. XTB2 usa uma aproximação diferente para a energia eletrônica; trajetórias mais longas não demonstram maior precisão.
 
-[Abrir DFT em 3D](../../visualizador/index.html?exemplo=water_dft&aba=trajetoria) · [Input DFT](inputs/dimero_b97.inp) · [Pacote DFT, para estudo posterior](aula-dimero_b97.zip).
+[Abrir DFT em 3D](../../visualizador/index.html?exemplo=water_dft&aba=trajetoria) · [Baixar input ORCA](inputs/dimero_b97.inp) · [Baixar geometria inicial (.xyz)](estruturas/dimero_b97.xyz) (opcional para executar; as coordenadas já estão no input) · [Pacote DFT, para estudo posterior](aula-dimero_b97.zip).
 
 </details>
 
@@ -105,3 +113,10 @@ Ela continua como [referência adicional já calculada](../../visualizador/index
 [Preparação do dímero](resultados/preparar_dimero_b97/preparar_dimero_b97.out). Geometria convergida na otimização; não foi feita análise de frequências.
 
 Métodos: [preparar XTB2 no ORCA](../../tutoriais/05-xtb-solvator.md) · [B97-3c das referências DFT](https://www.faccts.de/docs/orca/6.1/manual/contents/modelchemistries/3cmethods.html).
+
+## Inputs das variantes e preparações
+
+- **agua_dft:** [Baixar input ORCA](inputs/agua_dft.inp) · [Baixar geometria inicial (.xyz)](estruturas/agua.xyz) (opcional para executar; as coordenadas já estão no input).
+- **preparar_agua:** [Baixar input ORCA](inputs/preparar_agua.inp) · [Baixar geometria inicial (.xyz)](estruturas/agua_inicial.xyz) (opcional para executar; as coordenadas já estão no input).
+
+**Continuação de 2 até 5 ps:** [Baixar input ORCA](resultados/dimero_xtb2_5ps/etapas/water_02000_05000fs.inp) · [Baixar geometria inicial (.xyz)](resultados/dimero_xtb2_5ps/etapas/water_restart.xyz) (obrigatório; manter na mesma pasta do input) · [Baixar checkpoint obrigatório](resultados/dimero_xtb2_5ps/etapas/dimero_xtb2_2ps.mdrestart) (fornece o estado de continuação; manter junto do input). O XYZ isolado não substitui o checkpoint.

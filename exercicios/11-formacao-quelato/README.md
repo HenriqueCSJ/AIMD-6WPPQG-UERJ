@@ -50,3 +50,16 @@ O terceiro arquivo de hidratação foi interrompido após 9864 fs. O percurso us
 [Trecho anterior de 3 ps, começando no encontro](../../visualizador/index.html?exemplo=chelation_previous&aba=trajetoria) · [Pacote anterior](resultado-chelation.zip) · [Manual ORCA: restrições e restart](https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html)
 
 **Entrega da dupla:** identifique a hidratação, o primeiro N assistido, o segundo N livre e as águas que saem. Explique quais variações de energia podem estar relacionadas às intervenções do protocolo.
+
+## Inputs das variantes e preparações
+
+- **m01a_N_sem_vies_agua:** [Baixar input ORCA](inputs/m01a_N_sem_vies_agua.inp) · [Baixar geometria inicial (.xyz)](estruturas/encontro_real_R1.xyz) (obrigatório; manter na mesma pasta do input).
+- **m02_livre_apos_N1:** [Baixar input ORCA](inputs/m02_livre_apos_N1.inp) · [Baixar geometria inicial (.xyz)](estruturas/encontro_real_R1.xyz) (obrigatório; manter na mesma pasta do input) · [Baixar checkpoint obrigatório](inputs/m01a_N_sem_vies_agua.mdrestart) (fornece o estado de continuação; manter junto do input).
+
+## Inputs da sequência de hidratação
+
+- **Hidratação inicial (0–500 fs da sequência):** [Baixar input ORCA](resultados/chelation_continuous/etapas/r9_rep1_piloto_0500fs/r9_rep1_piloto_0500fs.inp) · [Baixar geometria inicial (.xyz)](estruturas/zn_20h2o_3en_r9.xyz) (obrigatório; manter na mesma pasta do input).
+- **Continuação da hidratação (500–5000 fs):** [Baixar input ORCA](resultados/chelation_continuous/etapas/r9_rep1_00500_05000fs/r9_rep1_00500_05000fs.inp) · [Baixar geometria inicial (.xyz)](estruturas/zn_20h2o_3en_r9.xyz) (obrigatório; manter na mesma pasta do input) · [Baixar checkpoint obrigatório](resultados/chelation_continuous/etapas/r9_rep1_piloto_0500fs/r9_rep1_piloto_0500fs.mdrestart) (fornece o estado de continuação; manter junto do input).
+- **Continuação; o percurso utiliza o trecho até 7083 fs:** [Baixar input ORCA](resultados/chelation_continuous/etapas/r9_rep1_05000_10000fs/r9_rep1_05000_10000fs.inp) · [Baixar geometria inicial (.xyz)](estruturas/zn_20h2o_3en_r9.xyz) (obrigatório; manter na mesma pasta do input) · [Baixar checkpoint obrigatório](resultados/chelation_continuous/etapas/r9_rep1_00500_05000fs/r9_rep1_00500_05000fs.mdrestart) (fornece o estado de continuação; manter junto do input).
+
+A geometria acima é o início da sequência de hidratação. Nas continuações, o checkpoint fornece posições, velocidades e o estado dinâmico. Os inputs `m01a_N_sem_vies_agua` e `m02_livre_apos_N1` listados acima usam a geometria de encontro selecionada: o primeiro reinicializa velocidades; o segundo exige o checkpoint do primeiro.

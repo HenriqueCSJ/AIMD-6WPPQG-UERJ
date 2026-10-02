@@ -9,11 +9,13 @@
 <p>Para observar a formação da primeira camada de águas, abra também <a href="../7-dinamica-complexo/hidratacao.html">Zn, águas e en inicialmente afastados</a>. O SOLVATOR desta atividade parte de um complexo preparado; não mostra sua formação por dinâmica.</p>
 <h2 id="1-prepare">1. Prepare</h2>
 <p>O ponto de partida tem Zn, etilenodiamina e quatro águas: <strong>25 átomos</strong>. O SOLVATOR acrescentará seis águas, chegando a <strong>43 átomos</strong>. O banho contínuo ALPB permanece.</p>
-<p><a href="aula-zn_solvator.zip">Baixar os arquivos da atividade</a> · <a href="estruturas/zn_en.xyz">Abrir a estrutura</a></p>
+<p><a href="aula-zn_solvator.zip">Baixar os arquivos da atividade</a> · <a href="estruturas/zn_en.xyz" download="zn_en.xyz">Baixar a estrutura</a></p>
 <p>Extraia o pacote. Ele contém o input e os arquivos que precisam ficar juntos. Use uma pasta para esta atividade.</p>
 <h2 id="2-execute">2. Execute</h2>
 <p>Salve este conteúdo como <strong><code>zn_solvator.inp</code></strong>; ele já está no pacote.</p>
-<p><a href="inputs/zn_solvator.inp">Baixar input</a> · <a href="aula-zn_solvator.zip">Baixar pacote com os arquivos necessários</a></p>
+<p><a href="inputs/zn_solvator.inp" download="zn_solvator.inp">Baixar input ORCA</a> · <a href="estruturas/zn_en.xyz" download="zn_en.xyz">Baixar geometria inicial (.xyz)</a> (obrigatório; manter na mesma pasta do input) · <a href="aula-zn_solvator.zip">Baixar pacote com os arquivos necessários</a></p>
+<!-- input-source: inputs/zn_solvator.inp -->
+
 <pre><code class="language-text"># SOLVATOR: acrescenta aguas explicitas ao complexo.
 ! XTB2 ALPB(water) PAL8
 %maxcore 256
@@ -61,7 +63,8 @@ end
 <details>
 <summary>Opcional: montagem mais curta</summary>
 <p>Troque seis por duas águas para praticar em menos tempo: o resultado tem 31 átomos. Execute somente uma versão. Na etapa 04b todos usarão o sistema fornecido de 43 átomos.</p>
-<p><a href="inputs/zn_solvator_2aguas.inp">Baixar input</a> · <a href="aula-zn_solvator_2aguas.zip">Baixar pacote com os arquivos necessários</a></p>
+<p><a href="inputs/zn_solvator_2aguas.inp" download="zn_solvator_2aguas.inp">Baixar input ORCA</a> · <a href="estruturas/zn_en.xyz" download="zn_en.xyz">Baixar geometria inicial (.xyz)</a> (obrigatório; manter na mesma pasta do input) · <a href="aula-zn_solvator_2aguas.zip">Baixar pacote com os arquivos necessários</a></p>
+<!-- input-source: inputs/zn_solvator_2aguas.inp -->
 <pre><code class="language-text"># Alternativa curta: acrescenta somente duas aguas.
 ! XTB2 ALPB(water) PAL8
 %maxcore 256
@@ -96,10 +99,15 @@ end
 <summary>Referências, preparação e explicações adicionais</summary>
 <p>Resultados reais já calculados com PAL8. O input completo de cada referência está ao lado da saída; as séries não foram substituídas por simulações novas.</p>
 <ul>
-<li><strong>zn_solvator:</strong> <a href="resultados/zn_solvator/zn_solvator.inp">input completo usado</a> · <a href="resultados/zn_solvator/zn_solvator.out">saída</a> · <a href="resultados/zn_solvator/zn_solvator.solvator.xyz">estrutura</a>.</li>
-<li><strong>zn_solvator_2aguas:</strong> <a href="resultados/zn_solvator_2aguas/zn_solvator_2aguas.inp">input completo usado</a> · <a href="resultados/zn_solvator_2aguas/zn_solvator_2aguas.out">saída</a> · <a href="resultados/zn_solvator_2aguas/zn_solvator_2aguas.solvator.xyz">estrutura</a>.</li>
+<li><strong>zn_solvator:</strong> <a href="resultados/zn_solvator/zn_solvator.inp" download="zn_solvator.inp">input completo usado</a> · <a href="resultados/zn_solvator/zn_solvator.out">saída</a> · <a href="resultados/zn_solvator/zn_solvator.solvator.xyz" download="zn_solvator.solvator.xyz">estrutura</a>.</li>
+<li><strong>zn_solvator_2aguas:</strong> <a href="resultados/zn_solvator_2aguas/zn_solvator_2aguas.inp" download="zn_solvator_2aguas.inp">input completo usado</a> · <a href="resultados/zn_solvator_2aguas/zn_solvator_2aguas.out">saída</a> · <a href="resultados/zn_solvator_2aguas/zn_solvator_2aguas.solvator.xyz" download="zn_solvator_2aguas.solvator.xyz">estrutura</a>.</li>
 </ul>
 <p><a href="apoio.html">Consultar preparação, números e respostas</a>.</p>
 </details>
 <p><strong>Manual:</strong> <a href="https://www.faccts.de/docs/orca/6.1/manual/contents/structurereactivity/solvator.html">SOLVATOR</a>.</p>
-<p><strong>Antes de avançar:</strong> anote uma mudança no input, uma observação e uma conclusão que esta trajetória ainda não permite.</p><nav class="endnav" aria-label="Próxima etapa"><a href="../5-termostato/index.html">← Aquecer e resfriar</a><a href="../7-dinamica-complexo/index.html">Zn–en: parede →</a></nav></main></div><footer>Henrique de Castro Silva Junior e Virginia Camila Rufino Ferreira · ORCA 6.1.1 · Materiais e dados locais; links externos levam à documentação oficial.</footer></body></html>
+<p><strong>Antes de avançar:</strong> anote uma mudança no input, uma observação e uma conclusão que esta trajetória ainda não permite.</p>
+<h2 id="inputs-das-variantes-e-preparacoes">Inputs das variantes e preparações</h2>
+<ul>
+<li><strong>preparar_complexo:</strong> <a href="inputs/preparar_complexo.inp" download="preparar_complexo.inp">Baixar input ORCA</a> · <a href="estruturas/zn_en_inicial.xyz" download="zn_en_inicial.xyz">Baixar geometria inicial (.xyz)</a> (obrigatório; manter na mesma pasta do input).</li>
+<li><strong>relaxar_solvato:</strong> <a href="inputs/relaxar_solvato.inp" download="relaxar_solvato.inp">Baixar input ORCA</a> · <a href="estruturas/zn_solvator.xyz" download="zn_solvator.xyz">Baixar geometria inicial (.xyz)</a> (obrigatório; manter na mesma pasta do input).</li>
+</ul><nav class="endnav" aria-label="Próxima etapa"><a href="../5-termostato/index.html">← Aquecer e resfriar</a><a href="../7-dinamica-complexo/index.html">Zn–en: parede →</a></nav></main></div><footer>Henrique de Castro Silva Junior e Virginia Camila Rufino Ferreira · ORCA 6.1.1 · Materiais e dados locais; links externos levam à documentação oficial.</footer></body></html>

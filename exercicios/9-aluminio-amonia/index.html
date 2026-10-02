@@ -11,11 +11,13 @@
 </blockquote>
 <p>Partimos da geometria fornecida: Al³⁺, seis águas e uma NH₃ afastada. Substituímos BLYP/D3/def2-SVP por <strong>XTB2</strong>. Não acrescentamos solvente implícito, parede nem otimização inicial. É um agregado isolado, com carga total +3 e multiplicidade 1.</p>
 <h2 id="1-execute">1. Execute</h2>
-<p><a href="aula-al_agua_nh3_scc.zip">Pacote de 1 fs</a> · <a href="aula-al_agua_nh3_dt05.zip">Pacote de 0,5 fs</a> · <a href="estruturas/al_agua_nh3.xyz">Estrutura inicial</a></p>
+<p><a href="aula-al_agua_nh3_scc.zip">Pacote de 1 fs</a> · <a href="aula-al_agua_nh3_dt05.zip">Pacote de 0,5 fs</a> · <a href="estruturas/al_agua_nh3.xyz" download="al_agua_nh3.xyz">Estrutura inicial</a></p>
 <p>Para reproduzir esta referência opcional, prefira <strong>0,5 fs</strong>; o pacote de <strong>1 fs</strong> conserva o passo do exemplo proposto para comparação. Ambos chegam a 2 ps. Execute apenas um e abra a outra referência pronta.</p>
 <p><strong>Atenção ao terceiro arquivo:</strong> cada pacote contém o input, a geometria e <code>scc.inp</code>. Mantenha os três na mesma pasta. A troca direta para XTB2, sem esse ajuste de convergência, falhou antes da dinâmica nesta geometria. <a href="apoio.html">Entenda e consulte a tentativa preservada</a>.</p>
 <details open>
 <summary>Input de 0,5 fs · recomendado para a execução em aula</summary>
+<p><a href="inputs/al_agua_nh3_dt05.inp" download="al_agua_nh3_dt05.inp">Baixar input ORCA</a> · <a href="estruturas/al_agua_nh3.xyz" download="al_agua_nh3.xyz">Baixar geometria inicial (.xyz)</a> (obrigatório; manter na mesma pasta do input) · <a href="inputs/scc.inp" download="scc.inp">Baixar scc.inp obrigatório</a> (manter junto do input e do XYZ)</p>
+<!-- input-source: inputs/al_agua_nh3_dt05.inp -->
 <pre><code class="language-text"># Caso fornecido: Al3+ + 6 aguas + NH3, agora com XTB2.
 ! MD XTB2 PAL8
 %maxcore 256
@@ -40,6 +42,8 @@ end
 </details>
 <details>
 <summary>Input de 1 fs · passo do exemplo original</summary>
+<p><a href="inputs/al_agua_nh3_scc.inp" download="al_agua_nh3_scc.inp">Baixar input ORCA</a> · <a href="estruturas/al_agua_nh3.xyz" download="al_agua_nh3.xyz">Baixar geometria inicial (.xyz)</a> (obrigatório; manter na mesma pasta do input) · <a href="inputs/scc.inp" download="scc.inp">Baixar scc.inp obrigatório</a> (manter junto do input e do XYZ)</p>
+<!-- input-source: inputs/al_agua_nh3_scc.inp -->
 <pre><code class="language-text"># Caso fornecido: Al3+ + 6 aguas + NH3, agora com XTB2.
 ! MD XTB2 PAL8
 %maxcore 256
@@ -133,8 +137,8 @@ H         -8.41348       -0.42234        1.13168
 <p>Berendsen com acoplamento de 20 fs foi mantido do exemplo proposto. É forte acoplamento e não gera a distribuição canônica exata. A geometria inicial não foi equilibrada; o gap eletrônico inicial pequeno produz ocupações fracionárias no xTB. Por isso, esta é uma <strong>demonstração exploratória de reação</strong>, não uma medida de pKa, barreira, velocidade ou comportamento do Al³⁺ em solução. A diferença de energia potencial entre os extremos inclui relaxação, transferência e separação; não é uma entalpia de reação.</p>
 <h2 id="resultados-e-leitura">Resultados e leitura</h2>
 <ul>
-<li><strong>0,5 fs:</strong> <a href="resultados/al_agua_nh3_dt05/al_agua_nh3_dt05.out">output</a> · <a href="resultados/al_agua_nh3_dt05/al_agua_nh3_dt05-md-ener.csv">energias</a> · <a href="resultados/al_agua_nh3_dt05/al_agua_nh3_dt05-traj.xyz">trajetória</a> · <a href="resultados/al_agua_nh3_dt05/analysis.json">medidas e eventos</a>.</li>
-<li><strong>1 fs:</strong> <a href="resultados/al_agua_nh3_scc/al_agua_nh3_scc.out">output</a> · <a href="resultados/al_agua_nh3_scc/al_agua_nh3_scc-md-ener.csv">energias</a> · <a href="resultados/al_agua_nh3_scc/al_agua_nh3_scc-traj.xyz">trajetória</a> · <a href="resultados/al_agua_nh3_scc/analysis.json">medidas e eventos</a>.</li>
+<li><strong>0,5 fs:</strong> <a href="resultados/al_agua_nh3_dt05/al_agua_nh3_dt05.out">output</a> · <a href="resultados/al_agua_nh3_dt05/al_agua_nh3_dt05-md-ener.csv">energias</a> · <a href="resultados/al_agua_nh3_dt05/al_agua_nh3_dt05-traj.xyz" download="al_agua_nh3_dt05-traj.xyz">trajetória</a> · <a href="resultados/al_agua_nh3_dt05/analysis.json">medidas e eventos</a>.</li>
+<li><strong>1 fs:</strong> <a href="resultados/al_agua_nh3_scc/al_agua_nh3_scc.out">output</a> · <a href="resultados/al_agua_nh3_scc/al_agua_nh3_scc-md-ener.csv">energias</a> · <a href="resultados/al_agua_nh3_scc/al_agua_nh3_scc-traj.xyz" download="al_agua_nh3_scc-traj.xyz">trajetória</a> · <a href="resultados/al_agua_nh3_scc/analysis.json">medidas e eventos</a>.</li>
 <li><a href="https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html">ORCA: MD, passos de integração e termostatos</a>.</li>
 <li><a href="https://www.faccts.de/docs/orca/6.1/manual/contents/modelchemistries/semiempirical.html">ORCA: XTB2 e XTBINPUTSTRING</a>.</li>
 <li><a href="https://github.com/grimme-lab/xtb/blob/main/man/xcontrol.7.adoc">xTB: opções do controle SCC</a>.</li>

@@ -9,10 +9,12 @@
 <h2 id="1-prepare-o-par-de-moleculas">1. Prepare o par de moléculas</h2>
 <p>Uma água começa como doadora da ligação H. Vamos observar a reorientação: <strong>uma água pode passar de doadora a aceptora da ligação H?</strong> A estrutura já foi relaxada com B97-3c; a otimização é fornecida, não precisa ser repetida na aula.</p>
 <p>Vamos executar <strong>2 ps = 2 × 10⁻¹² s</strong> com XTB2, sem termostato. Essa execução original levou <strong>56,5 s nesta máquina</strong>. A geometria inicial é a mesma da comparação DFT fornecida; não é apresentada como um mínimo de XTB2. Este dímero isolado não representa água líquida.</p>
-<p>O laboratório abre a <strong>referência ampliada de 5 ps</strong>: os 2 ps originais seguidos por mais 3 ps a partir do checkpoint, preservando posições, velocidades, timestep de 0,5 fs e NVE. São <strong>10001 quadros originais</strong>, sem interpolação ou redução. O input curto abaixo permanece igual para a execução em aula; a referência de 2 ps continua disponível separadamente.</p>
+<p>O laboratório abre a <strong>referência ampliada de 5 ps</strong>: os 2 ps originais seguidos por mais 3 ps a partir do checkpoint, preservando posições, velocidades, timestep de 0,5 fs e NVE. São <strong>10001 quadros originais</strong>, sem interpolação ou redução. O protocolo curto de 2 ps abaixo permanece disponível para a execução em aula; a referência de 2 ps continua disponível separadamente.</p>
 <p>A continuação levou <strong>91,1 s nesta máquina</strong>, além dos 56,5 s originais. Nos 5 ps completos, O···O varia de <strong>2,617 a 3,511 Å</strong> e a amplitude de Etotal é <strong>0,260 kJ/mol</strong>. Cada H permanece associado à sua água no acompanhamento pelo O mais próximo.</p>
 <h2 id="2-execute">2. Execute</h2>
-<p><a href="aula-dimero_xtb2_2ps.zip">Baixar pacote</a> · <a href="inputs/dimero_xtb2_2ps.inp">Input</a> · <a href="estruturas/dimero_b97.xyz">Estrutura</a></p>
+<p><a href="aula-dimero_xtb2_2ps.zip">Baixar pacote</a> · <a href="inputs/dimero_xtb2_2ps.inp" download="dimero_xtb2_2ps.inp">Baixar input ORCA</a> · <a href="estruturas/dimero_b97.xyz" download="dimero_b97.xyz">Baixar geometria inicial (.xyz)</a> (opcional para executar; as coordenadas já estão no input)</p>
+<!-- input-source: inputs/dimero_xtb2_2ps.inp -->
+
 <pre><code class="language-text"># Duas aguas: 2 ps = 2e-12 s, sem banho termico nem parede.
 ! MD XTB2 PAL8
 %maxcore 256
@@ -26,7 +28,14 @@
   # Geometria inicial compartilhada com a demonstracao DFT.
   Run 4000
 end
-* xyzfile 0 1 dimero_b97.xyz
+* xyz 0 1
+  O          -0.07963526387957     -0.01964165075209     -0.00000000264085
+  H           0.88823357664041      0.04103734930643      0.00000002901791
+  H          -0.37106168405382      0.89703962065287     -0.00000002440793
+  O           2.88291572564215      0.11999069039073     -0.00000000005029
+  H           3.28977384105638      0.54578697932583      0.76197145433409
+  H           3.28977380459444      0.54578701107623     -0.76197145625293
+*
 </code></pre>
 <details>
 <summary>Executar no Ubuntu / WSL2</summary>
@@ -57,7 +66,7 @@ end
 <details>
 <summary>Comparação DFT já calculada</summary>
 <p>Não execute DFT durante a aula. A referência curta B97-3c simulou <strong>60 fs</strong> em <strong>275,5 s</strong> nesta máquina; ela permite comparar a geometria e o custo com XTB2. Compare apenas a janela comum de 0–60 fs. XTB2 usa uma aproximação diferente para a energia eletrônica; trajetórias mais longas não demonstram maior precisão.</p>
-<p><a href="../../visualizador/index.html?exemplo=water_dft&amp;aba=trajetoria">Abrir DFT em 3D</a> · <a href="inputs/dimero_b97.inp">Input DFT</a> · <a href="aula-dimero_b97.zip">Pacote DFT, para estudo posterior</a>.</p>
+<p><a href="../../visualizador/index.html?exemplo=water_dft&amp;aba=trajetoria">Abrir DFT em 3D</a> · <a href="inputs/dimero_b97.inp" download="dimero_b97.inp">Baixar input ORCA</a> · <a href="estruturas/dimero_b97.xyz" download="dimero_b97.xyz">Baixar geometria inicial (.xyz)</a> (opcional para executar; as coordenadas já estão no input) · <a href="aula-dimero_b97.zip">Pacote DFT, para estudo posterior</a>.</p>
 </details>
 <details>
 <summary>E a molécula de água isolada?</summary>
@@ -66,10 +75,16 @@ end
 </details>
 <h2 id="resultados-e-manual">Resultados e manual</h2>
 <ul>
-<li><strong>XTB2, referência ampliada de 5 ps:</strong> <a href="resultados/dimero_xtb2_5ps/dimero_xtb2_5ps-traj.xyz">trajetória completa</a> · <a href="resultados/dimero_xtb2_5ps/dimero_xtb2_5ps-md-ener.csv">energias</a> · <a href="resultados/dimero_xtb2_5ps/curso.json">etapas e limites</a> · <a href="resultados/dimero_xtb2_5ps/verificacao.json">verificação</a> · <a href="resultado-dimero_xtb2_5ps.zip">pacote completo de resultados</a> · <a href="aula-dimero_restart_5ps.zip">input e checkpoint para continuar de 2 até 5 ps</a>. As saídas das duas execuções estão separadas por etapa no pacote.</li>
-<li><strong>XTB2, 2 ps:</strong> <a href="resultados/dimero_xtb2_2ps/dimero_xtb2_2ps.out">saída</a> · <a href="resultados/dimero_xtb2_2ps/dimero_xtb2_2ps.inp">input usado</a> · <a href="resultados/dimero_xtb2_2ps/dimero_xtb2_2ps-md-ener.csv">energias</a> · <a href="resultados/dimero_xtb2_2ps/dimero_xtb2_2ps-traj.xyz">trajetória completa</a> · <a href="resultados/dimero_xtb2_2ps/execucao.json">tempo de execução</a>.</li>
-<li><strong>DFT, comparação pronta de 60 fs:</strong> <a href="resultados/dimero_b97/dimero_b97.out">saída</a> · <a href="resultados/dimero_b97/dimero_b97-md-ener.csv">energias</a> · <a href="resultados/dimero_b97/dimero_b97-traj.xyz">trajetória</a>.</li>
+<li><strong>XTB2, referência ampliada de 5 ps:</strong> <a href="resultados/dimero_xtb2_5ps/dimero_xtb2_5ps-traj.xyz" download="dimero_xtb2_5ps-traj.xyz">trajetória completa</a> · <a href="resultados/dimero_xtb2_5ps/dimero_xtb2_5ps-md-ener.csv">energias</a> · <a href="resultados/dimero_xtb2_5ps/curso.json">etapas e limites</a> · <a href="resultados/dimero_xtb2_5ps/verificacao.json">verificação</a> · <a href="resultado-dimero_xtb2_5ps.zip">pacote completo de resultados</a> · <a href="aula-dimero_restart_5ps.zip">input e checkpoint para continuar de 2 até 5 ps</a>. As saídas das duas execuções estão separadas por etapa no pacote.</li>
+<li><strong>XTB2, 2 ps:</strong> <a href="resultados/dimero_xtb2_2ps/dimero_xtb2_2ps.out">saída</a> · <a href="resultados/dimero_xtb2_2ps/dimero_xtb2_2ps.inp" download="dimero_xtb2_2ps.inp">input usado</a> · <a href="resultados/dimero_xtb2_2ps/dimero_xtb2_2ps-md-ener.csv">energias</a> · <a href="resultados/dimero_xtb2_2ps/dimero_xtb2_2ps-traj.xyz" download="dimero_xtb2_2ps-traj.xyz">trajetória completa</a> · <a href="resultados/dimero_xtb2_2ps/execucao.json">tempo de execução</a>.</li>
+<li><strong>DFT, comparação pronta de 60 fs:</strong> <a href="resultados/dimero_b97/dimero_b97.out">saída</a> · <a href="resultados/dimero_b97/dimero_b97-md-ener.csv">energias</a> · <a href="resultados/dimero_b97/dimero_b97-traj.xyz" download="dimero_b97-traj.xyz">trajetória</a>.</li>
 </ul>
 <p><a href="https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html">Manual ORCA: dinâmica molecular</a>.</p>
 <p><a href="resultados/preparar_dimero_b97/preparar_dimero_b97.out">Preparação do dímero</a>. Geometria convergida na otimização; não foi feita análise de frequências.</p>
-<p>Métodos: <a href="https://github.com/HenriqueCSJ/AIMD-6WPPQG-UERJ/blob/main/tutoriais/05-xtb-solvator.md">preparar XTB2 no ORCA</a> · <a href="https://www.faccts.de/docs/orca/6.1/manual/contents/modelchemistries/3cmethods.html">B97-3c das referências DFT</a>.</p><nav class="endnav" aria-label="Próxima etapa"><a href="../index.html">← Percurso</a><a href="../3-xtb2-etanol/index.html">Etanol: controle →</a></nav></main></div><footer>Henrique de Castro Silva Junior e Virginia Camila Rufino Ferreira · ORCA 6.1.1 · Materiais e dados locais; links externos levam à documentação oficial.</footer></body></html>
+<p>Métodos: <a href="https://github.com/HenriqueCSJ/AIMD-6WPPQG-UERJ/blob/main/tutoriais/05-xtb-solvator.md">preparar XTB2 no ORCA</a> · <a href="https://www.faccts.de/docs/orca/6.1/manual/contents/modelchemistries/3cmethods.html">B97-3c das referências DFT</a>.</p>
+<h2 id="inputs-das-variantes-e-preparacoes">Inputs das variantes e preparações</h2>
+<ul>
+<li><strong>agua_dft:</strong> <a href="inputs/agua_dft.inp" download="agua_dft.inp">Baixar input ORCA</a> · <a href="estruturas/agua.xyz" download="agua.xyz">Baixar geometria inicial (.xyz)</a> (opcional para executar; as coordenadas já estão no input).</li>
+<li><strong>preparar_agua:</strong> <a href="inputs/preparar_agua.inp" download="preparar_agua.inp">Baixar input ORCA</a> · <a href="estruturas/agua_inicial.xyz" download="agua_inicial.xyz">Baixar geometria inicial (.xyz)</a> (opcional para executar; as coordenadas já estão no input).</li>
+</ul>
+<p><strong>Continuação de 2 até 5 ps:</strong> <a href="resultados/dimero_xtb2_5ps/etapas/water_02000_05000fs.inp" download="water_02000_05000fs.inp">Baixar input ORCA</a> · <a href="resultados/dimero_xtb2_5ps/etapas/water_restart.xyz" download="water_restart.xyz">Baixar geometria inicial (.xyz)</a> (obrigatório; manter na mesma pasta do input) · <a href="resultados/dimero_xtb2_5ps/etapas/dimero_xtb2_2ps.mdrestart" download="dimero_xtb2_2ps.mdrestart">Baixar checkpoint obrigatório</a> (fornece o estado de continuação; manter junto do input). O XYZ isolado não substitui o checkpoint.</p><nav class="endnav" aria-label="Próxima etapa"><a href="../index.html">← Percurso</a><a href="../3-xtb2-etanol/index.html">Etanol: controle →</a></nav></main></div><footer>Henrique de Castro Silva Junior e Virginia Camila Rufino Ferreira · ORCA 6.1.1 · Materiais e dados locais; links externos levam à documentação oficial.</footer></body></html>

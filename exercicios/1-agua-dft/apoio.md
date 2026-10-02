@@ -34,24 +34,22 @@ Estes cálculos já foram feitos pelos ministrantes. Não são novas execuções
 
 <details markdown="1"><summary>Input e resultados: preparar_agua</summary>
 
-[Baixar input](resultados/preparar_agua/preparar_agua.inp) · [Baixar estrutura de partida](estruturas/agua_inicial.xyz)
+[Baixar input ORCA](inputs/preparar_agua.inp) · [Baixar geometria inicial (.xyz)](estruturas/agua_inicial.xyz) (opcional para executar; as coordenadas já estão no input)
 
+[Input original usado na referência](resultados/preparar_agua/preparar_agua.inp).
+
+<!-- input-source: inputs/preparar_agua.inp -->
 ```text
-# Minicurso AIMD / ORCA 6.1.1 - preparar_agua
-# Estas linhas de comentario explicam as escolhas e nao alteram o calculo.
-# Execute um caso por vez; mantenha o arquivo XYZ na pasta de execucao.
-
-# Relaxa a geometria. PAL8 solicita oito recursos. BLYP/def2-SVP e o nivel
-# DFT; TightSCF aperta a convergencia eletronica.
+# Apoio: otimiza a agua no nivel DFT usado na dinamica.
 ! BLYP def2-SVP TightSCF Opt PAL8
-
-# Memoria em MB por processo. 256 x 8 = 2048 MB de orcamento, alem de memoria
-# adicional.
 %maxcore 256
 
-# Le o XYZ: carga total 0, multiplicidade 1. O nome do arquivo deve coincidir
-# exatamente.
-* xyzfile 0 1 agua_inicial.xyz
+# Carga 0, multiplicidade 1; coordenadas abaixo; XYZ separado opcional.
+* xyz 0 1
+O   0.0000000000  0.0000000000  0.0000000000
+H   0.7586020000  0.0000000000  0.5042840000
+H  -0.7586020000  0.0000000000  0.5042840000
+*
 ```
 
 ### preparar_agua

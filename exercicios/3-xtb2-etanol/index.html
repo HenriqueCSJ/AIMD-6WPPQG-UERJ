@@ -12,7 +12,9 @@
 <p>O laboratório também oferece <strong>5 ps de NVE</strong>, por continuação dos 0,5 ps originais a partir do checkpoint, com as mesmas posições, velocidades, timestep de 0,5 fs e ausência de termostato. A referência ampliada preserva <strong>10001 quadros originais</strong>. O input abaixo continua produzindo os 0,5 ps do controle; as comparações de timestep e termostato conservam essa série curta para manter os dados pareados.</p>
 <p>A continuação levou <strong>136,1 s nesta máquina</strong>, além dos 15,8 s originais. Nos 5 ps completos, o diedro C 0–C 1–O 2–H 8 varia de <strong>−79,5° a −28,0°</strong>, sem troca de região conformacional observada. A amplitude de Etotal é <strong>0,549 kJ/mol</strong>.</p>
 <h2 id="2-execute">2. Execute</h2>
-<p><a href="aula-etanol_nve.zip">Baixar pacote</a> · <a href="inputs/etanol_nve.inp">Input</a> · <a href="estruturas/etanol.xyz">Estrutura</a></p>
+<p><a href="aula-etanol_nve.zip">Baixar pacote</a> · <a href="inputs/etanol_nve.inp" download="etanol_nve.inp">Baixar input ORCA</a> · <a href="estruturas/etanol.xyz" download="etanol.xyz">Baixar geometria inicial (.xyz)</a> (opcional para executar; as coordenadas já estão no input)</p>
+<!-- input-source: inputs/etanol_nve.inp -->
+
 <pre><code class="language-text"># Etanol com GFN2-xTB, sem banho termico (NVE).
 ! MD XTB2 PAL8
 %maxcore 256
@@ -28,8 +30,18 @@
   Run 1000
 end
 
-# Carga 0, multiplicidade 1; XYZ na mesma pasta.
-* xyzfile 0 1 etanol.xyz
+# Carga 0, multiplicidade 1; coordenadas abaixo; XYZ separado opcional.
+* xyz 0 1
+  C          -0.90144100150192      0.17625125426761     -0.03297153896772
+  C           0.46936125625488     -0.49209041813779     -0.04596375886747
+  O           1.46256276612237      0.28843917261435      0.57717031816153
+  H          -0.88148499664442      1.09990657237907     -0.61006530877166
+  H          -1.64361180355502     -0.48789343144170     -0.46692815539801
+  H          -1.19233363929951      0.41110994548345      0.98810024770280
+  H           0.76068917865250     -0.72317969030966     -1.08182288177168
+  H           0.44081648762406     -1.42618852781151      0.51953633130848
+  H           1.48544175234705      1.15364512295618      0.15294474650374
+*
 </code></pre>
 <details>
 <summary>Executar no Ubuntu / WSL2</summary>
@@ -58,7 +70,12 @@ end
 <p><strong>Por que XTB2 aqui?</strong> O custo baixo permite repetir e prolongar o cálculo durante a aula. É GFN2-xTB, um modelo semiempírico de estrutura eletrônica; não devemos interpretar sua energia como uma energia DFT.</p>
 <h2 id="resultados-e-manual">Resultados e manual</h2>
 <ul>
-<li><strong>NVE ampliado, 5 ps:</strong> <a href="resultados/etanol_nve_5ps/etanol_nve_5ps-traj.xyz">trajetória completa</a> · <a href="resultados/etanol_nve_5ps/etanol_nve_5ps-md-ener.csv">energias</a> · <a href="resultados/etanol_nve_5ps/curso.json">etapas e limites</a> · <a href="resultados/etanol_nve_5ps/verificacao.json">verificação</a> · <a href="resultado-etanol_nve_5ps.zip">pacote completo de resultados</a> · <a href="aula-etanol_restart_5ps.zip">input e checkpoint para continuar de 0,5 até 5 ps</a>. As saídas das duas execuções estão separadas por etapa no pacote.</li>
-<li><strong>etanol_nve:</strong> <a href="resultados/etanol_nve/etanol_nve.out">saída</a> · <a href="resultados/etanol_nve/etanol_nve.inp">input usado</a> · <a href="resultados/etanol_nve/etanol_nve-md-ener.csv">energias</a> · <a href="resultados/etanol_nve/etanol_nve-traj.xyz">trajetória</a> · <a href="resultados/etanol_nve/execucao.json">tempo de execução</a>.</li>
+<li><strong>NVE ampliado, 5 ps:</strong> <a href="resultados/etanol_nve_5ps/etanol_nve_5ps-traj.xyz" download="etanol_nve_5ps-traj.xyz">trajetória completa</a> · <a href="resultados/etanol_nve_5ps/etanol_nve_5ps-md-ener.csv">energias</a> · <a href="resultados/etanol_nve_5ps/curso.json">etapas e limites</a> · <a href="resultados/etanol_nve_5ps/verificacao.json">verificação</a> · <a href="resultado-etanol_nve_5ps.zip">pacote completo de resultados</a> · <a href="aula-etanol_restart_5ps.zip">input e checkpoint para continuar de 0,5 até 5 ps</a>. As saídas das duas execuções estão separadas por etapa no pacote.</li>
+<li><strong>etanol_nve:</strong> <a href="resultados/etanol_nve/etanol_nve.out">saída</a> · <a href="resultados/etanol_nve/etanol_nve.inp" download="etanol_nve.inp">input usado</a> · <a href="resultados/etanol_nve/etanol_nve-md-ener.csv">energias</a> · <a href="resultados/etanol_nve/etanol_nve-traj.xyz" download="etanol_nve-traj.xyz">trajetória</a> · <a href="resultados/etanol_nve/execucao.json">tempo de execução</a>.</li>
 </ul>
-<p><a href="https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html">Manual ORCA: dinâmica molecular</a>.</p><nav class="endnav" aria-label="Próxima etapa"><a href="../1-agua-dft/index.html">← Dímero de água</a><a href="../4-timestep/index.html">Timestep e correção →</a></nav></main></div><footer>Henrique de Castro Silva Junior e Virginia Camila Rufino Ferreira · ORCA 6.1.1 · Materiais e dados locais; links externos levam à documentação oficial.</footer></body></html>
+<p><a href="https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html">Manual ORCA: dinâmica molecular</a>.</p>
+<h2 id="inputs-das-variantes-e-preparacoes">Inputs das variantes e preparações</h2>
+<ul>
+<li><strong>preparar_etanol:</strong> <a href="inputs/preparar_etanol.inp" download="preparar_etanol.inp">Baixar input ORCA</a> · <a href="estruturas/etanol_inicial.xyz" download="etanol_inicial.xyz">Baixar geometria inicial (.xyz)</a> (opcional para executar; as coordenadas já estão no input).</li>
+</ul>
+<p><strong>Continuação de 0,5 até 5 ps:</strong> <a href="resultados/etanol_nve_5ps/etapas/ethanol_00500_05000fs.inp" download="ethanol_00500_05000fs.inp">Baixar input ORCA</a> · <a href="resultados/etanol_nve_5ps/etapas/ethanol_restart.xyz" download="ethanol_restart.xyz">Baixar geometria inicial (.xyz)</a> (obrigatório; manter na mesma pasta do input) · <a href="resultados/etanol_nve_5ps/etapas/etanol_nve.mdrestart" download="etanol_nve.mdrestart">Baixar checkpoint obrigatório</a> (fornece o estado de continuação; manter junto do input). O XYZ isolado não substitui o checkpoint.</p><nav class="endnav" aria-label="Próxima etapa"><a href="../1-agua-dft/index.html">← Dímero de água</a><a href="../4-timestep/index.html">Timestep e correção →</a></nav></main></div><footer>Henrique de Castro Silva Junior e Virginia Camila Rufino Ferreira · ORCA 6.1.1 · Materiais e dados locais; links externos levam à documentação oficial.</footer></body></html>

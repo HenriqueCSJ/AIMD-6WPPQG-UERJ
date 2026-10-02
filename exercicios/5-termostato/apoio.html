@@ -6,7 +6,7 @@
 <h2 id="entenda-as-escolhas">Entenda as escolhas</h2>
 <p><code>Initvel 300_K</code> prepara a condição inicial. O termostato permite troca de energia com um banho a 300 K; portanto, <strong>K + U não precisa ser constante em NVT</strong>. A temperatura instantânea deve flutuar. O acoplamento de 100 fs = 0,1 ps = 10⁻¹³ s define a escala de atuação do banho, não a duração total da trajetória. Esta pequena molécula e este intervalo curto não demonstram amostragem canônica convergida.</p>
 <p>Abra o <a href="../../visualizador/index.html">Laboratório de trajetórias</a> e carregue o <code>*-md-ener.csv</code>, o <code>.out</code> e o <code>*-traj.xyz</code> deste cálculo. O aplicativo prepara os gráficos de energia/temperatura e a animação. Na aba <strong>Distâncias</strong>, escolha dois átomos; a medida é calculada do XYZ. O CSV original usa fs, Hartree e K; a conversão de unidades fica explícita na tela.</p>
-<p><strong>Controle reutilizado:</strong> <a href="../3-xtb2-etanol/inputs/etanol_nve.inp">input NVE de 0,5 fs</a>, <a href="../3-xtb2-etanol/resultados/etanol_nve/etanol_nve-md-ener.csv">CSV NVE</a> e <a href="../3-xtb2-etanol/resultados/etanol_nve/etanol_nve-traj.xyz">trajetória NVE</a>. A geometria inicial é idêntica à deste exercício.</p>
+<p><strong>Controle reutilizado:</strong> <a href="../3-xtb2-etanol/inputs/etanol_nve.inp" download="etanol_nve.inp">Baixar input ORCA</a> · <a href="../3-xtb2-etanol/estruturas/etanol.xyz" download="etanol.xyz">Baixar geometria inicial (.xyz)</a> (opcional para executar; as coordenadas já estão no input), <a href="../3-xtb2-etanol/resultados/etanol_nve/etanol_nve-md-ener.csv">CSV NVE</a> e <a href="../3-xtb2-etanol/resultados/etanol_nve/etanol_nve-traj.xyz" download="etanol_nve-traj.xyz">trajetória NVE</a>. A geometria inicial é idêntica à deste exercício.</p>
 <h2 id="resultados-de-referencia">Resultados de referência</h2>
 <p>Estes arquivos são saídas reais, preservadas sem suavização dos dados. Os tempos incluem a inicialização do programa e correspondem a uma execução por caso em um Intel Core Ultra 9 185H; não são uma promessa para todos os computadores. Se seu cálculo atrasar, use a referência e identifique-a como tal.</p>
 <h3 id="etanol_csvr">etanol_csvr</h3>
@@ -14,8 +14,8 @@
 <ul>
 <li><a href="resultados/etanol_csvr/etanol_csvr.out">Saída completa</a></li>
 <li><a href="resultados/etanol_csvr/etanol_csvr-md-ener.csv">Energias e temperatura — CSV</a></li>
-<li><a href="resultados/etanol_csvr/etanol_csvr-traj.xyz">Trajetória — XYZ</a></li>
-<li><a href="resultados/etanol_csvr/etanol_csvr.mdrestart">Estado de reinício</a></li>
+<li><a href="resultados/etanol_csvr/etanol_csvr-traj.xyz" download="etanol_csvr-traj.xyz">Trajetória — XYZ</a></li>
+<li><a href="resultados/etanol_csvr/etanol_csvr.mdrestart" download="etanol_csvr.mdrestart">Estado de reinício</a></li>
 <li><a href="resultados/etanol_csvr/execucao.json">Registro da execução</a></li>
 </ul>
 <p>O CSV contém <strong>1001 registros</strong>, de <strong>0 a 500 fs</strong>, cobrindo <strong>500 fs nesta etapa</strong>. A diferença final E(t) − E(início da etapa) é <strong>0.0125 Eh</strong>; o intervalo máximo–mínimo de E é <strong>0.0166 Eh</strong>. A temperatura variou de <strong>52.7 a 435.0 K</strong>. São descrições desta trajetória, não estimativas de equilíbrio.</p>
