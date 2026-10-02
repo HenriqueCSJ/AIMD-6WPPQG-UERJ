@@ -12,19 +12,22 @@
     const lower=time=>{let lo=0,hi=entries.length;while(lo<hi){const mid=(lo+hi)>>>1;if(entries[mid].time<time)lo=mid+1;else hi=mid;}return lo;};
     const matches=time=>{if(!Number.isFinite(time))return [];const tolerance=1e-7,found=[];for(let i=lower(time-tolerance);i<entries.length&&entries[i].time<=time+tolerance;i++)found.push(entries[i]);return found;};
     const byStep=new Map();for(const entry of entries)if(Number.isFinite(entry.sample.step)){if(!byStep.has(entry.sample.step))byStep.set(entry.sample.step,[]);byStep.get(entry.sample.step).push(entry);}
+    const bySourceStep=new Map();for(const entry of entries)if(entry.sample.sourceKey&&Number.isFinite(entry.sample.sourceStep)){if(!bySourceStep.has(entry.sample.sourceStep))bySourceStep.set(entry.sample.sourceStep,[]);bySourceStep.get(entry.sample.sourceStep).push(entry);}
     const exact=(time,context={})=>{
       let found=matches(time);
+      if(context.sourceKey)found=found.filter(e=>e.sample.sourceKey===context.sourceKey);
       if(found.length>1&&Number.isFinite(context.step))found=found.filter(e=>e.sample.step===context.step);
       // ORCA may round its CSV clock to one decimal while the XYZ retains
       // quarter-fs times. Only the same recorded step may bridge that rounding.
-      if(!found.length&&Number.isFinite(time)&&Number.isFinite(context.step))found=(byStep.get(context.step)||[]).filter(e=>Math.abs(e.time-time)<=.050001);
+      if(!found.length&&Number.isFinite(time)&&Number.isFinite(context.step))found=(byStep.get(context.step)||[]).filter(e=>(!context.sourceKey||e.sample.sourceKey===context.sourceKey)&&Math.abs(e.time-time)<=.050001);
+      if(!found.length&&Number.isFinite(time)&&context.sourceKey&&Number.isFinite(context.sourceStep))found=(bySourceStep.get(context.sourceStep)||[]).filter(e=>e.sample.sourceKey===context.sourceKey&&Math.abs(e.time-time)<=.050001);
       return found.length===1&&valid(found[0].sample)?found[0].sample:null;
     };
     const inRange=time=>Number.isFinite(time)&&entries.length>0&&time>=entries[0].time-1e-7&&time<=entries.at(-1).time+1e-7;
     return {
       entries,
       exact,
-      covers(time,context={}){if(exact(time,context))return true;if(!inRange(time))return false;const same=matches(time);if(same.length)return same.some(e=>valid(e.sample));const i=lower(time),a=entries[i-1],b=entries[i];return !!a&&!!b&&a.sample.segment===b.sample.segment&&valid(a.sample)&&valid(b.sample);},
+      covers(time,context={}){if(exact(time,context))return true;if(!inRange(time))return false;const same=matches(time).filter(e=>!context.sourceKey||e.sample.sourceKey===context.sourceKey);if(same.length)return same.some(e=>valid(e.sample));const i=lower(time),a=entries[i-1],b=entries[i];return !!a&&!!b&&(!context.sourceKey||(a.sample.sourceKey===context.sourceKey&&b.sample.sourceKey===context.sourceKey))&&a.sample.segment===b.sample.segment&&valid(a.sample)&&valid(b.sample);},
       nearest(time,preferredIndex=0){
         if(!inRange(time))return null;const i=lower(time),candidates=[entries[i-1],entries[i]].filter(Boolean);if(!candidates.length)return null;
         const nearest=candidates.reduce((a,b)=>Math.abs(b.time-time)<Math.abs(a.time-time)?b:a);

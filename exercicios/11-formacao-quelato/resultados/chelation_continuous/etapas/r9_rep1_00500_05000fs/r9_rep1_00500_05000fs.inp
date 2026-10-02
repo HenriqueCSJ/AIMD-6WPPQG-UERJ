@@ -1,0 +1,15 @@
+# Replica 1, continuacao 0.5-5 ps: preservar velocidades.
+! MD XTB2 ALPB(water) PAL8
+%maxcore 256
+
+%md
+  Timestep 0.25_fs
+  Randomize 43
+  Walls Sphere 0, 0, 0, 9.0_A Spring 50.0
+  Thermostat CSVR 300_K Timecon 100_fs
+  Dump Position Stride 4 Filename "r9_rep1_00500_05000fs-traj.xyz"
+  Restart "r9_rep1_piloto_0500fs.mdrestart"
+  Run 18000
+end
+
+* xyzfile 2 1 zn_20h2o_3en_r9.xyz

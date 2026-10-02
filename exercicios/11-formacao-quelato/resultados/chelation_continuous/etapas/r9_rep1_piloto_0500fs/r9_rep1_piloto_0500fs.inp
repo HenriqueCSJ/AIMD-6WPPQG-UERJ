@@ -1,0 +1,17 @@
+# Replica 1: mesma geometria; velocidades iniciais com semente 42.
+! MD XTB2 ALPB(water) PAL8
+%maxcore 256
+
+%md
+  Timestep 0.25_fs
+  Randomize 42
+  Initvel 300_K
+  # Todos os atomos com folga inicial; sem restricoes Zn-O ou Zn-N.
+  Walls Sphere 0, 0, 0, 9.0_A Spring 50.0
+  Dump Position Stride 2 Filename "r9_rep1_piloto_0500fs-traj.xyz"
+  # Dissipar o calor da hidratacao antes da extensao a 10 ps.
+  Thermostat CSVR 300_K Timecon 20_fs
+  Run 2000
+end
+
+* xyzfile 2 1 zn_20h2o_3en_r9.xyz

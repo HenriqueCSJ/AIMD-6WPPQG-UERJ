@@ -5,9 +5,9 @@
   <meta name="description" content="Leia resultados de dinâmica molecular do ORCA: energias, temperatura, trajetórias e medidas geométricas. Tudo no seu navegador.">
   <title>Laboratório de trajetórias · AIMD com ORCA</title>
   <link rel="stylesheet" href="app.css?v=20261001-temperature1">
-  <script defer src="orca-parser.js?v=20260929-chemistry2"></script><script defer src="charts.js?v=20261001-interactions1"></script><script defer src="geometry.js?v=20261001-performance1"></script>
+  <script defer src="orca-parser.js?v=20260929-chemistry2"></script><script defer src="charts.js?v=20261001-sequence1"></script><script defer src="geometry.js?v=20261001-performance1"></script>
   <script defer src="highlight-selection.js?v=20261001-temperature1"></script>
-  <script defer src="vendor/3Dmol-min.js?v=20261001-performance1"></script><script defer src="examples.js?v=20261001-longproton1"></script><script defer src="example-loader.js?v=20260929-loading1"></script><script defer src="app.js?v=20261001-stages1"></script>
+  <script defer src="vendor/3Dmol-min.js?v=20261001-performance1"></script><script defer src="examples.js?v=20261001-sequence1"></script><script defer src="example-loader.js?v=20260929-loading1"></script><script defer src="app.js?v=20261001-sequence1"></script>
 </head>
 <body>
 <a class="skip" href="#main">Ir para o conteúdo</a>
@@ -42,7 +42,7 @@
           <option value="thermostat">03 · Etanol: aquecer e resfriar</option>
           <option value="solvator">04a · Zn–en: construir com SOLVATOR</option>
           <option value="complex">04b · Zn–en: efeito da parede</option>
-          <option value="chelation">04c · Zn–en: formação do quelato (dados prontos)</option>
+          <option value="chelation">04c · Zn–en: hidratação e quelação</option>
           <option value="proton_shared">05 · H₅O₂⁺: um próton entre duas águas · 10 ps</option>
         </optgroup>
         <optgroup label="Opcionais e referências">
@@ -154,7 +154,7 @@
             <div class="chart-heading"><h3 id="trajectory-temperature-title">Temperatura</h3><label class="sr-only" for="trajectory-temperature-mode">Escala da temperatura junto à trajetória</label><select id="trajectory-temperature-mode"><option value="absolute">Temperatura (K)</option><option value="delta">Variação ΔT</option></select></div>
             <p id="trajectory-temperature-status" class="trajectory-temperature-status"></p><div id="trajectory-temperature-chart" class="chart"></div><p id="trajectory-temperature-empty" class="small muted" hidden></p><p id="trajectory-temperature-note" class="small muted">A linha escura acompanha a trajetória no tempo físico.</p>
           </section>
-          <div class="frame-readouts"><span class="eyebrow">NO QUADRO ATUAL · VALORES ORIGINAIS</span><div id="frame-values"></div><div id="atom-info" class="atom-info">Selecione um átomo para ver seu índice e suas coordenadas.</div></div><div class="interpret"><h3>Observe o movimento</h3><p>O que vibra? O que gira? O solvente se reorganiza?</p><p>A velocidade da animação é uma escolha de reprodução; o tempo físico aparece abaixo da molécula.</p><button class="text-button" type="button" id="goto-distances">Medir uma geometria →</button></div>
+          <div class="frame-readouts"><span class="eyebrow">NO QUADRO ATUAL · VALORES ORIGINAIS</span><div id="frame-values"></div><div id="atom-info" class="atom-info">Selecione um átomo para ver seu índice e suas coordenadas.</div></div><div class="interpret"><h3>Observe o movimento</h3><p>O que vibra? O que gira? O solvente se reorganiza?</p><p>A velocidade da animação é uma escolha de reprodução; o relógio usado aparece abaixo da molécula.</p><button class="text-button" type="button" id="goto-distances">Medir uma geometria →</button></div>
         </aside>
       </div>
     </section>

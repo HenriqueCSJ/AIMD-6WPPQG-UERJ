@@ -1,0 +1,23 @@
+{
+  "source": "C:\\Users\\henri\\OneDrive\\Academic\\Events\\6WPPGQ-UERJ\\teste-zn-20aguas-3en-raio9-20260929\\resultados\\r9_rep1_05000_10000fs\\r9_rep1_05000_10000fs-traj.xyz",
+  "source_time_fs": 7083.0,
+  "selection": "minimum max(Zn-N61,Zn-N64) in completed R1 after 500 fs",
+  "coordinates_modified": false,
+  "velocities": "new Maxwell-Boltzmann 300 K; seed 93001; new time origin",
+  "first_N": 61,
+  "second_N": 64,
+  "Zn_N_initial_A": [
+    3.8868683281377425,
+    3.8871749628083356
+  ],
+  "water_O_within_2p6_A": [
+    7,
+    10,
+    13,
+    16,
+    22,
+    25
+  ],
+  "continuous_water_CN_cutoff_2p6_A": 4.925432653234704,
+  "meaning": "Selected outer-sphere encounter, not an equilibrium random sample or a spontaneous association rate."
+}

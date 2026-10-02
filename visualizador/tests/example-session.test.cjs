@@ -61,14 +61,14 @@ function session({inspectState=false,search='?exemplo=__test_no_auto__',presets=
   nodes.molecule.tabIndex=0;
   let source=fs.readFileSync(path.join(viewer,'app.js'),'utf8');
   // A test-only bridge supplies a renderer double without creating WebGL.
-  if(inspectState)source=source.replace(/\}\)\(\);\s*$/,'globalThis.__testState=state;globalThis.__testHighlights={drawHighlights,selectTrajectoryAtom};globalThis.__testTrajectory={renderTrajectoryChart,updateTrajectoryCursor};globalThis.__testRendering={drawFrame,clearTrajectoryScene,drawContactSuggestions};})();');
+  if(inspectState)source=source.replace(/\}\)\(\);\s*$/,'globalThis.__testExports={energyRows:energyExportRows};globalThis.__testState=state;globalThis.__testHighlights={drawHighlights,selectTrajectoryAtom};globalThis.__testTrajectory={renderTrajectoryChart,updateTrajectoryCursor};globalThis.__testRendering={drawFrame,clearTrajectoryScene,drawContactSuggestions};})();');
   vm.runInContext(source,context);
   // Preserve the old helper meaning: `true` opens Trajectory 3D through the
   // primary action, while the default opens the explicit energy comparison.
   const choose=(key,trajectory=false)=>{nodes['example-select'].value=key;return nodes[trajectory?'example-button':'example-energy-button'].fire('click');};
   const toggle=(index,checked)=>{const box=nodes.runs.querySelectorAll('[data-run]')[index];box.checked=checked;box.fire('change');};
   const remove=index=>nodes.runs.querySelectorAll('[data-remove]')[index].fire('click');
-  return {html,nodes,requests,choose,toggle,remove,cancelled,animationTick,playbackNote,document:context.document,key:event=>documentListeners.keydown(event),state:context.__testState,highlightHooks:context.__testHighlights,trajectoryHooks:context.__testTrajectory,renderHooks:context.__testRendering};
+  return {html,nodes,requests,choose,toggle,remove,cancelled,animationTick,playbackNote,document:context.document,key:event=>documentListeners.keydown(event),state:context.__testState,exports:context.__testExports,highlightHooks:context.__testHighlights,trajectoryHooks:context.__testTrajectory,renderHooks:context.__testRendering};
 }
 function preset(key,{staticOnly=false,frames,energyRows}={}){
   const xyz={elements:['O','H'],frames:frames||[{time:0,step:0,coords:[[0,0,0],[0,0,1]]}],warnings:[]};
@@ -97,7 +97,7 @@ test('the main example action defaults to trajectory while explicit tabs remain 
 });
 
 test('retained reference deep links open trajectories without adding menu options',async()=>{
-  for(const key of ['proton_shared_short','water_short','ethanol_short']){
+  for(const key of ['proton_shared_short','water_short','ethanol_short','chelation_previous']){
     const ui=session({search:`?exemplo=${key}&aba=trajetoria`,inspectState:true,presets:{[key]:true}});
     assert.doesNotMatch(ui.html,new RegExp(`<option\\b[^>]*value="${key}"`));
     assert.equal(ui.requests.length,1);assert.equal(ui.requests[0].key,key);
@@ -563,6 +563,46 @@ test('stage playback and manual seeking retain matching physical energy and temp
   ui.nodes['frame-slider'].value='8';ui.nodes['frame-slider'].fire('input');
   assert.equal(ui.state.playing,false);assert.equal(ui.state.frame,8);
   assert.equal(ui.nodes['trajectory-energy-chart'].chartCursor,2);assert.equal(ui.nodes['trajectory-temperature-chart'].chartCursor,2);
+});
+
+test('sequence clock readouts and stage playback keep original source time and energy at a velocity reset',async()=>{
+ const ui=await renderingSession(),run=ui.state.runs[0],coords=run.xyz.frames[0].coords;
+ run.xyz.frames=[
+  {time:7082.5,sourceTime:7082.5,sourceStep:28330,sourceKey:'before',step:null,segment:0,coords},
+  {time:7083,sourceTime:0,sourceStep:0,sourceKey:'after',step:null,segment:1,coords},
+  {time:7083.5,sourceTime:.5,sourceStep:2,sourceKey:'after',step:null,segment:1,coords}
+ ];
+ run.energy.rows=[{time:7083,sourceTime:7083,sourceKey:'before',sourceStep:28332,step:null,total:-1,potential:-1.1,kinetic:.1,temperature:284.9,segment:0},...run.xyz.frames.slice(1).map(frame=>({...frame,total:-.99,potential:-1.1,kinetic:.11,temperature:300}))];
+ run.metadata={clockMode:'sequence_elapsed',clockNote:'Em 7083 fs: velocidades reinicializadas a 300 K; não é calor de reação.',stages:[{startFs:7083,endFs:7083.5,label:'N assistido'}]};
+ const original=JSON.stringify([run.xyz,run.energy]);ui.nodes['frame-time-heading']=new Element();
+ ui.trajectoryHooks.renderTrajectoryChart(run);ui.nodes['playback-duration'].fire('change');ui.nodes['playback-interval'].value='stage-0';ui.nodes['playback-interval'].fire('change');
+ assert.equal(ui.state.frame,1);assert.equal(ui.nodes['trajectory-energy-chart'].chart.xLabel,'Tempo da sequência (fs)');assert.equal(ui.nodes['trajectory-temperature-chart'].chart.xLabel,'Tempo da sequência (fs)');
+ assert.equal(ui.nodes['frame-temperature'].textContent,'300 K');assert.equal(ui.nodes['frame-time-heading'].textContent,'Tempo da sequência');
+ assert.match(ui.nodes['frame-time'].querySelector('.frame-time-value').textContent,/7083.*da sequência.*Relógio original: 0 fs/);
+ assert.match(ui.nodes['trajectory-stage-summary'].innerHTML,/Tempo da sequência/);assert.doesNotMatch(ui.nodes['trajectory-stage-summary'].innerHTML,/velocidades reinicializadas/);assert.match(ui.playbackNote.textContent,/tempo abaixo é acumulado/);
+ assert.equal(ui.nodes['trajectory-energy-chart'].chartCursor,7083);assert.equal(JSON.stringify([run.xyz,run.energy]),original);
+ run.metadata={};ui.renderHooks.drawFrame();assert.equal(ui.nodes['frame-time-heading'].textContent,'Tempo físico');
+});
+
+test('the 97-atom sequence has both N and two water measurements without assuming the old 43-atom system',async()=>{
+ const ui=session({inspectState:true}),load=ui.choose('chelation');
+ const data=preset('chelation_continuous'),run=data.runs[0];run.xyz.elements=Array(97).fill('H');
+ for(const [index,element] of [[0,'Zn'],[61,'N'],[64,'N'],[19,'O'],[7,'O']])run.xyz.elements[index]=element;
+ run.xyz.frames[0].coords=Array.from({length:97},(_,i)=>[i,0,0]);ui.requests[0].resolve(data);await load;
+ ui.nodes['tab-distance'].fire('click');assert.deepEqual(JSON.parse(JSON.stringify(ui.state.pairs[ui.state.runs[0].id])),[[0,61],[0,64],[0,19],[0,7]]);
+ assert.match(ui.nodes['energy-guide'].innerHTML,/primeiro N é assistida/);assert.doesNotMatch(ui.nodes['energy-guide'].innerHTML,/N 31|N 34/);
+});
+
+test('energy export distinguishes elapsed sequence time from every original clock and step',async()=>{
+ const ui=session({inspectState:true}),load=ui.choose('sequence'),data=preset('sequence');
+ data.runs[0].metadata={clockMode:'sequence_elapsed'};
+ data.runs[0].energy.rows=[{time:7083,step:null,sourceKey:'m01',sourceTime:0,sourceStep:0,segment:1,kinetic:.11,potential:-1.1,total:-.99,temperature:300,conserved:null}];
+ ui.requests[0].resolve(data);await load;
+ const exported=JSON.parse(JSON.stringify(ui.exports.energyRows()));
+ assert.deepEqual(exported[0].slice(-4),['relogio','fonte','tempo_original_fs','passo_original']);
+ assert.equal(exported[0][3],'tempo_exibido_fs');assert.equal(exported[1][2],null);assert.equal(exported[1][3],7083);
+ assert.deepEqual(exported[1].slice(-4),['sequence_elapsed','m01',0,0]);assert.equal(exported[1][7],-.99);
+ ui.state.runs[0].metadata={};const ordinary=ui.exports.energyRows();assert.equal(ordinary[0][3],'tempo_fs');assert.equal(ordinary[0].length,10);
 });
 
 test('all atom indices reuse textures and model objects across frames, then release on disable',async()=>{

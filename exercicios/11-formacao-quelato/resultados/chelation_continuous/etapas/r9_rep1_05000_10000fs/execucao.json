@@ -1,0 +1,11 @@
+{
+  "case": "r9_rep1_05000_10000fs",
+  "status": "interrupted_wsl_process_loss",
+  "normal_termination": false,
+  "returncode": null,
+  "checkpoint_fs": 9864.25,
+  "last_complete_trajectory_fs": 9864.0,
+  "pal_requested": 8,
+  "run_directory": "/home/henrique/aimd-workshop/exercicios-pal8-20260928/r9_rep1_05000_10000fs_radius9",
+  "note": "Processes absent; exact cause of WSL termination unknown. Raw files retained, no interval rerun."
+}

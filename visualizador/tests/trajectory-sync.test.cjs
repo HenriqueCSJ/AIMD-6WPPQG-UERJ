@@ -2,6 +2,19 @@ const test=require('node:test');
 const assert=require('node:assert/strict');
 const {timeIndex,ScientificChart}=require('../charts.js');
 
+test('sequence boundaries resolve energy by the original source without inventing a global step',()=>{
+ const before={time:7083,step:null,sourceKey:'hydration',sourceStep:28332,temperature:284.9,segment:0};
+ const after={time:7083,step:null,sourceKey:'assisted',sourceStep:0,temperature:300,segment:1};
+ const next={time:7083.2,step:null,sourceKey:'assisted',sourceStep:1,temperature:301,segment:1};
+ const index=timeIndex([before,after,next]);
+ assert.equal(index.exact(7083),null);assert.equal(index.exact(7083,{sourceKey:'assisted',sourceStep:0}),after);
+ assert.equal(index.exact(7083,{sourceKey:'hydration',sourceStep:28332}),before);
+ assert.equal(index.exact(7083.25,{sourceKey:'assisted',sourceStep:1}),next);
+ assert.equal(index.exact(7083.25,{sourceKey:'hydration',sourceStep:1}),null);
+ assert.equal(index.covers(7083,{sourceKey:'missing'}),false);
+ assert.equal(after.time,7083);assert.equal(after.step,null);assert.equal(before.temperature,284.9);
+});
+
 test('different XYZ and energy strides synchronize by physical time, not array index',()=>{
   const energies=timeIndex(Array.from({length:11},(_,i)=>({time:100+i*.5,step:200+i,potential:-i,segment:0})));
   const frames=timeIndex([{time:100.5,step:201},{time:102.5,step:205},{time:104.5,step:209}]);

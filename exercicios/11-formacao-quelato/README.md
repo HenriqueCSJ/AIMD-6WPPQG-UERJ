@@ -1,50 +1,52 @@
-# 04c · Zn–en: reconhecer a formação de um quelato
+# 04c · Zn–en: hidratação, primeiro N e fechamento do quelato
 
 [← Percurso](../README.md) · [Aplicativo de análise](../../visualizador/index.html)
 
 **Núcleo da aula · 20 min após o intervalo · interpretar resultado pronto · 97 átomos**
 
-> **Pergunta:** os dois N que se aproximam do Zn pertencem à mesma molécula intacta, e o contato persiste?
+> **Pergunta:** como as águas coordenam o Zn e como uma en passa de um para dois N coordenados?
 
-Este sistema contém Zn²⁺, **20 águas e três etilenodiaminas (en)**. É diferente do complexo menor usado no par com/sem parede. A geometria inicial contém um encontro selecionado entre Zn hidratado e en; a primeira aproximação de um N foi assistida. A trajetória completa não representa associação inteiramente espontânea.
+[**Abrir hidratação → primeiro N assistido → segundo N livre**](../../visualizador/index.html?exemplo=chelation&aba=trajetoria) · [Baixar os arquivos e inputs](resultado-chelation-continuous.zip)
 
-## 1. Abra a trajetória pronta
+O percurso acompanha o mesmo sistema: **Zn²⁺, 20 águas e três etilenodiaminas (en)**. No início, dez oxigênios estão a 3,1 Å do Zn, dez a 5,0 Å e todos os N, a pelo menos 6,5 Å. Ao final, há **quatro águas e uma en bidentada** na primeira esfera. **Apenas N 61 recebeu ajuda para se aproximar. N 64 e as águas nunca receberam força de coordenação.**
 
-[Abrir formação do quelato](../../visualizador/index.html?exemplo=chelation&aba=trajetoria) · [Baixar resultado e inputs](resultado-chelation.zip)
+## 1. Veja a sequência nos cálculos prontos
 
-São **3 ps = 3000 fs**, reunidos a partir de duas etapas reais e contínuas:
+Selecione **04c · Zn–en: hidratação e quelação** no aplicativo. O controle **Trecho para repetir** permite observar cada etapa com calma; **Trajetória completa** percorre todas. O relógio exibido é o **tempo acumulado da sequência**, de 0 a 10083 fs.
 
-- **0–1000 fs:** uma restrição de distância aproxima **N 61** de **Zn 0**. N 64 e as águas não recebem esse viés de coordenação.
-- **1000–3000 fs:** a restrição de coordenação foi retirada. O termostato CSVR a 300 K, ALPB(water) e a parede esférica de raio 9 Å continuam ativos.
+1. **Hidratação · 0–500 fs.** As águas se aproximam sem força imposta Zn–O. A primeira cruza o corte de 2,6 Å em **33,5 fs**; seis águas, até **66,5 fs**.
+2. **Encontro com a en · 500–7083 fs.** O Zn permanece hidratado; a en alcança uma posição de encontro, ainda sem coordenação Zn–N.
+3. **Primeiro N assistido · 7083–8083 fs.** Uma restrição atua somente em **Zn 0–N 61**. O primeiro contato abaixo de 2,6 Å ocorre em **7623 fs da sequência**, ou 540 fs no relógio desta execução.
+4. **Segundo N livre · 8083–10083 fs.** A restrição de N 61 foi removida. **N 64 entra sem guia**, fecha o quelato e os dois N permanecem coordenados até o fim. A entrada ocorre em **8636,75 fs pelos registros de distância**; o primeiro quadro XYZ que a mostra está em 8637 fs.
 
-A continuação de 2 ps levou **544,584 s** nesta máquina, com PAL8 solicitado. Preparação e execução ficam fora da atividade obrigatória. O objetivo da dupla é interpretar os arquivos fornecidos.
+**Intervenção em 7083 fs:** a geometria de encontro é selecionada da primeira dinâmica. As posições são preservadas, mas as velocidades são reinicializadas a 300 K, com semente 93001, e o relógio da nova execução volta a zero. A partir daí, o aplicativo mostra **7083 fs + o tempo local**. Portanto, este é um percurso didático com uma reinicialização declarada, e não uma única dinâmica com velocidades contínuas. Os tempos originais e os arquivos de cada etapa permanecem disponíveis.
 
-## 2. Acompanhe quatro distâncias
+## 2. Confirme que o fechamento é bidentado
 
-Os índices começam em **zero**, como no aplicativo e nos inputs do ORCA:
+Os índices começam em zero. Compare **Zn 0–N 61** e **Zn 0–N 64**, ambos da mesma en intacta. Uma associação com apenas um N é monodentada. A coordenação bidentada exige contato simultâneo pelos dois doadores.
 
-1. Adicione **Zn 0–N 61** e **Zn 0–N 64**. Ambos os N pertencem à mesma en. Identifique quando o segundo N entra em contato e por quanto tempo os dois permanecem próximos.
-2. Adicione **Zn 0–O 7** e **Zn 0–O 25**. Estas são as duas águas que deixam a primeira esfera inicial.
-3. Compare o começo e o fim. O produto final tem **seis átomos doadores**, mas **cinco moléculas ligantes**: quatro águas e uma en bidentada.
-4. Registre qual parte da trajetória foi assistida. Explique por que observar um quelato aqui não fornece uma constante de velocidade experimental.
+Nos registros de distância a cada 0,25 fs, os dois N permanecem estritamente abaixo de 2,6 Å de **1553,75 a 3000 fs do relógio local**, por **1,44625 ps**. No eixo da sequência, esse intervalo é **8636,75–10083 fs**. Veja a [verificação numérica](resultados/chelation_continuous/verificacao.json).
 
-No XYZ completo, Zn–N 61 fica abaixo de 2,6 Å em 540 fs; Zn–N 64, em 1554 fs. Os dois N permanecem abaixo de 2,6 Å de **1554 a 3000 fs**, um intervalo de **1446 fs = 1,446 ps**. O 7 permanece além de 3,0 Å a partir de 1332 fs e O 25, a partir de 1823 fs.
+Compare também **Zn 0–O 7** e **Zn 0–O 25**. Essas águas saem acima de 3,0 Å em **8415 fs** e **8906 fs da sequência**, respectivamente, conforme os XYZ gravados a cada 1 fs. Depois da hidratação, a sequência de contatos é **6O → 6O1N → 5O1N → 5O2N → 4O2N**. Ao final são seis átomos doadores, distribuídos em cinco moléculas ligantes.
 
-Com entrada de contato abaixo de 2,6 Å e saída acima de 3,0 Å, a sequência é **6O → 6O1N → 5O1N → 5O2N → 4O2N**. Esses limites são critérios geométricos; não são uma definição universal de ligação química. A en permanece intacta nesta referência.
+Os cortes de distância são critérios geométricos de acompanhamento, não ordens de ligação. As três en e as águas permanecem intactas nos trechos utilizados.
 
-## 3. Limites e resolução dos arquivos
+## 3. Relacione movimento, energia e temperatura
 
-A prévia do aplicativo usa **um a cada três quadros** da trajetória de 1 fs, preservando também o último. Para localizar eventos com a resolução de 1 fs, carregue o [XYZ completo](resultados/chelation/chelation-traj.xyz) junto do [CSV completo](resultados/chelation/chelation-md-ener.csv). Nenhuma coordenada ou tempo foi interpolado.
+Os gráficos junto à molécula mostram os valores medidos de **U, K, E e temperatura**. Observe primeiro a hidratação; depois a aproximação do primeiro N e o fechamento livre do segundo.
 
-O CSV reúne as etapas e preserva os valores impressos. A referência da quantidade conservada pode mudar no restart: um offset não é um salto físico. O timestep é 0,25 fs, enquanto a saída XYZ foi gravada a cada quatro passos.
+A restrição do primeiro N é uma mola de limite superior, com constante de **200 kJ mol⁻¹ Å⁻²**. Durante 1 ps, o limite diminui de **3,886868 para 2,2 Å**. A força é zero quando a distância fica abaixo desse limite. Após esse período, a restrição é removida.
 
-A parede e o termostato permanecem na fase sem viés de coordenação. Não atribua causalmente a formação do quelato à parede com base neste caso; a comparação controlada de parede está na etapa 04b. Ausência de evento em outro trecho curto também não prova que a associação seja impossível.
+Em **7083 fs**, a reinicialização muda a temperatura de **284,90 para 300 K**. K e E aumentam **0,006958 Eh**, enquanto U permanece igual na precisão impressa. Esse salto deve ser atribuído à intervenção, não à formação de uma ligação. A linha dos gráficos é interrompida nessa fronteira. No trecho assistido, a mola móvel também realiza trabalho; o termostato troca calor durante todo o percurso.
 
-## Inputs e consulta
+O protocolo usa **GFN2-xTB/ALPB(water)**, timestep de **0,25 fs**, **CSVR a 300 K** e parede esférica de **9 Å**. O acoplamento térmico é 20 fs nos primeiros 500 fs e 100 fs depois. A etapa sem viés de coordenação continua com termostato e parede. As curvas não fornecem, por si só, entalpia, energia livre ou velocidade experimental de associação.
 
-- [Aproximação assistida](inputs/m01a_N_sem_vies_agua.inp) · [Continuação sem viés de coordenação](inputs/m02_livre_apos_N1.inp) · [Geometria inicial](estruturas/encontro_real_R1.xyz).
-- [Saída da primeira etapa](resultados/etapas/m01a_N_sem_vies_agua.out) · [Saída da continuação](resultados/etapas/m02_livre_apos_N1.out).
-- O ZIP inclui o pequeno restart necessário à continuação. Para uma reprodução posterior, copie geometria e inputs para uma pasta nova e execute uma etapa por vez. O nome `m01a_N_sem_vies_agua` significa ausência de viés **nas águas**; a aproximação de N 61 é assistida.
-- [Manual ORCA 6.1: restrições, variáveis coletivas e restart](https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html).
+## 4. Arquivos e resolução
 
-**Entrega da dupla:** identifique os dois N, as duas águas que saem e uma medida de persistência que sustente a interpretação de quelação.
+O [ZIP](resultado-chelation-continuous.zip) conserva XYZ, CSV, inputs, saídas e checkpoints de cada etapa. A [descrição do percurso](resultados/chelation_continuous/curso.json) identifica os intervalos usados, os relógios originais e a reinicialização. O aplicativo usa uma prévia de cerca de 6 mil quadros reais, preservando as fronteiras; nenhuma posição é interpolada. As energias não são reduzidas nem deslocadas verticalmente.
+
+O terceiro arquivo de hidratação foi interrompido após 9864 fs. O percurso usa somente seu trecho registrado até **7083 fs**, anterior à interrupção; nenhum intervalo faltante foi preenchido. As duas etapas posteriores de coordenação terminaram normalmente.
+
+[Trecho anterior de 3 ps, começando no encontro](../../visualizador/index.html?exemplo=chelation_previous&aba=trajetoria) · [Pacote anterior](resultado-chelation.zip) · [Manual ORCA: restrições e restart](https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html)
+
+**Entrega da dupla:** identifique a hidratação, o primeiro N assistido, o segundo N livre e as águas que saem. Explique quais variações de energia podem estar relacionadas às intervenções do protocolo.

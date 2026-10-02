@@ -1,10 +1,12 @@
 /* Build the offline teaching examples from the retained, unmodified ORCA files. */
 const fs=require('node:fs'),path=require('node:path');
 const root=path.resolve(__dirname,'..'),R=require('../visualizador/orca-parser.js');
+const {buildSequence}=require('./build_viewer_sequence.cjs');
 const specs=[
  ['proton_shared_10ps','H₅O₂⁺ · próton compartilhado · 10 ps','10-proton-compartilhado'],
  ['proton_shared','H₅O₂⁺ · próton compartilhado · 2 ps','10-proton-compartilhado'],
  ['chelation','Zn–en · aproximação assistida → quelato · 3 ps','11-formacao-quelato'],
+ ['chelation_continuous','Zn–en · hidratação e quelação','11-formacao-quelato'],
  ['proton_droplet_300k','Gota protonada · 300 K · controle','12-gota-protonada'],
  ['proton_droplet_400k','Gota protonada · rampa até 400 K','12-gota-protonada'],
  ['proton_droplet_500k','Gota protonada · rampa até 500 K','12-gota-protonada'],
@@ -39,10 +41,13 @@ const specs=[
 const runs={};
 for(const [key,label,lesson] of specs){
  const folder=`exercicios/${lesson}/resultados/${key}`,run={key,label,reference:true,files:[],warnings:[]};
+ const courseFile=path.join(root,folder,'curso.json'),course=fs.existsSync(courseFile)?JSON.parse(fs.readFileSync(courseFile,'utf8')):null;
+ if(key==='chelation_continuous'&&!course?.sequenceSources)throw new Error('Missing verified chelation sequence sources.');
+ if(course?.sequenceSources){const assembled=buildSequence(path.join(root,folder),key,course);run.xyz=assembled.xyz;run.energy=assembled.energy;run.warnings.push(...assembled.warnings);run.files.push(...assembled.files.map(file=>({name:path.basename(file.relative),path:path.posix.normalize(`${folder}/${file.relative}`),kind:file.kind})));}
  if(['proton_shared_10ps','dimero_xtb2_5ps','etanol_nve_5ps'].includes(key))for(const file of [`${key}-md-ener.csv`,`${key}-traj.xyz`,'curso.json']){
   if(!fs.existsSync(path.join(root,folder,file)))throw new Error(`Missing verified extended source: ${folder}/${file}`);
  }
- const files=[`${key}.out`,`${key}-md-ener.csv`,`${key}-traj.xyz`,`${key}-colvars.csv`];
+ const files=course?.sequenceSources?[]:[`${key}.out`,`${key}-md-ener.csv`,`${key}-traj.xyz`,`${key}-colvars.csv`];
  if(key==='zn_solvator')files.push('zn_solvator.solvator.xyz');
  if(key==='preparar_complexo')files.push('preparar_complexo.xyz');
  for(const file of files){const rel=`${folder}/${file}`,full=path.join(root,rel);if(!fs.existsSync(full))continue;
@@ -59,15 +64,13 @@ for(const [key,label,lesson] of specs){
   run[slot]=parsed;run.files.push({name:file,path:rel,kind:parsed.kind});
  }
  // Joined trajectories have verified stage metadata, not a fabricated whole-run .out.
- const courseFile=path.join(root,folder,'curso.json');
- if(fs.existsSync(courseFile)){
-  const course=JSON.parse(fs.readFileSync(courseFile,'utf8'));
+ if(course){
   run.metadata=course.metadata;run.warnings.push(...(course.warnings||[]));
   // A joined file retains per-stage conserved-energy references. Break charts at
   // the documented boundaries without shifting any measured value or timestamp.
   const breaks=course.energyBreaksAfterFs||[];
-  if(run.energy&&breaks.length){run.energy.rows.forEach(row=>row.segment+=breaks.filter(t=>row.time>t).length);run.energy.warnings.push('Gráficos separados nas fronteiras documentadas de restart/Run; valores e tempos originais preservados.');}
-  for(const relative of course.relatedFiles||[]){const rel=path.posix.normalize(`${folder}/${relative}`);if(!fs.existsSync(path.join(root,rel)))throw new Error(`Missing course source: ${rel}`);run.files.push({name:path.basename(rel),path:rel,kind:'stage-output'});}
+  if(run.energy&&breaks.length&&!course.sequenceSources){run.energy.rows.forEach(row=>row.segment+=breaks.filter(t=>row.time>t).length);run.energy.warnings.push('Gráficos separados nas fronteiras documentadas de restart/Run; valores e tempos originais preservados.');}
+  for(const relative of course.relatedFiles||[]){const rel=path.posix.normalize(`${folder}/${relative}`);if(!fs.existsSync(path.join(root,rel)))throw new Error(`Missing course source: ${rel}`);if(!run.files.some(file=>file.path===rel))run.files.push({name:path.basename(rel),path:rel,kind:'stage-output'});}
   run.files.push({name:'curso.json',path:`${folder}/curso.json`,kind:'course-metadata'});
  }
  const issue=R.validateEnergySources(run.energy,run.out);if(issue)throw new Error(key+': '+issue);
@@ -76,7 +79,7 @@ for(const [key,label,lesson] of specs){
 const presets={
  proton_shared:{runs:['proton_shared_10ps'],tab:'trajectory'},
  proton_shared_short:{runs:['proton_shared'],tab:'trajectory'},
- chelation:{runs:['chelation'],tab:'trajectory'},
+ chelation:{runs:['chelation_continuous'],tab:'trajectory'},chelation_previous:{runs:['chelation'],tab:'trajectory'},
  proton_droplet:{runs:['proton_droplet_300k'],tab:'trajectory'},
  proton_droplet_400k:{runs:['proton_droplet_400k'],tab:'trajectory'},
  proton_droplet_500k:{runs:['proton_droplet_500k'],tab:'trajectory'},
@@ -90,7 +93,7 @@ const presets={
 };
 // Ordinary scripts, rather than fetch(), preserve direct file:// use offline.
 // The small manifest is loaded at startup; calculations are loaded on demand.
-const version='20261001-longproton1',sources={},folder=path.join(root,'visualizador/examples');
+const version='20261001-sequence1',sources={},folder=path.join(root,'visualizador/examples');
 fs.mkdirSync(folder,{recursive:true});let totalBytes=0;
 for(const [key,run] of Object.entries(runs)){
  const filename=`${key}.js`,full=path.join(folder,filename);

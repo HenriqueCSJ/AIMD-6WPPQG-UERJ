@@ -59,17 +59,17 @@ test('long proton reference keeps all 40001 measured frames and separates the re
  assert.equal(run.energy.rows[8000].segment,0);assert.equal(run.energy.rows[8001].segment,1);
 });
 
-test('main and short proton presets remain distinct and the manifest retains longproton1',()=>{
+test('main and short proton presets remain distinct and the manifest and browser cache versions agree',()=>{
  const examples=store();
  assert.deepEqual(examples.presets.proton_shared.runs,['proton_shared_10ps']);
  assert.deepEqual(examples.presets.proton_shared_short.runs,['proton_shared']);
  assert.equal(examples.runs.proton_shared.xyz.frames.length,8001);
  assert.equal(examples.runs.proton_shared.xyz.frames.at(-1).time,2000);
- assert.equal(examples.version,'20261001-longproton1');
- assert.match(examples.sources.proton_shared_10ps.src,/\?v=20261001-longproton1$/);
+ assert.equal(examples.version,'20261001-sequence1');
+ assert.match(examples.sources.proton_shared_10ps.src,/\?v=20261001-sequence1$/);
  const html=read('visualizador/index.html');
  assert.match(html,/<option value="proton_shared">[^<]*10 ps<\/option>/);
  assert.doesNotMatch(html,/<option\b[^>]*value="proton_shared_short"/);
- assert.match(html,/examples\.js\?v=20261001-longproton1/);assert.match(html,/app\.js\?v=20261001-stages1/);
+ assert.match(html,/examples\.js\?v=20261001-sequence1/);assert.match(html,/app\.js\?v=20261001-sequence1/);
  assert.match(html,/geometry\.js\?v=20261001-performance1/);assert.match(html,/vendor\/3Dmol-min\.js\?v=20261001-performance1/);
 });

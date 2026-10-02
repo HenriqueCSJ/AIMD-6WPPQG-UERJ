@@ -1,0 +1,68 @@
+{
+  "status": "root_checked_teaching_sequence",
+  "atoms": 97,
+  "composition": "Zn2+ + 20 H2O + 3 en",
+  "sequence_end_fs": 10083,
+  "source_geometry_selected_fs": 7083,
+  "velocity_reset_at_sequence_fs": 7083,
+  "uninterrupted_dynamics": false,
+  "source_selection": "Minimum max(Zn-N61,Zn-N64) in retained R1 frames after 500 fs; selected encounter, not random equilibrium sample. The third source block later suffered WSL process loss.",
+  "positions_input_identical": true,
+  "max_R1_to_m01a_XYZ_difference_A": 3.8799999657612716e-08,
+  "all_original_bonds_below_limits": true,
+  "bond_maxima_A": {
+    "C-N": 1.578711924727877,
+    "H-N": 1.1422149400446755,
+    "C-C": 1.6544918275862612,
+    "C-H": 1.2082703359357918,
+    "H-O": 1.2267901685327596
+  },
+  "first_N_contacts_local_fs": [
+    540.0,
+    1553.75
+  ],
+  "first_N_contacts_sequence_fs": [
+    7623.0,
+    8636.75
+  ],
+  "bidentate_intervals_local_full_CV": [
+    {
+      "start_fs": 1553.75,
+      "end_fs": 3000.0,
+      "duration_fs": 1446.25
+    }
+  ],
+  "second_N_ever_guided": false,
+  "waters_ever_guided": false,
+  "N61_assistance_local_fs": [
+    0,
+    1000
+  ],
+  "N61_assistance_sequence_fs": [
+    7083,
+    8083
+  ],
+  "boundary_columns": [
+    "source_time_fs",
+    "T_K",
+    "K_Eh",
+    "U_Eh",
+    "E_Eh"
+  ],
+  "boundary_before": [
+    7083.0,
+    284.9,
+    0.131273,
+    -144.262977,
+    -144.131704
+  ],
+  "boundary_after": [
+    0.0,
+    300.0,
+    0.138231,
+    -144.262977,
+    -144.124746
+  ],
+  "source_steps_and_clocks_preserved_in_original_files": true,
+  "partial_source_disclosure": "r9_rep1_05000_10000fs was interrupted by WSL process loss at 9864 fs; only its intact recorded prefix through 7083 fs is selected here. No missing interval is invented."
+}
