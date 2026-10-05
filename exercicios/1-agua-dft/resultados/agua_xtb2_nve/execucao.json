@@ -1,0 +1,14 @@
+{
+  "case": "agua_xtb2_nve",
+  "elapsed_seconds": 17.875,
+  "returncode": 0,
+  "normal_termination": true,
+  "input_source": "C:\\Users\\henri\\OneDrive\\Documents\\GitHub\\AIMD-6WPPQG-UERJ\\exercicios\\1-agua-dft\\inputs\\agua_xtb2_nve.inp",
+  "run_directory": "/home/henrique/aimd-workshop/slides-resultados-20261005/agua_xtb2_nve",
+  "strict_sequential": true,
+  "requested_time_fs": 500,
+  "requested_steps": 1000,
+  "timestep_fs": 0.5,
+  "copy_returncode": 0,
+  "command_stderr": ""
+}

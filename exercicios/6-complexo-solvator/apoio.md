@@ -16,6 +16,8 @@ Os tempos abaixo incluem a inicialização do ORCA e foram medidos em um Intel C
 
 Tempo de execução: **201.59 s**, com PAL8.
 
+[Comparar no aplicativo: complexo inicial → seis águas adicionadas](../../visualizador/index.html?exemplo=solvator&aba=trajetoria).
+
 - [Saída completa](resultados/zn_solvator/zn_solvator.out)
 - [Estrutura solvatada — XYZ](resultados/zn_solvator/zn_solvator.solvator.xyz)
 - [Histórico de montagem — XYZ](resultados/zn_solvator/zn_solvator.solvator.solventbuild.xyz)
@@ -24,6 +26,8 @@ Tempo de execução: **201.59 s**, com PAL8.
 ### zn_solvator_2aguas
 
 Tempo de execução: **64.41 s**, com PAL8.
+
+[Comparar no aplicativo: complexo inicial → duas águas adicionadas](../../visualizador/index.html?exemplo=solvator_two&aba=trajetoria). Alterne as estruturas no seletor da trajetória: o complexo inicial tem 25 átomos e a montagem com duas águas adicionadas tem 31 átomos. São estruturas de referência; o histórico de montagem não é uma trajetória de MD.
 
 - [Saída completa](resultados/zn_solvator_2aguas/zn_solvator_2aguas.out)
 - [Estrutura solvatada — XYZ](resultados/zn_solvator_2aguas/zn_solvator_2aguas.solvator.xyz)

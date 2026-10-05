@@ -24,7 +24,7 @@ test('all retained MD outputs agree with CSV values; input metadata recognizes N
   assert.equal(R.validateEnergySources(c,o),null,name);assert.equal(o.rows.length,c.rows.length,name);
   assert.equal(c.rows[0].total,o.rows[0].total);assert.equal(c.rows.at(-1).total,o.rows.at(-1).total);
   assert.equal(o.metadata.ensemble,name==='etanol_etapas'?'unknown':/csvr|parede|termica|agua_c60|controle_dt025_31A|hidratacao_associacao_31A|al_agua_nh3_/.test(name)?'NVT':'NVE',name);checked++;
- }}assert.equal(checked,23);assert.equal(joined,2);
+ }}assert.equal(checked,25);assert.equal(joined,2);
 });
 test('real timestep controls retain the full duration and measured energy amplitudes',()=>{
  for(const [name,lesson,count,span] of [['etanol_dt025','4-timestep',2001,.000038],['etanol_nve','3-xtb2-etanol',1001,.000114],['etanol_dt200','4-timestep',251,.002526]]){

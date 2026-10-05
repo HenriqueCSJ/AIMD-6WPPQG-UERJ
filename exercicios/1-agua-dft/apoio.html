@@ -21,6 +21,28 @@
 </ul>
 <p>O CSV contém <strong>41 registros</strong>, de <strong>0 a 20 fs</strong>, cobrindo <strong>20 fs nesta etapa</strong>. A diferença final E(t) − E(início da etapa) é <strong>5e-06 Eh</strong>; o intervalo máximo–mínimo de E é <strong>2.9e-05 Eh</strong>. A temperatura variou de <strong>3.1 a 300.0 K</strong>. São descrições desta trajetória, não estimativas de equilíbrio.</p>
 <p><a href="resultados/agua_dft/analise.json">Diagnósticos numéricos desta referência</a>.</p>
+<p><a id="resultados-xtb2"></a></p>
+<h2 id="agua-xtb2-resultados-sem-e-com-termostato">Água XTB2: resultados sem e com termostato</h2>
+<p><a href="../../visualizador/index.html?exemplo=water_thermostat&amp;aba=trajetoria">Comparar as duas trajetórias</a> · <a href="../../visualizador/index.html?exemplo=water_thermostat&amp;aba=energias">Comparar energias e temperatura</a></p>
+<p>Os inputs são os mesmos da atividade: geometria inicial e semente iguais, <code>Initvel 100_K</code>, passo de 0,5 fs e 1000 passos. Cada referência tem <strong>1001 quadros e 1001 registros de energia, de 0 a 500 fs</strong>. Os dois cálculos terminaram normalmente. A única mudança no protocolo é <code>Thermostat None</code> versus <code>Thermostat CSVR 300_K Timecon 100_fs</code>. A janela curta e as flutuações de uma molécula não demonstram equilíbrio térmico.</p>
+<h3 id="sem-termostato-nve">Sem termostato — NVE</h3>
+<p><a href="../../visualizador/index.html?exemplo=water_nve&amp;aba=trajetoria">Abrir NVE</a> · <a href="resultado-agua_xtb2_nve.zip">Baixar resultados completos</a></p>
+<ul>
+<li><a href="resultados/agua_xtb2_nve/agua_xtb2_nve.inp" download="agua_xtb2_nve.inp">Input executado</a></li>
+<li><a href="resultados/agua_xtb2_nve/agua_xtb2_nve.out">Saída completa</a></li>
+<li><a href="resultados/agua_xtb2_nve/agua_xtb2_nve-md-ener.csv">Energias e temperatura — CSV</a></li>
+<li><a href="resultados/agua_xtb2_nve/agua_xtb2_nve-traj.xyz" download="agua_xtb2_nve-traj.xyz">Trajetória — XYZ</a></li>
+<li><a href="resultados/agua_xtb2_nve/agua_xtb2_nve.mdrestart" download="agua_xtb2_nve.mdrestart">Estado de reinício</a></li>
+</ul>
+<h3 id="com-termostato-csvr-a-300-k">Com termostato — CSVR a 300 K</h3>
+<p><a href="../../visualizador/index.html?exemplo=water_csvr&amp;aba=trajetoria">Abrir CSVR</a> · <a href="resultado-agua_xtb2_csvr.zip">Baixar resultados completos</a></p>
+<ul>
+<li><a href="resultados/agua_xtb2_csvr/agua_xtb2_csvr.inp" download="agua_xtb2_csvr.inp">Input executado</a></li>
+<li><a href="resultados/agua_xtb2_csvr/agua_xtb2_csvr.out">Saída completa</a></li>
+<li><a href="resultados/agua_xtb2_csvr/agua_xtb2_csvr-md-ener.csv">Energias e temperatura — CSV</a></li>
+<li><a href="resultados/agua_xtb2_csvr/agua_xtb2_csvr-traj.xyz" download="agua_xtb2_csvr-traj.xyz">Trajetória — XYZ</a></li>
+<li><a href="resultados/agua_xtb2_csvr/agua_xtb2_csvr.mdrestart" download="agua_xtb2_csvr.mdrestart">Estado de reinício</a></li>
+</ul>
 <h2 id="preparacao-das-estruturas-material-de-apoio">Preparação das estruturas — material de apoio</h2>
 <p>Estes cálculos já foram feitos pelos ministrantes. Não são novas execuções obrigatórias na aula. A otimização fornece uma geometria convergida no critério escolhido; sem análise vibracional, não afirmamos que ela seja um mínimo confirmado por frequências.</p>
 <details>

@@ -44,5 +44,5 @@ test('timestep and thermostat controls retain the original short matched ethanol
  assert.deepEqual(store.presets.thermostat_compare.runs,['etanol_nve','etanol_csvr']);
  assert.deepEqual(store.presets.timestep.runs,['etanol_instavel','etanol_corrigido']);
  const html=read('visualizador/index.html');
- for(const c of cases){assert.match(html,new RegExp(`<option value="${c.preset}"[^>]*>[^<]*5 ps<\\/option>`));assert.doesNotMatch(html,new RegExp(`<option\\b[^>]*value="${c.preset}_short"`));}
+ for(const c of cases){assert.match(html,new RegExp(`<option value="${c.preset}"[^>]*>[^<]*5 ps<\\/option>`));assert.match(html,new RegExp(`<option\\b[^>]*value="${c.preset}_short"`));}
 });

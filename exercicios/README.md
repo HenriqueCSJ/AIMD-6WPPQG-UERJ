@@ -15,7 +15,7 @@ Cinco blocos conectam movimento, integração, controle térmico, coordenação 
 
 [01a · Água isolada](1-agua-dft/README.md#agua-isolada) → [01b · Dímero](1-agua-dft/README.md#dimero) · [Começar no laboratório](../visualizador/index.html?exemplo=water_single&aba=trajetoria) · **25 min de aula**
 
-Uma água: meça O–H e H–O–H, acompanhe K/U/E e distinga velocidades iniciais de controle térmico. O par XTB2 proposto compara NVE e CSVR; a discussão de IV/Raman liga movimento molecular e propriedades vibracionais. Depois, duas águas: execute **2 ps = 2 × 10⁻¹² s** e investigue a troca de doador/aceptor da ligação H. Execução de referência do dímero: **56 s**.
+Uma água: meça O–H e H–O–H, acompanhe K/U/E e distinga velocidades iniciais de controle térmico. O [par XTB2 pronto compara NVE e CSVR por 500 fs](../visualizador/index.html?exemplo=water_thermostat&aba=trajetoria); a discussão de IV/Raman liga movimento molecular e propriedades vibracionais. Depois, duas águas: execute **2 ps = 2 × 10⁻¹² s** e investigue a troca de doador/aceptor da ligação H. Execução de referência do dímero: **56 s**.
 
 ### 02 · Etanol: perceber o erro e corrigir
 
@@ -59,7 +59,7 @@ Conclua os [testes de instalação](../tutoriais/03-testar-instalacao.md) e de [
 
 Carregue juntos **`.out`**, **`-md-ener.csv`** e **`-traj.xyz`**. O laboratório lê seus arquivos localmente. Na trajetória, use **Mover** para reposicionar a molécula e acompanhe o marcador nas curvas de energia. Você também pode abrir o resultado pronto.
 
-O [roteiro de quatro horas](roteiro-4h.md) preserva **15 min de descanso, 25 min de margem e o intervalo de 16h–17h**. Os tempos de execução das referências foram medidos na máquina de referência; variam entre computadores. O novo par XTB2 da água ainda não tem tempo medido nem resultados prontos. Ao terminar, registre uma observação, sua interpretação e algo que a trajetória ainda não permite concluir.
+O [roteiro de quatro horas](roteiro-4h.md) preserva **15 min de descanso, 25 min de margem e o intervalo de 16h–17h**. Os tempos de execução das referências foram medidos na máquina de referência; variam entre computadores. O par XTB2 da água já tem resultados prontos: aproximadamente 18 s de execução para NVE e 15 s para CSVR. Ao terminar, registre uma observação, sua interpretação e algo que a trajetória ainda não permite concluir.
 
 ## Como executar
 

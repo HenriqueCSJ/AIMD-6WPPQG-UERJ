@@ -30,7 +30,11 @@ A referência BLYP/def2-SVP mostra **20 fs em 41 quadros**, com timestep de 0,5 
 
 Vamos iniciar **duas dinâmicas XTB2 da mesma geometria e com a mesma semente**, ambas com velocidades preparadas a 100 K. O primeiro caso evolui sem banho; no segundo, CSVR troca energia com um banho cujo alvo é 300 K. Assim, a comparação isola a presença do termostato. Não compare DFT/NVE com XTB2/CSVR para atribuir uma diferença apenas ao banho.
 
-São **inputs preparados para 500 fs = 0,5 ps**, ainda sem resultados ou custo medido. Execute um cálculo por vez, em pastas separadas. Se a espera ocupar o bloco, abra a [comparação pronta NVE × CSVR do etanol](../../visualizador/index.html?exemplo=thermostat_compare&aba=trajetoria) e retome a execução depois.
+Os **dois resultados de 500 fs = 0,5 ps já estão prontos**, calculados com os inputs abaixo. Cada caso contém 1001 quadros e 1001 registros de energia, incluindo o instante inicial. Na máquina de referência, as execuções levaram aproximadamente **18 s sem termostato e 15 s com CSVR**; o tempo varia entre computadores. Para reproduzir, execute um cálculo por vez, em pastas separadas.
+
+[Abrir comparação pronta da água: NVE × CSVR](../../visualizador/index.html?exemplo=water_thermostat&aba=trajetoria) · [Comparar energias e temperatura](../../visualizador/index.html?exemplo=water_thermostat&aba=energias)
+
+Os dois cálculos ficam selecionados para comparar as curvas. No campo **Simulação**, alterne a trajetória entre **sem termostato (NVE)** e **CSVR a 300 K**. Você também pode abrir [apenas NVE](../../visualizador/index.html?exemplo=water_nve&aba=trajetoria) ou [apenas CSVR](../../visualizador/index.html?exemplo=water_csvr&aba=trajetoria). Os arquivos completos estão no [apoio da água](apoio.md#resultados-xtb2).
 
 **Sem banho — NVE:** [Baixar pacote](aula-agua_xtb2_nve.zip) · [Baixar input ORCA](inputs/agua_xtb2_nve.inp) · [Baixar geometria inicial (.xyz)](estruturas/agua.xyz) (opcional para executar; as coordenadas já estão no input)
 

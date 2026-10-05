@@ -32,7 +32,7 @@
 
 Água isolada XTB2, NVE e CSVR, conforme o tempo disponível; dímero XTB2; etanol NVE; etanol instável e corrigido; etanol em cinco etapas; SOLVATOR; dinâmica do complexo com parede; H₅O₂⁺. Usamos resultados prontos para os controles e para a formação do quelato. O ramo sem parede pode ser executado depois da aula.
 
-A água DFT da abertura é observada nos resultados fornecidos. O novo par XTB2 ainda não tem resultados nem custo medido: sua execução não é condição para avançar. Se a espera ocupar o bloco, use a comparação pronta NVE × CSVR do etanol.
+A água DFT da abertura é observada nos resultados fornecidos. O par XTB2 também tem [comparação pronta NVE × CSVR da própria água](../visualizador/index.html?exemplo=water_thermostat&aba=trajetoria): 500 fs por condição, com cerca de 18 s e 15 s de execução na máquina de referência. A reprodução local não é condição para avançar.
 
 As execuções principais anteriormente medidas somaram cerca de 14 minutos na máquina de referência, usando SOLVATOR com seis águas e incluindo a repetição do etanol corrigido, distribuídos ao longo das atividades. Esse valor não inclui os novos inputs da água, o trabalho dos alunos com arquivos, inputs, medidas e interpretação e não prevê o desempenho de outros computadores. Se uma execução atrasar, carregue o resultado fornecido e continue a atividade.
 

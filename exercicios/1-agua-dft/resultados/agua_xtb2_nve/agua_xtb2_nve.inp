@@ -1,0 +1,17 @@
+# Agua isolada: comparar ausencia e presenca de banho termico.
+! MD XTB2 PAL8
+%maxcore 256
+
+%md
+  Randomize 42
+  Initvel 100_K
+  Timestep 0.5_fs
+  Thermostat None
+  Dump Position Stride 1 Filename "agua_xtb2_nve-traj.xyz"
+  Run 1000
+end
+* xyz 0 1
+  O          -0.00000000000561      0.00000000000000     -0.07350969363937
+  H           0.76032823354949      0.00000000000000      0.54103884681985
+  H          -0.76032823354388      0.00000000000000      0.54103884681952
+*

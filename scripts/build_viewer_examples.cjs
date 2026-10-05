@@ -18,6 +18,8 @@ const specs=[
  ['dimero_b97','Dímero de água · DFT','1-agua-dft'],
  ['dimero_b97_cpcm','Dímero de água · DFT/CPCM','2-solvente-implicito'],
  ['agua_dft','01a · Água isolada · DFT · 20 fs','1-agua-dft'],
+ ['agua_xtb2_nve','Água · XTB2 · sem termostato (NVE) · 500 fs','1-agua-dft'],
+ ['agua_xtb2_csvr','Água · XTB2 · CSVR a 300 K · 500 fs','1-agua-dft'],
  ['agua_cpcm','Água · CPCM','2-solvente-implicito'],
  ['etanol_nve_5ps','Etanol · 0,5 fs · NVE · 5 ps','3-xtb2-etanol'],
  ['etanol_nve','Etanol · 0,5 fs · NVE','3-xtb2-etanol'],
@@ -36,6 +38,7 @@ const specs=[
  ['hidratacao_associacao_31A','Zn + águas + en · encontro · 5 ps','7-dinamica-complexo'],
  ['agua_c60','H₂O@C₆₀ · 1 ps','8-agua-no-fulereno'],
  ['zn_solvator','SOLVATOR · 6 águas','6-complexo-solvator'],
+ ['zn_solvator_2aguas','SOLVATOR · 2 águas adicionadas','6-complexo-solvator'],
  ['preparar_complexo','Complexo · antes do SOLVATOR','6-complexo-solvator']
 ];
 const runs={};
@@ -48,7 +51,7 @@ for(const [key,label,lesson] of specs){
   if(!fs.existsSync(path.join(root,folder,file)))throw new Error(`Missing verified extended source: ${folder}/${file}`);
  }
  const files=course?.sequenceSources?[]:[`${key}.out`,`${key}-md-ener.csv`,`${key}-traj.xyz`,`${key}-colvars.csv`];
- if(key==='zn_solvator')files.push('zn_solvator.solvator.xyz');
+ if(['zn_solvator','zn_solvator_2aguas'].includes(key))files.push(`${key}.solvator.xyz`);
  if(key==='preparar_complexo')files.push('preparar_complexo.xyz');
  for(const file of files){const rel=`${folder}/${file}`,full=path.join(root,rel);if(!fs.existsSync(full))continue;
   const parsed=R.parseFile(fs.readFileSync(full,'utf8'),file),slot=parsed.kind==='energy'?'energy':parsed.kind;
@@ -87,13 +90,15 @@ const presets={
  aluminum:{runs:['al_agua_nh3_dt05','al_agua_nh3_scc'],tab:'trajectory'},
  water:{runs:['dimero_xtb2_5ps']},water_short:{runs:['dimero_xtb2_2ps']},water_dft:{runs:['dimero_b97']},solvent:{runs:['dimero_b97','dimero_b97_cpcm']},ethanol:{runs:['etanol_nve_5ps']},ethanol_short:{runs:['etanol_nve']},
  water_single:{runs:['agua_dft']},solvent_single:{runs:['agua_dft','agua_cpcm']},
+ water_thermostat:{runs:['agua_xtb2_nve','agua_xtb2_csvr']},water_nve:{runs:['agua_xtb2_nve']},water_csvr:{runs:['agua_xtb2_csvr']},
  timestep:{runs:['etanol_instavel','etanol_corrigido']},timestep_abrupt:{runs:['etanol_dt500','etanol_corrigido']},timestep_accuracy:{runs:['etanol_dt025','etanol_nve','etanol_dt200']},thermostat:{runs:['etanol_etapas']},thermostat_compare:{runs:['etanol_nve','etanol_csvr']},
  solvator:{runs:['zn_solvator','preparar_complexo'],tab:'trajectory'},complex:{runs:['zn_parede_longo','zn_sem_parede_longo']},
+ solvator_two:{runs:['zn_solvator_2aguas','preparar_complexo'],tab:'trajectory'},
  complex_short:{runs:['zn_parede','zn_sem_parede']},hydration:{runs:['controle_dt025_31A'],tab:'trajectory'},hydration_long:{runs:['hidratacao_associacao_31A'],tab:'trajectory'},fullerene:{runs:['agua_c60'],tab:'trajectory'}
 };
 // Ordinary scripts, rather than fetch(), preserve direct file:// use offline.
 // The small manifest is loaded at startup; calculations are loaded on demand.
-const version='20261001-sequence1',sources={},folder=path.join(root,'visualizador/examples');
+const version='20261005-exercise-parity',sources={},folder=path.join(root,'visualizador/examples');
 fs.mkdirSync(folder,{recursive:true});let totalBytes=0;
 for(const [key,run] of Object.entries(runs)){
  const filename=`${key}.js`,full=path.join(folder,filename);

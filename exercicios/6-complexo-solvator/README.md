@@ -71,7 +71,7 @@ Espere o prompt voltar antes de iniciar outro cálculo. Os arquivos de resultado
 Ative **Coordenação** e **Ligações H** no visualizador. Identifique os dois N da etilenodiamina ligados geometricamente ao Zn e compare águas próximas do metal com as acrescentadas ao redor. **SOLVATOR constrói um arranjo de solvatação**; não é uma trajetória de associação do ligante nem demonstra uma constante de formação. O exercício seguinte pergunta se essa camada externa permanece por perto.
 
 
-[Carregar meus arquivos no aplicativo](../../visualizador/index.html) · [Abrir as referências desta atividade](../../visualizador/index.html?exemplo=solvator)
+[Carregar meus arquivos no aplicativo](../../visualizador/index.html) · [Comparar estrutura inicial e seis águas adicionadas](../../visualizador/index.html?exemplo=solvator&aba=trajetoria) · [Comparar estrutura inicial e duas águas adicionadas](../../visualizador/index.html?exemplo=solvator_two&aba=trajetoria)
 
 1. Carregue `zn_solvator.out` e **`zn_solvator.solvator.xyz`** no aplicativo.
 2. Na aba **Trajetória**, compare as estruturas antes e depois. O número de átomos mudou como esperado?
@@ -82,6 +82,8 @@ Ative **Coordenação** e **Ligações H** no visualizador. Identifique os dois 
 <details markdown="1"><summary>Opcional: montagem mais curta</summary>
 
 Troque seis por duas águas para praticar em menos tempo: o resultado tem 31 átomos. Execute somente uma versão. Na etapa 04b todos usarão o sistema fornecido de 43 átomos.
+
+[Abrir a referência pronta com duas águas adicionadas](../../visualizador/index.html?exemplo=solvator_two&aba=trajetoria). No seletor da trajetória, alterne entre o complexo inicial de 25 átomos e a estrutura de 31 átomos produzida pelo SOLVATOR. Esta comparação mostra as duas estruturas, sem representar uma trajetória de dinâmica.
 
 [Baixar input ORCA](inputs/zn_solvator_2aguas.inp) · [Baixar geometria inicial (.xyz)](estruturas/zn_en.xyz) (obrigatório; manter na mesma pasta do input) · [Baixar pacote com os arquivos necessários](aula-zn_solvator_2aguas.zip)
 

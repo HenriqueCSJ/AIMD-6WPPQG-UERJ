@@ -107,10 +107,10 @@ test('the main example action defaults to trajectory while explicit tabs remain 
   }
 });
 
-test('retained reference deep links open trajectories without adding menu options',async()=>{
+test('retained reference deep links open trajectories and stay discoverable in the menu',async()=>{
   for(const key of ['proton_shared_short','water_short','ethanol_short','chelation_previous']){
     const ui=session({search:`?exemplo=${key}&aba=trajetoria`,inspectState:true,presets:{[key]:true}});
-    assert.doesNotMatch(ui.html,new RegExp(`<option\\b[^>]*value="${key}"`));
+    assert.match(ui.html,new RegExp(`<option\\b[^>]*value="${key}"`));
     assert.equal(ui.requests.length,1);assert.equal(ui.requests[0].key,key);
     const load=ui.requests[0].promise;ui.requests[0].resolve(preset(key));await load;await new Promise(setImmediate);
     assert.equal(ui.state.tab,'trajectory');assert.equal(ui.nodes['trajectory-run'].options.length,1);

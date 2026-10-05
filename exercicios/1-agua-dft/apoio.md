@@ -32,6 +32,34 @@ O CSV contém **41 registros**, de **0 a 20 fs**, cobrindo **20 fs nesta etapa**
 
 [Diagnósticos numéricos desta referência](resultados/agua_dft/analise.json).
 
+<a id="resultados-xtb2"></a>
+
+## Água XTB2: resultados sem e com termostato
+
+[Comparar as duas trajetórias](../../visualizador/index.html?exemplo=water_thermostat&aba=trajetoria) · [Comparar energias e temperatura](../../visualizador/index.html?exemplo=water_thermostat&aba=energias)
+
+Os inputs são os mesmos da atividade: geometria inicial e semente iguais, `Initvel 100_K`, passo de 0,5 fs e 1000 passos. Cada referência tem **1001 quadros e 1001 registros de energia, de 0 a 500 fs**. Os dois cálculos terminaram normalmente. A única mudança no protocolo é `Thermostat None` versus `Thermostat CSVR 300_K Timecon 100_fs`. A janela curta e as flutuações de uma molécula não demonstram equilíbrio térmico.
+
+### Sem termostato — NVE
+
+[Abrir NVE](../../visualizador/index.html?exemplo=water_nve&aba=trajetoria) · [Baixar resultados completos](resultado-agua_xtb2_nve.zip)
+
+- [Input executado](resultados/agua_xtb2_nve/agua_xtb2_nve.inp)
+- [Saída completa](resultados/agua_xtb2_nve/agua_xtb2_nve.out)
+- [Energias e temperatura — CSV](resultados/agua_xtb2_nve/agua_xtb2_nve-md-ener.csv)
+- [Trajetória — XYZ](resultados/agua_xtb2_nve/agua_xtb2_nve-traj.xyz)
+- [Estado de reinício](resultados/agua_xtb2_nve/agua_xtb2_nve.mdrestart)
+
+### Com termostato — CSVR a 300 K
+
+[Abrir CSVR](../../visualizador/index.html?exemplo=water_csvr&aba=trajetoria) · [Baixar resultados completos](resultado-agua_xtb2_csvr.zip)
+
+- [Input executado](resultados/agua_xtb2_csvr/agua_xtb2_csvr.inp)
+- [Saída completa](resultados/agua_xtb2_csvr/agua_xtb2_csvr.out)
+- [Energias e temperatura — CSV](resultados/agua_xtb2_csvr/agua_xtb2_csvr-md-ener.csv)
+- [Trajetória — XYZ](resultados/agua_xtb2_csvr/agua_xtb2_csvr-traj.xyz)
+- [Estado de reinício](resultados/agua_xtb2_csvr/agua_xtb2_csvr.mdrestart)
+
 ## Preparação das estruturas — material de apoio
 
 Estes cálculos já foram feitos pelos ministrantes. Não são novas execuções obrigatórias na aula. A otimização fornece uma geometria convergida no critério escolhido; sem análise vibracional, não afirmamos que ela seja um mínimo confirmado por frequências.

@@ -2,7 +2,7 @@
 
 [← Materiais](../README.md)
 
-As **26 execuções preservadas com PAL8 (24 normais e duas falhas deliberadas)** estão junto de seus [sete exercícios e uma extensão](../exercicios/README.md). Cada página vincula input comentado, estrutura, saída completa, tempos medidos e, nas MD, CSV de energia/temperatura e trajetória XYZ. O complexo também inclui distâncias Zn–N/Zn–O e estado de reinício comum.
+Os resultados preservados estão junto dos [exercícios da aula e opcionais](../exercicios/README.md). Incluem execuções individuais, falhas numéricas identificadas e sequências montadas a partir de etapas documentadas. Cada página vincula os inputs, estruturas e arquivos de referência correspondentes; nas dinâmicas, há séries de energia/temperatura e trajetórias XYZ. O [laboratório](../visualizador/index.html) oferece os exemplos prontos e distingue os inputs curtos da aula das continuações. A [comparação da água sem e com termostato](../visualizador/index.html?exemplo=water_thermostat&aba=trajetoria) e o [SOLVATOR com duas águas adicionadas](../visualizador/index.html?exemplo=solvator_two&aba=trajetoria) também estão disponíveis.
 
 Os [pilotos operacionais anteriores](pilotos-progressao/README.md) ficam preservados separadamente; não substituem as referências dos exercícios.
 
