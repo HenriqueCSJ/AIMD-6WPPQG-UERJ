@@ -133,8 +133,8 @@
     if(state.busy)return;cancelExampleLoad();state.busy=true;document.body.classList.add('busy');stop();message('Lendo os arquivos…',true);
     const warnings=[],groups=new Map();let accepted=0,trajectoryRun=null;
     for(const file of files){
-      if(file.size>80*1024*1024){warnings.push(`${file.name}: limite de 80 MB por arquivo.`);continue;}
-      try{const parsed=R.parseFile(await file.text(),file.name);warnings.push(...parsed.warnings.filter(w=>!w.startsWith('O .out pode')&&!w.startsWith('XYZ convencional')).map(w=>`${file.name}: ${w}`));if(!groups.has(parsed.key))groups.set(parsed.key,[]);groups.get(parsed.key).push(parsed);}
+      if(file.size>R.MAX_FILE_BYTES){warnings.push(`${file.name}: limite de 1 GB por arquivo.`);continue;}
+      try{const parsed=await R.parseBlob(file,file.name,(read,total)=>message(`Lendo ${file.name}… ${total?Math.floor(read/total*100):100}%`,true));warnings.push(...parsed.warnings.filter(w=>!w.startsWith('O .out pode')&&!w.startsWith('XYZ convencional')).map(w=>`${file.name}: ${w}`));if(!groups.has(parsed.key))groups.set(parsed.key,[]);groups.get(parsed.key).push(parsed);}
       catch(error){warnings.push(`${file.name}: ${error.message}`);}
     }
     for(const [key,parts] of groups){

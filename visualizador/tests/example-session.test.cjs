@@ -7,6 +7,7 @@ const vm=require('node:vm');
 const OrcaReader=require('../orca-parser.js'),Geometry=require('../geometry.js'),HighlightSelection=require('../highlight-selection.js');
 const {timeIndex}=require('../charts.js');
 const viewer=path.resolve(__dirname,'..');
+const inputFile=(name,text)=>new File([text],name);
 const deferred=()=>{let resolve,reject;const promise=new Promise((a,b)=>{resolve=a;reject=b;});return {promise,resolve,reject};};
 class Element{
   constructor(tag='div'){this.tag=tag;this.children=[];this.listeners={};this.dataset={};this.attributes={};this.value='';this.hidden=false;this.checked=false;this.inert=false;this.isConnected=true;this.tabIndex=['button','input','select','textarea','a'].includes(tag)?0:-1;this.innerHTML='';this.textContent='';this.style={removeProperty(key){delete this[key];}};const classes=new Set();this.classList={add:value=>classes.add(value),remove:value=>classes.delete(value),contains:value=>classes.has(value),toggle(value,force){const on=force??!classes.has(value);if(on)classes.add(value);else classes.delete(value);return on;}};}
@@ -76,6 +77,16 @@ function preset(key,{staticOnly=false,frames,energyRows}={}){
   if(!staticOnly)run.energy={rows:energyRows||[{time:0,step:0,total:-1,potential:-1.1,kinetic:.1,temperature:300}],warnings:[]};
   return {config:{runs:[key]},runs:[run]};
 }
+
+test('oversized upload is rejected before reading and preserves the selected reference',async()=>{
+  const ui=session({inspectState:true}),load=ui.choose('water',true);
+  ui.requests[0].resolve(preset('water'));await load;
+  let reads=0;
+  await ui.nodes['file-input'].fire('change',{target:{files:[{name:'too-large.xyz',size:OrcaReader.MAX_FILE_BYTES+1,slice(){reads++;throw new Error('Must not read');}}]}});
+  assert.equal(reads,0);assert.match(ui.nodes.message.textContent,/1 GB por arquivo/);
+  assert.equal(ui.state.runs.length,1);assert.equal(ui.nodes['trajectory-run'].value,String(ui.state.runs[0].id));
+  assert.equal(ui.state.busy,false);
+});
 
 test('the trajectory tab is first and a no-query laboratory opens isolated water in trajectory mode',async()=>{
   const ui=session({search:'',inspectState:true,presets:{water_single:true}});
@@ -147,7 +158,7 @@ test('clearing the session cancels a pending preset without resurrecting it late
 
 test('an upload during preset loading cancels the preset and remains selected',async()=>{
   const ui=session(),load=ui.choose('complex');
-  await ui.nodes['file-input'].fire('change',{target:{files:[{name:'my-water.xyz',size:35,text:async()=>'2\nmy structure\nO 0 0 0\nH 0 0 1\n'}]}});
+  await ui.nodes['file-input'].fire('change',{target:{files:[inputFile('my-water.xyz','2\nmy structure\nO 0 0 0\nH 0 0 1\n')]}});
   ui.requests[0].resolve(preset('complex'));await load;
   assert.match(ui.nodes.runs.innerHTML,/my-water/);
   assert.doesNotMatch(ui.nodes.runs.innerHTML,/<strong>complex<\/strong>/);
@@ -156,7 +167,7 @@ test('an upload during preset loading cancels the preset and remains selected',a
 
 test('a ready preset selects its reference before rendering while retaining uploads',async()=>{
   const ui=session();
-  await ui.nodes['file-input'].fire('change',{target:{files:[{name:'upload.xyz',size:30,text:async()=>'2\nmy structure\nO 0 0 0\nH 0 0 1\n'}]}});
+  await ui.nodes['file-input'].fire('change',{target:{files:[inputFile('upload.xyz','2\nmy structure\nO 0 0 0\nH 0 0 1\n')]}});
   const load=ui.choose('complex',true);ui.requests[0].resolve(preset('complex'));await load;
   assert.match(ui.nodes.runs.innerHTML,/upload/);
   assert.equal(ui.nodes['trajectory-run'].options.length,1);
@@ -231,7 +242,7 @@ test('removing another run preserves the selection; removing the selected run fa
 
 test('a new XYZ stays selected even when four other simulations were selected',async()=>{
   const ui=session();
-  for(let i=0;i<5;i++)await ui.nodes['file-input'].fire('change',{target:{files:[{name:`upload${i}.xyz`,size:30,text:async()=>'2\nstructure\nO 0 0 0\nH 0 0 1\n'}]}});
+  for(let i=0;i<5;i++)await ui.nodes['file-input'].fire('change',{target:{files:[inputFile(`upload${i}.xyz`,'2\nstructure\nO 0 0 0\nH 0 0 1\n')]}});
   const selected=ui.nodes['trajectory-run'];
   assert.equal(selected.options.length,4);
   assert.equal(selected.options.find(option=>option.value===selected.value).textContent,'upload4');
@@ -241,9 +252,9 @@ test('a new XYZ stays selected even when four other simulations were selected',a
 
 test('an XYZ added to a previously unchecked energy run reactivates that run',async()=>{
   const ui=session();
-  await ui.nodes['file-input'].fire('change',{target:{files:[{name:'sample-md-ener.csv',size:50,text:async()=>'# Step; Sim. Time; E_Tot\n0;0;-1\n1;.5;-0.9\n'}]}});
+  await ui.nodes['file-input'].fire('change',{target:{files:[inputFile('sample-md-ener.csv','# Step; Sim. Time; E_Tot\n0;0;-1\n1;.5;-0.9\n')]}});
   ui.toggle(0,false);
-  await ui.nodes['file-input'].fire('change',{target:{files:[{name:'sample-traj.xyz',size:30,text:async()=>'2\nstructure\nO 0 0 0\nH 0 0 1\n'}]}});
+  await ui.nodes['file-input'].fire('change',{target:{files:[inputFile('sample-traj.xyz','2\nstructure\nO 0 0 0\nH 0 0 1\n')]}});
   assert.equal(ui.nodes.runs.querySelectorAll('[data-run]').length,1);
   assert.equal(ui.nodes.runs.querySelectorAll('[data-run]')[0].checked,true);
   assert.equal(ui.nodes['trajectory-run'].options[0].textContent,'sample');
@@ -254,7 +265,7 @@ test('a CSV without its own XYZ stays in energy mode beside a reference trajecto
   const ui=session({inspectState:true}),example=ui.choose('water',true);
   ui.requests[0].resolve(preset('water'));await example;
   assert.ok(ui.state.runs.some(run=>run.reference&&run.xyz));
-  await ui.nodes['file-input'].fire('change',{target:{files:[{name:'water-md-ener.csv',size:50,text:async()=>'# Step; Sim. Time; E_Tot\n0;0;-1\n1;.5;-.9\n'}]}});
+  await ui.nodes['file-input'].fire('change',{target:{files:[inputFile('water-md-ener.csv','# Step; Sim. Time; E_Tot\n0;0;-1\n1;.5;-.9\n')]}});
   const upload=ui.state.runs.find(run=>!run.reference);
   assert.ok(upload?.energy);
   assert.equal(upload?.xyz,undefined);

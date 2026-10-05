@@ -34,7 +34,11 @@ O leitor foi conferido com ORCA 6.1.1 e os resultados locais dos exercícios. Um
 
 O formato CSV esperado é o nativo do ORCA: ponto e vírgula, ponto decimal, `Sim. Time` em fs, energias em Hartree e `Temp` em K. A constante de conversão usada é 1 Eh = 2625,4996394799 kJ/mol. `Cons.Qty` permanece separada de `E_Tot`; `E.Drift` não é tratado como uma energia.
 
-Valores ausentes permanecem ausentes. Linhas incompletas, mudanças na ordem dos átomos, tempos não monotônicos e discrepâncias entre `.out` e CSV são sinalizados. Trechos descontínuos não são unidos por linhas no gráfico. Um XYZ convencional sem relógio usa números de quadro, sem inventar fs. Coordenadas convencionais são interpretadas em Å; um comentário explícito em outra unidade é rejeitado. O limite inicial é 80 MB por arquivo, voltado às trajetórias curtas da aula.
+Valores ausentes permanecem ausentes. Linhas incompletas, mudanças na ordem dos átomos, tempos não monotônicos e discrepâncias entre `.out` e CSV são sinalizados. Trechos descontínuos não são unidos por linhas no gráfico. Um XYZ convencional sem relógio usa números de quadro, sem inventar fs. Coordenadas convencionais são interpretadas em Å; um comentário explícito em outra unidade é rejeitado. O limite é **1 GB por arquivo** (1.073.741.824 bytes, 1024 MiB), inclusive. Arquivos maiores são recusados antes da leitura.
+
+Os uploads são lidos em partes de 4 MiB, com progresso, usando os mesmos leitores de coordenadas, energias, Colvars e metadados. O arquivo inteiro não precisa virar um único texto na memória. Os dados extraídos, incluindo todos os quadros completos da trajetória, continuam na RAM; o desempenho depende da quantidade de átomos/quadros e da memória disponível.
+
+A atualização de 04/10/2026 passou nos 121 testes do aplicativo, incluindo o limite inclusive, recusa antes da leitura, continuidade entre blocos e comparação com arquivos reais. No navegador, um XYZ sintético de exatamente 1 GiB, com dois quadros e preenchimento em branco, foi carregado até o último quadro. Esse teste verifica tamanho e leitura completa; não é um benchmark de uma trajetória densa de 1 GiB.
 
 Os gráficos mostram os pontos lidos, sem suavização. A média indicada descreve os pontos exibidos, não uma estimativa independente de equilíbrio. Amplitude é máximo menos mínimo, não uma medida de deriva monotônica. O aplicativo não estima energias livres, constantes de formação, taxas ou qualidade do método eletrônico.
 

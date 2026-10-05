@@ -20,7 +20,7 @@ test('the 97-atom preview and complete energy series retain source clocks, coord
   const retained=run.energy.rows.filter(row=>row.sourceKey===source.key);assert.equal(retained.length,rows.length);
   for(let i=0;i<rows.length;i++){const row=retained[i],actual=rows[i];assert.equal(row.sourceTime,actual.time);assert.equal(row.time,actual.time+source.offsetFs);assert.equal(row.sourceStep,actual.step);assert.equal(row.step,null);for(const key of ['kinetic','potential','total','temperature','conserved','orcaDriftK'])assert.equal(row[key],plain(actual[key]));}
   assert.ok(run.files.some(file=>file.path.endsWith(source.xyz)));assert.ok(run.files.some(file=>file.path.endsWith(source.energy)));
-  assert.ok(fs.statSync(path.join(root,folder,source.xyz)).size<=80*1024*1024,'Stage XYZ remains within the unchanged upload limit');
+  assert.ok(fs.statSync(path.join(root,folder,source.xyz)).size<=R.MAX_FILE_BYTES,'Stage XYZ remains within the upload limit');
  }
  assert.equal(run.xyz.originalFrameCount,selectedFrames);assert.equal(run.xyz.previewStride,Math.ceil(selectedFrames/6001));assert.equal(run.energy.rows.length,selectedRows);
  assert.ok(run.xyz.frames.every((frame,i)=>!i||frame.time>run.xyz.frames[i-1].time));
@@ -36,5 +36,5 @@ test('velocity-reset boundary preserves both energies and selects the following 
  for(const stage of course.metadata.stages){assert.ok(run.xyz.frames.some(frame=>frame.time===stage.startFs),`Stage start ${stage.startFs}`);assert.ok(run.xyz.frames.some(frame=>frame.time===stage.endFs),`Stage end ${stage.endFs}`);}
  assert.deepEqual(store.presets.chelation.runs,['chelation_continuous']);assert.deepEqual(store.presets.chelation_previous.runs,['chelation']);assert.equal(store.runs.chelation.xyz.elements.length,97);
  const html=read('visualizador/index.html');assert.equal((html.match(/<option value="chelation">/g)||[]).length,1);assert.doesNotMatch(html,/<option value="chelation_previous">/);assert.match(html,/Zn–en: hidratação e quelação/);
- assert.equal(store.version,'20261001-sequence1');assert.match(html,/examples\.js\?v=20261001-sequence1/);assert.match(html,/app\.js\?v=20261002-water1/);assert.match(html,/charts\.js\?v=20261001-sequence1/);
+ assert.equal(store.version,'20261001-sequence1');assert.match(html,/examples\.js\?v=20261001-sequence1/);assert.match(html,/app\.js\?v=20261004-large-files1/);assert.match(html,/charts\.js\?v=20261001-sequence1/);
 });
