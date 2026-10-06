@@ -2,7 +2,7 @@
 
 [← Voltar à atividade](README.md) · [Abrir o aplicativo](../../visualizador/index.html)
 
-Estes controles de 0,5 ps mostram como ler o relógio de um restart e medir coordenação e afastamento. Compare-os com a janela de 2 ps da atividade principal para investigar por que a duração da observação importa ao avaliar a parede.
+Estes controles de 0,5 ps mostram como ler o relógio de um restart e medir coordenação e afastamento. A referência principal de 2 ps também muda a força da parede: `Spring 10.0` nos controles curtos e `Spring 50.0` no caso longo, ambos com raio de 6 Å. Portanto, diferenças entre essas referências não isolam o efeito da duração. Para avaliar somente a janela de observação, compare os primeiros 500 fs com os 2 ps completos da mesma trajetória longa (relógio de 100 a 600 fs versus 100 a 2100 fs).
 
 ## Entenda as escolhas
 
@@ -13,6 +13,8 @@ Abra o [Laboratório de trajetórias](../../visualizador/index.html) e carregue 
 [Índices dos átomos](estruturas/indices-atomos.txt) · [Geometria relaxada antes da preparação térmica](../6-complexo-solvator/resultados/relaxar_solvato/relaxar_solvato.xyz).
 
 **Relógio da simulação:** a preparação fornecida cobre 0–100 fs. `Restart` conserva esse relógio: os novos 1.000 passos vão de **100 a 600 fs**, adicionando **500 fs = 0,5 ps = 5 × 10⁻¹³ s**. O CSV contém 1.001 registros, incluindo o estado de reinício; o XYZ desta etapa tem 1.000 quadros, de 100,5 a 600 fs. Compare arquivos pelo tempo, não pelo número da linha.
+
+**Arquivos de distâncias:** os CSVs de Colvars abaixo pertencem às referências prontas. Os inputs didáticos curtos de preparação e dos controles com/sem parede não incluem essas medições; neles, use a aba **Geometria** para medir diretamente no XYZ. Para gerar também os CSVs, use o input original da referência ([preparação](resultados/preparacao_termica/preparacao_termica.inp), [com parede](resultados/zn_parede/zn_parede.inp), [sem parede](resultados/zn_sem_parede/zn_sem_parede.inp)), mantendo os arquivos auxiliares indicados para cada execução na mesma pasta.
 
 **Quais colunas usar:** no CSV de Colvars, selecione `Colvar … Position / Angstrom`, que contém as distâncias. As colunas `Internal Force` são forças, não distâncias. Colvars 1–2 medem Zn–N; 3–6, os quatro O inicialmente coordenados; 7–12, os seis O acrescentados. Essas definições apenas medem: não mantêm as distâncias fixas.
 

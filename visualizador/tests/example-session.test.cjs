@@ -604,13 +604,45 @@ test('sequence clock readouts and stage playback keep original source time and e
  run.metadata={};ui.renderHooks.drawFrame();assert.equal(ui.nodes['frame-time-heading'].textContent,'Tempo físico');
 });
 
-test('the 97-atom sequence has both N and two water measurements without assuming the old 43-atom system',async()=>{
- const ui=session({inspectState:true}),load=ui.choose('chelation');
- const data=preset('chelation_continuous'),run=data.runs[0];run.xyz.elements=Array(97).fill('H');
- for(const [index,element] of [[0,'Zn'],[61,'N'],[64,'N'],[19,'O'],[7,'O']])run.xyz.elements[index]=element;
- run.xyz.frames[0].coords=Array.from({length:97},(_,i)=>[i,0,0]);ui.requests[0].resolve(data);await load;
- ui.nodes['tab-distance'].fire('click');assert.deepEqual(JSON.parse(JSON.stringify(ui.state.pairs[ui.state.runs[0].id])),[[0,61],[0,64],[0,19],[0,7]]);
- assert.match(ui.nodes['energy-guide'].innerHTML,/primeiro N é assistida/);assert.doesNotMatch(ui.nodes['energy-guide'].innerHTML,/N 31|N 34/);
+function retainedRun(key){
+ const context={window:{}};vm.runInNewContext(fs.readFileSync(path.join(viewer,'examples.js'),'utf8'),context);
+ vm.runInNewContext(fs.readFileSync(path.join(viewer,'examples',key+'.js'),'utf8'),context);
+ return JSON.parse(JSON.stringify(context.window.AIMD_EXAMPLES.runs[key]));
+}
+
+test('the chelation guide measures the two departing waters requested by the exercise',async()=>{
+ const ui=session({inspectState:true}),load=ui.choose('chelation'),run=retainedRun('chelation_continuous');
+ ui.requests[0].resolve({config:{runs:[run.key]},runs:[run]});await load;ui.nodes['tab-distance'].fire('click');
+ const pairs=JSON.parse(JSON.stringify(ui.state.pairs[ui.state.runs[0].id]));
+ assert.deepEqual(pairs,[[0,61],[0,64],[0,7],[0,25]]);
+ const exercise=fs.readFileSync(path.join(viewer,'../exercicios/11-formacao-quelato/README.md'),'utf8');
+ assert.match(exercise,/Zn 0–O 7/);assert.match(exercise,/Zn 0–O 25/);
+ const start=run.xyz.frames.find(frame=>frame.time===7083),end=run.xyz.frames.at(-1);
+ for(const [,atom] of pairs.slice(2)){
+   assert.equal(run.xyz.elements[atom],'O');
+   const distance=frame=>Math.hypot(...frame.coords[atom].map((v,i)=>v-frame.coords[0][i]));
+   assert.ok(distance(start)<2.6,'The selected water starts coordinated');
+   assert.ok(distance(end)>3,'The selected water departs during the displayed sequence');
+ }
+ assert.match(ui.nodes['energy-guide'].innerHTML,/O 7.*O 25/);
+ assert.doesNotMatch(ui.nodes['energy-guide'].innerHTML,/O 19|N 31|N 34/);
+});
+
+test('retained thermal-stage boundaries display recorded energy and temperature without losing rows',async()=>{
+ for(const [key,times] of [['etanol_etapas',[500,1500,3500,4500]],['hidratacao_associacao_31A',[500]]]){
+   const run=retainedRun(key),original=JSON.stringify(run.energy),ui=session({inspectState:true}),load=ui.choose(key,true);
+   ui.requests[0].resolve({config:{runs:[run.key]},runs:[run]});await load;
+   const loaded=ui.state.runs[0];ui.trajectoryHooks.renderTrajectoryChart(loaded);
+   for(const time of times){
+     const frame=loaded.xyz.frames.find(frame=>frame.time===time),rows=loaded.energy.rows.filter(row=>row.time===time);
+     assert.ok(frame);assert.equal(rows.length,2);assert.notEqual(rows[0].segment,rows[1].segment);
+     const energy=ui.state.energyIndex.exact(time,frame),temperature=ui.state.temperatureIndex.exact(time,frame);
+     assert.ok(energy);assert.ok(temperature);
+     for(const field of ['kinetic','potential','total','temperature'])assert.equal(energy[field],rows[0][field]);
+     assert.equal(temperature.temperature,rows[0].temperature);
+   }
+   assert.equal(JSON.stringify(run.energy),original);
+ }
 });
 
 test('energy export distinguishes elapsed sequence time from every original clock and step',async()=>{

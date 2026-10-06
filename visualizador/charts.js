@@ -7,7 +7,7 @@
   function ticks(min,max,count){if(min===max)return [min];const rough=(max-min)/count,power=10**Math.floor(Math.log10(rough)),ratio=rough/power,step=(ratio<=1?1:ratio<=2?2:ratio<=5?5:10)*power;const result=[];for(let t=Math.ceil(min/step)*step;t<=max+step*1e-8;t+=step)result.push(Math.abs(t)<step*1e-9?0:t);return result;}
   // Index timestamps once. XYZ and energy files may use different dump strides;
   // an array offset is never a physical-time correspondence.
-  function timeIndex(samples,valid=()=>true){
+  function timeIndex(samples,valid=()=>true,equivalentFields=[]){
     const entries=samples.map((sample,index)=>({sample,index,time:sample.time})).filter(e=>Number.isFinite(e.time)).sort((a,b)=>a.time-b.time||a.index-b.index);
     const lower=time=>{let lo=0,hi=entries.length;while(lo<hi){const mid=(lo+hi)>>>1;if(entries[mid].time<time)lo=mid+1;else hi=mid;}return lo;};
     const matches=time=>{if(!Number.isFinite(time))return [];const tolerance=1e-7,found=[];for(let i=lower(time-tolerance);i<entries.length&&entries[i].time<=time+tolerance;i++)found.push(entries[i]);return found;};
@@ -21,6 +21,13 @@
       // quarter-fs times. Only the same recorded step may bridge that rounding.
       if(!found.length&&Number.isFinite(time)&&Number.isFinite(context.step))found=(byStep.get(context.step)||[]).filter(e=>(!context.sourceKey||e.sample.sourceKey===context.sourceKey)&&Math.abs(e.time-time)<=.050001);
       if(!found.length&&Number.isFinite(time)&&context.sourceKey&&Number.isFinite(context.sourceStep))found=(bySourceStep.get(context.sourceStep)||[]).filter(e=>e.sample.sourceKey===context.sourceKey&&Math.abs(e.time-time)<=.050001);
+      // Consecutive ORCA Run blocks can repeat their shared endpoint. Resolve
+      // only the requested observables when time, step, source and every value
+      // agree. Keep distinct restart states and the original rows untouched.
+      if(found.length>1&&equivalentFields.length){
+        const first=found[0].sample,identified=Number.isFinite(first.step)||(first.sourceKey&&Number.isFinite(first.sourceStep));
+        if(identified&&equivalentFields.some(key=>Number.isFinite(first[key]))&&found.every(({sample})=>valid(sample)&&['time','step','sourceKey','sourceStep',...equivalentFields].every(key=>sample[key]===first[key])))return first;
+      }
       return found.length===1&&valid(found[0].sample)?found[0].sample:null;
     };
     const inRange=time=>Number.isFinite(time)&&entries.length>0&&time>=entries[0].time-1e-7&&time<=entries.at(-1).time+1e-7;

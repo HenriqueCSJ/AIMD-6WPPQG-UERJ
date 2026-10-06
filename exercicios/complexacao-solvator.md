@@ -1,8 +1,10 @@
-# Complexação de Zn²⁺ com etilenodiamina e solvatação explícita
+# Histórico da preparação: Zn²⁺, etilenodiamina e solvatação explícita
 
 [← Roteiro de 4 horas](roteiro-4h.md)
 
-**Escolha confirmada por Henrique:** Zn²⁺ e um ligante pequeno, etilenodiamina; SOLVATOR deve ser usado durante a aula. **Estado:** preparação computacional concluída com PAL8; [exercício 6](6-complexo-solvator/README.md) e [exercício 7](7-dinamica-complexo/README.md) incluem inputs comentados e resultados reais. Permanece necessário o ensaio integral da aula.
+**Registro histórico da preparação inicial. Para a aula atual, siga [04a · SOLVATOR](6-complexo-solvator/README.md), [04b · efeito da parede, 2 ps](7-dinamica-complexo/README.md) e [04c · hidratação e quelação](11-formacao-quelato/README.md).** Os controles de 0,5 ps descritos abaixo são referências opcionais; a sequência de quelação já está disponível.
+
+**Escolha confirmada por Henrique:** Zn²⁺ e um ligante pequeno, etilenodiamina; SOLVATOR deve ser usado durante a aula. **Estado:** preparação computacional concluída com PAL8; [04a · SOLVATOR](6-complexo-solvator/README.md) e [04b · efeito da parede](7-dinamica-complexo/README.md) incluem inputs comentados e resultados reais. Permanece necessário o ensaio integral da aula.
 
 ## Caso principal
 
@@ -17,11 +19,11 @@ Usar o complexo pré-formado resolve um problema pedagógico: permite que todos 
 3. [Candidato solvatado, 43 átomos](6-complexo-solvator/resultados/zn_solvator/zn_solvator.solvator.xyz).
 4. [Relaxação de todos os átomos](6-complexo-solvator/resultados/relaxar_solvato/relaxar_solvato.xyz), convergida em 20,8 s, seguida de [preparação térmica de 100 fs](7-dinamica-complexo/inputs/preparacao_termica.inp). Essa preparação não demonstra equilíbrio convergido.
 5. [MD com parede](7-dinamica-complexo/inputs/zn_parede.inp) e [controle sem parede](7-dinamica-complexo/inputs/zn_sem_parede.inp): o mesmo reinício conserva posições e velocidades, e cada etapa acrescenta 0,5 ps. Tempos reais de 26,1 e 25,8 s.
-6. [Atividade de leitura de energias, temperatura e distâncias no aplicativo](7-dinamica-complexo/README.md#3-veja-e-interprete). Os doze Colvars permanecem nos [resultados históricos](7-dinamica-complexo/apoio.md#resultados-de-referência); os inputs de aula medem distâncias a partir do XYZ no aplicativo.
+6. [Atividade de leitura de energias, temperatura e distâncias no aplicativo](7-dinamica-complexo/README.md). Os doze Colvars permanecem nos [resultados históricos](7-dinamica-complexo/apoio.md); os inputs de aula medem distâncias a partir do XYZ no aplicativo.
 
 Todos usam `XTB2 ALPB(water) PAL8`, com o executável externo configurado como `otool_xtb`. `Native-XTB2` foi rejeitado pelo SOLVATOR no teste anterior com ORCA 6.1.1. [Preparação do xTB](../tutoriais/05-xtb-solvator.md).
 
-A versão de duas águas produz **31 átomos** e é uma alternativa para praticar SOLVATOR. Para a dinâmica, todos retomam a referência comum de **43 átomos**, relaxada e fornecida no exercício 7. Não comparar diretamente energias absolutas de composições diferentes. O [roteiro](roteiro-4h.md) reserva 30 min para reconhecer o complexo, executar SOLVATOR e inspecionar o candidato.
+A versão de duas águas produz **31 átomos** e é uma alternativa para praticar SOLVATOR. Para a dinâmica, todos retomam a referência comum de **43 átomos**, relaxada e fornecida na atividade 04b. Não comparar diretamente energias absolutas de composições diferentes. O [roteiro](roteiro-4h.md) reserva 30 min para reconhecer o complexo, executar SOLVATOR e inspecionar o candidato.
 
 No SOLVATOR, o arquivo intermediário `.solvator.solventbuild.xyz` mostra a inserção de moléculas, não intervalos regulares de tempo. O `.solvator.xyz` final fornece as coordenadas de partida. O potencial de parede usado automaticamente na construção não é transportado no XYZ: configurar `Walls` separadamente na MD, conforme os inputs de aula testados no ORCA 6.1.1. [Documentação do SOLVATOR](https://www.faccts.de/docs/orca/6.1/manual/contents/structurereactivity/solvator.html).
 
@@ -37,7 +39,7 @@ Não ensinar ligação como simples traço no visualizador: algoritmos de desenh
 
 ## Extensão para associação/troca de ligante
 
-Se houver tempo após o ensaio, preparar uma segunda condição com Zn aquoso e en próximos, mas sem a ligação inicial. Para comparar composições, conservar **os mesmos átomos, carga e solvente**. Um esquema idealizado é [Zn(H₂O)₆]²⁺ + en ↔ [Zn(en)(H₂O)₄]²⁺ + 2 H₂O: os dois lados têm 31 átomos, antes de adicionar águas externas. Isso evita comparar diretamente um sistema que tem seis águas com outro que perdeu duas do arquivo.
+Na preparação inicial, foi proposta uma segunda condição com Zn aquoso e en próximos, mas sem a ligação inicial. Para comparar composições, conservar **os mesmos átomos, carga e solvente**. Um esquema idealizado é [Zn(H₂O)₆]²⁺ + en ↔ [Zn(en)(H₂O)₄]²⁺ + 2 H₂O: os dois lados têm 31 átomos, antes de adicionar águas externas. Isso evita comparar diretamente um sistema que tem seis águas com outro que perdeu duas do arquivo.
 
 Essa extensão não garante associação em poucos ps. Não aquecer excessivamente, reduzir a caixa nem impor uma restrição para produzir uma “reação espontânea” sem declarar a intervenção. Dinâmica enviesada pode ser apresentada depois como outro problema metodológico. Não calcular constante de formação, energia livre ou barreira a partir de uma diferença entre duas energias instantâneas.
 

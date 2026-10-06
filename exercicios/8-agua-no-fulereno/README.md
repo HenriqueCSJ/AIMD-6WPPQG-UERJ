@@ -69,7 +69,7 @@ São **2000 passos × 0,5 fs = 1000 fs = 1 ps = 10⁻¹² s**. A referência PAL
 1. Gire a gaiola e acompanhe a água no interior. Os carbonos aparecem como uma armação fina para facilitar a visão.
 2. Avance no tempo: a água muda de orientação? A gaiola também vibra?
 3. Em **Geometria**, acompanhe **O 0 — H 1** e **O 0 — H 2**. Compare reorientação da molécula com ruptura de ligação.
-4. Diferencie os dois confinamentos da aula: no exercício 7 aplicamos um potencial artificial; aqui as interações com os átomos de carbono fazem parte da energia calculada. **Não há `Walls` neste input.**
+4. Diferencie os dois confinamentos da aula: na atividade [04b · efeito da parede](../7-dinamica-complexo/README.md) aplicamos um potencial artificial; aqui as interações com os átomos de carbono fazem parte da energia calculada. **Não há `Walls` neste input.**
 
 Esta trajetória curta não descreve a entrada da água através de uma gaiola intacta, o processo de síntese ou a estabilidade de longo prazo. Os núcleos seguem dinâmica clássica; o teste não reproduz os níveis de um rotor quântico, efeitos de ponto zero ou conversão de isômeros de spin da água.
 

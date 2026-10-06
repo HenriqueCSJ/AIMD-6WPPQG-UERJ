@@ -1,6 +1,6 @@
 # Ver a camada de águas se formar
 
-[← Exercício 7](README.md) · [Abrir o filme curto](../../visualizador/index.html?exemplo=hydration&aba=trajetoria)
+[← 04b · Efeito da parede](README.md) · [Abrir o filme curto](../../visualizador/index.html?exemplo=hydration&aba=trajetoria)
 
 **Zn + 10 águas + etilenodiamina · 43 átomos · XTB2/ALPB(water)**
 

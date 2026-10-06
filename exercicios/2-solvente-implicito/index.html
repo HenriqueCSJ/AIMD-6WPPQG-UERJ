@@ -10,7 +10,7 @@
 <p>No dímero, a ligação H depende da posição das duas moléculas. Agora vamos perguntar como um ambiente polar modifica esse movimento sem acrescentar moléculas. Compare as duas referências DFT fornecidas: elas usam as mesmas seis coordenadas, semente, método e duração de 60 fs. A diferença no input é <code>CPCM(water)</code> na primeira linha. O campo de reação do meio contínuo modifica energia e forças; <strong>as duas águas explícitas continuam sendo as únicas moléculas presentes</strong>.</p>
 <h2 id="2-abra-as-referencias-prontas">2. Abra as referências prontas</h2>
 <p>Na aula, <strong>não execute este cálculo DFT</strong>. Compare os resultados de vácuo e CPCM fornecidos abaixo, ambos de 60 fs. A referência CPCM levou cerca de 5 min 24 s nesta máquina. O input fica disponível para leitura e reprodução depois da aula.</p>
-<p>Não compare diretamente a trajetória XTB2 de 2 ps da atividade 1 com a DFT/CPCM para atribuir diferenças só ao solvente: nessa comparação também mudariam o método e a duração.</p>
+<p>Não compare diretamente a trajetória XTB2 de 2 ps da atividade 01b com a DFT/CPCM para atribuir diferenças só ao solvente: nessa comparação também mudariam o método e a duração.</p>
 <p><a href="aula-dimero_b97_cpcm.zip">Baixar pacote</a> · <a href="inputs/dimero_b97_cpcm.inp" download="dimero_b97_cpcm.inp">Baixar input ORCA</a> · <a href="estruturas/dimero_b97.xyz" download="dimero_b97.xyz">Baixar geometria inicial (.xyz)</a> (opcional para executar; as coordenadas já estão no input)</p>
 <!-- input-source: inputs/dimero_b97_cpcm.inp -->
 
@@ -58,7 +58,7 @@ end
 <li>Observe as curvas de energia separadamente. O zero de cada curva ΔE é seu próprio primeiro ponto.</li>
 </ol>
 <p><strong>Dado da referência:</strong> no fim dos 60 fs, O 0···O 3 é <strong>2.949 Å no vácuo</strong> e <strong>2.946 Å com CPCM</strong>. A diferença em O···O é pequena: olhar só essa distância esconderia parte da resposta. O ângulo 0–1–3 chega a <strong>97,1° no vácuo</strong>, mas a <strong>130,0° com CPCM</strong>, partindo dos mesmos 178,7°. Essas são amplitudes observadas nesta trajetória curta, não preferências de equilíbrio. Isso mostra uma resposta transitória a duas superfícies de energia diferentes. Não é a distância média de equilíbrio em solução. Tempo de execução desta referência: <strong>324.5 s</strong>.</p>
-<p><strong>Para levar:</strong> o contínuo pode alterar as forças, mas não fornece a rede molecular de ligações H. No exercício 6, o SOLVATOR acrescentará águas explícitas; no 7, a parede controlará o afastamento dessas águas. São três papéis distintos.</p>
+<p><strong>Para levar:</strong> o contínuo pode alterar as forças, mas não fornece a rede molecular de ligações H. Na atividade <a href="../6-complexo-solvator/index.html">04a · SOLVATOR</a>, acrescentamos águas explícitas; na <a href="../7-dinamica-complexo/index.html">04b · efeito da parede</a>, examinamos o afastamento dessas águas sob confinamento. São três papéis distintos.</p>
 <p><strong>Não concluir:</strong> a diferença entre duas energias instantâneas não é ΔG de solvatação. Começamos da geometria relaxada no vácuo, e a trajetória CPCM curta inclui a resposta inicial à troca de ambiente.</p>
 <h2 id="resultados-e-manual">Resultados e manual</h2>
 <ul>

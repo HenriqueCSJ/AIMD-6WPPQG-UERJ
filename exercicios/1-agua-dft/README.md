@@ -206,7 +206,7 @@ Uma única trajetória permite acompanhar reorientações, mas não medir popula
 
 **Nos 2 ps originais XTB2:** O···O varia de **2,633 a 3,511 Å**; as quatro ligações covalentes O–H permanecem entre **0,914 e 1,020 Å**. O 0 começa como doador; perto de 50 fs, o O 3 aparece como doador. Há outras alternâncias ao longo dos 2 ps. Essas faixas descrevem o trecho original; use a extensão para investigar se a faixa observada aumenta quando a janela chega a 5 ps.
 
-Na análise dos 2 ps originais, o critério operacional foi H···O < 2,4 Å e O–H···O > 130°. Os cortes ajustáveis do visualizador podem deslocar o instante em que o traço aparece. A amplitude de Etotal nesse trecho foi **0,194 kJ/mol**; examine a curva inteira, não apenas a diferença entre início e fim. Em NVE, a temperatura instantânea deste sistema de seis átomos pode variar bastante. A referência ampliada identifica o restart em 2000 fs e mantém os valores físicos originais de energia e temperatura.
+Na análise dos 2 ps originais, o critério operacional foi H···O < 2,4 Å e O–H···O > 130°. O visualizador usa critérios fixos diferentes: H···O ≤ 2,5 Å, O···O ≤ 3,5 Å e O–H···O ≥ 150°. Por isso, o instante em que o traço aparece pode diferir desta análise. A amplitude de Etotal nesse trecho foi **0,194 kJ/mol**; examine a curva inteira, não apenas a diferença entre início e fim. Em NVE, a temperatura instantânea deste sistema de seis átomos pode variar bastante. A referência ampliada identifica o restart em 2000 fs e mantém os valores físicos originais de energia e temperatura.
 
 O tempo medido de **56,5 s** não é garantia para outros computadores. Se ultrapassar **2 min durante a aula**, abra a referência e continue a análise.
 

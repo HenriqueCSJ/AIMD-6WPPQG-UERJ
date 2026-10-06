@@ -58,6 +58,20 @@ test('gaps, missing samples, and repeated restart times preserve uncertainty',()
   assert.equal(restarted.nearest(0,3),2);
 });
 
+test('identical Run endpoints resolve only explicitly requested observables at the same recorded state',()=>{
+  const fields=['kinetic','potential','total','temperature'],before={time:1500,step:3000,segment:1,kinetic:.01655,potential:-11.370591,total:-11.354042,temperature:387.11,conserved:-11.368887};
+  const after={...before,segment:2,conserved:null},rows=[before,after],original=JSON.stringify(rows);
+  assert.equal(timeIndex(rows).exact(1500,{step:3000}),null,'Default indexing remains strict');
+  assert.equal(timeIndex(rows,()=>true,fields).exact(1500,{step:3000}),before);
+  assert.equal(timeIndex(rows,()=>true,[...fields,'conserved']).exact(1500,{step:3000}),null);
+  for(const change of [{temperature:300},{total:-11.4},{kinetic:null},{sourceKey:'another'},{sourceStep:0},{time:1500.00000001}]){
+    assert.equal(timeIndex([before,{...after,...change}],()=>true,fields).exact(1500,{step:3000}),null);
+  }
+  assert.equal(timeIndex([before,{...after,step:0}],()=>true,fields).exact(1500),null);
+  assert.equal(timeIndex([{...before,step:null},{...after,step:null}],()=>true,fields).exact(1500),null);
+  assert.equal(JSON.stringify(rows),original,'Rows and segment boundaries are retained');
+});
+
 class Element{
   constructor(tag){this.tag=tag;this.children=[];this.attributes={};this.listeners={};this.style={};this.clientWidth=680;this.offsetHeight=28;}
   setAttribute(key,value){this.attributes[key]=String(value);}

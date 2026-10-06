@@ -1,6 +1,6 @@
 # XTB2 e SOLVATOR: confira antes da aula
 
-[← Tutoriais](README.md) · [Exercício de complexação](../exercicios/complexacao-solvator.md)
+[← Tutoriais](README.md) · [04a · Construir com SOLVATOR](../exercicios/6-complexo-solvator/README.md)
 
 Nos inputs do minicurso usaremos **`! XTB2`**, acrescentando `ALPB(water)` quando houver solvente implícito. Não é necessário chamar o programa xTB manualmente durante os exercícios: o ORCA faz essa chamada.
 

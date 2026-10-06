@@ -73,8 +73,8 @@ Ative **Coordenação** e **Ligações H** no visualizador. Identifique os dois 
 
 [Carregar meus arquivos no aplicativo](../../visualizador/index.html) · [Comparar estrutura inicial e seis águas adicionadas](../../visualizador/index.html?exemplo=solvator&aba=trajetoria) · [Comparar estrutura inicial e duas águas adicionadas](../../visualizador/index.html?exemplo=solvator_two&aba=trajetoria)
 
-1. Carregue `zn_solvator.out` e **`zn_solvator.solvator.xyz`** no aplicativo.
-2. Na aba **Trajetória**, compare as estruturas antes e depois. O número de átomos mudou como esperado?
+1. Clique em **Limpar sessão** se houver outro exemplo aberto. Carregue `zn_solvator.out`, **`zn_solvator.solvator.xyz`** e a [estrutura inicial `zn_en.xyz`](estruturas/zn_en.xyz) no aplicativo.
+2. Mantenha os dois sistemas selecionados. Na aba **Trajetória**, alterne o campo **Simulação** entre a estrutura inicial de 25 átomos e a estrutura solvatada de 43 átomos. O número de átomos mudou como esperado?
 3. As seis novas águas estão todas coordenadas ao Zn? Inspecione as posições e distâncias.
 
 > **Para levar:** SOLVATOR constrói uma estrutura candidata. Seu histórico de montagem não é uma trajetória de MD.

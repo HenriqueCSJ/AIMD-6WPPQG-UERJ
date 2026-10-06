@@ -14,7 +14,7 @@ No dímero, a ligação H depende da posição das duas moléculas. Agora vamos 
 
 Na aula, **não execute este cálculo DFT**. Compare os resultados de vácuo e CPCM fornecidos abaixo, ambos de 60 fs. A referência CPCM levou cerca de 5 min 24 s nesta máquina. O input fica disponível para leitura e reprodução depois da aula.
 
-Não compare diretamente a trajetória XTB2 de 2 ps da atividade 1 com a DFT/CPCM para atribuir diferenças só ao solvente: nessa comparação também mudariam o método e a duração.
+Não compare diretamente a trajetória XTB2 de 2 ps da atividade 01b com a DFT/CPCM para atribuir diferenças só ao solvente: nessa comparação também mudariam o método e a duração.
 
 [Baixar pacote](aula-dimero_b97_cpcm.zip) · [Baixar input ORCA](inputs/dimero_b97_cpcm.inp) · [Baixar geometria inicial (.xyz)](estruturas/dimero_b97.xyz) (opcional para executar; as coordenadas já estão no input)
 
@@ -77,7 +77,7 @@ Espere o prompt voltar antes de iniciar outro cálculo. Os arquivos de resultado
 
 **Dado da referência:** no fim dos 60 fs, O 0···O 3 é **2.949 Å no vácuo** e **2.946 Å com CPCM**. A diferença em O···O é pequena: olhar só essa distância esconderia parte da resposta. O ângulo 0–1–3 chega a **97,1° no vácuo**, mas a **130,0° com CPCM**, partindo dos mesmos 178,7°. Essas são amplitudes observadas nesta trajetória curta, não preferências de equilíbrio. Isso mostra uma resposta transitória a duas superfícies de energia diferentes. Não é a distância média de equilíbrio em solução. Tempo de execução desta referência: **324.5 s**.
 
-**Para levar:** o contínuo pode alterar as forças, mas não fornece a rede molecular de ligações H. No exercício 6, o SOLVATOR acrescentará águas explícitas; no 7, a parede controlará o afastamento dessas águas. São três papéis distintos.
+**Para levar:** o contínuo pode alterar as forças, mas não fornece a rede molecular de ligações H. Na atividade [04a · SOLVATOR](../6-complexo-solvator/README.md), acrescentamos águas explícitas; na [04b · efeito da parede](../7-dinamica-complexo/README.md), examinamos o afastamento dessas águas sob confinamento. São três papéis distintos.
 
 **Não concluir:** a diferença entre duas energias instantâneas não é ΔG de solvatação. Começamos da geometria relaxada no vácuo, e a trajetória CPCM curta inclui a resposta inicial à troca de ambiente.
 
