@@ -146,7 +146,7 @@
       <p class="instructions">Clique em um comando ou opção para ver a explicação e um exemplo copiável.</p>
       <div class="hero-bottom">
         <div class="totals" aria-label="Conteúdo do guia"><span><strong id="total-commands">—</strong> comandos</span><span><strong id="total-options">—</strong> opções</span></div>
-        <div class="actions"><button class="button primary" id="copy-basic" type="button">Copiar bloco básico</button><button class="button" id="copy-template" type="button">Copiar comentado</button><button class="button" id="download" type="button">Baixar .inp</button></div>
+        <div class="actions"><button class="button" id="units-reference" type="button" data-entry="reference:units" aria-haspopup="dialog">Unidades aceitas</button><button class="button primary" id="copy-basic" type="button">Copiar bloco básico</button><button class="button" id="copy-template" type="button">Copiar comentado</button><button class="button" id="download" type="button">Baixar .inp</button></div>
       </div>
     </div>
   </header>
@@ -178,7 +178,7 @@
   <footer class="foot"><div class="wrap"><p>Explore, copie e adapte o bloco ao seu cálculo.</p><p>Guia do bloco <code>%md</code> · ORCA</p></div></footer>
   <dialog id="detail-dialog" aria-labelledby="dialog-title">
     <div class="dialog-head"><div><p class="dialog-kicker" id="dialog-kicker"></p><h2 id="dialog-title"></h2></div><button class="close" id="close-dialog" type="button" aria-label="Fechar explicação">×</button></div>
-    <div class="dialog-body"><h3 class="section-label">O que faz</h3><p class="plain-text" id="dialog-description"></p><div class="note" id="dialog-note" hidden><strong>Observação</strong><p class="plain-text" id="note-text"></p></div><div class="example-header"><h3 class="section-label">Exemplo de uso</h3><button class="button" type="button" id="copy-example">Copiar exemplo</button></div><pre class="dialog-code" tabindex="0" aria-label="Exemplo de uso"><code id="dialog-example"></code></pre><p class="sr-only" id="dialog-status" role="status" aria-live="polite" aria-atomic="true"></p></div>
+    <div class="dialog-body"><h3 class="section-label" id="dialog-section-title">O que faz</h3><p class="plain-text" id="dialog-description"></p><div class="note" id="dialog-note" hidden><strong>Observação</strong><p class="plain-text" id="note-text"></p></div><div class="example-header"><h3 class="section-label">Exemplo de uso</h3><button class="button" type="button" id="copy-example">Copiar exemplo</button></div><pre class="dialog-code" tabindex="0" aria-label="Exemplo de uso"><code id="dialog-example"></code></pre><p id="dialog-source" hidden><a id="dialog-source-link" target="_blank" rel="noopener">Fonte: manual ORCA 6.1 · Unidades físicas ↗</a></p><p class="sr-only" id="dialog-status" role="status" aria-live="polite" aria-atomic="true"></p></div>
   </dialog>
   <div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
   <noscript><p class="wrap error">Ative o JavaScript do navegador para consultar os comandos e abrir as explicações.</p></noscript>
@@ -216,6 +216,7 @@
         optionSearch.set(command.id + ':' + option.id,searchable(option));
       });
     });
+    entries.set('reference:units',{item:data.unitsReference});
     byId('total-commands').textContent = data.commands.length;
     byId('total-options').textContent = data.commands.reduce((sum,command) => sum + (command.options || []).length,0);
     function element(tag,className,text) {
@@ -329,12 +330,16 @@
       if (!entry) return;
       previousFocus = trigger || document.activeElement;
       const isCommand = entryKey.startsWith('command:');
-      byId('dialog-kicker').textContent = isCommand ? 'Comando · ' + (categories.get(entry.command.category)?.label || '') : 'Opção de ' + entry.command.label;
+      const isReference = entryKey.startsWith('reference:');
+      byId('dialog-kicker').textContent = isReference ? 'Referência · ORCA 6.1' : isCommand ? 'Comando · ' + (categories.get(entry.command.category)?.label || '') : 'Opção de ' + entry.command.label;
+      byId('dialog-section-title').textContent = isReference ? 'Sufixos e padrões' : 'O que faz';
       byId('dialog-title').textContent = entry.item.label;
       byId('dialog-description').textContent = entry.item.description || entry.item.summary || '';
       byId('dialog-note').hidden = !entry.item.note;
       byId('note-text').textContent = entry.item.note || '';
-      currentExample = entry.item.example || entry.command.example || '';
+      currentExample = entry.item.example || entry.command?.example || '';
+      byId('dialog-source').hidden = !entry.item.source;
+      if (entry.item.source) byId('dialog-source-link').href = entry.item.source;
       byId('dialog-example').textContent = currentExample;
       byId('dialog-status').textContent = '';
       byId('copy-example').disabled = !currentExample;

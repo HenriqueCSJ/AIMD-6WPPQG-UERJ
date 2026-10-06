@@ -11,6 +11,11 @@
   # Unidades: comprimento = Angstrom/A/Bohr/pm/nm; tempo = fs/ps/au;
   # temperatura = Kelvin/K/Celsius/C; angulo = Deg/Rad.
   # Sem sufixo, os padroes sao Angstrom, fs, Kelvin e Deg.
+  # Ligue numero e unidade por _: 0.5_fs = 0.0005_ps; use ponto decimal.
+  # 1 ps = 1000 fs; 1 au de tempo equivale aproximadamente a 0.02419 fs.
+  # ns, us e s nao constam da lista de sufixos de tempo do manual ORCA 6.1.
+  # Run e Stride contam passos: com 0.5_fs, Run 2000 percorre 1 ps.
+  # Cell Spring: kJ/mol/A^2; Cell Pressure: bar, sem sufixos alternativos.
   # Parametros numericos opcionais abaixo sao exemplos, nao um protocolo universal.
 
   # 1. RANDOMIZE: semente para inicializacao e processos estocasticos.
