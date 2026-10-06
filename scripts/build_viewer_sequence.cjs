@@ -3,10 +3,11 @@ const fs=require('node:fs'),path=require('node:path');
 const R=require('../visualizador/orca-parser.js');
 
 function buildSequence(folder,key,course,{previewLimit=6001}={}){
- if(course.metadata?.clockMode!=='sequence_elapsed')throw new Error('A sequence requires clockMode=sequence_elapsed.');
+ if(!['sequence_elapsed','physical_continuous'].includes(course.metadata?.clockMode))throw new Error('A sequence requires a documented clock mode.');
  if(!Array.isArray(course.sequenceSources)||!course.sequenceSources.length)throw new Error('Missing sequence sources.');
  if(!Number.isInteger(previewLimit)||previewLimit<1)throw new Error('Invalid preview limit.');
  if(new Set(course.sequenceSources.map(source=>source.key)).size!==course.sequenceSources.length)throw new Error('Sequence source keys must be unique.');
+ if(course.metadata.clockMode==='physical_continuous'&&course.sequenceSources.some(source=>source.offsetFs!==0||source.velocityReset))throw new Error('A continuous physical clock requires zero offsets and no velocity reset between stages.');
  const frames=[],rows=[],files=[],warnings=[],boundaryFrames=new Set();let elements=null,energySegment=0;
  const read=relative=>{const full=path.resolve(folder,relative);if(!full.startsWith(path.resolve(folder)+path.sep))throw new Error('Sequence source outside its result folder.');return fs.readFileSync(full,'utf8');};
  for(const [index,source] of course.sequenceSources.entries()){

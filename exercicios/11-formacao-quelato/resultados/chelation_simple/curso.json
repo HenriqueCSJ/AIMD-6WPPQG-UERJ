@@ -1,0 +1,85 @@
+{
+  "metadata": {
+    "version": "6.1.1",
+    "method": "XTB2 ALPB(water)",
+    "ensemble": "NVT",
+    "thermostat": "CSVR",
+    "targetTemperature": 300,
+    "timestep": 0.25,
+    "charge": 2,
+    "multiplicity": 1,
+    "wall": true,
+    "wallSphere": {
+      "center": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "radius": 9
+    },
+    "changingConditions": true,
+    "hasMD": true,
+    "stages": [
+      {
+        "index": 1,
+        "startFs": 0,
+        "endFs": 1000,
+        "timestep": 0.25,
+        "thermostat": "CSVR",
+        "targetStartK": 300,
+        "targetEndK": 300,
+        "ramp": false,
+        "label": "Primeiro N assistido"
+      },
+      {
+        "index": 2,
+        "startFs": 1000,
+        "endFs": 3000,
+        "timestep": 0.25,
+        "thermostat": "CSVR",
+        "targetStartK": 300,
+        "targetEndK": 300,
+        "ramp": false,
+        "label": "Segundo N livre da restrição"
+      }
+    ],
+    "clockMode": "physical_continuous",
+    "clockNote": "Um relógio físico, de 0 a 3000 fs. O segundo input continua o checkpoint novo sem Initvel; os relógios nativos têm offset zero."
+  },
+  "sequenceSources": [
+    {
+      "key": "en_aproximar_N1",
+      "label": "Primeiro N assistido",
+      "xyz": "etapas/en_aproximar_N1/en_aproximar_N1-traj.xyz",
+      "energy": "etapas/en_aproximar_N1/en_aproximar_N1-md-ener.csv",
+      "startFs": 0,
+      "endFs": 1000,
+      "offsetFs": 0,
+      "velocityReset": false,
+      "sourceStatus": "finished"
+    },
+    {
+      "key": "en_continuar_sem_mola",
+      "label": "Segundo N livre da restrição",
+      "xyz": "etapas/en_continuar_sem_mola/en_continuar_sem_mola-traj.xyz",
+      "energy": "etapas/en_continuar_sem_mola/en_continuar_sem_mola-md-ener.csv",
+      "startFs": 1000,
+      "endFs": 3000,
+      "offsetFs": 0,
+      "velocityReset": false,
+      "sourceStatus": "finished"
+    }
+  ],
+  "relatedFiles": [
+    "chelation_simple-traj.xyz",
+    "chelation_simple-md-ener.csv",
+    "etapas/en_aproximar_N1/en_aproximar_N1.out",
+    "etapas/en_continuar_sem_mola/en_continuar_sem_mola.out"
+  ],
+  "warnings": [
+    "0–1000 fs: mola somente na distância Zn 0–N 61. 1000–3000 fs: continuação sem reaplicar essa mola; N 64 aproxima-se sem essa restrição. Parede e termostato permanecem.",
+    "Os dois inputs mínimos foram executados em sequência, com checkpoint novo e sem reinicializar velocidades na continuação. Todos os quadros reais são mantidos; nenhum output ORCA agregado foi inventado.",
+    "Contatos abaixo de 2,6 Å são critérios geométricos; esta preparação não mede uma taxa espontânea de associação.",
+    "Cada etapa conserva seus valores de energia. A referência da quantidade conservada muda no restart; as curvas são separadas na fronteira, sem deslocar os valores medidos."
+  ]
+}

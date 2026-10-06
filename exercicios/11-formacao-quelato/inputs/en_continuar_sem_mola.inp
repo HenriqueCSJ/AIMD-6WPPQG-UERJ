@@ -1,0 +1,14 @@
+! MD XTB2 ALPB(water) PAL8
+%maxcore 256
+%md
+  Timestep 0.25_fs
+  Randomize 93002
+  Thermostat CSVR 300_K Timecon 100_fs
+  Walls Sphere 0, 0, 0, 9.0_A Spring 50.0
+  Dump Position Stride 4 Filename "en_continuar_sem_mola-traj.xyz"
+  Manage_Colvar Define 1 Distance Atom 0 Atom 61
+  Restraint Reset Colvar 1
+  Restart "en_aproximar_N1.mdrestart"
+  Run 8000
+end
+* xyzfile 2 1 encontro_real_R1.xyz

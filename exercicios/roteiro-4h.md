@@ -23,7 +23,7 @@
 ## Segundo bloco
 
 - **17h00–17h05:** retomada.
-- **17h05–17h25 · 04c–d:** primeiro N assistido e segundo N livre; depois compare a en sem assistência sob alvos de 1, 1000 e 4000 bar, usando resultados prontos de 5 ps.
+- **17h05–17h25 · 04c–d:** parta do encontro preparado: 1 ps de assistência a Zn–N 61 e 2 ps após retirar a mola; depois compare a en sem assistência sob alvos de 1, 1000 e 4000 bar, usando resultados prontos de 5 ps.
 - **17h25–17h45 · 05:** executar H₅O₂⁺ e acompanhar o próton compartilhado.
 - **17h45–17h50:** margem.
 - **17h50–18h00:** síntese, perguntas e opções para continuar depois.

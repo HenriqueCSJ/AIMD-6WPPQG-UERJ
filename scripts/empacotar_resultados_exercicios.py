@@ -30,6 +30,10 @@ def main(lessons=None):
         with zipfile.ZipFile(folder / 'resultados-completos.zip', 'w', zipfile.ZIP_DEFLATED, compresslevel=6) as archive:
             archive.writestr('LEIA-ME.txt', '\n'.join(lines) + '\n')
             archive.write(folder / 'README.md', 'README-EXERCICIO.md')
+            archive.write(folder / 'README.md', 'README.md')
+            for support in sorted(folder.glob('*.md')):
+                if support.name != 'README.md':
+                    archive.write(support, support.name)
             for file in files:
                 archive.write(file, file.relative_to(folder).as_posix())
             # Large native SCF logs may be retained in each calculation's result

@@ -1,52 +1,37 @@
 <!doctype html>
 <html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>04c · en: primeiro N assistido, segundo N livre · AIMD / ORCA</title><link rel="stylesheet" href="../pagina.css?v=20261006-solvator-direto"><script defer src="../pagina.js?v=20261006-solvator-direto"></script></head>
-<body><a class="skip" href="#conteudo">Ir para o conteúdo</a><header class="brand"><a href="../index.html"><strong>AIMD com ORCA</strong><small>6º Workshop PPGQ–UERJ · 7 de outubro de 2026</small></a><div class="logos"><img src="../../assets/uerj-logo.png" alt="UERJ"><img src="../../assets/ufrrj-logo-compacto.png" alt="UFRRJ"></div></header><div class="layout"><nav class="course-nav" aria-label="Mapa dos exercícios"><details class="course-map" open><summary>Mapa dos exercícios <small>9 etapas + complementos opcionais</small></summary><a class="home" href="../index.html">Visão geral do percurso</a><a class="parameter-guide" href="../../guia-md/index.html" target="_blank" rel="noopener" aria-label="Guia de parâmetros %md (abre em outra aba)">Guia de parâmetros %md ↗</a><h3 class="nav-group">Durante a aula · siga nesta ordem</h3><ol class="links"><li><a href="../1-agua-dft/index.html"><span class="num">01</span><span>Água: molécula e dímero</span></a></li><li><a href="../3-xtb2-etanol/index.html"><span class="num">02a</span><span>Etanol: controle</span></a></li><li><a href="../4-timestep/index.html"><span class="num">02b</span><span>Timestep e correção</span></a></li><li><a href="../5-termostato/index.html"><span class="num">03</span><span>Aquecer e resfriar</span></a></li><li><a href="../6-complexo-solvator/index.html"><span class="num">04a</span><span>Zn²⁺ + 20 águas: SOLVATOR</span></a></li><li><a href="../7-dinamica-complexo/index.html"><span class="num">04b</span><span>Zn²⁺: hidratação e paredes</span></a></li><li><a href="../11-formacao-quelato/index.html" aria-current="page"><span class="num">04c</span><span>en: primeiro N assistido, segundo N livre</span></a></li><li><a href="../14-zn-en-pressao/index.html"><span class="num">04d</span><span>Zn–en sem assistência: 1 / 1000 / 4000 bar</span></a></li><li><a href="../10-proton-compartilhado/index.html"><span class="num">05</span><span>Um próton entre duas águas</span></a></li></ol><h3 class="nav-group">Complementos opcionais e referências</h3><p class="nav-note">A sequência da aula segue diretamente entre as 9 etapas acima.</p><ol class="links"><li><a href="../13-cell-pressao/index.html"><span class="num">C</span><span>Cell: parede, pressão e volume</span></a></li><li><a href="../2-solvente-implicito/index.html"><span class="num">↗</span><span>DFT e solvente contínuo</span></a></li><li><a href="../12-gota-protonada/index.html"><span class="num">↗</span><span>Gota protonada: 300–600 K</span></a></li><li><a href="../8-agua-no-fulereno/index.html"><span class="num">↗</span><span>Água dentro de C₆₀</span></a></li><li><a href="../9-aluminio-amonia/index.html"><span class="num">↗</span><span>Al³⁺/amônia: referência</span></a></li></ol></details></nav><main id="conteudo"><nav class="route-nav route-topo" aria-label="Navegação do percurso — topo"><div class="route-status">Etapa 7 de 9 · Bloco 04c<progress class="course-progress" value="7" max="9" aria-label="Etapa 7 de 9"></progress></div><div class="route-controls"><a class="route-prev" rel="prev" href="../7-dinamica-complexo/index.html"><small>Anterior</small><span>← Zn²⁺: hidratação e paredes</span></a><a class="route-next" rel="next" href="../14-zn-en-pressao/index.html"><small>Próximo</small><span>Zn–en sem assistência: 1 / 1000 / 4000 bar →</span></a></div><a class="route-map" href="../index.html">Mapa completo do percurso</a></nav><article class="lesson-content"><h1 id="04c-en-primeiro-n-assistido-segundo-n-livre">04c · en: primeiro N assistido, segundo N livre</h1><nav class="section-nav" aria-label="Seções desta página"><strong>Nesta página</strong><ul><li><a href="#1-veja-a-sequencia-nos-calculos-prontos">1. Veja a sequência nos cálculos prontos</a></li><li><a href="#2-confirme-que-o-fechamento-e-bidentado">2. Confirme que o fechamento é bidentado</a></li><li><a href="#3-relacione-movimento-energia-e-temperatura">3. Relacione movimento, energia e temperatura</a></li><li><a href="#4-arquivos-e-resolucao">4. Arquivos e resolução</a></li><li><a href="#inputs-das-variantes-e-preparacoes">Inputs das variantes e preparações</a></li><li><a href="#inputs-da-sequencia-de-hidratacao">Inputs da sequência de hidratação</a></li><li><a href="#5-repetir-a-en-com-pares-controlados">5. Repetir a en com pares controlados</a></li><li><a href="#geometria-copiar-e-colar-ou-baixar">Geometria: copiar e colar ou baixar</a></li></ul></nav>
+<body><a class="skip" href="#conteudo">Ir para o conteúdo</a><header class="brand"><a href="../index.html"><strong>AIMD com ORCA</strong><small>6º Workshop PPGQ–UERJ · 7 de outubro de 2026</small></a><div class="logos"><img src="../../assets/uerj-logo.png" alt="UERJ"><img src="../../assets/ufrrj-logo-compacto.png" alt="UFRRJ"></div></header><div class="layout"><nav class="course-nav" aria-label="Mapa dos exercícios"><details class="course-map" open><summary>Mapa dos exercícios <small>9 etapas + complementos opcionais</small></summary><a class="home" href="../index.html">Visão geral do percurso</a><a class="parameter-guide" href="../../guia-md/index.html" target="_blank" rel="noopener" aria-label="Guia de parâmetros %md (abre em outra aba)">Guia de parâmetros %md ↗</a><h3 class="nav-group">Durante a aula · siga nesta ordem</h3><ol class="links"><li><a href="../1-agua-dft/index.html"><span class="num">01</span><span>Água: molécula e dímero</span></a></li><li><a href="../3-xtb2-etanol/index.html"><span class="num">02a</span><span>Etanol: controle</span></a></li><li><a href="../4-timestep/index.html"><span class="num">02b</span><span>Timestep e correção</span></a></li><li><a href="../5-termostato/index.html"><span class="num">03</span><span>Aquecer e resfriar</span></a></li><li><a href="../6-complexo-solvator/index.html"><span class="num">04a</span><span>Zn²⁺ + 20 águas: SOLVATOR</span></a></li><li><a href="../7-dinamica-complexo/index.html"><span class="num">04b</span><span>Zn²⁺: hidratação e paredes</span></a></li><li><a href="../11-formacao-quelato/index.html" aria-current="page"><span class="num">04c</span><span>en: primeiro N assistido, segundo N livre</span></a></li><li><a href="../14-zn-en-pressao/index.html"><span class="num">04d</span><span>Zn–en sem assistência: 1 / 1000 / 4000 bar</span></a></li><li><a href="../10-proton-compartilhado/index.html"><span class="num">05</span><span>Um próton entre duas águas</span></a></li></ol><h3 class="nav-group">Complementos opcionais e referências</h3><p class="nav-note">A sequência da aula segue diretamente entre as 9 etapas acima.</p><ol class="links"><li><a href="../13-cell-pressao/index.html"><span class="num">C</span><span>Cell: parede, pressão e volume</span></a></li><li><a href="../2-solvente-implicito/index.html"><span class="num">↗</span><span>DFT e solvente contínuo</span></a></li><li><a href="../12-gota-protonada/index.html"><span class="num">↗</span><span>Gota protonada: 300–600 K</span></a></li><li><a href="../8-agua-no-fulereno/index.html"><span class="num">↗</span><span>Água dentro de C₆₀</span></a></li><li><a href="../9-aluminio-amonia/index.html"><span class="num">↗</span><span>Al³⁺/amônia: referência</span></a></li></ol></details></nav><main id="conteudo"><nav class="route-nav route-topo" aria-label="Navegação do percurso — topo"><div class="route-status">Etapa 7 de 9 · Bloco 04c<progress class="course-progress" value="7" max="9" aria-label="Etapa 7 de 9"></progress></div><div class="route-controls"><a class="route-prev" rel="prev" href="../7-dinamica-complexo/index.html"><small>Anterior</small><span>← Zn²⁺: hidratação e paredes</span></a><a class="route-next" rel="next" href="../14-zn-en-pressao/index.html"><small>Próximo</small><span>Zn–en sem assistência: 1 / 1000 / 4000 bar →</span></a></div><a class="route-map" href="../index.html">Mapa completo do percurso</a></nav><article class="lesson-content"><h1 id="04c-en-primeiro-n-assistido-segundo-n-livre">04c · en: primeiro N assistido, segundo N livre</h1><nav class="section-nav" aria-label="Seções desta página"><strong>Nesta página</strong><ul><li><a href="#1-o-que-fizemos-e-por-que">1. O que fizemos e por quê</a></li><li><a href="#2-assista-a-tres-momentos-com-um-relogio">2. Assista a três momentos, com um relógio</a></li><li><a href="#3-os-dois-inputs-minimos-executados">3. Os dois inputs mínimos executados</a></li><li><a href="#4-para-aprofundar-depois">4. Para aprofundar depois</a></li></ul></nav>
 <p><a href="../index.html">← Percurso</a> · <a href="../../visualizador/index.html?exemplo=chelation&amp;aba=trajetoria">Aplicativo de análise</a></p>
-<p><strong>Núcleo da aula · 20 min compartilhados entre 04c e 04d após o intervalo · interpretar resultados prontos · 97 átomos</strong></p>
-<blockquote>
-<p><strong>Pergunta:</strong> como as águas coordenam o Zn e como uma en passa de um para dois N coordenados?</p>
-</blockquote>
-<p><a href="../../visualizador/index.html?exemplo=chelation&amp;aba=trajetoria"><strong>Abrir hidratação → primeiro N assistido → segundo N livre</strong></a> · <a href="resultado-chelation-continuous.zip">Baixar os arquivos e inputs</a></p>
-<p><strong>Depois de estudar a hidratação sem en em 04a–b, passamos ao ligante.</strong> A trajetória pronta abaixo é uma <strong>referência independente de 97 átomos</strong>, preparada anteriormente; ela não foi calculada a partir da nova saída do SOLVATOR nem dos controles de hidratação de 61 átomos. Dentro desta referência, o percurso acompanha o mesmo sistema: <strong>Zn²⁺, 20 águas e três etilenodiaminas (en)</strong>. No início, dez oxigênios estão a 3,1 Å do Zn, dez a 5,0 Å e todos os N, a pelo menos 6,5 Å. Ao final, há <strong>quatro águas e uma en bidentada</strong> na primeira esfera. <strong>Apenas N 61 recebeu ajuda para se aproximar. N 64 e as águas não receberam restrições externas para induzir a coordenação.</strong></p>
-<h2 id="1-veja-a-sequencia-nos-calculos-prontos">1. Veja a sequência nos cálculos prontos</h2>
-<p>Selecione <strong>04c · en: primeiro N assistido → segundo N livre</strong> no aplicativo. O controle <strong>Trecho para repetir</strong> permite observar cada etapa com calma; <strong>Trajetória completa</strong> percorre todas. O relógio exibido é o <strong>tempo acumulado da sequência</strong>, de 0 a 10083 fs.</p>
+<p><strong>Núcleo da aula · 20 min compartilhados entre 04c e 04d · interpretar resultados prontos · 97 átomos</strong></p>
+<h2 id="1-o-que-fizemos-e-por-que">1. O que fizemos e por quê</h2>
+<p><strong>Ajudamos o primeiro N de uma etilenodiamina (en) a chegar perto do Zn durante 1 ps. Depois retiramos essa ajuda e observamos se o segundo N da mesma en fecha o quelato.</strong> Essa preparação torna o primeiro contato acessível na janela curta da aula.</p>
+<p><strong>Começamos com o Zn²⁺ e seis águas já coordenadas.</strong> Aproximamos uma en por seu N 61 e observamos o outro N da mesma molécula, N 64.</p>
+<p><a href="../../visualizador/index.html?exemplo=chelation&amp;aba=trajetoria"><strong>Abrir o percurso de 3 ps no laboratório</strong></a> · <a href="resultado-en-sequencia-simples.zip">Baixar o percurso e os inputs</a> · <a href="resultados/chelation_simple/chelation_simple-traj.xyz" download="chelation_simple-traj.xyz">Baixar XYZ reunido das duas etapas · 0–3000 fs</a></p>
+<p><strong>Como a aproximação foi forçada?</strong> Acrescentamos uma força à <strong>distância entre Zn 0 e N 61</strong>, por meio de uma mola de limite superior. A força atua nos dois átomos do par, inclusive no Zn. Durante 1 ps, o limite diminui de <strong>3,886868 para 2,2 Å</strong>. Se a distância está acima do limite, a mola favorece a aproximação; abaixo dele, sua força adicional é zero. A constante é <strong>200 kJ mol⁻¹ Å⁻²</strong>. A distância responde às forças da dinâmica: não é fixada exatamente no valor da rampa e as coordenadas do filme não foram editadas manualmente.</p>
+<p><strong>Só a distância Zn–N 61 é definida para a mola. N 64 e as águas são observados pelo XYZ e não recebem essa restrição de coordenação.</strong> A constante 200 é a intensidade escolhida para esta intervenção didática, não uma constante física da ligação Zn–N. A parede atua na borda da gota; esta restrição atua na distância Zn–N 61. As interações normais e o termostato continuam atuando.</p>
+<h2 id="2-assista-a-tres-momentos-com-um-relogio">2. Assista a três momentos, com um relógio</h2>
 <ol>
-<li><strong>Hidratação · 0–500 fs.</strong> As águas se aproximam sem força imposta Zn–O. A primeira cruza o corte de 2,6 Å em <strong>33,5 fs</strong>; seis águas, até <strong>66,5 fs</strong>.</li>
-<li><strong>Encontro com a en · 500–7083 fs.</strong> O Zn permanece hidratado; a en alcança uma posição de encontro, ainda sem coordenação Zn–N.</li>
-<li><strong>Primeiro N assistido · 7083–8083 fs.</strong> Uma restrição atua somente em <strong>Zn 0–N 61</strong>. O primeiro contato abaixo de 2,6 Å ocorre em <strong>7623 fs da sequência</strong>, ou 540 fs no relógio desta execução.</li>
-<li><strong>Segundo N livre · 8083–10083 fs.</strong> A restrição de N 61 foi removida. <strong>N 64 entra sem guia</strong>, fecha o quelato e os dois N permanecem coordenados até o fim. A entrada ocorre em <strong>8636,75 fs pelos registros de distância</strong>; o primeiro quadro XYZ que a mostra está em 8637 fs.</li>
+<li><strong>Encontro preparado · 0 fs.</strong> O Zn tem seis águas próximas; os dois N da en estão a cerca de 3,89 Å.</li>
+<li><strong>Primeiro N assistido · 0–1000 fs.</strong> A mola aproxima o par Zn–N 61. N 61 entra abaixo do corte de 2,6 Å aos <strong>540 fs</strong>.</li>
+<li><strong>Segundo N livre da restrição · 1000–3000 fs.</strong> Retiramos a mola e continuamos do checkpoint. N 64 entra abaixo de 2,6 Å aos <strong>1554 fs nos XYZ novos</strong>, gravados a cada 1 fs. Os dois N permanecem no corte de 1554 até 3000 fs.</li>
 </ol>
-<p><strong>Intervenção em 7083 fs:</strong> a geometria de encontro é selecionada da primeira dinâmica. As posições são preservadas, mas as velocidades são reinicializadas a 300 K, com semente 93001, e o relógio da nova execução volta a zero. A partir daí, o aplicativo mostra <strong>7083 fs + o tempo local</strong>. Portanto, este é um percurso didático com uma reinicialização declarada, e não uma única dinâmica com velocidades contínuas. Compare cada etapa no intervalo indicado antes de interpretar o tempo acumulado como tempo de um evento.</p>
-<h2 id="2-confirme-que-o-fechamento-e-bidentado">2. Confirme que o fechamento é bidentado</h2>
-<p>Os índices começam em zero. Compare <strong>Zn 0–N 61</strong> e <strong>Zn 0–N 64</strong>, ambos da mesma en intacta. Uma associação com apenas um N é monodentada. A coordenação bidentada exige contato simultâneo pelos dois doadores.</p>
-<p>Nos registros de distância a cada 0,25 fs, os dois N permanecem estritamente abaixo de 2,6 Å de <strong>1553,75 a 3000 fs do relógio local</strong>, por <strong>1,44625 ps</strong>. No eixo da sequência, esse intervalo é <strong>8636,75–10083 fs</strong>. Veja a <a href="resultados/chelation_continuous/verificacao.json">verificação numérica</a>.</p>
-<p>Compare também <strong>Zn 0–O 7</strong> e <strong>Zn 0–O 25</strong>. Essas águas saem acima de 3,0 Å em <strong>8415 fs</strong> e <strong>8906 fs da sequência</strong>, respectivamente, conforme os XYZ gravados a cada 1 fs. Depois da hidratação, a sequência de contatos é <strong>6O → 6O1N → 5O1N → 5O2N → 4O2N</strong>. Ao final são seis átomos doadores, distribuídos em cinco moléculas ligantes.</p>
-<p>Os cortes de distância são critérios geométricos de acompanhamento, não ordens de ligação. As três en e as águas permanecem intactas nos trechos utilizados.</p>
-<h2 id="3-relacione-movimento-energia-e-temperatura">3. Relacione movimento, energia e temperatura</h2>
-<p>Os gráficos junto à molécula mostram os valores medidos de <strong>U, K, E e temperatura</strong>. Observe primeiro a hidratação; depois a aproximação do primeiro N e o fechamento livre do segundo.</p>
-<p>A restrição do primeiro N é uma mola de limite superior, com constante de <strong>200 kJ mol⁻¹ Å⁻²</strong>. Durante 1 ps, o limite diminui de <strong>3,886868 para 2,2 Å</strong>. A força é zero quando a distância fica abaixo desse limite. Após esse período, a restrição é removida.</p>
-<p>Em <strong>7083 fs</strong>, a reinicialização muda a temperatura de <strong>284,90 para 300 K</strong>. K e E aumentam <strong>0,006958 Eh</strong>, enquanto U permanece igual na precisão impressa. Esse salto deve ser atribuído à intervenção, não à formação de uma ligação. A linha dos gráficos é interrompida nessa fronteira. No trecho assistido, a mola móvel também realiza trabalho; o termostato troca calor durante todo o percurso.</p>
-<p>O protocolo usa <strong>GFN2-xTB/ALPB(water)</strong>, timestep de <strong>0,25 fs</strong>, <strong>CSVR a 300 K</strong> e parede esférica de <strong>9 Å</strong>. O acoplamento térmico é 20 fs nos primeiros 500 fs e 100 fs depois. A etapa sem viés de coordenação continua com termostato e parede. As curvas não fornecem, por si só, entalpia, energia livre ou velocidade experimental de associação.</p>
-<p>A passagem do primeiro para o segundo N deve ser lida junto à remoção da restrição. Fechar o quelato depois dessa intervenção mostra a evolução deste sistema preparado; não mede a velocidade espontânea de associação em solução.</p>
-<details>
-<summary>Arquivos, resolução e etapas do percurso</summary>
-<h2 id="4-arquivos-e-resolucao">4. Arquivos e resolução</h2>
-<p>O <a href="resultado-chelation-continuous.zip">ZIP</a> conserva XYZ, CSV, inputs, saídas e checkpoints de cada etapa. A <a href="resultados/chelation_continuous/curso.json">descrição do percurso</a> identifica os intervalos usados, os relógios originais e a reinicialização. O aplicativo usa uma prévia de cerca de 6 mil quadros reais, preservando as fronteiras; nenhuma posição é interpolada. As energias não são reduzidas nem deslocadas verticalmente.</p>
-<p>O terceiro arquivo de hidratação foi interrompido após 9864 fs. O percurso usa somente seu trecho registrado até <strong>7083 fs</strong>, anterior à interrupção; nenhum intervalo faltante foi preenchido. As duas etapas posteriores de coordenação terminaram normalmente.</p>
-<p><a href="../../visualizador/index.html?exemplo=chelation_previous&amp;aba=trajetoria">Trecho anterior de 3 ps, começando no encontro</a> · <a href="resultado-chelation.zip">Pacote anterior</a> · <a href="https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html">Manual ORCA: restrições e restart</a></p>
-</details>
-<p><strong>Entrega da dupla:</strong> identifique a hidratação, o primeiro N assistido, o segundo N livre e as águas que saem. Explique quais variações de energia podem estar relacionadas às intervenções do protocolo.</p>
-<h2 id="inputs-das-variantes-e-preparacoes">Inputs das variantes e preparações</h2>
+<p>No laboratório, use <strong>Trecho para observar</strong> para escolher <strong>0–1000 fs</strong> e <strong>1000–3000 fs</strong>; marque <strong>Repetir</strong> para voltar ao início do trecho. Em <strong>Geometria</strong>, acompanhe as duas distâncias já selecionadas: <strong>Zn 0–N 61</strong> e <strong>Zn 0–N 64</strong>. Os índices começam em zero. Bidentado significa que <strong>os dois N da mesma en</strong> estão próximos do Zn ao mesmo tempo; contar dois N sem conferir suas identidades não basta. O corte é um critério geométrico, não uma ordem de ligação.</p>
+<p><strong>Entrega da dupla:</strong></p>
 <ul>
-<li><strong>m01a_N_sem_vies_agua:</strong> <a href="inputs/m01a_N_sem_vies_agua.inp" download="m01a_N_sem_vies_agua.inp">Baixar input ORCA</a> · <a href="estruturas/encontro_real_R1.xyz" download="encontro_real_R1.xyz">Baixar geometria inicial (.xyz)</a> (obrigatório; manter na mesma pasta do input).</li>
+<li>Qual par recebeu a força extra, por quanto tempo e com qual finalidade?</li>
+<li>Quando N 64 entra no corte, a mola de Zn–N 61 ainda está ativa? Que observação identifica o fechamento do quelato?</li>
 </ul>
-<p><strong>Input completo · <code>m01a_N_sem_vies_agua.inp</code> — copie e salve com esse nome.</strong></p>
-<!-- input-source: inputs/m01a_N_sem_vies_agua.inp -->
-<div class="input-resources" data-input="exercicios/11-formacao-quelato/inputs/m01a_N_sem_vies_agua.inp"><p><strong>m01a_N_sem_vies_agua.inp</strong> · Dinâmica executada; resultados disponíveis.</p><div class="input-downloads"><a href="inputs/m01a_N_sem_vies_agua.inp" download>Baixar input completo</a><a href="estruturas/encontro_real_R1.xyz" download>Baixar XYZ de entrada · encontro_real_R1.xyz</a><a href="resultados/chelation_continuous/etapas/m01a_N_sem_vies_agua/m01a_N_sem_vies_agua-traj.xyz" download>Baixar XYZ do resultado · m01a_N_sem_vies_agua-traj.xyz</a><a href="resultados-completos.zip" download>Resultados completos deste exercício · todas as variantes</a><a class="open-input-lab" href="../../visualizador/index.html?exemplo=arquivo_m01a_N_sem_vies_agua&amp;aba=trajetoria">Abrir no laboratório com tudo carregado</a></div></div>
+<h2 id="3-os-dois-inputs-minimos-executados">3. Os dois inputs mínimos executados</h2>
+<p>Os dois inputs abaixo foram executados nesta versão simplificada. Os <a href="historico.html#coordenacao-original">originais anteriores</a> ficam no histórico. O método é <strong>GFN2-xTB/ALPB(water)</strong>, com passo de <strong>0,25 fs</strong>, <strong>CSVR a 300 K</strong> e parede esférica de <strong>9 Å</strong>. “Livre” abaixo significa livre da restrição de coordenação; o banho e a parede permanecem.</p>
+<p><a id="primeiro-n"></a></p>
+<h3 id="primeiro-n-aplicar-a-mola-durante-1-ps">Primeiro N: aplicar a mola durante 1 ps</h3>
+<p>Use a <a href="estruturas/encontro_real_R1.xyz" download="encontro_real_R1.xyz">geometria de encontro</a> junto do input; ela também está <a href="apoio.html#geometria-de-encontro">inteira e copiável no apoio</a>. <code>Initvel</code> prepara as velocidades a 300 K. <code>Manage_Colvar Define 1</code> identifica a distância Zn–N 61; <code>Restraint Add Colvar 1</code> aplica a mola a essa distância. <code>Run 4000</code> corresponde a 4000 × 0,25 fs = 1000 fs.</p>
+<p><strong>Input completo · <code>en_aproximar_N1.inp</code> — copie e salve com esse nome.</strong></p>
+<!-- input-source: inputs/en_aproximar_N1.inp -->
+<div class="input-resources" data-input="exercicios/11-formacao-quelato/inputs/en_aproximar_N1.inp"><p><strong>en_aproximar_N1.inp</strong> · Input mínimo executado; resultados próprios disponíveis.</p><div class="input-downloads"><a href="inputs/en_aproximar_N1.inp" download>Baixar input completo</a><a href="estruturas/encontro_real_R1.xyz" download>Baixar XYZ de entrada · encontro_real_R1.xyz</a><a href="resultados/chelation_simple/etapas/en_aproximar_N1/en_aproximar_N1-traj.xyz" download>Baixar XYZ do resultado · en_aproximar_N1-traj.xyz</a><a href="resultado-en_aproximar_N1.zip" download>Resultados completos desta etapa</a><a href="resultados-completos.zip" download>Resultados completos deste exercício · todas as variantes</a><a class="open-input-lab" href="../../visualizador/index.html?exemplo=arquivo_en_aproximar_N1&amp;aba=trajetoria">Abrir no laboratório com tudo carregado</a></div></div>
 
 
-<pre><code class="language-text"># Encontro real hidratado: trecho assistido, sem significado cinetico.
-! MD XTB2 ALPB(water) PAL8
+<pre><code class="language-text">! MD XTB2 ALPB(water) PAL8
 %maxcore 256
 %md
   Timestep 0.25_fs
@@ -54,452 +39,44 @@
   Initvel 300_K
   Thermostat CSVR 300_K Timecon 100_fs
   Walls Sphere 0, 0, 0, 9.0_A Spring 50.0
-  Dump Position Stride 4 Filename &quot;m01a_N_sem_vies_agua-traj.xyz&quot;
+  Dump Position Stride 4 Filename &quot;en_aproximar_N1-traj.xyz&quot;
   Manage_Colvar Define 1 Distance Atom 0 Atom 61
-  Manage_Colvar Define 2 Distance Atom 0 Atom 64
-  Manage_Colvar Define 3 CoordNumber Atom 0 Group 1 4 7 10 13 16 19 22 25 28 31 34 37 40 43 46 49 52 55 58 Cutoff 2.6_A
-  # Aproximar apenas N61; todas as aguas e N64 ficam sem vies.
-  # Upper nao obriga a agua individual nem impoe ligacoes covalentes.
   Restraint Add Colvar 1 Harmonic Spring 200.0 Upper Ramp 3.886868 2.2
   Run 4000
-  # Revisar antes de retirar o unico vies em outro bloco.
 end
 * xyzfile 2 1 encontro_real_R1.xyz
 </code></pre>
-<ul>
-<li><strong>m02_livre_apos_N1:</strong> <a href="inputs/m02_livre_apos_N1.inp" download="m02_livre_apos_N1.inp">Baixar input ORCA</a> · <a href="estruturas/encontro_real_R1.xyz" download="encontro_real_R1.xyz">Baixar geometria inicial (.xyz)</a> (obrigatório; manter na mesma pasta do input) · <a href="inputs/m01a_N_sem_vies_agua.mdrestart" download="m01a_N_sem_vies_agua.mdrestart">Baixar checkpoint obrigatório</a> (fornece o estado de continuação; manter junto do input).</li>
-</ul>
-<p><strong>Input completo · <code>m02_livre_apos_N1.inp</code> — copie e salve com esse nome.</strong></p>
-<!-- input-source: inputs/m02_livre_apos_N1.inp -->
-<div class="input-resources" data-input="exercicios/11-formacao-quelato/inputs/m02_livre_apos_N1.inp"><p><strong>m02_livre_apos_N1.inp</strong> · Dinâmica executada; resultados disponíveis.</p><div class="input-downloads"><a href="inputs/m02_livre_apos_N1.inp" download>Baixar input completo</a><a href="estruturas/encontro_real_R1.xyz" download>Baixar XYZ de entrada · encontro_real_R1.xyz</a><a href="resultados/chelation_continuous/etapas/m02_livre_apos_N1/m02_livre_apos_N1-traj.xyz" download>Baixar XYZ do resultado · m02_livre_apos_N1-traj.xyz</a><a href="inputs/m01a_N_sem_vies_agua.mdrestart" download>Auxiliar obrigatório · m01a_N_sem_vies_agua.mdrestart</a><a href="resultados-completos.zip" download>Resultados completos deste exercício · todas as variantes</a><a class="open-input-lab" href="../../visualizador/index.html?exemplo=arquivo_m02_livre_apos_N1&amp;aba=trajetoria">Abrir no laboratório com tudo carregado</a></div></div>
+<p><a id="segundo-n"></a></p>
+<h3 id="segundo-n-retirar-a-mola-e-continuar-por-2-ps">Segundo N: retirar a mola e continuar por 2 ps</h3>
+<p>O <strong>checkpoint do primeiro input é obrigatório</strong>: <a href="inputs/en_aproximar_N1.mdrestart" download="en_aproximar_N1.mdrestart">baixar <code>en_aproximar_N1.mdrestart</code></a>. <code>Restart</code> retoma posições, velocidades e relógio aos 1000 fs. Este input não tem <code>Initvel</code>; seus 8000 passos levam a continuação até 3000 fs. O segundo input continua sem reaplicar a mola; <code>Restraint Reset Colvar 1</code> explicita essa condição. <code>Randomize</code> define uma semente, não reinicializa sozinho as velocidades.</p>
+<p><strong>Input completo · <code>en_continuar_sem_mola.inp</code> — copie e salve com esse nome.</strong></p>
+<!-- input-source: inputs/en_continuar_sem_mola.inp -->
+<div class="input-resources" data-input="exercicios/11-formacao-quelato/inputs/en_continuar_sem_mola.inp"><p><strong>en_continuar_sem_mola.inp</strong> · Input mínimo executado; resultados próprios disponíveis.</p><div class="input-downloads"><a href="inputs/en_continuar_sem_mola.inp" download>Baixar input completo</a><a href="estruturas/encontro_real_R1.xyz" download>Baixar XYZ de entrada · encontro_real_R1.xyz</a><a href="resultados/chelation_simple/etapas/en_continuar_sem_mola/en_continuar_sem_mola-traj.xyz" download>Baixar XYZ do resultado · en_continuar_sem_mola-traj.xyz</a><a href="inputs/en_aproximar_N1.mdrestart" download>Auxiliar obrigatório · en_aproximar_N1.mdrestart</a><a href="resultado-en_continuar_sem_mola.zip" download>Resultados completos desta etapa</a><a href="resultados-completos.zip" download>Resultados completos deste exercício · todas as variantes</a><a class="open-input-lab" href="../../visualizador/index.html?exemplo=arquivo_en_continuar_sem_mola&amp;aba=trajetoria">Abrir no laboratório com tudo carregado</a></div></div>
 
 
-<pre><code class="language-text"># Retirar a aproximacao Zn-N; continuar posicoes, velocidades e relogio.
-! MD XTB2 ALPB(water) PAL8
+<pre><code class="language-text">! MD XTB2 ALPB(water) PAL8
 %maxcore 256
 %md
   Timestep 0.25_fs
   Randomize 93002
   Thermostat CSVR 300_K Timecon 100_fs
   Walls Sphere 0, 0, 0, 9.0_A Spring 50.0
-  Dump Position Stride 4 Filename &quot;m02_livre_apos_N1-traj.xyz&quot;
+  Dump Position Stride 4 Filename &quot;en_continuar_sem_mola-traj.xyz&quot;
   Manage_Colvar Define 1 Distance Atom 0 Atom 61
-  Manage_Colvar Define 2 Distance Atom 0 Atom 64
-  Manage_Colvar Define 3 CoordNumber Atom 0 Group 1 4 7 10 13 16 19 22 25 28 31 34 37 40 43 46 49 52 55 58 Cutoff 2.6_A
   Restraint Reset Colvar 1
-  Restraint Reset Colvar 3
-  Restart &quot;m01a_N_sem_vies_agua.mdrestart&quot;
+  Restart &quot;en_aproximar_N1.mdrestart&quot;
   Run 8000
 end
 * xyzfile 2 1 encontro_real_R1.xyz
 </code></pre>
-<h2 id="inputs-da-sequencia-de-hidratacao">Inputs da sequência de hidratação</h2>
+<h2 id="4-para-aprofundar-depois">4. Para aprofundar depois</h2>
+<p>O sistema já começa em uma <strong>geometria de encontro</strong>: Zn²⁺ hidratado por seis águas, com uma en por perto. No agregado inteiro há <strong>Zn²⁺, 20 águas e três en, totalizando 97 átomos</strong>. A geometria foi selecionada de uma referência anterior; não é uma amostra aleatória nem uma continuação dos exercícios 04a–b com 61 átomos. A origem está no <a href="historico.html">histórico separado</a>.</p>
+<p>O encontro preparado não demonstra que a ajuda seja fisicamente necessária nem mede uma velocidade espontânea de reação.</p>
+<p>Ao final deste percurso há quatro águas e uma en bidentada na primeira esfera. As duas águas que saem continuam no agregado. Para acompanhar essa troca, acrescente Zn 0–O 7 e Zn 0–O 25 no laboratório. Energia e temperatura também estão disponíveis: a mola móvel realiza trabalho, o termostato troca calor e o restart tem sua própria referência da quantidade conservada. Uma variação da curva não determina sozinha o calor de reação.</p>
 <ul>
-<li><strong>Hidratação inicial (0–500 fs da sequência):</strong> <a href="resultados/chelation_continuous/etapas/r9_rep1_piloto_0500fs/r9_rep1_piloto_0500fs.inp" download="r9_rep1_piloto_0500fs.inp">Baixar input ORCA</a> · <a href="estruturas/zn_20h2o_3en_r9.xyz" download="zn_20h2o_3en_r9.xyz">Baixar geometria inicial (.xyz)</a> (obrigatório; manter na mesma pasta do input).</li>
+<li><a href="historico.html">Histórico: como a geometria de encontro foi obtida, com três inputs de preparação, os dois originais de coordenação e a sequência anterior</a>.</li>
+<li><a href="apoio.html">Apoio: quatro controles preparados, seus inputs e a geometria copiável</a>. Esses controles ainda não foram executados.</li>
+<li><a href="resultados-completos.zip">Todos os recursos deste exercício</a>, incluindo originais, checkpoints e apoios.</li>
+<li><a href="https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html">Manual ORCA: restrições e restart</a>.</li>
 </ul>
-<p><strong>Input completo · <code>r9_rep1_piloto_0500fs.inp</code> — copie e salve com esse nome.</strong></p>
-<!-- input-source: resultados/chelation_continuous/etapas/r9_rep1_piloto_0500fs/r9_rep1_piloto_0500fs.inp -->
-<div class="input-resources" data-input="exercicios/11-formacao-quelato/resultados/chelation_continuous/etapas/r9_rep1_piloto_0500fs/r9_rep1_piloto_0500fs.inp"><p><strong>r9_rep1_piloto_0500fs.inp</strong> · Dinâmica executada; resultados disponíveis.</p><div class="input-downloads"><a href="resultados/chelation_continuous/etapas/r9_rep1_piloto_0500fs/r9_rep1_piloto_0500fs.inp" download>Baixar input completo</a><a href="estruturas/zn_20h2o_3en_r9.xyz" download>Baixar XYZ de entrada · zn_20h2o_3en_r9.xyz</a><a href="resultados/chelation_continuous/etapas/r9_rep1_piloto_0500fs/r9_rep1_piloto_0500fs-traj.xyz" download>Baixar XYZ do resultado · r9_rep1_piloto_0500fs-traj.xyz</a><a href="resultados-completos.zip" download>Resultados completos deste exercício · todas as variantes</a><a class="open-input-lab" href="../../visualizador/index.html?exemplo=arquivo_r9_rep1_piloto_0500fs&amp;aba=trajetoria">Abrir no laboratório com tudo carregado</a></div></div>
-
-
-<pre><code class="language-text"># Replica 1: mesma geometria; velocidades iniciais com semente 42.
-! MD XTB2 ALPB(water) PAL8
-%maxcore 256
-
-%md
-  Timestep 0.25_fs
-  Randomize 42
-  Initvel 300_K
-  # Todos os atomos com folga inicial; sem restricoes Zn-O ou Zn-N.
-  Walls Sphere 0, 0, 0, 9.0_A Spring 50.0
-  Dump Position Stride 2 Filename &quot;r9_rep1_piloto_0500fs-traj.xyz&quot;
-  # Dissipar o calor da hidratacao antes da extensao a 10 ps.
-  Thermostat CSVR 300_K Timecon 20_fs
-  Run 2000
-end
-
-* xyzfile 2 1 zn_20h2o_3en_r9.xyz
-</code></pre>
-<ul>
-<li><strong>Continuação da hidratação (500–5000 fs):</strong> <a href="resultados/chelation_continuous/etapas/r9_rep1_00500_05000fs/r9_rep1_00500_05000fs.inp" download="r9_rep1_00500_05000fs.inp">Baixar input ORCA</a> · <a href="estruturas/zn_20h2o_3en_r9.xyz" download="zn_20h2o_3en_r9.xyz">Baixar geometria inicial (.xyz)</a> (obrigatório; manter na mesma pasta do input) · <a href="resultados/chelation_continuous/etapas/r9_rep1_piloto_0500fs/r9_rep1_piloto_0500fs.mdrestart" download="r9_rep1_piloto_0500fs.mdrestart">Baixar checkpoint obrigatório</a> (fornece o estado de continuação; manter junto do input).</li>
-</ul>
-<p><strong>Input completo · <code>r9_rep1_00500_05000fs.inp</code> — copie e salve com esse nome.</strong></p>
-<!-- input-source: resultados/chelation_continuous/etapas/r9_rep1_00500_05000fs/r9_rep1_00500_05000fs.inp -->
-<div class="input-resources" data-input="exercicios/11-formacao-quelato/resultados/chelation_continuous/etapas/r9_rep1_00500_05000fs/r9_rep1_00500_05000fs.inp"><p><strong>r9_rep1_00500_05000fs.inp</strong> · Dinâmica executada; resultados disponíveis.</p><div class="input-downloads"><a href="resultados/chelation_continuous/etapas/r9_rep1_00500_05000fs/r9_rep1_00500_05000fs.inp" download>Baixar input completo</a><a href="estruturas/zn_20h2o_3en_r9.xyz" download>Baixar XYZ de entrada · zn_20h2o_3en_r9.xyz</a><a href="resultados/chelation_continuous/etapas/r9_rep1_00500_05000fs/r9_rep1_00500_05000fs-traj.xyz" download>Baixar XYZ do resultado · r9_rep1_00500_05000fs-traj.xyz</a><a href="resultados/chelation_continuous/etapas/r9_rep1_piloto_0500fs/r9_rep1_piloto_0500fs.mdrestart" download>Auxiliar obrigatório · r9_rep1_piloto_0500fs.mdrestart</a><a href="resultados-completos.zip" download>Resultados completos deste exercício · todas as variantes</a><a class="open-input-lab" href="../../visualizador/index.html?exemplo=arquivo_r9_rep1_00500_05000fs&amp;aba=trajetoria">Abrir no laboratório com tudo carregado</a></div></div>
-
-
-<pre><code class="language-text"># Replica 1, continuacao 0.5-5 ps: preservar velocidades.
-! MD XTB2 ALPB(water) PAL8
-%maxcore 256
-
-%md
-  Timestep 0.25_fs
-  Randomize 43
-  Walls Sphere 0, 0, 0, 9.0_A Spring 50.0
-  Thermostat CSVR 300_K Timecon 100_fs
-  Dump Position Stride 4 Filename &quot;r9_rep1_00500_05000fs-traj.xyz&quot;
-  Restart &quot;r9_rep1_piloto_0500fs.mdrestart&quot;
-  Run 18000
-end
-
-* xyzfile 2 1 zn_20h2o_3en_r9.xyz
-</code></pre>
-<ul>
-<li><strong>Continuação; o percurso utiliza o trecho até 7083 fs:</strong> <a href="resultados/chelation_continuous/etapas/r9_rep1_05000_10000fs/r9_rep1_05000_10000fs.inp" download="r9_rep1_05000_10000fs.inp">Baixar input ORCA</a> · <a href="estruturas/zn_20h2o_3en_r9.xyz" download="zn_20h2o_3en_r9.xyz">Baixar geometria inicial (.xyz)</a> (obrigatório; manter na mesma pasta do input) · <a href="resultados/chelation_continuous/etapas/r9_rep1_00500_05000fs/r9_rep1_00500_05000fs.mdrestart" download="r9_rep1_00500_05000fs.mdrestart">Baixar checkpoint obrigatório</a> (fornece o estado de continuação; manter junto do input).</li>
-</ul>
-<p><strong>Input completo · <code>r9_rep1_05000_10000fs.inp</code> — copie e salve com esse nome.</strong></p>
-<!-- input-source: resultados/chelation_continuous/etapas/r9_rep1_05000_10000fs/r9_rep1_05000_10000fs.inp -->
-<div class="input-resources" data-input="exercicios/11-formacao-quelato/resultados/chelation_continuous/etapas/r9_rep1_05000_10000fs/r9_rep1_05000_10000fs.inp"><p><strong>r9_rep1_05000_10000fs.inp</strong> · Execução interrompida: trajetória até 9864 fs; não completou 10000 fs.</p><div class="input-downloads"><a href="resultados/chelation_continuous/etapas/r9_rep1_05000_10000fs/r9_rep1_05000_10000fs.inp" download>Baixar input completo</a><a href="estruturas/zn_20h2o_3en_r9.xyz" download>Baixar XYZ de entrada · zn_20h2o_3en_r9.xyz</a><a href="resultados/chelation_continuous/etapas/r9_rep1_05000_10000fs/r9_rep1_05000_10000fs-traj.xyz" download>Baixar XYZ do resultado parcial · r9_rep1_05000_10000fs-traj.xyz</a><a href="resultados/chelation_continuous/etapas/r9_rep1_00500_05000fs/r9_rep1_00500_05000fs.mdrestart" download>Auxiliar obrigatório · r9_rep1_00500_05000fs.mdrestart</a><a href="resultados-completos.zip" download>Resultados completos deste exercício · todas as variantes</a><a class="open-input-lab" href="../../visualizador/index.html?exemplo=arquivo_r9_rep1_05000_10000fs&amp;aba=trajetoria">Abrir no laboratório com tudo carregado</a></div></div>
-
-
-<pre><code class="language-text"># Replica 1, continuacao 5-10 ps: preservar velocidades.
-! MD XTB2 ALPB(water) PAL8
-%maxcore 256
-
-%md
-  Timestep 0.25_fs
-  Randomize 44
-  Walls Sphere 0, 0, 0, 9.0_A Spring 50.0
-  Thermostat CSVR 300_K Timecon 100_fs
-  Dump Position Stride 4 Filename &quot;r9_rep1_05000_10000fs-traj.xyz&quot;
-  Restart &quot;r9_rep1_00500_05000fs.mdrestart&quot;
-  Run 20000
-end
-
-* xyzfile 2 1 zn_20h2o_3en_r9.xyz
-</code></pre>
-<p>A geometria acima é o início da sequência de hidratação. Nas continuações, o checkpoint fornece posições, velocidades e o estado dinâmico. Os inputs <code>m01a_N_sem_vies_agua</code> e <code>m02_livre_apos_N1</code> listados acima usam a geometria de encontro selecionada: o primeiro reinicializa velocidades; o segundo exige o checkpoint do primeiro.</p>
-<h2 id="5-repetir-a-en-com-pares-controlados">5. Repetir a en com pares controlados</h2>
-<p><strong>Os novos controles abaixo estão preparados, mas ainda não foram executados.</strong> Todos partem da mesma geometria de encontro retida, <strong><code>encontro_real_R1.xyz</code></strong>, com 97 átomos. Ela pertence à referência anterior; não deriva da montagem nova de 61 átomos. Os pacotes incluem essa geometria.</p>
-<p>Compare separadamente o efeito da parede e o efeito da assistência ao primeiro N:</p>
-<ul>
-<li><strong>en livre, sem parede:</strong> <a href="inputs/en_livre_sem_parede.inp" download="en_livre_sem_parede.inp">input</a> · <a href="aula-en_livre_sem_parede.zip">pacote</a>.</li>
-</ul>
-<p><strong>Input completo · <code>en_livre_sem_parede.inp</code> — copie e salve com esse nome.</strong></p>
-<!-- input-source: inputs/en_livre_sem_parede.inp -->
-<div class="input-resources" data-input="exercicios/11-formacao-quelato/inputs/en_livre_sem_parede.inp"><p><strong>en_livre_sem_parede.inp</strong> · Input preparado, ainda não executado. Sem resultados próprios; o laboratório abre somente a estrutura inicial. A geometria foi extraída da referência anterior aos 7083 fs; esse tempo pertence à origem, não a este controle.</p><div class="input-downloads"><a href="inputs/en_livre_sem_parede.inp" download>Baixar input completo</a><a href="estruturas/encontro_real_R1.xyz" download>Baixar XYZ de entrada · encontro_real_R1.xyz</a><a href="aula-en_livre_sem_parede.zip" download>Pacote para executar</a><a href="resultados-completos.zip" download>Resultados completos deste exercício · todas as variantes</a><a class="open-input-lab" href="../../visualizador/index.html?exemplo=arquivo_en_livre_sem_parede&amp;aba=trajetoria">Abrir a estrutura inicial no laboratório · ainda sem resultados</a></div></div>
-
-
-<pre><code class="language-text"># 04c: referencia independente; 97 atomos = Zn + 20 H2O + 3 en.
-# Mesmo encontro hidratado retido em todos os quatro ramos.
-# NAO e uma continuacao da nova montagem SOLVATOR de 61 atomos.
-! MD XTB2 ALPB(water) PAL8
-%maxcore 256
-%md
-  Timestep 0.25_fs
-  Randomize 93001
-  Initvel 300_K
-  Thermostat CSVR 300_K Timecon 100_fs
-  Cell None
-  Dump Position Stride 4 Filename &quot;en_livre_sem_parede-traj.xyz&quot;
-  Manage_Colvar Define 1 Distance Atom 0 Atom 61
-  Manage_Colvar Define 2 Distance Atom 0 Atom 64
-  # Controle de 3 ps sem nenhuma assistencia Zn-N.
-  Run 12000
-end
-* xyzfile 2 1 encontro_real_R1.xyz
-</code></pre>
-<ul>
-<li><strong>en livre, com parede:</strong> <a href="inputs/en_livre_com_parede.inp" download="en_livre_com_parede.inp">input</a> · <a href="aula-en_livre_com_parede.zip">pacote</a>.</li>
-</ul>
-<p><strong>Input completo · <code>en_livre_com_parede.inp</code> — copie e salve com esse nome.</strong></p>
-<!-- input-source: inputs/en_livre_com_parede.inp -->
-<div class="input-resources" data-input="exercicios/11-formacao-quelato/inputs/en_livre_com_parede.inp"><p><strong>en_livre_com_parede.inp</strong> · Input preparado, ainda não executado. Sem resultados próprios; o laboratório abre somente a estrutura inicial. A geometria foi extraída da referência anterior aos 7083 fs; esse tempo pertence à origem, não a este controle.</p><div class="input-downloads"><a href="inputs/en_livre_com_parede.inp" download>Baixar input completo</a><a href="estruturas/encontro_real_R1.xyz" download>Baixar XYZ de entrada · encontro_real_R1.xyz</a><a href="aula-en_livre_com_parede.zip" download>Pacote para executar</a><a href="resultados-completos.zip" download>Resultados completos deste exercício · todas as variantes</a><a class="open-input-lab" href="../../visualizador/index.html?exemplo=arquivo_en_livre_com_parede&amp;aba=trajetoria">Abrir a estrutura inicial no laboratório · ainda sem resultados</a></div></div>
-
-
-<pre><code class="language-text"># 04c: referencia independente; 97 atomos = Zn + 20 H2O + 3 en.
-# Mesmo encontro hidratado retido em todos os quatro ramos.
-# NAO e uma continuacao da nova montagem SOLVATOR de 61 atomos.
-! MD XTB2 ALPB(water) PAL8
-%maxcore 256
-%md
-  Timestep 0.25_fs
-  Randomize 93001
-  Initvel 300_K
-  Thermostat CSVR 300_K Timecon 100_fs
-  Cell Sphere 0, 0, 0, 9.0_A Spring 50.0
-  Dump Position Stride 4 Filename &quot;en_livre_com_parede-traj.xyz&quot;
-  Manage_Colvar Define 1 Distance Atom 0 Atom 61
-  Manage_Colvar Define 2 Distance Atom 0 Atom 64
-  # Controle de 3 ps sem nenhuma assistencia Zn-N.
-  Run 12000
-end
-* xyzfile 2 1 encontro_real_R1.xyz
-</code></pre>
-<ul>
-<li><strong>primeiro N assistido, sem parede:</strong> <a href="inputs/en_assistida_sem_parede.inp" download="en_assistida_sem_parede.inp">input</a> · <a href="aula-en_assistida_sem_parede.zip">pacote</a>.</li>
-</ul>
-<p><strong>Input completo · <code>en_assistida_sem_parede.inp</code> — copie e salve com esse nome.</strong></p>
-<!-- input-source: inputs/en_assistida_sem_parede.inp -->
-<div class="input-resources" data-input="exercicios/11-formacao-quelato/inputs/en_assistida_sem_parede.inp"><p><strong>en_assistida_sem_parede.inp</strong> · Input preparado, ainda não executado. Sem resultados próprios; o laboratório abre somente a estrutura inicial. A geometria foi extraída da referência anterior aos 7083 fs; esse tempo pertence à origem, não a este controle.</p><div class="input-downloads"><a href="inputs/en_assistida_sem_parede.inp" download>Baixar input completo</a><a href="estruturas/encontro_real_R1.xyz" download>Baixar XYZ de entrada · encontro_real_R1.xyz</a><a href="aula-en_assistida_sem_parede.zip" download>Pacote para executar</a><a href="resultados-completos.zip" download>Resultados completos deste exercício · todas as variantes</a><a class="open-input-lab" href="../../visualizador/index.html?exemplo=arquivo_en_assistida_sem_parede&amp;aba=trajetoria">Abrir a estrutura inicial no laboratório · ainda sem resultados</a></div></div>
-
-
-<pre><code class="language-text"># 04c: referencia independente; 97 atomos = Zn + 20 H2O + 3 en.
-# Mesmo encontro hidratado retido em todos os quatro ramos.
-# NAO e uma continuacao da nova montagem SOLVATOR de 61 atomos.
-! MD XTB2 ALPB(water) PAL8
-%maxcore 256
-%md
-  Timestep 0.25_fs
-  Randomize 93001
-  Initvel 300_K
-  Thermostat CSVR 300_K Timecon 100_fs
-  Cell None
-  Dump Position Stride 4 Filename &quot;en_assistida_sem_parede-traj.xyz&quot;
-  Manage_Colvar Define 1 Distance Atom 0 Atom 61
-  Manage_Colvar Define 2 Distance Atom 0 Atom 64
-  # Somente o primeiro N recebe forca de aproximacao durante 1 ps.
-  Restraint Add Colvar 1 Harmonic Spring 200.0 Upper Ramp 3.886868 2.2
-  Run 4000
-  # Retirar a assistencia e observar o segundo N por mais 2 ps.
-  Restraint Reset Colvar 1
-  Run 8000
-end
-* xyzfile 2 1 encontro_real_R1.xyz
-</code></pre>
-<ul>
-<li><strong>primeiro N assistido, com parede:</strong> <a href="inputs/en_assistida_com_parede.inp" download="en_assistida_com_parede.inp">input</a> · <a href="aula-en_assistida_com_parede.zip">pacote</a>.</li>
-</ul>
-<p><strong>Input completo · <code>en_assistida_com_parede.inp</code> — copie e salve com esse nome.</strong></p>
-<!-- input-source: inputs/en_assistida_com_parede.inp -->
-<div class="input-resources" data-input="exercicios/11-formacao-quelato/inputs/en_assistida_com_parede.inp"><p><strong>en_assistida_com_parede.inp</strong> · Input preparado, ainda não executado. Sem resultados próprios; o laboratório abre somente a estrutura inicial. A geometria foi extraída da referência anterior aos 7083 fs; esse tempo pertence à origem, não a este controle.</p><div class="input-downloads"><a href="inputs/en_assistida_com_parede.inp" download>Baixar input completo</a><a href="estruturas/encontro_real_R1.xyz" download>Baixar XYZ de entrada · encontro_real_R1.xyz</a><a href="aula-en_assistida_com_parede.zip" download>Pacote para executar</a><a href="resultados-completos.zip" download>Resultados completos deste exercício · todas as variantes</a><a class="open-input-lab" href="../../visualizador/index.html?exemplo=arquivo_en_assistida_com_parede&amp;aba=trajetoria">Abrir a estrutura inicial no laboratório · ainda sem resultados</a></div></div>
-
-
-<pre><code class="language-text"># 04c: referencia independente; 97 atomos = Zn + 20 H2O + 3 en.
-# Mesmo encontro hidratado retido em todos os quatro ramos.
-# NAO e uma continuacao da nova montagem SOLVATOR de 61 atomos.
-! MD XTB2 ALPB(water) PAL8
-%maxcore 256
-%md
-  Timestep 0.25_fs
-  Randomize 93001
-  Initvel 300_K
-  Thermostat CSVR 300_K Timecon 100_fs
-  Cell Sphere 0, 0, 0, 9.0_A Spring 50.0
-  Dump Position Stride 4 Filename &quot;en_assistida_com_parede-traj.xyz&quot;
-  Manage_Colvar Define 1 Distance Atom 0 Atom 61
-  Manage_Colvar Define 2 Distance Atom 0 Atom 64
-  # Somente o primeiro N recebe forca de aproximacao durante 1 ps.
-  Restraint Add Colvar 1 Harmonic Spring 200.0 Upper Ramp 3.886868 2.2
-  Run 4000
-  # Retirar a assistencia e observar o segundo N por mais 2 ps.
-  Restraint Reset Colvar 1
-  Run 8000
-end
-* xyzfile 2 1 encontro_real_R1.xyz
-</code></pre>
-<p>Os pares com/sem parede usam as mesmas posições e a mesma regra de inicialização das velocidades. A parede, quando presente, tem <strong>raio 9 Å e Spring 50</strong>. Nos inputs assistidos, o primeiro N (<strong>N 61</strong>) recebe a rampa durante <strong>1 ps</strong>; a restrição é removida e seguem <strong>2 ps livres no mesmo input</strong>, com continuidade de velocidades. <strong>N 64 não recebe guia.</strong> Nos inputs livres, nenhum N recebe restrição de coordenação.</p>
-<p>Execute um por vez e carregue os arquivos no laboratório. Registre primeiro se N 61 já está próximo na geometria de encontro; compare Zn–N 61 e Zn–N 64 ao longo do tempo. A referência pronta mostra fechamento depois da assistência; isso não garante fechamento nos novos controles livres ou sem parede. Não atribua aos novos inputs os resultados medidos anteriormente.</p>
-<p><strong>Próxima etapa do percurso:</strong> <a href="../14-zn-en-pressao/index.html">04d · en sem assistência sob 1, 1000 e 4000 bar</a>. Os três controles partem do início do sistema de 97 átomos, com en afastada; não partem do quelato final nem da geometria de encontro selecionada acima.</p>
-<!-- copyable-geometries -->
-<h2 id="geometria-copiar-e-colar-ou-baixar">Geometria: copiar e colar ou baixar</h2>
-<p>Os inputs acima usam <code>xyzfile</code>. Você pode copiar a geometria abaixo, salvá-la com o nome indicado e mantê-la na mesma pasta do input. O download é uma alternativa.</p>
-<p>Use <strong><code>encontro_real_R1.xyz</code></strong> nos controles de en e na etapa assistida; <strong><code>zn_20h2o_3en_r9.xyz</code></strong> pertence ao início afastado da sequência de hidratação. Nas continuações com <code>Restart</code>, o checkpoint indicado continua obrigatório e está nos links e pacotes acima.</p>
-<h3 id="encontro_real_r1xyz"><code>encontro_real_R1.xyz</code></h3>
-<p><a href="estruturas/encontro_real_R1.xyz" download="encontro_real_R1.xyz">Baixar a geometria, se preferir</a>.</p>
-<!-- xyz-source: estruturas/encontro_real_R1.xyz -->
-
-<pre><code class="language-text">97
-Selected R1 unbound encounter; original t=7083.0 fs; new MD time origin
-Zn  3.5975034436  1.2952864952 -4.3081669524
-O   1.1513192422  6.7132278230 -1.6597703147
-H   1.2628587275  7.4632920562 -2.2536995113
-H   1.1539388810  7.0468601583 -0.7684394292
-O  -3.7079891481  0.9648554929 -5.1720347885
-H  -3.8097207638  0.1134424250 -4.7286475770
-H  -4.0397798112  1.6570209215 -4.5602483453
-O   3.6716085082 -0.4210400580 -3.3200196010
-H   4.0730689149 -0.8304895155 -2.5518032088
-H   2.7654033762 -0.8008592713 -3.3998688486
-O   5.5526115152  1.2431077435 -4.4762839683
-H   6.2354690343  1.0681394601 -5.1016003481
-H   5.8960623463  1.4762315115 -3.5994452295
-O   3.5025786143  0.2489827292 -6.0679685001
-H   3.1639200314 -0.6597888008 -6.0932160463
-H   4.3205950935  0.1991046686 -6.5521402400
-O   3.6860368748  2.2107788815 -2.6096428789
-H   4.6333408431  2.3194264734 -2.1632094436
-H   3.3196980881  3.0440008791 -2.4845732479
-O  -3.3943047120  0.2876629512 -1.8773509693
-H  -3.2732613706  1.0425952702 -1.2876319053
-H  -2.5471553385 -0.1384959402 -1.7274552493
-O   1.5536118042  1.3531020343 -4.5657937950
-H   1.0848902447  1.1431114598 -5.3843503541
-H   0.9779628847  2.0377985698 -4.1645086500
-O   3.6482451557  3.2353552340 -5.3610779120
-H   3.5203736598  4.0736768399 -4.9720735768
-H   3.3692410508  3.3015709495 -6.2467422432
-O  -1.9026279368  3.2869130302 -0.0225985065
-H  -1.5111201397  3.5450942982  0.7845316209
-H  -1.3754817551  3.7743088584 -0.7049086108
-O   0.1691061742 -6.0530107195 -2.9515767687
-H   0.5823508648 -5.8824264757 -3.8245079840
-H   0.3017784824 -7.0074658742 -2.8908238601
-O   4.4968382423 -4.9358764855  3.1155656695
-H   4.2682034046 -4.3921457232  2.3584257096
-H   3.8260994521 -4.6378738013  3.7371223740
-O  -0.8202974437 -5.7977522591  4.3898992759
-H  -0.6936385122 -4.9495561415  3.9257937299
-H  -0.4967366463 -6.4092158602  3.7520842102
-O  -4.6842751757 -0.9425113531  6.2361239315
-H  -5.6180174500 -1.0705046691  6.4549676450
-H  -4.3238967902 -0.8909685961  7.1224600106
-O   8.1144796154 -1.9394100779  1.0349950713
-H   8.4443799943 -1.7734480108  0.1650346391
-H   8.6542427371 -2.6794129170  1.3700432941
-O  -5.9807739752  1.2801220704  2.4156555381
-H  -6.1751392794  0.9634036400  1.5217038253
-H  -6.0817018800  0.5435365736  3.0268124601
-O  -5.0681231474 -6.2465501145 -1.5763148703
-H  -4.8681337501 -5.3488288027 -1.8684750843
-H  -4.2715841681 -6.7187689270 -1.3093494240
-O  -4.8047332942  6.7009480835 -2.4148153157
-H  -4.5709200173  6.6066370964 -3.3474417529
-H  -3.9808769943  6.9670243357 -1.9700190073
-O   0.5096770482  0.9180847246 -7.4109065637
-H   0.8449751689  0.9298470790 -8.3198279614
-H  -0.3872273618  1.1913669263 -7.5758622075
-O  -3.5363282993 -5.3275244524  4.3283857497
-H  -4.1411585034 -4.6104666841  4.1626732420
-H  -2.5998312529 -5.0507438998  4.2456101698
-N   5.5220912209  1.8103200444 -0.9707356451
-C   6.7908124465  2.4930615183 -1.0467038465
-C   6.5332806840  3.9513261114 -1.4746654670
-N   5.5530512642  4.1487961713 -2.5351907988
-H   5.5168344799  0.8004979155 -0.8517541190
-H   4.9793359770  2.0969803313 -0.1718183450
-H   7.3836146576  2.5408142386 -0.1142151820
-H   7.3439176070  2.0478574626 -1.8242883459
-H   7.5310731845  4.3005910533 -1.7361874807
-H   6.1950057622  4.4994747934 -0.6422185037
-H   5.2427353424  5.0850351088 -2.4704020995
-H   5.9561567039  3.8208322945 -3.4230534433
-N   2.6636274265  0.3423606384  4.9394220531
-C   3.7218829377  1.3348386232  4.8145258353
-C   4.4195557997  1.3534229927  3.4066749220
-N   5.4072410062  2.4604878983  3.1470385634
-H   2.3534417534  0.4014264171  5.8971211895
-H   1.8890487558  0.4214525362  4.2940449603
-H   3.3321458526  2.3493060945  5.0363105398
-H   4.5322155362  1.1624926039  5.5293203949
-H   3.6777976856  1.4792163776  2.6388866029
-H   4.9611886241  0.3971032984  3.3218417250
-H   5.0263771901  3.3856922338  3.3715660654
-H   6.2813920303  2.2707898103  3.6323814770
-N  -2.9795018903  4.2319153467  5.5447701806
-C  -2.8592821731  3.9060942268  4.0941307956
-C  -3.5994332069  4.8753698351  3.0725466897
-N  -3.6820943592  6.2236315857  3.5182016890
-H  -2.5883339424  5.1316517115  5.7859980644
-H  -3.9595083218  4.2386957502  5.8405575217
-H  -1.7904282537  3.8890880724  3.8948024919
-H  -3.3510941504  2.8881738209  4.0146999556
-H  -4.6068523923  4.3550753375  2.9031923739
-H  -3.0594757614  4.7358983887  2.1237025435
-H  -4.3305110302  6.8249984730  3.0107461857
-H  -3.8995960980  6.2597304901  4.4949339828
-</code></pre>
-<h3 id="zn_20h2o_3en_r9xyz"><code>zn_20h2o_3en_r9.xyz</code></h3>
-<p><a href="estruturas/zn_20h2o_3en_r9.xyz" download="zn_20h2o_3en_r9.xyz">Baixar a geometria, se preferir</a>.</p>
-<!-- xyz-source: estruturas/zn_20h2o_3en_r9.xyz -->
-
-<pre><code class="language-text">97
-Zn2+ +20H2O +3en; separated fragments inside9A; shared replica geometry
-Zn  0.0000000000  0.0000000000  0.0000000000
-O   1.3512586725  2.7900000000  0.0000000000
-H   2.3003842161  2.9901516985  0.0000000000
-H   0.9198402204  3.6587796724  0.0000000000
-O  -1.6324187912  2.1700000000  1.4954293331
-H  -1.3322251034  3.0467655290  1.7819008971
-H  -2.5580403127  2.1246255373  1.7819008971
-O   0.2347099855  1.5500000000 -2.6743992265
-H   1.0379962107  1.7320955552 -3.1867198773
-H  -0.4786519147  1.9617552065 -3.1867198773
-O   1.7992824116  0.9300000000  2.3468452875
-H   2.4961264248  0.4268174624  2.7964181460
-H   1.7917966116  1.7894929946  2.7964181460
-O  -3.0373103958  0.3100000000 -0.5372574424
-H  -3.5412767031  1.1323901253 -0.6401770364
-H  -3.6970273736 -0.3936199730 -0.6401770364
-O   2.6025303468 -0.3100000000 -1.6555167755
-H   3.0103673614 -1.1309701756 -1.9726554522
-H   3.1917995442  0.3922000233 -1.9726554522
-O  -0.7677048422 -0.9300000000  2.8558237472
-H  -1.5062473135 -0.6198971975  3.4028989432
-H  -0.3232927615 -1.5964132595  3.4028989432
-O  -1.2373872958 -1.5500000000 -2.3825139413
-H  -2.0738217159 -1.3684200357 -2.8389196569
-H  -0.8750324808 -2.3254307259 -2.8389196569
-O   2.0795097008 -2.1700000000  0.7594336075
-H   1.9241186052 -3.1163556245  0.9049143256
-H   3.0316223575 -2.0550354418  0.9049143256
-O  -1.2490299491 -2.7900000000  0.5155814060
-H  -2.1883216869 -3.0110793200  0.6143486352
-H  -0.7882784607 -3.6378520510  0.6143486352
-O  -2.3814853186  4.1931165900 -1.3214768026
-H  -2.8723776754  4.8029423591 -0.7487314617
-H  -2.4562917100  4.5793250132 -2.2081261457
-O   1.3871593461 -4.3626535038 -2.0107320443
-H   1.4752393898 -4.5816210053 -2.9515801400
-H   1.6285855561 -5.1799920448 -1.5475138510
-O   4.8110042380  1.2380181824  0.5670530858
-H   5.4715570219  1.3875337029 -0.1273640286
-H   5.2932588665  1.3825818781  1.3961681630
-O  -4.3026380954 -1.0555811975  2.3179848480
-H  -4.4242309011 -1.5097118405  3.1664425951
-H  -5.2030952536 -0.8521936337  2.0201419279
-O   1.3438314144 -1.3263651076 -4.6297810673
-H   1.3777249695 -0.7670038704 -5.4215299121
-H   1.6291519829 -2.2007915166 -4.9377918277
-O  -0.6479903569  2.0627832061  4.5083293959
-H  -0.9123612737  2.9735122955  4.7122424759
-H  -0.5375432668  1.6420482680  5.3753262541
-O   2.7223355107 -2.1594028632  3.5952564083
-H   2.9402581122 -3.0997086347  3.6913542542
-H   3.1510773157 -1.7320423058  4.3531768649
-O  -3.2247221461  1.2246228192 -3.6195947330
-H  -3.1080046127  1.8849268999 -4.3205052397
-H  -4.1074411606  0.8552160161 -3.7784838619
-O  -1.2105131046  0.0666704752 -4.8507950968
-H  -1.6851442832 -0.6134729435 -5.3538161445
-H  -1.0234275777  0.7626508188 -5.5000333943
-O  -3.3290880750 -3.3124717278 -1.7160138815
-H  -4.1298537363 -3.6337064346 -1.2727502818
-H  -3.3191150093 -3.7780825643 -2.5668999414
-N   6.4045782233 -1.9347324243 -2.1864070923
-C   6.1632489276 -2.3423968824 -0.8131265196
-C   5.8927029728 -3.8445570009 -0.6338286728
-N   4.7248460470 -4.2337306609 -1.4146923920
-H   7.2245154973 -2.4185965676 -2.5390212270
-H   5.6191996693 -2.2432595561 -2.7515243303
-H   7.0314671179 -2.0616622179 -0.2116023002
-H   5.2992842888 -1.7780600715 -0.4494071003
-H   5.7913915177 -4.0589904672  0.4436882270
-H   6.7473648898 -4.4147628549 -1.0116561565
-H   4.5490306339 -5.2254966928 -1.3038122366
-H   3.9082653416 -3.7369336207 -1.0725514061
-N   4.3023345732  4.5193665199  1.8207810094
-C   3.7901029070  5.3793491273  2.8735764815
-C   2.2845014788  5.6726830682  2.7789858293
-N   1.9849316212  6.3174813701  1.5063558221
-H   3.8311456739  3.6211404102  1.8647042084
-H   4.0574672809  4.9329500762  0.9261556085
-H   4.0025530795  4.9098541729  3.8373635826
-H   4.3415262209  6.3231518668  2.8248787721
-H   1.9857646135  6.2722299441  3.6556774630
-H   1.7285711492  4.7301924301  2.8104211813
-H   0.9914403180  6.5051015637  1.4386873380
-H   2.4697838945  7.2080132347  1.4559269316
-N  -0.2974963908 -5.1660825696  3.9335844708
-C  -1.5683858475 -5.8202323934  3.6742436377
-C  -2.7658211849 -4.8630776319  3.5654721878
-N  -2.9100118736 -4.1081041230  4.8041481467
-H  -0.0881584772 -4.5292815577  3.1710751401
-H  -0.3982938045 -4.5969537260  4.7686283005
-H  -1.4808652677 -6.3895994581  2.7454770049
-H  -1.7481068186 -6.5255636461  4.4911958674
-H  -3.6629886610 -5.4484575441  3.3014470567
-H  -2.5837789961 -4.1443266988  2.7601194369
-H  -3.6945813221 -3.4708941539  4.7319015830
-H  -3.1027007582 -4.7469905470  5.5692409076
-</code></pre></article><nav class="route-nav route-fim" aria-label="Navegação do percurso — fim"><div class="route-status">Etapa 7 de 9 · Bloco 04c<progress class="course-progress" value="7" max="9" aria-label="Etapa 7 de 9"></progress></div><div class="route-controls"><a class="route-prev" rel="prev" href="../7-dinamica-complexo/index.html"><small>Anterior</small><span>← Zn²⁺: hidratação e paredes</span></a><a class="route-next" rel="next" href="../14-zn-en-pressao/index.html"><small>Próximo</small><span>Zn–en sem assistência: 1 / 1000 / 4000 bar →</span></a></div><a class="route-map" href="../index.html">Mapa completo do percurso</a></nav></main></div><footer>Henrique de Castro Silva Junior e Virginia Camila Rufino Ferreira · ORCA 6.1.1 · Materiais e dados locais; links externos levam à documentação oficial.</footer></body></html>
+<p><strong>Próxima etapa:</strong> <a href="../14-zn-en-pressao/index.html">04d · en sem assistência sob 1, 1000 e 4000 bar</a>. Os controles de 04d começam dos fragmentos afastados da referência anterior, antes do encontro selecionado usado aqui.</p></article><nav class="route-nav route-fim" aria-label="Navegação do percurso — fim"><div class="route-status">Etapa 7 de 9 · Bloco 04c<progress class="course-progress" value="7" max="9" aria-label="Etapa 7 de 9"></progress></div><div class="route-controls"><a class="route-prev" rel="prev" href="../7-dinamica-complexo/index.html"><small>Anterior</small><span>← Zn²⁺: hidratação e paredes</span></a><a class="route-next" rel="next" href="../14-zn-en-pressao/index.html"><small>Próximo</small><span>Zn–en sem assistência: 1 / 1000 / 4000 bar →</span></a></div><a class="route-map" href="../index.html">Mapa completo do percurso</a></nav></main></div><footer>Henrique de Castro Silva Junior e Virginia Camila Rufino Ferreira · ORCA 6.1.1 · Materiais e dados locais; links externos levam à documentação oficial.</footer></body></html>

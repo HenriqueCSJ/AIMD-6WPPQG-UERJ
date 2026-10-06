@@ -33,6 +33,30 @@ def protocol(path):
 
 
 class ExerciseResourcesTests(unittest.TestCase):
+    def test_chelation_classroom_has_two_minimal_inputs_and_all_nine_original_support_protocols_remain_copyable(self):
+        folder = EX / '11-formacao-quelato'
+        main = (folder / 'README.md').read_text(encoding='utf-8')
+        history = (folder / 'historico.md').read_text(encoding='utf-8')
+        support = (folder / 'apoio.md').read_text(encoding='utf-8')
+        self.assertEqual(len(BLOCK.findall(main)), 2)
+        self.assertEqual(len(BLOCK.findall(history)), 5)
+        self.assertEqual(len(BLOCK.findall(support)), 4)
+        self.assertLess(main.index('Ajudamos o primeiro N'), main.index('Abrir o percurso'))
+        self.assertLess(main.index('seis águas já coordenadas'), main.index('Abrir o percurso'))
+        self.assertGreater(main.index('Como a aproximação foi forçada?'), main.index('Abrir o percurso'))
+        self.assertNotIn('7083', main)
+        self.assertNotIn('CoordNumber', main)
+        self.assertNotIn('Define 2', main)
+        self.assertNotIn('Define 3', main)
+        self.assertNotIn('Reset Colvar 3', main)
+        self.assertIn('en_aproximar_N1', main)
+        self.assertIn('en_continuar_sem_mola', main)
+        self.assertIn('9864', history)
+        self.assertIn('ainda não foram executados', support)
+        with zipfile.ZipFile(folder / 'resultados-completos.zip') as archive:
+            for name in ['historico.md', 'apoio.md']:
+                self.assertEqual(archive.read(name), (folder / name).read_bytes())
+
     def test_raw_solvator_packages_include_the_native_scf_logs(self):
         folder = EX / '7-dinamica-complexo'
         with zipfile.ZipFile(folder / 'resultados-completos.zip') as combined:

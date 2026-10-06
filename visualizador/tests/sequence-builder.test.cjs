@@ -35,3 +35,17 @@ test('a normal restart may begin at the next recorded dump without adding a fabr
  assert.equal(frames.length,13);assert.equal(frames.find(frame=>frame.time===3).sourceKey,'before');assert.equal(frames.find(frame=>frame.sourceKey==='after').time,3.5);
  course.sequenceSources[1].velocityReset=true;assert.throws(()=>buildSequence(folder,'sequence',course),/missing boundary interval/);
 });
+
+test('a continuous restart retains its original physical clocks and forbids offsets or a velocity reset',t=>{
+ const {folder,course}=fixture(t);
+ course.metadata.clockMode='physical_continuous';
+ const source=course.sequenceSources[1];source.offsetFs=0;source.startFs=3;source.endFs=6;source.velocityReset=false;
+ const xyz=path.join(folder,'after.xyz'),csv=path.join(folder,'after.csv');
+ fs.writeFileSync(xyz,fs.readFileSync(xyz,'utf8').replace(/Step (\d+) t = ([\d.]+)/g,(_,step,time)=>`Step ${Number(step)+6} t = ${Number(time)+3}`));
+ fs.writeFileSync(csv,fs.readFileSync(csv,'utf8').replace(/^(\d+);([\d.]+);/gm,(_,step,time)=>`${Number(step)+6};${Number(time)+3};`));
+ const result=buildSequence(folder,'continuous',course);
+ assert.equal(result.xyz.frames.length,13);assert.ok(result.xyz.frames.every(frame=>frame.time===frame.sourceTime));
+ assert.equal(result.xyz.frames.at(-1).sourceStep,12);
+ source.offsetFs=3;assert.throws(()=>buildSequence(folder,'continuous',course),/zero offsets/);
+ source.offsetFs=0;source.velocityReset=true;assert.throws(()=>buildSequence(folder,'continuous',course),/velocity reset/);
+});

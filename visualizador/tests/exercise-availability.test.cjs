@@ -19,7 +19,7 @@ test('exercise links resolve retained data while the main menu stays focused',()
  const html=read('visualizador/index.html'),select=html.match(/<select id="example-select">([\s\S]*?)<\/select>/)[1];
  const options=[...select.matchAll(/<option value="([^"]+)"/g)].map(m=>m[1]);
  assert.equal(new Set(options).size,options.length,'No duplicate menu choices');
- const directOnly=['water_nve','water_csvr','solvator','complex','complex_short','solvator_two','water_short','ethanol_short','proton_shared_short','chelation_previous','zn_hydration_radial_history'];
+ const directOnly=['water_nve','water_csvr','solvator','complex','complex_short','solvator_two','water_short','ethanol_short','proton_shared_short','chelation_previous','chelation_history','zn_hydration_radial_history'];
  const inputPresets=Object.keys(JSON.parse(read('exercicios/arquivos-exercicios.json')).presets);
  assert.deepEqual([...options,...directOnly,...inputPresets].sort(),Object.keys(store.presets).sort());
  const main=select.match(/<optgroup label="Durante a aula · cinco blocos">([\s\S]*?)<\/optgroup>/)[1];
@@ -90,7 +90,7 @@ test('the primary SOLVATOR contains only the isolated ion and unmodified ORCA as
  assert.ok(raw.resultXYZ.some(file=>file.path.endsWith('zn_ion_20h2o_solvator.solvator.xyz')));
  const menu=read('visualizador/index.html').match(/<optgroup label="Durante a aula · cinco blocos">([\s\S]*?)<\/optgroup>/)[1];
  assert.doesNotMatch(menu,/value="(?:solvator|complex|complex_short|solvator_two)"/);
- const lesson=read('exercicios/11-formacao-quelato/README.md');assert.match(lesson,/referência independente de 97 átomos/);assert.match(lesson,/não foi calculada a partir da nova saída do SOLVATOR/);
+ const lesson=read('exercicios/11-formacao-quelato/README.md');assert.match(lesson,/totalizando 97 átomos/);assert.match(lesson,/não é uma amostra aleatória nem uma continuação dos exercícios 04a–b com 61 átomos/);
 });
 
 

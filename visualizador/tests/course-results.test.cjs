@@ -39,7 +39,7 @@ test('chelation fixture preserves the assisted interval and persistent same-liga
  const {xyz}=data.get('chelation'),run=bundle('chelation');
  assert.equal(xyz.elements[0],'Zn');for(const id of [61,64])assert.equal(xyz.elements[id],'N');for(const id of [7,25])assert.equal(xyz.elements[id],'O');
  assert.deepEqual(run.metadata.stages.map(s=>[s.startFs,s.endFs]),[[0,1000],[1000,3000]]);
- assert.match(run.metadata.stages[0].label,/assistida/);assert.match(run.metadata.stages[1].label,/Sem viés/);
+ assert.match(run.metadata.stages[0].label,/Primeiro N assistido/);assert.match(run.metadata.stages[1].label,/Segundo N livre da restrição/);
  const first=xyz.frames.find(f=>distance(f,0,61)<2.6&&distance(f,0,64)<2.6);assert.equal(first.time,1554);
  assert.ok(xyz.frames.filter(f=>f.time>=1554).every(f=>distance(f,0,61)<2.6&&distance(f,0,64)<2.6));
  for(const id of [7,25])assert.ok(distance(xyz.frames.at(-1),0,id)>3);

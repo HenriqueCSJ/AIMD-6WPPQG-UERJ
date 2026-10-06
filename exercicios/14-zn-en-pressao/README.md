@@ -8,7 +8,7 @@
 
 ## 1. Compare o mesmo início, sem guiar os N
 
-Os três casos começam na **mesma geometria inicial de 97 átomos** usada no começo da referência de 04c, com as águas e os ligantes afastados. Eles não começam no quelato final nem na geometria de encontro selecionada para assistir o primeiro N. A preparação de 61 átomos de 04a–b também é outro sistema.
+Os três casos começam na **mesma geometria de 97 átomos dos fragmentos inicialmente afastados** da referência anterior, antes da hidratação e do encontro selecionado usado em 04c. Eles não começam no quelato final nem na geometria de encontro selecionada para assistir o primeiro N. A preparação de 61 átomos de 04a–b também é outro sistema.
 
 **Nenhum caso contém restrição Zn–N.** Todos usam GFN2-xTB/ALPB(water), timestep de **0,25 fs**, CSVR a **300 K**, esfera inicial de **9 Å**, `Spring 50` e **5 ps**. Compare os alvos externos de **1, 1000 e 4000 bar** mantendo as demais escolhas do protocolo.
 

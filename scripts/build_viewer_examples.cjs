@@ -14,8 +14,9 @@ const specs=[
  ['zn_cell_none','C3 · Continuação sem parede','13-cell-pressao'],
  ['proton_shared_10ps','H₅O₂⁺ · próton compartilhado · 10 ps','10-proton-compartilhado'],
  ['proton_shared','H₅O₂⁺ · próton compartilhado · 2 ps','10-proton-compartilhado'],
- ['chelation','Zn–en · aproximação assistida → quelato · 3 ps','11-formacao-quelato'],
- ['chelation_continuous','04c · Referência independente · primeiro N assistido → segundo N livre','11-formacao-quelato'],
+ ['chelation','Histórico 04c · dois inputs originais · 3 ps','11-formacao-quelato'],
+ ['chelation_simple','04c · Dois inputs mínimos: primeiro N assistido → segundo N livre · 3 ps','11-formacao-quelato'],
+ ['chelation_continuous','Histórico 04c · hidratação → encontro → quelação','11-formacao-quelato'],
  ['proton_droplet_300k','Gota protonada · 300 K · controle','12-gota-protonada'],
  ['proton_droplet_400k','Gota protonada · rampa até 400 K','12-gota-protonada'],
  ['proton_droplet_500k','Gota protonada · rampa até 500 K','12-gota-protonada'],
@@ -104,6 +105,7 @@ for(const [key,label,lesson,basename=key] of specs){
  // Joined trajectories have verified stage metadata, not a fabricated whole-run .out.
  if(course){
   run.metadata=course.metadata;run.warnings.push(...(course.warnings||[]));
+  if(key==='chelation')run.metadata={...run.metadata,stages:run.metadata.stages.map((stage,i)=>({...stage,label:i===0?'Primeiro N assistido':'Segundo N livre da restrição'}))};
   // A joined file retains per-stage conserved-energy references. Break charts at
   // the documented boundaries without shifting any measured value or timestamp.
   const breaks=course.energyBreaksAfterFs||[];
@@ -135,7 +137,7 @@ const presets={
  cell_release:{runs:['zn_cell_fixed','zn_cell_none'],tab:'trajectory'},
  proton_shared:{runs:['proton_shared_10ps'],tab:'trajectory'},
  proton_shared_short:{runs:['proton_shared'],tab:'trajectory'},
- chelation:{runs:['chelation_continuous'],tab:'trajectory'},chelation_previous:{runs:['chelation'],tab:'trajectory'},
+ chelation:{runs:['chelation_simple'],tab:'trajectory',loadMessage:'Encontro preparado → primeiro N assistido por 1 ps → segundo N livre da restrição por 2 ps. A força extra atua no par Zn 0–N 61; compare as duas distâncias Zn–N.'},chelation_previous:{runs:['chelation'],tab:'trajectory'},chelation_history:{runs:['chelation_continuous'],tab:'trajectory',returnRoute:{href:'../exercicios/11-formacao-quelato/historico.html',label:'Histórico 04c · preparação do encontro'},loadMessage:'Sequência histórica de 0–10083 fs, com seleção do encontro e velocidades reinicializadas aos 7083 fs. Consulte essa intervenção no histórico.'},
  proton_droplet:{runs:['proton_droplet_300k'],tab:'trajectory'},
  proton_droplet_400k:{runs:['proton_droplet_400k'],tab:'trajectory'},
  proton_droplet_500k:{runs:['proton_droplet_500k'],tab:'trajectory'},
@@ -192,7 +194,7 @@ for(const [input,item] of Object.entries(resources.inputs)){
 const partialXYZPaths=new Set(Object.values(runs).filter(run=>run.resultState==='partial_interrupted_md'||run.out?.metadata?.failed===true).flatMap(run=>run.files.filter(file=>file.kind==='xyz').map(file=>file.path)));
 for(const [key,run] of Object.entries(runs)){
  const initial=key==='zn2_isolado'||['initial_structure','failed_scc_zero_md_steps','failed_diagnostic_before_md'].includes(run.resultState);
- run.resultXYZ=initial?[]:run.files.filter(file=>file.path.endsWith('.xyz')&&(file.kind==='xyz'||(file.kind==='stage-output'&&/-traj\.xyz$/.test(file.path)))).map(file=>({path:file.path,name:file.name,label:`Baixar XYZ do resultado${partialXYZPaths.has(file.path)?' parcial':''} · ${file.name}`}));
+ run.resultXYZ=initial?[]:run.files.filter(file=>file.path.endsWith('.xyz')&&(file.kind==='xyz'||(file.kind==='stage-output'&&/-traj\.xyz$/.test(file.path)))).map(file=>({path:file.path,name:file.name,label:`Baixar XYZ do resultado${partialXYZPaths.has(file.path)?' parcial':''} · ${key==='chelation_simple'&&file.name==='chelation_simple-traj.xyz'?'reunião das duas etapas · ':''}${file.name}`}));
 }
 Object.assign(presets,resources.presets);
 for(const [key,preset] of Object.entries(resources.presets))for(const runkey of preset.runs)if(!runs[runkey])throw new Error(`${key}: missing reference ${runkey}`);
@@ -208,7 +210,7 @@ for(const [input,item] of Object.entries(resources.inputs)){
 }
 // Ordinary scripts, rather than fetch(), preserve direct file:// use offline.
 // The small manifest is loaded at startup; calculations are loaded on demand.
-const version='20261006-solvator-direto',sources={},folder=path.join(root,'visualizador/examples');
+const version='20261006-en-minimal',sources={},folder=path.join(root,'visualizador/examples');
 fs.mkdirSync(folder,{recursive:true});let totalBytes=0;
 for(const [key,run] of Object.entries(runs)){
  const filename=`${key}.js`,full=path.join(folder,filename);

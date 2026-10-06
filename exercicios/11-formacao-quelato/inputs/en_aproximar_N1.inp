@@ -1,0 +1,14 @@
+! MD XTB2 ALPB(water) PAL8
+%maxcore 256
+%md
+  Timestep 0.25_fs
+  Randomize 93001
+  Initvel 300_K
+  Thermostat CSVR 300_K Timecon 100_fs
+  Walls Sphere 0, 0, 0, 9.0_A Spring 50.0
+  Dump Position Stride 4 Filename "en_aproximar_N1-traj.xyz"
+  Manage_Colvar Define 1 Distance Atom 0 Atom 61
+  Restraint Add Colvar 1 Harmonic Spring 200.0 Upper Ramp 3.886868 2.2
+  Run 4000
+end
+* xyzfile 2 1 encontro_real_R1.xyz

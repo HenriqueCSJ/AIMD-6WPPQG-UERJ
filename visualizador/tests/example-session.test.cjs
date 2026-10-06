@@ -683,8 +683,8 @@ function retainedRun(key){
  return JSON.parse(JSON.stringify(context.window.AIMD_EXAMPLES.runs[key]));
 }
 
-test('the chelation guide measures the two departing waters requested by the exercise',async()=>{
- const ui=session({inspectState:true}),load=ui.choose('chelation'),run=retainedRun('chelation_continuous');
+test('the historical chelation guide measures the two departing waters retained for further study',async()=>{
+ const ui=session({inspectState:true}),load=ui.choose('chelation_history'),run=retainedRun('chelation_continuous');
  ui.requests[0].resolve({config:{runs:[run.key]},runs:[run]});await load;ui.nodes['tab-distance'].fire('click');
  const pairs=JSON.parse(JSON.stringify(ui.state.pairs[ui.state.runs[0].id]));
  assert.deepEqual(pairs,[[0,61],[0,64],[0,7],[0,25]]);
@@ -699,6 +699,25 @@ test('the chelation guide measures the two departing waters requested by the exe
  }
  assert.match(ui.nodes['energy-guide'].innerHTML,/O 7.*O 25/);
  assert.doesNotMatch(ui.nodes['energy-guide'].innerHTML,/O 19|N 31|N 34/);
+});
+
+test('classroom chelation starts at zero with two N distances and repeats each real 1 ps / 2 ps phase',async()=>{
+ const ui=session({inspectState:true}),load=ui.choose('chelation',true),run=retainedRun('chelation_simple');
+ ui.requests[0].resolve({config:{runs:[run.key]},runs:[run]});await load;
+ assert.equal(ui.state.frame,0);assert.equal(ui.nodes['playback-interval'].options.length,3);
+ ui.nodes['tab-energy'].fire('click');assert.match(ui.nodes['energy-guide'].innerHTML,/par Zn 0–N 61/);
+ ui.nodes['tab-distance'].fire('click');
+ assert.deepEqual(JSON.parse(JSON.stringify(ui.state.pairs[ui.state.runs[0].id])),[[0,61],[0,64]]);
+ ui.nodes['tab-trajectory'].fire('click');
+ ui.nodes['playback-duration'].value='60';ui.nodes['playback-repeat'].checked=true;ui.nodes['playback-duration'].fire('change');
+ for(const [stage,start,end] of [['stage-0',0,1000],['stage-1',1000,3000]]){
+  ui.nodes['playback-interval'].value=stage;ui.nodes['playback-interval'].fire('change');
+  assert.equal(ui.state.runs[0].xyz.frames[ui.state.frame].time,start);
+  ui.nodes['play-button'].fire('click');ui.animationTick(0);ui.animationTick(30000);
+  const time=ui.state.runs[0].xyz.frames[ui.state.frame].time;assert.ok(time>=start&&time<=end);
+  ui.animationTick(60000);assert.equal(ui.state.runs[0].xyz.frames[ui.state.frame].time,start);
+  ui.nodes['play-button'].fire('click');
+ }
 });
 
 test('retained thermal-stage boundaries display recorded energy and temperature without losing rows',async()=>{

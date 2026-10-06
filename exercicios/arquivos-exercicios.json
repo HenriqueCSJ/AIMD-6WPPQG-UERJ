@@ -1800,6 +1800,58 @@
       "resultsPackage": "exercicios/7-dinamica-complexo/resultados-completos.zip",
       "case": "zn_solv_h2o_spring200",
       "casePackage": "exercicios/7-dinamica-complexo/resultado-zn_solv_h2o_spring200.zip"
+    },
+    "exercicios/11-formacao-quelato/inputs/en_aproximar_N1.inp": {
+      "structures": [
+        "exercicios/11-formacao-quelato/estruturas/encontro_real_R1.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_en_aproximar_N1",
+      "state": "complete_md",
+      "status": "Input mínimo executado; resultados próprios disponíveis.",
+      "resultsPackage": "exercicios/11-formacao-quelato/resultados-completos.zip",
+      "case": "en_aproximar_N1",
+      "casePackage": "exercicios/11-formacao-quelato/resultado-en_aproximar_N1.zip"
+    },
+    "exercicios/11-formacao-quelato/resultados/chelation_simple/etapas/en_aproximar_N1/en_aproximar_N1.inp": {
+      "structures": [
+        "exercicios/11-formacao-quelato/estruturas/encontro_real_R1.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_en_aproximar_N1",
+      "state": "complete_md",
+      "status": "Input mínimo executado; resultados próprios disponíveis.",
+      "resultsPackage": "exercicios/11-formacao-quelato/resultados-completos.zip",
+      "case": "en_aproximar_N1",
+      "casePackage": "exercicios/11-formacao-quelato/resultado-en_aproximar_N1.zip"
+    },
+    "exercicios/11-formacao-quelato/inputs/en_continuar_sem_mola.inp": {
+      "structures": [
+        "exercicios/11-formacao-quelato/estruturas/encontro_real_R1.xyz"
+      ],
+      "dependencies": [
+        "exercicios/11-formacao-quelato/inputs/en_aproximar_N1.mdrestart"
+      ],
+      "preset": "arquivo_en_continuar_sem_mola",
+      "state": "complete_md",
+      "status": "Input mínimo executado; resultados próprios disponíveis.",
+      "resultsPackage": "exercicios/11-formacao-quelato/resultados-completos.zip",
+      "case": "en_continuar_sem_mola",
+      "casePackage": "exercicios/11-formacao-quelato/resultado-en_continuar_sem_mola.zip"
+    },
+    "exercicios/11-formacao-quelato/resultados/chelation_simple/etapas/en_continuar_sem_mola/en_continuar_sem_mola.inp": {
+      "structures": [
+        "exercicios/11-formacao-quelato/estruturas/encontro_real_R1.xyz"
+      ],
+      "dependencies": [
+        "exercicios/11-formacao-quelato/inputs/en_aproximar_N1.mdrestart"
+      ],
+      "preset": "arquivo_en_continuar_sem_mola",
+      "state": "complete_md",
+      "status": "Input mínimo executado; resultados próprios disponíveis.",
+      "resultsPackage": "exercicios/11-formacao-quelato/resultados-completos.zip",
+      "case": "en_continuar_sem_mola",
+      "casePackage": "exercicios/11-formacao-quelato/resultado-en_continuar_sem_mola.zip"
     }
   },
   "newRuns": [
@@ -2052,6 +2104,26 @@
       "out": "exercicios/1-agua-dft/verificacao-dump/probe_properties.out",
       "energy_csv": null,
       "normal": false
+    },
+    {
+      "runkey": "en_aproximar_N1",
+      "label": "04c · Primeiro N assistido · 1 ps",
+      "state": "complete_md",
+      "out": "exercicios/11-formacao-quelato/resultados/chelation_simple/etapas/en_aproximar_N1/en_aproximar_N1.out",
+      "energy_csv": "exercicios/11-formacao-quelato/resultados/chelation_simple/etapas/en_aproximar_N1/en_aproximar_N1-md-ener.csv",
+      "xyz": "exercicios/11-formacao-quelato/resultados/chelation_simple/etapas/en_aproximar_N1/en_aproximar_N1-traj.xyz",
+      "normal": true,
+      "frames": 1001
+    },
+    {
+      "runkey": "en_continuar_sem_mola",
+      "label": "04c · Segundo N livre da restrição · 2 ps",
+      "state": "complete_md",
+      "out": "exercicios/11-formacao-quelato/resultados/chelation_simple/etapas/en_continuar_sem_mola/en_continuar_sem_mola.out",
+      "energy_csv": "exercicios/11-formacao-quelato/resultados/chelation_simple/etapas/en_continuar_sem_mola/en_continuar_sem_mola-md-ener.csv",
+      "xyz": "exercicios/11-formacao-quelato/resultados/chelation_simple/etapas/en_continuar_sem_mola/en_continuar_sem_mola-traj.xyz",
+      "normal": true,
+      "frames": 2000
     }
   ],
   "presets": {
@@ -2207,8 +2279,8 @@
       ],
       "tab": "trajectory",
       "returnRoute": {
-        "href": "../exercicios/11-formacao-quelato/index.html",
-        "label": "04c · en: primeiro N assistido, segundo N livre"
+        "href": "../exercicios/11-formacao-quelato/apoio.html#en_assistida_com_parede",
+        "label": "Apoio 04c · controles preparados"
       },
       "loadMessage": "Input preparado, ainda não executado. Sem resultados próprios; o laboratório abre somente a estrutura inicial. A geometria foi extraída da referência anterior aos 7083 fs; esse tempo pertence à origem, não a este controle."
     },
@@ -2218,8 +2290,8 @@
       ],
       "tab": "trajectory",
       "returnRoute": {
-        "href": "../exercicios/11-formacao-quelato/index.html",
-        "label": "04c · en: primeiro N assistido, segundo N livre"
+        "href": "../exercicios/11-formacao-quelato/apoio.html#en_assistida_sem_parede",
+        "label": "Apoio 04c · controles preparados"
       },
       "loadMessage": "Input preparado, ainda não executado. Sem resultados próprios; o laboratório abre somente a estrutura inicial. A geometria foi extraída da referência anterior aos 7083 fs; esse tempo pertence à origem, não a este controle."
     },
@@ -2229,8 +2301,8 @@
       ],
       "tab": "trajectory",
       "returnRoute": {
-        "href": "../exercicios/11-formacao-quelato/index.html",
-        "label": "04c · en: primeiro N assistido, segundo N livre"
+        "href": "../exercicios/11-formacao-quelato/apoio.html#en_livre_com_parede",
+        "label": "Apoio 04c · controles preparados"
       },
       "loadMessage": "Input preparado, ainda não executado. Sem resultados próprios; o laboratório abre somente a estrutura inicial. A geometria foi extraída da referência anterior aos 7083 fs; esse tempo pertence à origem, não a este controle."
     },
@@ -2240,8 +2312,8 @@
       ],
       "tab": "trajectory",
       "returnRoute": {
-        "href": "../exercicios/11-formacao-quelato/index.html",
-        "label": "04c · en: primeiro N assistido, segundo N livre"
+        "href": "../exercicios/11-formacao-quelato/apoio.html#en_livre_sem_parede",
+        "label": "Apoio 04c · controles preparados"
       },
       "loadMessage": "Input preparado, ainda não executado. Sem resultados próprios; o laboratório abre somente a estrutura inicial. A geometria foi extraída da referência anterior aos 7083 fs; esse tempo pertence à origem, não a este controle."
     },
@@ -2251,8 +2323,8 @@
       ],
       "tab": "trajectory",
       "returnRoute": {
-        "href": "../exercicios/11-formacao-quelato/index.html",
-        "label": "04c · en: primeiro N assistido, segundo N livre"
+        "href": "../exercicios/11-formacao-quelato/historico.html#original-m01a",
+        "label": "Histórico 04c · inputs originais com registros extras"
       },
       "loadMessage": "Dinâmica executada; resultados disponíveis."
     },
@@ -2262,8 +2334,8 @@
       ],
       "tab": "trajectory",
       "returnRoute": {
-        "href": "../exercicios/11-formacao-quelato/index.html",
-        "label": "04c · en: primeiro N assistido, segundo N livre"
+        "href": "../exercicios/11-formacao-quelato/historico.html#original-m02",
+        "label": "Histórico 04c · inputs originais com registros extras"
       },
       "loadMessage": "Dinâmica executada; resultados disponíveis."
     },
@@ -2273,8 +2345,8 @@
       ],
       "tab": "trajectory",
       "returnRoute": {
-        "href": "../exercicios/11-formacao-quelato/index.html",
-        "label": "04c · en: primeiro N assistido, segundo N livre"
+        "href": "../exercicios/11-formacao-quelato/historico.html#r9_rep1_00500_05000fs",
+        "label": "Histórico 04c · preparação do encontro"
       },
       "loadMessage": "Dinâmica executada; resultados disponíveis."
     },
@@ -2284,8 +2356,8 @@
       ],
       "tab": "trajectory",
       "returnRoute": {
-        "href": "../exercicios/11-formacao-quelato/index.html",
-        "label": "04c · en: primeiro N assistido, segundo N livre"
+        "href": "../exercicios/11-formacao-quelato/historico.html#r9_rep1_05000_10000fs",
+        "label": "Histórico 04c · preparação do encontro"
       },
       "loadMessage": "Execução interrompida: trajetória até 9864 fs; não completou 10000 fs."
     },
@@ -2295,8 +2367,8 @@
       ],
       "tab": "trajectory",
       "returnRoute": {
-        "href": "../exercicios/11-formacao-quelato/index.html",
-        "label": "04c · en: primeiro N assistido, segundo N livre"
+        "href": "../exercicios/11-formacao-quelato/historico.html#r9_rep1_piloto_0500fs",
+        "label": "Histórico 04c · preparação do encontro"
       },
       "loadMessage": "Dinâmica executada; resultados disponíveis."
     },
@@ -2887,6 +2959,28 @@
         "label": "04b · MD diretamente do SOLVATOR"
       },
       "loadMessage": "MD executada diretamente da saída SOLVATOR, sem ajuste das águas; 1 ps."
+    },
+    "arquivo_en_aproximar_N1": {
+      "runs": [
+        "en_aproximar_N1"
+      ],
+      "tab": "trajectory",
+      "returnRoute": {
+        "href": "../exercicios/11-formacao-quelato/index.html#primeiro-n",
+        "label": "04c · primeiro N assistido, segundo N livre"
+      },
+      "loadMessage": "Input mínimo executado; resultados próprios disponíveis."
+    },
+    "arquivo_en_continuar_sem_mola": {
+      "runs": [
+        "en_continuar_sem_mola"
+      ],
+      "tab": "trajectory",
+      "returnRoute": {
+        "href": "../exercicios/11-formacao-quelato/index.html#segundo-n",
+        "label": "04c · primeiro N assistido, segundo N livre"
+      },
+      "loadMessage": "Input mínimo executado; resultados próprios disponíveis."
     }
   }
 }

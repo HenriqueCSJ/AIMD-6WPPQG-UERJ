@@ -1,0 +1,26 @@
+{
+  "frame_resolution_fs": 1,
+  "cutoff_A": 2.6,
+  "initial_water_count": 6,
+  "first_N_contacts_fs": {
+    "61": 540.0,
+    "64": 1554.0
+  },
+  "terminal_bidentate_start_fs": 1554.0,
+  "end_fs": 3000.0,
+  "final_water_indices": [
+    10,
+    13,
+    16,
+    22
+  ],
+  "force_applied_only_to_pair": [
+    0,
+    61
+  ],
+  "sequential_runs": true,
+  "clock_offsets_fs": [
+    0,
+    0
+  ]
+}

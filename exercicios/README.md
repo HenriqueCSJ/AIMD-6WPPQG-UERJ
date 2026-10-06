@@ -15,7 +15,7 @@ Use **Próximo** no topo ou no fim de cada atividade. O indicador **Etapa X de 9
 
 **[Abrir o caderno completo em PDF](../materiais/caderno-aimd-orca-tablet.pdf)** · [Baixar os onze capítulos separados (ZIP)](../materiais/capitulos-aimd-tablet.zip)
 
-88 páginas em formato A5, com explicações, interpretações e respostas comentadas. O PDF acompanha as nove etapas, incluindo o SOLVATOR direto, a hidratação com diferentes paredes e a etapa 04d em três pressões. Os capítulos trazem links para baixar os XYZ dos resultados. Cell tem um capítulo próprio com C1 → C2 → C3; o dump é um único complemento no capítulo da água. Sumário e marcadores são clicáveis. Versão de estudo atualizada em **6 de outubro de 2026**.
+85 páginas em formato A5, com explicações, interpretações e respostas comentadas. O PDF acompanha as nove etapas, incluindo o SOLVATOR direto, a hidratação com diferentes paredes e a etapa 04d em três pressões. O capítulo de quelação começa no encontro preparado e usa um relógio de 0–3 ps: assistência ao primeiro N durante 1 ps e observação após a retirada por 2 ps. Os capítulos trazem links para baixar os XYZ dos resultados. Cell tem um capítulo próprio com C1 → C2 → C3; o dump é um único complemento no capítulo da água. Sumário e marcadores são clicáveis. Versão de estudo atualizada em **6 de outubro de 2026**.
 
 ## Durante a aula
 
