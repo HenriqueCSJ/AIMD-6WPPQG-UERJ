@@ -892,3 +892,85 @@ test('a wall appears when the output is added after its trajectory without chang
  await upload(ui,[out]);assert.equal(curves.length,3,'No duplicate outlines on reimport');
  ui.nodes['clear-button'].fire('click');assert.equal(curves.length,0);assert.equal(ui.state.wallSphere,null);
 });
+
+test('dynamic walls use the current density, remove missing states, and retain the camera while seeking',async()=>{
+ const curves=[];let atoms=[],fits=0,removed=0;
+ const model={addAtoms(values){atoms=values;},selectedAtoms(){return atoms;},setStyle(){},setClickable(){}};
+ const viewer={setProjection(){},getView(){return [0,0,0,0,0,0,1,0];},setView(){},rotate(){},zoomTo(){fits++;},zoom(){},render(){},resize(){},removeAllModels(){},removeAllShapes(){curves.length=0;},addModel(){return model;},addCurve(value){curves.push(value);return value;},removeShape(shape){const index=curves.indexOf(shape);if(index>=0){curves.splice(index,1);removed++;}}};
+ const ui=session({inspectState:true,molecularViewer:viewer});
+ for(const name of ['time-fs','time-ps','time-s','temperature','kinetic','potential','total','atoms'])ui.nodes['frame-'+name]=new Element();
+ const xyz=inputFile('cell-traj.xyz',[0,1,2,3].map(step=>`2\nStep ${step} t=${step*.5} fs\nO 0 0 0\nH 0 0 1\n`).join(''));
+ const csv=inputFile('cell-md-ener.csv','# Step; Sim. Time; E_Tot; Av.Press.; Cell Dens.\n0;0;-1;0;.2645\n1;.5;-1.01;478.5;.2903\n2;1;-1.02;;\n3;1.5;-1.03;500;.3');
+ const out=inputFile('cell.out',`Program Version 6.1.1
+| 1> ! XTB2 MD
+| 2> %md
+| 3> Thermostat CSVR 300_K Timecon 100_fs
+| 4> Cell Sphere 0, 0, 0, 3_A Spring 10 Elastic 5_fs, 0.001 Pressure 1000
+| 5> Run 3
+| 6> end
+>>> Initial Wall Info >>>
+    Active wall has spherical geometry.
+    Wall centered at ( 0.000 | 0.000 | 0.000 ) with radius 3.000 Angstrom.
+    Wall volume:     113.097 Angstrom^3
+    Cell mass density: 0.2645 g/cm^3
+    Wall is elastic with t_avg = 5.0 fs and c_response = 0.00100 Angstrom bar^-1.
+    External pressure is 1000.00 bar (isotropic).
+<<< Initial Wall Info <<<
+ORCA TERMINATED NORMALLY`);
+ await upload(ui,[xyz,csv,out]);assert.equal(curves.length,3);assert.equal(fits,1);
+ const originalCurves=curves.slice();
+ ui.nodes['frame-slider'].value='1';ui.nodes['frame-slider'].fire('input');
+ assert.equal(curves.length,3);assert.equal(removed,3);assert.equal(fits,1);
+ assert.ok(curves.every(curve=>!originalCurves.includes(curve)));
+ const radius=3*Math.cbrt(.2645/.2903);
+ for(const curve of curves)for(const point of curve.points)assert.ok(Math.abs(Math.hypot(point.x,point.y,point.z)-radius)<1e-12);
+ assert.match(ui.nodes['cell-status'].textContent,/Raio reconstruído da densidade/);
+ assert.match(ui.nodes['cell-status'].textContent,/478.5 bar.*alvo 1000 bar/);
+ assert.match(ui.nodes['molecule-legend'].innerHTML,/reconstruído/);
+ ui.nodes['frame-slider'].value='2';ui.nodes['frame-slider'].fire('input');
+ assert.equal(curves.length,0);assert.equal(fits,1);assert.match(ui.nodes['cell-status'].textContent,/sem estado correspondente/);
+ assert.doesNotMatch(ui.nodes['molecule-legend'].innerHTML,/raio/);
+ ui.nodes['frame-slider'].value='3';ui.nodes['frame-slider'].fire('input');
+ assert.equal(curves.length,3);assert.equal(fits,1);
+ ui.nodes['clear-button'].fire('click');assert.equal(curves.length,0);assert.equal(ui.nodes['cell-status'].hidden,true);
+});
+
+test('every built-in preset returns to an existing exercise page and any named section exists',async()=>{
+ const manifest={window:{}};vm.runInNewContext(fs.readFileSync(path.join(viewer,'examples.js'),'utf8'),manifest);
+ const ui=session({presets:manifest.window.AIMD_EXAMPLES.presets});
+ assert.match(ui.html,/<a href="\.\.\/exercicios\/index\.html">Mapa dos exercícios/);
+ for(const key of Object.keys(manifest.window.AIMD_EXAMPLES.presets)){
+  const load=ui.choose(key,true);ui.requests.at(-1).resolve(preset(key));await load;
+  const href=ui.nodes['exercise-return'].getAttribute('href');
+  assert.notEqual(href,'../exercicios/index.html',key+' must have a contextual exercise');
+  const [relative,anchor]=href.split('#'),full=path.resolve(viewer,relative);
+  assert.ok(fs.existsSync(full),key+': missing '+href);
+  if(anchor)assert.ok(fs.readFileSync(full,'utf8').includes(`id="${anchor}"`),key+': missing section '+anchor);
+ }
+ const targets={cell_rigidity:'parede-e-rigidez',cell_pressure:'pressao-e-volume',cell_release:'fixar-ou-remover'};
+ for(const [key,anchor] of Object.entries(targets)){
+  const load=ui.choose(key,true);ui.requests.at(-1).resolve(preset(key));await load;
+  assert.equal(ui.nodes['exercise-return'].getAttribute('href'),'../exercicios/13-cell-pressao/index.html#'+anchor);
+  assert.match(ui.nodes['exercise-return'].textContent,/Voltar a C[123]/);
+ }
+});
+
+test('the contextual return follows the displayed preset through races, failures, uploads and clearing',async()=>{
+ const ui=session({inspectState:true,presets:{cell_rigidity:true,cell_pressure:true,cell_release:true,unknown:true}});
+ const slow=ui.choose('cell_rigidity',true),fast=ui.choose('cell_pressure',true);
+ ui.requests[1].resolve(preset('cell_pressure'));await fast;
+ const pressureHref='../exercicios/13-cell-pressao/index.html#pressao-e-volume';
+ assert.equal(ui.nodes['exercise-return'].getAttribute('href'),pressureHref);
+ ui.requests[0].resolve(preset('cell_rigidity'));await slow;
+ assert.equal(ui.nodes['exercise-return'].getAttribute('href'),pressureHref,'A stale load does not change the return route');
+ const failed=ui.choose('cell_release',true);ui.requests[2].reject(new Error('Unavailable'));await failed;
+ assert.equal(ui.nodes['exercise-return'].getAttribute('href'),pressureHref,'Failed loading preserves the displayed preset route');
+ const referenceId=ui.state.runs[0].id;
+ await upload(ui,[inputFile('own-traj.xyz','1\nStep 0 t=0 fs\nH 0 0 0\n')]);
+ assert.equal(ui.nodes['exercise-return'].getAttribute('href'),'../exercicios/index.html');
+ ui.nodes['trajectory-run'].value=String(referenceId);ui.nodes['trajectory-run'].fire('change');
+ assert.equal(ui.nodes['exercise-return'].getAttribute('href'),pressureHref);
+ const unknown=ui.choose('unknown',true);ui.requests.at(-1).resolve(preset('unknown'));await unknown;
+ assert.equal(ui.nodes['exercise-return'].getAttribute('href'),'../exercicios/index.html');
+ ui.nodes['clear-button'].fire('click');assert.equal(ui.nodes['exercise-return'].getAttribute('href'),'../exercicios/index.html');
+});

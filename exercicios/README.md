@@ -5,6 +5,12 @@
 **7 de outubro · 13h–16h e 17h–18h · remoto**
 Henrique de Castro Silva Junior · Virginia Camila Rufino Ferreira
 
+## Como seguir sem se perder
+
+Use **Próximo** no topo ou no fim de cada atividade. O indicador **Etapa X de 8** e o mapa lateral mostram onde você está. A ordem é: água e dímero → etanol → timestep → aquecer/resfriar → SOLVATOR → parede → quelato → H compartilhado. Os complementos opcionais ficam em uma seção separada; entrar neles não é necessário para completar a aula.
+
+**[Começar na etapa 1 de 8](1-agua-dft/README.md)** · [Roteiro com horários](roteiro-4h.md)
+
 ## Durante a aula
 
 Cinco blocos conectam movimento, integração, controle térmico, coordenação e transferência de H. Comece pelas medidas da água isolada em uma trajetória DFT pronta. As execuções propostas usam **XTB2**, e os resultados fornecidos permitem continuar a interpretação enquanto um cálculo local termina.
@@ -42,6 +48,8 @@ Cinco etapas contínuas no mesmo input. Acompanhe a temperatura e o diedro C–C
 H₅O₂⁺, sete átomos: **10 ps prontos para observar**, com o input curto de **2 ps em cerca de 2 min de execução** disponível para a aula. Compare as duas distâncias O–H: onde está o próton e quando ele retorna? Compartilhamento e recrossamentos ficam visíveis; esta molécula isolada não representa transporte de prótons na água líquida.
 
 ## Opcionais e referências
+
+**Novo módulo [C · Celas de simulação e pressão](13-cell-pressao/README.md):** siga C1 (rigidez) → C2 (pressão e parede móvel) → C3 (fixar ou remover), com referências prontas. Retorne ao 04b ou siga para 04c ao terminar. O [Dump complementar](1-agua-dft/README.md#alem-das-posicoes) fica apenas no exercício inicial da água.
 
 Estes materiais ficam fora do percurso obrigatório. Abra as trajetórias prontas ou continue os cálculos depois da aula.
 

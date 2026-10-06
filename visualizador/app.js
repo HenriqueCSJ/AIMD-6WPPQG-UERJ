@@ -10,11 +10,36 @@
   const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const energy=run=>run.energy?.rows?.length?run.energy:run.out;
   const metadata=run=>run?.metadata||run?.out?.metadata||{};
+  const exerciseReturns=Object.fromEntries([
+    [['water_single','water_thermostat','water_nve','water_csvr'],'1-agua-dft/index.html#agua-isolada','01a · Água isolada'],
+    [['water','water_short','water_dft'],'1-agua-dft/index.html#dimero','01b · Dímero de água'],
+    [['solvent','solvent_single'],'2-solvente-implicito/index.html','DFT e solvente contínuo'],
+    [['ethanol','ethanol_short'],'3-xtb2-etanol/index.html','02a · Etanol'],
+    [['timestep','timestep_abrupt','timestep_accuracy'],'4-timestep/index.html','02b · Timestep e correção'],
+    [['thermostat','thermostat_compare'],'5-termostato/index.html','03 · Aquecer e resfriar'],
+    [['solvator','solvator_two'],'6-complexo-solvator/index.html','04a · SOLVATOR'],
+    [['complex','complex_short'],'7-dinamica-complexo/index.html','04b · Efeito da parede'],
+    [['hydration','hydration_long'],'7-dinamica-complexo/hidratacao.html','Hidratação do complexo'],
+    [['fullerene'],'8-agua-no-fulereno/index.html','Água dentro de C₆₀'],
+    [['aluminum'],'9-aluminio-amonia/index.html','Al³⁺ e amônia'],
+    [['proton_shared','proton_shared_short'],'10-proton-compartilhado/index.html','05 · Próton compartilhado'],
+    [['chelation','chelation_previous'],'11-formacao-quelato/index.html','04c · Formação do quelato'],
+    [['proton_droplet','proton_droplet_400k','proton_droplet_500k','proton_droplet_600k'],'12-gota-protonada/index.html','Gota protonada'],
+    [['cell_rigidity'],'13-cell-pressao/index.html#parede-e-rigidez','C1 · Parede e rigidez'],
+    [['cell_pressure'],'13-cell-pressao/index.html#pressao-e-volume','C2 · Pressão e volume'],
+    [['cell_release'],'13-cell-pressao/index.html#fixar-ou-remover','C3 · Fixar ou remover']
+  ].flatMap(([keys,path,label])=>keys.map(key=>[key,{href:`../exercicios/${path}`,label}])));
+  function updateExerciseReturn(){
+    const run=state.tab==='trajectory'?currentTrajectory():state.tab==='distance'?currentDistance():visible()[0];
+    const route=run?.reference?exerciseReturns[run.exercisePreset]:null,link=$('exercise-return');
+    link.setAttribute('href',route?.href||'../exercicios/index.html');
+    link.textContent=route?`← Voltar a ${route.label}`:'← Voltar ao percurso';
+  }
   const sequenceClock=run=>metadata(run).clockMode==='sequence_elapsed';
   const clockLabel=run=>sequenceClock(run)?'Tempo da sequência':'Tempo físico';
   const clockNote=run=>sequenceClock(run)?(metadata(run).clockNote||'Tempo acumulado das etapas; o relógio de cada arquivo original é preservado. A sequência não representa continuidade das velocidades.') : '';
   const sourceClock=frame=>Number.isFinite(frame?.sourceTime)?`Relógio original: ${num(frame.sourceTime,8)} fs${frame.sourceStage?` · ${frame.sourceStage}`:''}`:'';
-  const ensemble=run=>run.ensembleOverride||metadata(run).ensemble||'unknown';
+  const ensemble=run=>metadata(run).dynamicCell?'unknown':run.ensembleOverride||metadata(run).ensemble||'unknown';
   const visible=()=>state.runs.filter(r=>r.visible);
   const timeFactor=()=>({fs:1,ps:1e-3,s:1e-15}[$('time-unit').value]);
   const energyFactor=()=>$('energy-unit').value==='eh'?1:R.HARTREE_TO_KJMOL;
@@ -226,7 +251,7 @@
       if(request!==state.exampleRequest)return;
       // Keep uploaded files and the current display until every requested run exists.
       // Parsed reference data are read-only; only the session wrapper is modified.
-      const references=runs.map(src=>{const run=Object.assign(makeRun(src.key,src.label,true),src,{exampleKey:src.key,visible:true});run.color=referenceColors[src.key]||run.color;return run;});
+      const references=runs.map(src=>{const run=Object.assign(makeRun(src.key,src.label,true),src,{exampleKey:src.key,exercisePreset:key,visible:true});run.color=referenceColors[src.key]||run.color;return run;});
       stop();clearTrajectoryScene();state.runs=state.runs.filter(r=>!r.reference);state.runs.forEach(r=>r.visible=false);state.runs.push(...references);
       document.querySelectorAll('[name="energy-series"]').forEach(c=>c.checked=config.runs.length>1?c.value==='total':true);
       $('energy-mode').value='delta';$('time-unit').value='fs';resetEnergyRange();state.tab=preferredTab||(references.some(run=>run.xyz)?'trajectory':'energy');renderAll(references[0].id);
@@ -252,7 +277,7 @@
     }
   }
   function renderAll(preferredTrajectory){
-    const loaded=state.runs.length>0;$('workspace').hidden=!loaded;$('welcome-guide').hidden=loaded;document.body.classList.toggle('loaded',loaded);if(!loaded){stop();clearTrajectoryScene();const expanded=$('expand-trajectory').getAttribute('aria-expanded')==='true';expandTrajectory(false,false);if(expanded)$('upload-button').focus();return;}
+    const loaded=state.runs.length>0;$('workspace').hidden=!loaded;$('welcome-guide').hidden=loaded;document.body.classList.toggle('loaded',loaded);if(!loaded){updateExerciseReturn();stop();clearTrajectoryScene();const expanded=$('expand-trajectory').getAttribute('aria-expanded')==='true';expandTrajectory(false,false);if(expanded)$('upload-button').focus();return;}
     renderRuns();updateRunSelectors(preferredTrajectory);renderDetails();changeTab(state.tab);
   }
   function changeTab(tab){stop();state.tab=tab;const expanded=$('expand-trajectory').getAttribute('aria-expanded')==='true';if(tab!=='trajectory')expandTrajectory(false,false);for(const name of ['energy','trajectory','distance']){$('panel-'+name).hidden=name!==tab;$('tab-'+name).setAttribute('aria-selected',name===tab);$('tab-'+name).tabIndex=name===tab?0:-1;}if(expanded&&tab!=='trajectory')$('tab-'+tab).focus();
@@ -297,6 +322,7 @@
     return rows.filter((_,index)=>indices.has(index));
   }
   function renderEnergy(){
+    updateExerciseReturn();
     const status=$('energy-range-status');status.hidden=true;status.textContent='';
     const runs=visible().filter(r=>energy(r)?.rows.length),has=runs.length>0;$('energy-empty').hidden=has;$('energy-content').hidden=!has;$('export-energy').disabled=!has;
     renderStageSummary(runs,'energy-stage-summary');$('energy-first-window').hidden=!runs.some(r=>r.key==='etanol_instavel');
@@ -322,7 +348,7 @@
     $('time-summary').textContent=runs.map(r=>{const rows=energy(r).rows,start=rows[0].time,end=rows.at(-1).time;return `${r.label}: ${sequenceClock(r)?'tempo da sequência · ':''}${rows.length} pontos · ${num(start)}–${num(end)} fs · intervalo de ${num(end-start)} fs = ${num((end-start)/1000)} ps = ${num((end-start)*1e-15)} s`;}).join('  |  ');
     $('energy-stats').innerHTML=runs.map(r=>{const viewRows=energyRowsInWindow(r),e=R.stats(viewRows,'total'),t=R.stats(viewRows,'temperature');const amplitude=e?($('energy-unit').value==='kj'?(e.span*factor>0&&e.span*factor<.01?num(e.span*factor,2):(e.span*factor).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})):num(e.span,3)):null;return `<div class="stat" style="--run-color:${r.color}"><span class="stat-name">${esc(r.label)}</span><strong>${e?'≈ '+amplitude+' '+energyUnit():'—'}</strong><p>Amplitude de E no intervalo de tempo</p><p>${t?'T média no intervalo de tempo: '+num(t.mean,4)+' K':'Temperatura indisponível'}</p></div>`;}).join('');
     const sets=new Set(runs.map(ensemble)),unknown=sets.has('unknown'),hasNVT=sets.has('NVT'),hasNVE=sets.has('NVE'),changing=runs.some(r=>metadata(r).changingConditions===true);
-    let context=changing?'O input muda as condições ao longo da trajetória. Leia as etapas; durante as rampas não há um único estado NVT estacionário.':unknown?'O ensemble não foi identificado em todos os arquivos. Adicione o .out ou informe NVE/NVT em “Arquivos e condições”.':hasNVT&&hasNVE?'Compare a NVE com a dinâmica acoplada ao banho. A energia pode mudar em NVT pela troca com o termostato.':hasNVT?'Com termostato, o sistema troca energia com o banho. Uma variação de K + U não indica, sozinha, erro numérico.':'Em NVE, sem outras forças dependentes do tempo, observe se a energia total oscila em uma faixa pequena ou deriva.';
+    let context=runs.some(r=>metadata(r).dynamicCell)?'A cela elástica controla uma parede de um agregado finito por pressão externa. O raio reconstruído acompanha a densidade impressa; o aplicativo não atribui automaticamente NVT ou NPT. Considere o trabalho da parede e a troca com o termostato.':changing?'O input muda as condições ao longo da trajetória. Leia as etapas; durante as rampas não há um único estado NVT estacionário.':unknown?'O ensemble não foi identificado em todos os arquivos. Adicione o .out ou informe NVE/NVT em “Arquivos e condições”.':hasNVT&&hasNVE?'Compare a NVE com a dinâmica acoplada ao banho. A energia pode mudar em NVT pela troca com o termostato.':hasNVT?'Com termostato, o sistema troca energia com o banho. Uma variação de K + U não indica, sozinha, erro numérico.':'Em NVE, sem outras forças dependentes do tempo, observe se a energia total oscila em uma faixa pequena ou deriva.';
     if(runs.some(r=>metadata(r).wall))context+=' Há confinamento em pelo menos uma simulação; considere também as forças da parede.';
     const known=key=>runs.some(r=>r.reference&&r.key===key),unstable=known('etanol_instavel'),legacyUnstable=known('etanol_dt500');
     const question=known('chelation_continuous')?'Como a hidratação e a coordenação dos dois N se sucedem?':unstable||legacyUnstable?'Por que esta dinâmica falhou?':known('etanol_etapas')?'O etanol muda de conformação ao longo das etapas?':known('dimero_b97_cpcm')?'Como o ambiente implícito altera o movimento do dímero?':known('dimero_b97')?'A ligação H mantém a mesma geometria?':known('zn_parede_longo')?'Qual água a parede mantém por perto?':known('etanol_dt200')?'Qual timestep conserva melhor a energia?':known('etanol_csvr')?'O que o termostato muda?':known('etanol_nve')?'Oscilar é o mesmo que mudar de conformação?':known('agua_cpcm')?'O solvente foi representado sem acrescentar átomos?':known('zn_parede')?'O que a parede muda nesta trajetória curta?':runs.length>1?'O que mudou entre as simulações?':'Para onde vai a energia?';
@@ -331,8 +357,8 @@
   }
   function renderDetails(){
     $('file-details-content').innerHTML=state.runs.map(r=>{const m=metadata(r),warnings=[...new Set([...(r.energy?.warnings||[]),...(r.out?.warnings||[]).filter(w=>!r.energy||!w.startsWith('O .out pode')),...(r.xyz?.warnings||[]),...(r.colvars?.warnings||[]),...(r.warnings||[])])];
-      const values=[sequenceClock(r)?clockNote(r):null,m.method?`Método/input: ${m.method}`:null,m.timestep!==null&&m.timestep!==undefined?`Timestep declarado: ${num(m.timestep)} fs`:null,m.targetTemperature?`Alvo do termostato: ${num(m.targetTemperature)} K (${m.thermostat})`:null,m.charge!==null&&m.charge!==undefined?`Carga ${m.charge}; multiplicidade ${m.multiplicity}`:null,r.out?`Saída: ${m.normal?'término normal':m.failed?'término com erro':'sem término normal identificado'}`:null,m.runtime!==null&&m.runtime!==undefined?`Tempo de execução: ${num(m.runtime)} s (não é o tempo físico da simulação)`:null,m.finalEnergy!==null&&m.finalEnergy!==undefined&&!energy(r)?.rows.length?`Última energia pontual: ${num(m.finalEnergy,12)} Eh`:null,r.energy?'Gráficos de energia: CSV (prioridade sobre o .out).':r.out?.rows.length?'Gráficos de energia: valores impressos no .out.':null].filter(Boolean);
-      return `<div class="file-record"><h3>${esc(r.label)} · ${r.reference?'referência dos ministrantes':'arquivo carregado'}</h3><label>Condição da dinâmica <select data-ensemble="${r.id}" aria-label="Ensemble de ${esc(r.label)}"><option value="unknown" ${ensemble(r)==='unknown'?'selected':''}>Não informado</option><option value="NVE" ${ensemble(r)==='NVE'?'selected':''}>NVE</option><option value="NVT" ${ensemble(r)==='NVT'?'selected':''}>NVT / termostato</option></select></label><ul>${r.files.map(f=>`<li>${esc(f.name)}${r.reference&&f.path?` · <a href="../${esc(f.path)}" download>arquivo original</a>`:''}</li>`).join('')}${values.map(v=>`<li>${esc(v)}</li>`).join('')}</ul>${warnings.length?`<p><strong>Observações de leitura</strong></p><ul>${warnings.map(w=>`<li>${esc(w)}</li>`).join('')}</ul>`:''}</div>`;
+      const values=[sequenceClock(r)?clockNote(r):null,m.dynamicCell?'Cela elástica sob pressão externa, com agregado finito; não classificada automaticamente como NVT/NPT.':null,m.method?`Método/input: ${m.method}`:null,m.timestep!==null&&m.timestep!==undefined?`Timestep declarado: ${num(m.timestep)} fs`:null,m.targetTemperature?`Alvo do termostato: ${num(m.targetTemperature)} K (${m.thermostat})`:null,m.charge!==null&&m.charge!==undefined?`Carga ${m.charge}; multiplicidade ${m.multiplicity}`:null,r.out?`Saída: ${m.normal?'término normal':m.failed?'término com erro':'sem término normal identificado'}`:null,m.runtime!==null&&m.runtime!==undefined?`Tempo de execução: ${num(m.runtime)} s (não é o tempo físico da simulação)`:null,m.finalEnergy!==null&&m.finalEnergy!==undefined&&!energy(r)?.rows.length?`Última energia pontual: ${num(m.finalEnergy,12)} Eh`:null,r.energy?'Gráficos de energia: CSV (prioridade sobre o .out).':r.out?.rows.length?'Gráficos de energia: valores impressos no .out.':null].filter(Boolean);
+      return `<div class="file-record"><h3>${esc(r.label)} · ${r.reference?'referência dos ministrantes':'arquivo carregado'}</h3><label>Condição da dinâmica <select data-ensemble="${r.id}" aria-label="Ensemble de ${esc(r.label)}" ${m.dynamicCell?'disabled':''}><option value="unknown" ${ensemble(r)==='unknown'?'selected':''}>${m.dynamicCell?'Cela elástica / pressão externa':'Não informado'}</option><option value="NVE" ${ensemble(r)==='NVE'?'selected':''}>NVE</option><option value="NVT" ${ensemble(r)==='NVT'?'selected':''}>NVT / termostato</option></select></label><ul>${r.files.map(f=>`<li>${esc(f.name)}${r.reference&&f.path?` · <a href="../${esc(f.path)}" download>arquivo original</a>`:''}</li>`).join('')}${values.map(v=>`<li>${esc(v)}</li>`).join('')}</ul>${warnings.length?`<p><strong>Observações de leitura</strong></p><ul>${warnings.map(w=>`<li>${esc(w)}</li>`).join('')}</ul>`:''}</div>`;
     }).join('');
     $('file-details-content').querySelectorAll('[data-ensemble]').forEach(el=>el.addEventListener('change',()=>{const run=state.runs.find(r=>r.id===Number(el.dataset.ensemble));run.ensembleOverride=el.value;renderEnergy();}));
   }
@@ -433,7 +459,8 @@
   }
   function clearTrajectoryScene(){
     clearAtomLabels();clearContactShapes();state.viewer?.removeAllModels();state.viewer?.removeAllShapes();state.viewer?.render();
-    state.model=null;state.viewRun=null;state.renderAtoms=null;state.renderFrame=null;state.styleKey=null;state.frameGeometry=null;state.wallSphere=null;
+    state.model=null;state.viewRun=null;state.renderAtoms=null;state.renderFrame=null;state.styleKey=null;state.frameGeometry=null;state.wallSphere=null;state.wallKey=null;state.wallShapes=[];state.cellCurrent=null;state.cellIndex=null;
+    $('cell-status').hidden=true;$('cell-status').textContent='';
     state.playbackRanges=[];state.playbackRangeRun=null;
     state.trajectoryChart=null;state.trajectoryTemperatureChart=null;state.energyIndex=null;state.temperatureIndex=null;state.frameIndex=null;
   }
@@ -467,17 +494,35 @@
     const highlighted=highlights(run),muted=highlighted.length&&highlightSettings(run).muted;
     const elements=[...new Set(run.xyz.elements)].map(e=>`<span class="element-key"><i style="background:${muted?'#bdc8cd':elementColors[e]||'#8a8990'}"></i>${esc(e)}</span>`);
     for(const group of highlighted)elements.push(`<span class="highlight-key"><i style="background:${group.color}"></i>${esc(group.label)}</span>`);
-    const sphere=metadata(run).wallSphere;if(sphere)elements.push(`<span class="wall-key">Parede suave · raio ${num(sphere.radius)} Å</span>`);
+    const cell=state.cellCurrent,sphere=cell?.sphere||(!metadata(run).dynamicCell&&!metadata(run).cellProgramUnsupported?metadata(run).wallSphere:null);if(sphere)elements.push(`<span class="wall-key">${cell?.status==='reconstructed'?'Parede elástica · raio ≈':'Parede suave · raio'} ${num(sphere.radius)} Å${cell?.status==='reconstructed'?' · reconstruído':''}</span>`);
     if(isWaterCage(run.xyz))elements.push('<span class="wall-key">C₆₀ em armação · água no interior</span>');
     elements.push('<span class="contact-key"><i class="contact-sample hbond-sample"></i>Ligação H · heurística</span>','<span class="contact-key"><i class="contact-sample coordination-sample"></i>Coordenação · geométrica</span>');
     legend.innerHTML=elements.join('');
   }
-  function drawWall(run){
-    clearContactShapes();state.viewer.removeAllShapes();const sphere=metadata(run).wallSphere;if(!sphere)return;
+  function drawWall(sphere){
+    // Wall shapes have independent ownership; contacts and the chosen camera
+    // remain intact when a density change contracts or expands the sphere.
+    if(typeof state.viewer.removeShape==='function'){for(const shape of state.wallShapes||[])state.viewer.removeShape(shape);}
+    else{clearContactShapes();state.viewer.removeAllShapes();}
+    state.wallShapes=[];if(!sphere)return;
     for(let plane=0;plane<3;plane++){
       const points=[];for(let i=0;i<=72;i++){const t=2*Math.PI*i/72,p=[0,0,0];p[(plane+1)%3]=sphere.radius*Math.cos(t);p[(plane+2)%3]=sphere.radius*Math.sin(t);points.push({x:p[0]+sphere.center.x,y:p[1]+sphere.center.y,z:p[2]+sphere.center.z});}
-      state.viewer.addCurve({points,radius:.018,color:'#3e9295',opacity:.65,smooth:0});
+      const shape=state.viewer.addCurve({points,radius:.035,color:'#2b797c',opacity:.85,smooth:0});if(shape)state.wallShapes.push(shape);
     }
+  }
+  function updateCell(run,frame){
+    const cell=A.cellState(run,frame,state.cellIndex),sphere=cell?.sphere||null,key=JSON.stringify(sphere);
+    if(state.wallKey!==key){drawWall(sphere);state.wallKey=key;}
+    state.cellCurrent=cell;
+    const status=$('cell-status');status.hidden=!metadata(run).wall&&!cell;
+    if(cell?.status==='unsupported')status.textContent='Cela: programa com mudanças de parede sem estado resolvido por quadro. Parede não desenhada.';
+    else if(metadata(run).dynamicCell){
+      const target=Number.isFinite(cell?.targetPressure)?` · pressão externa alvo ${num(cell.targetPressure)} bar`:'';
+      if(!sphere)status.textContent=`Cela elástica: sem estado correspondente a este quadro; parede não desenhada${target}.`;
+      else{const reconstructed=cell.status==='reconstructed';status.textContent=`${reconstructed?'Raio reconstruído da densidade':'Esfera inicial impressa'}: R ${reconstructed?'≈ ':''}${num(sphere.radius)} Å${Number.isFinite(cell.volume)?` · V ${reconstructed?'≈ ':''}${num(cell.volume)} Å³${reconstructed?' (derivado)':''}`:''}${Number.isFinite(cell.density)?` · densidade ${num(cell.density)} g/cm³`:''} · pressão média ORCA ${Number.isFinite(cell.averagePressure)?`${num(cell.averagePressure)} bar`:'sem amostra'}${target}. ${reconstructed?'Massa constante; precisão limitada pelo arredondamento da saída.':''}`;}
+    }else if(sphere)status.textContent=`Esfera fixa: R ${num(sphere.radius)} Å.`;
+    else status.textContent='Confinamento reconhecido; geometria da parede não disponível para este quadro.';
+    renderContactLegend(run);
   }
   function renderTrajectoryChart(run){
     const rows=energy(run)?.rows||[],keys=['kinetic','potential','total'],hasEnergy=row=>keys.some(key=>Number.isFinite(row[key])),hasTemperature=row=>Number.isFinite(row.temperature);
@@ -598,6 +643,7 @@
     if(!focusable.includes(active)||(event.shiftKey?active===first:active===last)){event.preventDefault();(event.shiftKey?last:first).focus();}
   }
   function renderTrajectory(){
+    updateExerciseReturn();
     const run=currentTrajectory(),has=!!run?.xyz;$('trajectory-empty').hidden=has;$('trajectory-content').hidden=!has;
     $('reset-view').disabled=!has;renderPlaybackControls(run);renderTrajectoryDataLink(run);
     if(!has){
@@ -612,8 +658,9 @@
     try{if(!state.viewer){state.viewer=$3Dmol.createViewer($('molecule'),{backgroundColor:'white',orthographic:true,antialias:true});state.viewer.setProjection('orthographic');state.initialView=state.viewer.getView().slice();}
       const changedRun=state.viewRun!==run.id;
       if(changedRun){clearAtomLabels();state.frame=0;state.selectedAtom=null;state.viewRun=run.id;state.timeFormat=timeFormat(run.xyz.frames);ensureTrajectoryReadouts();$('frame-slider').value='0';state.viewer.removeAllModels();state.model=state.viewer.addModel();state.renderAtoms=null;state.renderFrame=null;state.styleKey=null;state.frameGeometry=null;}
-      const wallSphere=metadata(run).wallSphere||null,changedWall=state.wallSphere!==wallSphere;
-      if(changedRun||changedWall){drawWall(run);state.wallSphere=wallSphere;}
+      const wallSphere=metadata(run).wallSphere||metadata(run).initialWallInfo||null,changedWall=state.wallSphere!==wallSphere;
+      if(changedRun||changedWall){state.wallKey=null;state.wallSphere=wallSphere;}
+      state.cellIndex=A.cellIndex(run);
       renderHighlights(run,changedRun);
       $('frame-slider').max=run.xyz.frames.length-1;$('frame-number').max=run.xyz.frames.length;
       ensureTrajectoryReadouts();renderContactLegend(run);
@@ -645,6 +692,7 @@
   }
   function drawFrame(fit=false){
     const run=currentTrajectory();if(!run?.xyz||!state.viewer||!state.model)return;const xyz=run.xyz,frame=xyz.frames[state.frame];
+    updateCell(run,frame);
     const proximity=$('proximity-lines').checked,changedFrame=state.renderFrame!==frame;
     let atoms=state.renderAtoms;
     if(!atoms){
@@ -694,7 +742,7 @@
       // Leave room for rotated edge atoms and their rendered sphere radii.
       state.viewer.zoom(.9);
     }else state.viewer.zoomTo();
-    if(run?.xyz&&run.xyz.elements.length<=20&&!metadata(run).wallSphere&&!run.xyz.elements.includes('Zn')){
+    if(run?.xyz&&run.xyz.elements.length<=20&&!state.cellCurrent?.sphere&&!run.xyz.elements.includes('Zn')){
       // 3Dmol's default fit reserves a 5 Å radius even for tiny molecules.
       // Correct only that minimum, using atom extents plus the rendered radii;
       // confined systems keep their entire wall and Zn keeps its shared view.
@@ -747,6 +795,7 @@
     $('geometry-help').textContent=type==='distance'?'Índices começam em 0, como no ORCA. Medidas usam as coordenadas de cada quadro.':type==='angle'?'Ângulo no segundo átomo selecionado, em graus; braços de comprimento zero ficam como lacuna.':'Diedro assinado em graus (−180° a 180°); saltos de periodicidade abrem lacunas no gráfico.';
   }
   function renderDistances(resetControls=false){
+    updateExerciseReturn();
     const run=currentDistance(),has=!!run;$('distance-empty').hidden=has;$('distance-content').hidden=!has;$('export-distance').disabled=!has;
     if(!has){state.distanceSeries=[];state.geometrySeries=[];$('distance-chart').replaceChildren();$('distance-stats').replaceChildren();$('geometry-preview-note').hidden=true;$('geometry-preview-note').textContent='';$('distance-empty').innerHTML=!visible().length?'<strong>Marque uma simulação acima.</strong>As caixas selecionam os cálculos disponíveis nas três abas.':'<strong>Escolha uma medida geométrica.</strong>Carregue uma trajetória XYZ, ou o CSV de Colvars do ORCA, para uma simulação marcada.';return;}
     const source=$('distance-source');source.options[0].disabled=!run.xyz;source.options[1].disabled=!run.colvars;

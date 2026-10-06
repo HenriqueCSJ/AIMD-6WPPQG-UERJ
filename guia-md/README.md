@@ -26,3 +26,6 @@ Os exemplos mostram o bloco `%md`. Método eletrônico, geometria, carga e multi
 Depois de editar as fontes, execute `python guia-md/montar_guia.py` na raiz do repositório e confira o HTML no navegador. A base é o guia local de 4 de outubro de 2026, incluindo as explicações atualizadas de Timecon, CSVR, NHC e Berendsen. Em 6 de outubro, foi acrescentada a consulta de unidades, conferida com a seção Physical Units do manual oficial ORCA 6.1.
 
 Referência: [manual oficial do ORCA 6.1 — dinâmica molecular](https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html). O guia oferece explicações didáticas; não reproduz o capítulo integral do manual.
+
+
+Em 06/10/2026, testes ORCA 6.1.1 confirmaram forças XYZ em kJ mol⁻¹ Å⁻¹ e Dump Properties com dipolos no ramo DFT. A referência detalhada e o único exemplo complementar estão no [exercício da água](../exercicios/1-agua-dft/README.md#alem-das-posicoes). Leia a unidade do arquivo e não assuma suporte idêntico no XTB2.

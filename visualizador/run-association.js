@@ -12,7 +12,31 @@
     if(Array.isArray(a)||Array.isArray(b))return Array.isArray(a)&&Array.isArray(b)&&a.length===b.length&&a.every((value,i)=>sameValue(value,b[i]));
     const keys=Object.keys(a);return keys.length===Object.keys(b).length&&keys.every(key=>Object.hasOwn(b,key)&&sameValue(a[key],b[key]));
   }
-  function sameData(a,b){return a?.kind===b?.kind&&['rows','frames','elements','columns','metadata'].every(key=>sameValue(a?.[key],b?.[key]));}
+  function sameData(a,b){return a?.kind===b?.kind&&['rows','frames','elements','columns','metadata','cellStates'].every(key=>sameValue(a?.[key],b?.[key]));}
+  // A dynamic sphere is reconstructed independently for each printed density,
+  // assuming conserved cell mass. This is not a direct radius dump or an
+  // interpolation; uncertainty from the printed initial density is retained.
+  function cellIndex(run){
+    const rows=energy(run)?.rows||[];
+    return timeIndex(rows,()=>true,['averagePressure','cellDensity']);
+  }
+  function cellState(run,frame,index){
+    const metadata=run?.metadata||run?.out?.metadata||{};
+    if(metadata.cellProgramUnsupported)return {status:'unsupported',sphere:null};
+    if(!metadata.dynamicCell)return metadata.wallSphere?{status:'fixed',sphere:metadata.wallSphere,targetPressure:metadata.initialWallInfo?.targetPressure??null}:null;
+    if(!frame||!Number.isFinite(frame.time))return null;
+    const initial=metadata.initialWallInfo,missing={status:'missing',sphere:null,targetPressure:initial?.targetPressure??null};
+    if(!initial?.sphere||!(initial.density>0))return missing;
+    const state=(index||cellIndex(run)).exact(frame.time,frame);
+    if(state&&((Number.isFinite(frame.step)&&Number.isFinite(state.step)&&frame.step!==state.step)||(frame.sourceKey&&frame.sourceKey!==state.sourceKey)||(Number.isFinite(frame.sourceStep)&&Number.isFinite(state.sourceStep)&&frame.sourceStep!==state.sourceStep)))return missing;
+    const isInitial=Number.isFinite(initial.time)&&Math.abs(frame.time-initial.time)<1e-7&&(!Number.isFinite(frame.step)||!Number.isFinite(initial.step)||frame.step===initial.step)&&!frame.sourceKey;
+    if(!state)return missing;
+    const density=state?.cellDensity;
+    if(!(density>0))return isInitial?{status:'initial',sphere:initial.sphere,density:initial.density,volume:initial.volume,averagePressure:state?.averagePressure??null,targetPressure:initial.targetPressure,time:initial.time,step:initial.step}:missing;
+    const radius=initial.sphere.radius*Math.cbrt(initial.density/density);
+    if(!Number.isFinite(radius)||radius<=0)return missing;
+    return {status:'reconstructed',sphere:{center:initial.sphere.center,radius},density,volume:4*Math.PI*radius**3/3,averagePressure:state.averagePressure,targetPressure:initial.targetPressure,time:state.time,step:state.step};
+  }
   function potential(frame){
     const match=String(frame.comment||'').match(/\bE_Pot\s*=\s*([^\s,]+)\s*([^,]*)/i);
     if(!match)return null;
@@ -89,7 +113,7 @@
       const other=index.exact(row.time,row);if(!other||(Number.isFinite(row.step)&&Number.isFinite(other.step)&&row.step!==other.step))continue;
       // The index can match a rounded CSV clock by step. Check those values
       // too: the parser's exact-clock validation alone cannot see them.
-      if(['potential','kinetic','total','temperature'].some(key=>Number.isFinite(row[key])&&Number.isFinite(other[key])&&Math.abs(row[key]-other[key])>(key==='temperature'?.02:2e-6)))return {compatible:false,automatic:false,reason:'O .out e o CSV apresentam valores diferentes nos passos correspondentes.'};
+      if(['potential','kinetic','total','temperature','averagePressure','cellDensity'].some(key=>Number.isFinite(row[key])&&Number.isFinite(other[key])&&Math.abs(row[key]-other[key])>(key==='temperature'||key==='averagePressure'?.02:key==='cellDensity'?5.1e-5:2e-6)))return {compatible:false,automatic:false,reason:'O .out e o CSV apresentam valores diferentes nos passos correspondentes.'};
       if(['potential','kinetic','total'].some(key=>Number.isFinite(row[key])&&Number.isFinite(other[key])))times.add(`${row.step}:${row.time}`);
     }
     return {compatible:true,automatic:times.size>=3,compared:times.size,reason:'Passos, tempos e energias do .out e do CSV conferidos.'};
@@ -122,5 +146,5 @@
     }
     return uniqueMatch(matches);
   }
-  return {check,find,potential,sameData,validateRun};
+  return {check,find,potential,sameData,validateRun,cellState,cellIndex};
 });

@@ -1,0 +1,9 @@
+{
+  "case": "agua_dump",
+  "seconds": 4.105,
+  "returncode": 0,
+  "normal": true,
+  "timed_out": false,
+  "runtime": "/home/henrique/aimd-workshop/cell-20261006/agua_dump",
+  "source": "/mnt/c/Users/henri/OneDrive/Academic/Events/6WPPGQ-UERJ/cell-20261006/agua_dump.inp"
+}

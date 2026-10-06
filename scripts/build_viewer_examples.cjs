@@ -3,6 +3,12 @@ const fs=require('node:fs'),path=require('node:path');
 const root=path.resolve(__dirname,'..'),R=require('../visualizador/orca-parser.js');
 const {buildSequence}=require('./build_viewer_sequence.cjs');
 const specs=[
+ ['zn_cell_spring10','C1 · Parede fixa · Spring 10','13-cell-pressao'],
+ ['zn_cell_spring50','C1 · Parede fixa · Spring 50','13-cell-pressao'],
+ ['zn_cell_1bar','C2 · Cela elástica · alvo 1 bar','13-cell-pressao'],
+ ['zn_cell_1000bar','C2 · Cela elástica · alvo 1000 bar','13-cell-pressao'],
+ ['zn_cell_fixed','C3 · Continuação com parede fixa','13-cell-pressao'],
+ ['zn_cell_none','C3 · Continuação sem parede','13-cell-pressao'],
  ['proton_shared_10ps','H₅O₂⁺ · próton compartilhado · 10 ps','10-proton-compartilhado'],
  ['proton_shared','H₅O₂⁺ · próton compartilhado · 2 ps','10-proton-compartilhado'],
  ['chelation','Zn–en · aproximação assistida → quelato · 3 ps','11-formacao-quelato'],
@@ -80,6 +86,9 @@ for(const [key,label,lesson] of specs){
  runs[key]=run;
 }
 const presets={
+ cell_rigidity:{runs:['zn_cell_spring10','zn_cell_spring50'],tab:'trajectory'},
+ cell_pressure:{runs:['zn_cell_1bar','zn_cell_1000bar'],tab:'trajectory'},
+ cell_release:{runs:['zn_cell_fixed','zn_cell_none'],tab:'trajectory'},
  proton_shared:{runs:['proton_shared_10ps'],tab:'trajectory'},
  proton_shared_short:{runs:['proton_shared'],tab:'trajectory'},
  chelation:{runs:['chelation_continuous'],tab:'trajectory'},chelation_previous:{runs:['chelation'],tab:'trajectory'},
@@ -98,7 +107,7 @@ const presets={
 };
 // Ordinary scripts, rather than fetch(), preserve direct file:// use offline.
 // The small manifest is loaded at startup; calculations are loaded on demand.
-const version='20261005-exercise-parity',sources={},folder=path.join(root,'visualizador/examples');
+const version='20261006-cell',sources={},folder=path.join(root,'visualizador/examples');
 fs.mkdirSync(folder,{recursive:true});let totalBytes=0;
 for(const [key,run] of Object.entries(runs)){
  const filename=`${key}.js`,full=path.join(folder,filename);

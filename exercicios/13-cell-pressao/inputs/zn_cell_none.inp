@@ -1,0 +1,13 @@
+# Continuacao do mesmo estado comprimido em 1100 fs; sem reinicializar velocidades.
+! MD XTB2 ALPB(water) PAL8
+%maxcore 256
+%md
+ Randomize 42
+ Timestep 0.5_fs
+ Thermostat CSVR 300_K Timecon 100_fs
+ Cell None
+ Restart "comprimido.mdrestart"
+ Dump Position Stride 1 Filename "zn_cell_none-traj.xyz"
+ Run 1000
+end
+* xyzfile 2 1 zn_comprimido.xyz

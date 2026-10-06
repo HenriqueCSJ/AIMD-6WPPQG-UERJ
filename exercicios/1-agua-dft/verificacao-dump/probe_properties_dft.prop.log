@@ -1,0 +1,515 @@
+
+
+           ************************************************************
+           *        Program running with 8 parallel MPI-processes     *
+           *              working on a common directory               *
+           ************************************************************
+
+------------------------------------------------------------------------------
+                              ORCA PROPERTY CALCULATIONS
+------------------------------------------------------------------------------
+
+GBWName                                 ... probe_properties_dft.gbw
+Number of atoms                         ...      3
+Number of basis functions               ...     24
+Max core memory                         ...    256 MB
+
+Electric properties:
+Dipole moment                           ... YES
+Quadrupole moment                       ...  NO
+Static polarizability (Dipole/Dipole)   ...  NO
+Static polarizability (Dipole/Quad.)    ...  NO
+Static polarizability (Quad./Quad.)     ...  NO
+Static polarizability (Velocity)        ...  NO
+Static hyperpolarizability              ...  NO
+
+Atomic electric properties:
+Dipole moment                           ...  NO
+Quadrupole moment                       ...  NO
+Static polarizability                   ...  NO
+
+Choice of electric origin               ... Center of mass
+Position of electric origin             ...    -0.000000     0.000000    -0.015357
+
+General magnetic properties:
+Magnetizability                         ...  NO
+
+EPR properties:
+g-Tensor (aka g-matrix)                 ...  NO
+Zero-Field splitting spin-orbit         ...  NO
+Zero-field splitting spin-spin          ...  NO
+Hyperfine couplings                     ...  NO (   0 nuclei)
+Quadrupole couplings                    ...  NO (   0 nuclei)
+Contact density                         ...  NO (   0 nuclei)
+
+NMR properties:
+Chemical shifts                         ...  NO (   0 nuclei)
+Spin-rotation constants                 ...  NO (   0 nuclei)
+Spin-spin couplings                     ...  NO (   0 nuclei,    0 pairs)
+
+Choice of magnetic origin               ... GIAO
+Position of magnetic origin             ...     0.000000     0.000000     0.000000
+
+Properties with geometric perturbations:
+SCF Hessian                             ...  NO
+IR spectrum                             ...  NO
+VCD spectrum                            ...  NO
+X-ray spectroscopy properties:
+SCF XES/XAS/RIXS spectra                ...  NO
+
+SCF SOC stabilization energy            ...  NO
+Diagonal Born-Oppenheimer correction    ...  NO
+
+-------------
+DIPOLE MOMENT
+-------------
+
+Method             : SCF
+Type of density    : Electron Density
+Multiplicity       :   1
+Irrep              :   0
+Energy             :   -76.3367478768744689 Eh
+Basis              : AO
+                                X                 Y                 Z
+Electronic contribution:      0.000000000      -0.000000001      -0.222372395
+Nuclear contribution   :      0.000000000       0.000000000       0.972637610
+                        -----------------------------------------
+Total Dipole Moment    :      0.000000000      -0.000000001       0.750265215
+                        -----------------------------------------
+Magnitude (a.u.)       :      0.750265215
+Magnitude (Debye)      :      1.907022624
+
+
+
+--------------------
+Rotational spectrum 
+--------------------
+ 
+Rotational constants in cm-1:            27.582166            14.350698             9.439454 
+Rotational constants in MHz :        826892.528103        430223.105096        282987.707436 
+
+Dipole components along the rotational axes: 
+x,y,z [a.u.] :    -0.000000    -0.750265    -0.000000 
+x,y,z [Debye]:    -0.000000    -1.907023    -0.000000 
+
+ 
+
+Dipole moment calculation done in   0.0 sec 
+
+Maximum memory used throughout the entire PROP-calculation: 3.3 MB
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+>>>   ORCA MD, Step       1   >>>
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+
+
+           ************************************************************
+           *        Program running with 8 parallel MPI-processes     *
+           *              working on a common directory               *
+           ************************************************************
+
+------------------------------------------------------------------------------
+                              ORCA PROPERTY CALCULATIONS
+------------------------------------------------------------------------------
+
+GBWName                                 ... probe_properties_dft.gbw
+Number of atoms                         ...      3
+Number of basis functions               ...     24
+Max core memory                         ...    256 MB
+
+Electric properties:
+Dipole moment                           ... YES
+Quadrupole moment                       ...  NO
+Static polarizability (Dipole/Dipole)   ...  NO
+Static polarizability (Dipole/Quad.)    ...  NO
+Static polarizability (Quad./Quad.)     ...  NO
+Static polarizability (Velocity)        ...  NO
+Static hyperpolarizability              ...  NO
+
+Atomic electric properties:
+Dipole moment                           ...  NO
+Quadrupole moment                       ...  NO
+Static polarizability                   ...  NO
+
+Choice of electric origin               ... Center of mass
+Position of electric origin             ...    -0.000000     0.000000    -0.015357
+
+General magnetic properties:
+Magnetizability                         ...  NO
+
+EPR properties:
+g-Tensor (aka g-matrix)                 ...  NO
+Zero-Field splitting spin-orbit         ...  NO
+Zero-field splitting spin-spin          ...  NO
+Hyperfine couplings                     ...  NO (   0 nuclei)
+Quadrupole couplings                    ...  NO (   0 nuclei)
+Contact density                         ...  NO (   0 nuclei)
+
+NMR properties:
+Chemical shifts                         ...  NO (   0 nuclei)
+Spin-rotation constants                 ...  NO (   0 nuclei)
+Spin-spin couplings                     ...  NO (   0 nuclei,    0 pairs)
+
+Choice of magnetic origin               ... GIAO
+Position of magnetic origin             ...     0.000000     0.000000     0.000000
+
+Properties with geometric perturbations:
+SCF Hessian                             ...  NO
+IR spectrum                             ...  NO
+VCD spectrum                            ...  NO
+X-ray spectroscopy properties:
+SCF XES/XAS/RIXS spectra                ...  NO
+
+SCF SOC stabilization energy            ...  NO
+Diagonal Born-Oppenheimer correction    ...  NO
+
+-------------
+DIPOLE MOMENT
+-------------
+
+Method             : SCF
+Type of density    : Electron Density
+Multiplicity       :   1
+Irrep              :   0
+Energy             :   -76.3360259243996353 Eh
+Basis              : AO
+                                X                 Y                 Z
+Electronic contribution:     -0.000000000      -0.004926853      -0.205721607
+Nuclear contribution   :      0.000000000       0.006955583       0.945552590
+                        -----------------------------------------
+Total Dipole Moment    :     -0.000000000       0.002028729       0.739830983
+                        -----------------------------------------
+Magnitude (a.u.)       :      0.739833764
+Magnitude (Debye)      :      1.880507982
+
+
+
+--------------------
+Rotational spectrum 
+--------------------
+ 
+Rotational constants in cm-1:            29.190321            14.183317             9.545327 
+Rotational constants in MHz :        875103.801187        425205.142914        286161.714519 
+
+Dipole components along the rotational axes: 
+x,y,z [a.u.] :     0.012497     0.739728     0.000000 
+x,y,z [Debye]:     0.031764     1.880240     0.000000 
+
+ 
+
+Dipole moment calculation done in   0.0 sec 
+
+Maximum memory used throughout the entire PROP-calculation: 3.3 MB
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+>>>   ORCA MD, Step       2   >>>
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+
+
+           ************************************************************
+           *        Program running with 8 parallel MPI-processes     *
+           *              working on a common directory               *
+           ************************************************************
+
+------------------------------------------------------------------------------
+                              ORCA PROPERTY CALCULATIONS
+------------------------------------------------------------------------------
+
+GBWName                                 ... probe_properties_dft.gbw
+Number of atoms                         ...      3
+Number of basis functions               ...     24
+Max core memory                         ...    256 MB
+
+Electric properties:
+Dipole moment                           ... YES
+Quadrupole moment                       ...  NO
+Static polarizability (Dipole/Dipole)   ...  NO
+Static polarizability (Dipole/Quad.)    ...  NO
+Static polarizability (Quad./Quad.)     ...  NO
+Static polarizability (Velocity)        ...  NO
+Static hyperpolarizability              ...  NO
+
+Atomic electric properties:
+Dipole moment                           ...  NO
+Quadrupole moment                       ...  NO
+Static polarizability                   ...  NO
+
+Choice of electric origin               ... Center of mass
+Position of electric origin             ...    -0.000000     0.000000    -0.015357
+
+General magnetic properties:
+Magnetizability                         ...  NO
+
+EPR properties:
+g-Tensor (aka g-matrix)                 ...  NO
+Zero-Field splitting spin-orbit         ...  NO
+Zero-field splitting spin-spin          ...  NO
+Hyperfine couplings                     ...  NO (   0 nuclei)
+Quadrupole couplings                    ...  NO (   0 nuclei)
+Contact density                         ...  NO (   0 nuclei)
+
+NMR properties:
+Chemical shifts                         ...  NO (   0 nuclei)
+Spin-rotation constants                 ...  NO (   0 nuclei)
+Spin-spin couplings                     ...  NO (   0 nuclei,    0 pairs)
+
+Choice of magnetic origin               ... GIAO
+Position of magnetic origin             ...     0.000000     0.000000     0.000000
+
+Properties with geometric perturbations:
+SCF Hessian                             ...  NO
+IR spectrum                             ...  NO
+VCD spectrum                            ...  NO
+X-ray spectroscopy properties:
+SCF XES/XAS/RIXS spectra                ...  NO
+
+SCF SOC stabilization energy            ...  NO
+Diagonal Born-Oppenheimer correction    ...  NO
+
+-------------
+DIPOLE MOMENT
+-------------
+
+Method             : SCF
+Type of density    : Electron Density
+Multiplicity       :   1
+Irrep              :   0
+Energy             :   -76.3352151977864253 Eh
+Basis              : AO
+                                X                 Y                 Z
+Electronic contribution:      0.000000000      -0.009280532      -0.191413125
+Nuclear contribution   :      0.000000000       0.013003222       0.921805834
+                        -----------------------------------------
+Total Dipole Moment    :      0.000000000       0.003722690       0.730392709
+                        -----------------------------------------
+Magnitude (a.u.)       :      0.730402196
+Magnitude (Debye)      :      1.856534840
+
+
+
+--------------------
+Rotational spectrum 
+--------------------
+ 
+Rotational constants in cm-1:            30.726677            13.958994             9.598457 
+Rotational constants in MHz :        921162.591761        418480.099029        287754.499966 
+
+Dipole components along the rotational axes: 
+x,y,z [a.u.] :     0.021504     0.730086    -0.000000 
+x,y,z [Debye]:     0.054659     1.855730    -0.000000 
+
+ 
+
+Dipole moment calculation done in   0.0 sec 
+
+Maximum memory used throughout the entire PROP-calculation: 3.3 MB
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+>>>   ORCA MD, Step       3   >>>
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+
+
+           ************************************************************
+           *        Program running with 8 parallel MPI-processes     *
+           *              working on a common directory               *
+           ************************************************************
+
+------------------------------------------------------------------------------
+                              ORCA PROPERTY CALCULATIONS
+------------------------------------------------------------------------------
+
+GBWName                                 ... probe_properties_dft.gbw
+Number of atoms                         ...      3
+Number of basis functions               ...     24
+Max core memory                         ...    256 MB
+
+Electric properties:
+Dipole moment                           ... YES
+Quadrupole moment                       ...  NO
+Static polarizability (Dipole/Dipole)   ...  NO
+Static polarizability (Dipole/Quad.)    ...  NO
+Static polarizability (Quad./Quad.)     ...  NO
+Static polarizability (Velocity)        ...  NO
+Static hyperpolarizability              ...  NO
+
+Atomic electric properties:
+Dipole moment                           ...  NO
+Quadrupole moment                       ...  NO
+Static polarizability                   ...  NO
+
+Choice of electric origin               ... Center of mass
+Position of electric origin             ...    -0.000000    -0.000000    -0.015357
+
+General magnetic properties:
+Magnetizability                         ...  NO
+
+EPR properties:
+g-Tensor (aka g-matrix)                 ...  NO
+Zero-Field splitting spin-orbit         ...  NO
+Zero-field splitting spin-spin          ...  NO
+Hyperfine couplings                     ...  NO (   0 nuclei)
+Quadrupole couplings                    ...  NO (   0 nuclei)
+Contact density                         ...  NO (   0 nuclei)
+
+NMR properties:
+Chemical shifts                         ...  NO (   0 nuclei)
+Spin-rotation constants                 ...  NO (   0 nuclei)
+Spin-spin couplings                     ...  NO (   0 nuclei,    0 pairs)
+
+Choice of magnetic origin               ... GIAO
+Position of magnetic origin             ...     0.000000     0.000000     0.000000
+
+Properties with geometric perturbations:
+SCF Hessian                             ...  NO
+IR spectrum                             ...  NO
+VCD spectrum                            ...  NO
+X-ray spectroscopy properties:
+SCF XES/XAS/RIXS spectra                ...  NO
+
+SCF SOC stabilization energy            ...  NO
+Diagonal Born-Oppenheimer correction    ...  NO
+
+-------------
+DIPOLE MOMENT
+-------------
+
+Method             : SCF
+Type of density    : Electron Density
+Multiplicity       :   1
+Irrep              :   0
+Energy             :   -76.3345729974032707 Eh
+Basis              : AO
+                                X                 Y                 Z
+Electronic contribution:      0.000000000      -0.011507290      -0.181448096
+Nuclear contribution   :      0.000000000       0.017018975       0.902854183
+                        -----------------------------------------
+Total Dipole Moment    :      0.000000000       0.005511685       0.721406087
+                        -----------------------------------------
+Magnitude (a.u.)       :      0.721427142
+Magnitude (Debye)      :      1.833722067
+
+
+
+--------------------
+Rotational spectrum 
+--------------------
+ 
+Rotational constants in cm-1:            32.042608            13.684423             9.589177 
+Rotational constants in MHz :        960613.208407        410248.670197        287476.293180 
+
+Dipole components along the rotational axes: 
+x,y,z [a.u.] :     0.026947     0.720924    -0.000000 
+x,y,z [Debye]:     0.068494     1.832442    -0.000000 
+
+ 
+
+Dipole moment calculation done in   0.0 sec 
+
+Maximum memory used throughout the entire PROP-calculation: 3.3 MB
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+>>>   ORCA MD, Step       4   >>>
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+
+
+           ************************************************************
+           *        Program running with 8 parallel MPI-processes     *
+           *              working on a common directory               *
+           ************************************************************
+
+------------------------------------------------------------------------------
+                              ORCA PROPERTY CALCULATIONS
+------------------------------------------------------------------------------
+
+GBWName                                 ... probe_properties_dft.gbw
+Number of atoms                         ...      3
+Number of basis functions               ...     24
+Max core memory                         ...    256 MB
+
+Electric properties:
+Dipole moment                           ... YES
+Quadrupole moment                       ...  NO
+Static polarizability (Dipole/Dipole)   ...  NO
+Static polarizability (Dipole/Quad.)    ...  NO
+Static polarizability (Quad./Quad.)     ...  NO
+Static polarizability (Velocity)        ...  NO
+Static hyperpolarizability              ...  NO
+
+Atomic electric properties:
+Dipole moment                           ...  NO
+Quadrupole moment                       ...  NO
+Static polarizability                   ...  NO
+
+Choice of electric origin               ... Center of mass
+Position of electric origin             ...    -0.000000    -0.000000    -0.015357
+
+General magnetic properties:
+Magnetizability                         ...  NO
+
+EPR properties:
+g-Tensor (aka g-matrix)                 ...  NO
+Zero-Field splitting spin-orbit         ...  NO
+Zero-field splitting spin-spin          ...  NO
+Hyperfine couplings                     ...  NO (   0 nuclei)
+Quadrupole couplings                    ...  NO (   0 nuclei)
+Contact density                         ...  NO (   0 nuclei)
+
+NMR properties:
+Chemical shifts                         ...  NO (   0 nuclei)
+Spin-rotation constants                 ...  NO (   0 nuclei)
+Spin-spin couplings                     ...  NO (   0 nuclei,    0 pairs)
+
+Choice of magnetic origin               ... GIAO
+Position of magnetic origin             ...     0.000000     0.000000     0.000000
+
+Properties with geometric perturbations:
+SCF Hessian                             ...  NO
+IR spectrum                             ...  NO
+VCD spectrum                            ...  NO
+X-ray spectroscopy properties:
+SCF XES/XAS/RIXS spectra                ...  NO
+
+SCF SOC stabilization energy            ...  NO
+Diagonal Born-Oppenheimer correction    ...  NO
+
+-------------
+DIPOLE MOMENT
+-------------
+
+Method             : SCF
+Type of density    : Electron Density
+Multiplicity       :   1
+Irrep              :   0
+Energy             :   -76.3342061840163240 Eh
+Basis              : AO
+                                X                 Y                 Z
+Electronic contribution:      0.000000000      -0.012337776      -0.175517965
+Nuclear contribution   :      0.000000000       0.018420673       0.888738418
+                        -----------------------------------------
+Total Dipole Moment    :      0.000000000       0.006082897       0.713220453
+                        -----------------------------------------
+Magnitude (a.u.)       :      0.713246393
+Magnitude (Debye)      :      1.812928254
+
+
+
+--------------------
+Rotational spectrum 
+--------------------
+ 
+Rotational constants in cm-1:            33.072987            13.367724             9.519892 
+Rotational constants in MHz :        991503.193480        400754.292905        285399.191674 
+
+Dipole components along the rotational axes: 
+x,y,z [a.u.] :     0.027789     0.712705    -0.000000 
+x,y,z [Debye]:     0.070635     1.811552    -0.000000 
+
+ 
+
+Dipole moment calculation done in   0.0 sec 
+
+Maximum memory used throughout the entire PROP-calculation: 3.3 MB

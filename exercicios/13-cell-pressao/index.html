@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>C · Cell: parede, pressão e volume · AIMD / ORCA</title><link rel="stylesheet" href="../pagina.css?v=20261006-course2"><script defer src="../pagina.js?v=20261006-course2"></script></head>
+<body><a class="skip" href="#conteudo">Ir para o conteúdo</a><header class="brand"><a href="../index.html"><strong>AIMD com ORCA</strong><small>6º Workshop PPGQ–UERJ · 7 de outubro de 2026</small></a><div class="logos"><img src="../../assets/uerj-logo.png" alt="UERJ"><img src="../../assets/ufrrj-logo-compacto.png" alt="UFRRJ"></div></header><div class="layout"><nav class="course-nav" aria-label="Mapa dos exercícios"><details class="course-map" open><summary>Mapa dos exercícios <small>8 etapas + complementos opcionais</small></summary><a class="home" href="../index.html">Visão geral do percurso</a><a class="parameter-guide" href="../../guia-md/index.html" target="_blank" rel="noopener" aria-label="Guia de parâmetros %md (abre em outra aba)">Guia de parâmetros %md ↗</a><h3 class="nav-group">Durante a aula · siga nesta ordem</h3><ol class="links"><li><a href="../1-agua-dft/index.html"><span class="num">01</span><span>Água: molécula e dímero</span></a></li><li><a href="../3-xtb2-etanol/index.html"><span class="num">02a</span><span>Etanol: controle</span></a></li><li><a href="../4-timestep/index.html"><span class="num">02b</span><span>Timestep e correção</span></a></li><li><a href="../5-termostato/index.html"><span class="num">03</span><span>Aquecer e resfriar</span></a></li><li><a href="../6-complexo-solvator/index.html"><span class="num">04a</span><span>Zn–en: SOLVATOR</span></a></li><li><a href="../7-dinamica-complexo/index.html"><span class="num">04b</span><span>Zn–en: parede</span></a></li><li><a href="../11-formacao-quelato/index.html"><span class="num">04c</span><span>Zn–en: formar o quelato</span></a></li><li><a href="../10-proton-compartilhado/index.html"><span class="num">05</span><span>Um próton entre duas águas</span></a></li></ol><h3 class="nav-group">Complementos opcionais e referências</h3><p class="nav-note">A sequência da aula segue diretamente entre as oito etapas acima.</p><ol class="links"><li><a href="../13-cell-pressao/index.html" aria-current="page"><span class="num">C</span><span>Cell: parede, pressão e volume</span></a></li><li><a href="../2-solvente-implicito/index.html"><span class="num">↗</span><span>DFT e solvente contínuo</span></a></li><li><a href="../12-gota-protonada/index.html"><span class="num">↗</span><span>Gota protonada: 300–600 K</span></a></li><li><a href="../8-agua-no-fulereno/index.html"><span class="num">↗</span><span>Água dentro de C₆₀</span></a></li><li><a href="../9-aluminio-amonia/index.html"><span class="num">↗</span><span>Al³⁺/amônia: referência</span></a></li></ol></details></nav><main id="conteudo"><nav class="route-nav route-topo" aria-label="Navegação do percurso — topo"><div class="route-status">Complemento opcional · Cell · C1 → C2 → C3</div><div class="route-controls"><a class="route-prev" href="../index.html">← Voltar ao percurso da aula</a><a class="route-next" href="../index.html#opcionais-e-referencias">Ver outros opcionais →</a></div><a class="route-map" href="../index.html">Mapa completo do percurso</a></nav><article class="lesson-content"><h1 id="c-celas-de-simulacao-e-pressao">C · Celas de simulação e pressão</h1><nav class="section-nav" aria-label="Seções desta página"><strong>Neste complemento opcional · siga C1 → C2 → C3</strong><ul><li><a href="#parede-e-rigidez">C1 · Parede e rigidez</a></li><li><a href="#pressao-e-volume">C2 · Pressão e volume</a></li><li><a href="#fixar-ou-remover">C3 · Fixar ou remover</a></li></ul></nav>
+<p><a href="../index.html">← Percurso da aula</a> · <a href="../7-dinamica-complexo/index.html">Retomar 04b</a> · <a href="../../guia-md/index.html">Guia %md</a></p>
+<p><strong>Complemento opcional · siga C1 → C2 → C3.</strong> O percurso principal continua do 04b para o 04c. Este módulo aprofunda o confinamento usando o mesmo complexo Zn–en hidratado, com 43 átomos. As referências estão prontas; não é necessário executar todas para acompanhar.</p>
+<p>O comando <code>Cell</code> define uma parede repulsiva suave, <strong>sem periodicidade</strong>. Ela pode ter tamanho fixo ou responder à pressão. <code>Spring</code> controla a rigidez, em kJ mol⁻¹ Å⁻²; <code>Pressure</code> define o alvo em bar. A versão 6.1.1 testada aceita <code>Cell</code> e avisa que o nome foi atualizado para <code>Walls</code>; esse aviso isolado não indica falha. <a href="https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html#cell">Manual oficial, Cell</a>.</p>
+<h2 id="preparar-e-executar">Preparar e executar</h2>
+<p>Baixe e extraia <strong>um pacote por pasta</strong>. Execute um cálculo por vez, com ORCA/XTB2 já configurados. O XYZ e o <code>.mdrestart</code> do pacote são obrigatórios; o reinício conserva posições e velocidades. Não acrescente <code>Initvel</code> aos ramos.</p>
+<p>No <strong>Windows</strong>, abra <code>cmd</code> na pasta extraída. No <strong>Ubuntu/WSL</strong>, entre na pasta pelo terminal. Nos dois casos, para o exemplo de 1000 bar:</p>
+<pre><code class="language-text">orca zn_cell_1000bar.inp &gt; zn_cell_1000bar.out
+</code></pre>
+<p>Espere terminar antes de iniciar o próximo. Troque o nome para executar outra variante. Os tempos abaixo foram medidos na máquina de referência e variam entre computadores. No laboratório, carregue juntos <code>.out</code>, <code>-md-ener.csv</code> e <code>-traj.xyz</code>, ou abra as referências pelos botões de cada etapa.</p>
+<p><a id="parede-e-rigidez"></a></p>
+<h2 id="c1-parede-e-rigidez">C1 · Parede e rigidez</h2><nav class="complement-steps" aria-label="Navegação do complemento · C1 · Parede e rigidez"><span>C1 · Parede e rigidez · 1 de 3</span><a href="#conteudo">← Início do complemento</a><a href="#pressao-e-volume">C2 · Pressão e volume →</a></nav>
+<p><strong>Pergunta:</strong> a parede retém as águas sem alterar o movimento? Comece pela <a href="../7-dinamica-complexo/index.html">comparação com/sem parede do 04b</a>. Reter uma água perto do complexo e coordená-la ao Zn são observações distintas.</p>
+<p>Agora compare duas paredes com <strong>raio fixo de 6 Å</strong>, <code>Spring 10</code> e <code>Spring 50</code>, por 500 fs adicionais. Ambas partem do mesmo checkpoint de 100 fs e terminam em 600 fs, com XTB2/ALPB(water), CSVR a 300 K e timestep de 0,5 fs.</p>
+<p><strong><a href="../../visualizador/index.html?exemplo=cell_rigidity&amp;aba=trajetoria">Abrir C1 no laboratório</a></strong></p>
+<p><strong>Spring 10:</strong> <a href="aula-zn_cell_spring10.zip">Pacote para executar</a> · <a href="inputs/zn_cell_spring10.inp" download="zn_cell_spring10.inp">Input</a> · <a href="resultado-zn_cell_spring10.zip">Resultados completos</a>. Execução de referência: 35,3 s</p>
+<p><strong>Spring 50:</strong> <a href="aula-zn_cell_spring50.zip">Pacote para executar</a> · <a href="inputs/zn_cell_spring50.inp" download="zn_cell_spring50.inp">Input</a> · <a href="resultado-zn_cell_spring50.zip">Resultados completos</a>. Execução de referência: 29,4 s</p>
+<details>
+<summary>Input comentado da parede mais rígida</summary>
+<!-- input-source: inputs/zn_cell_spring50.inp -->
+<pre><code class="language-text"># Mesmo estado inicial do exercicio 04b; alvo de pressao em bar.
+! MD XTB2 ALPB(water) PAL8
+%maxcore 256
+%md
+ Randomize 42
+ Timestep 0.5_fs
+ Thermostat CSVR 300_K Timecon 100_fs
+ Cell Sphere 0, 0, 0, 6.0_A Spring 50
+ Restart &quot;preparacao_termica.mdrestart&quot;
+ Dump Position Stride 1 Filename &quot;zn_cell_spring50-traj.xyz&quot;
+ Run 1000
+end
+* xyzfile 2 1 zn_solvato.xyz
+</code></pre>
+<p>Na outra variante, somente Spring passa a 10 e o nome do arquivo de saída muda.</p>
+</details>
+<ol>
+<li>Compare as duas trajetórias na mesma marca de tempo.</li>
+<li>Observe a penetração de átomos além da parede suave e meça Zn–O para uma mesma água.</li>
+<li>Examine energia e temperatura. Como há termostato, não exija conservação de K+U.</li>
+<li>Registre uma diferença e uma semelhança. Evite atribuir à coordenação um efeito que seja apenas retenção espacial.</li>
+</ol>
+<p><a id="pressao-e-volume"></a></p>
+<h2 id="c2-pressao-e-volume">C2 · Pressão e volume</h2><nav class="complement-steps" aria-label="Navegação do complemento · C2 · Pressão e volume"><span>C2 · Pressão e volume · 2 de 3</span><a href="#parede-e-rigidez">← C1 · Parede e rigidez</a><a href="#fixar-ou-remover">C3 · Fixar ou remover →</a></nav>
+<p><strong>Pergunta:</strong> uma cela sob pressão sempre encolhe? Compare alvos de <strong>1 e 1000 bar</strong>, a partir do mesmo estado de 100 fs e raio inicial de 6 Å, por mais 1 ps. A janela de média da pressão é de 100 fs e o parâmetro de resposta é 0,001. São parâmetros do exemplo, não garantia de equilíbrio.</p>
+<p>A parede tende a contrair quando a pressão média que o sistema exerce sobre ela fica abaixo do alvo externo; tende a expandir quando fica acima. Há atraso e oscilações. <strong>O alvo não é a pressão medida a cada instante.</strong> <a href="https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html#cell">Manual oficial, cela elástica</a>.</p>
+<p><strong><a href="../../visualizador/index.html?exemplo=cell_pressure&amp;aba=trajetoria">Abrir C2 e observar a parede móvel</a></strong></p>
+<p><strong>1 bar:</strong> <a href="aula-zn_cell_1bar.zip">Pacote para executar</a> · <a href="inputs/zn_cell_1bar.inp" download="zn_cell_1bar.inp">Input</a> · <a href="resultado-zn_cell_1bar.zip">Resultados completos</a>. Execução de referência: 59,3 s</p>
+<p><strong>1000 bar:</strong> <a href="aula-zn_cell_1000bar.zip">Pacote para executar</a> · <a href="inputs/zn_cell_1000bar.inp" download="zn_cell_1000bar.inp">Input</a> · <a href="resultado-zn_cell_1000bar.zip">Resultados completos</a>. Execução de referência: 56,9 s</p>
+<details>
+<summary>Input comentado da cela elástica a 1000 bar</summary>
+<!-- input-source: inputs/zn_cell_1000bar.inp -->
+<pre><code class="language-text"># Mesmo estado inicial do exercicio 04b; alvo de pressao em bar.
+! MD XTB2 ALPB(water) PAL8
+%maxcore 256
+%md
+ Randomize 42
+ Timestep 0.5_fs
+ Thermostat CSVR 300_K Timecon 100_fs
+ Cell Sphere 0, 0, 0, 6.0_A Spring 50 Elastic 100_fs, 0.001 Pressure 1000
+ Restart &quot;preparacao_termica.mdrestart&quot;
+ Dump Position Stride 1 Filename &quot;zn_cell_1000bar-traj.xyz&quot;
+ Run 2000
+end
+* xyzfile 2 1 zn_solvato.xyz
+</code></pre>
+<p>Na outra variante, somente Pressure passa a 1 e o nome da saída muda.</p>
+</details>
+<h3 id="como-o-laboratorio-reconstroi-a-parede">Como o laboratório reconstrói a parede</h3>
+<p>O ORCA testado escreve <code>Av.Press.</code> (pressão média, bar) e <code>Cell Dens.</code> (densidade geométrica da cela, g/cm³) no CSV. A saída <code>.out</code> informa o centro, raio e densidade iniciais. Com massa constante, o app obtém <strong>R(t) = R₀ [ρ₀/ρ(t)]¹ᐟ³</strong>. O raio e o volume são aproximados porque a saída arredonda a densidade. O tamanho acompanha o tempo registrado; o app não inventa uma contração linear.</p>
+<p>Sem a densidade correspondente ao quadro ou sem a configuração inicial, o tamanho da cela elástica fica indisponível. O suporte atual é para uma esfera e um único trecho <code>Run</code>; outras formas e mudanças de parede entre vários trechos não recebem uma animação presumida.</p>
+<ol>
+<li>Pause no mesmo tempo nas duas condições e compare a parede, a pressão média e o alvo.</li>
+<li>Encontre uma expansão ou mudança de sentido. Explique-a usando a diferença entre pressão média e alvo.</li>
+<li>Compare distâncias Zn–O. Compressão espacial não demonstra, por si só, uma reação.</li>
+<li>Confira o final em 1100 fs: a saída reporta raios de <strong>7,137 Å a 1 bar</strong> e <strong>4,985 Å a 1000 bar</strong>. As pressões médias finais são <strong>0,00 e 478,50 bar</strong>, respectivamente. Esses pontos não demonstram equilíbrio.</li>
+</ol>
+<p>Esta é uma amostra finita com parede artificial e solvente implícito ALPB. A densidade m/V da cela não deve ser apresentada como densidade de equilíbrio da água líquida. O protocolo também não será rotulado automaticamente como amostragem rigorosa de NPT.</p>
+<p><a id="fixar-ou-remover"></a></p>
+<h2 id="c3-fixar-ou-remover-a-cela">C3 · Fixar ou remover a cela</h2><nav class="complement-steps" aria-label="Navegação do complemento · C3 · Fixar ou remover"><span>C3 · Fixar ou remover · 3 de 3</span><a href="#pressao-e-volume">← C2 · Pressão e volume</a><a href="../index.html">Voltar ao percurso →</a></nav>
+<p><strong>Pergunta:</strong> congelar o tamanho da parede é o mesmo que retirá-la? Os dois ramos partem do <strong>mesmo checkpoint comprimido em 1100 fs</strong>, obtido no exemplo de 1000 bar, e avançam por 500 fs até 1600 fs. Posições e velocidades iniciais são iguais.</p>
+<p>No ramo fixo, a esfera é redeclarada com <strong>4,985 Å</strong>, o raio final arredondado reportado pelo ORCA, e <code>Cell Fixed</code> mantém esse tamanho. Esse é o raio escolhido para o novo ramo, não um reinício exato da geometria interna da cela elástica. No outro ramo, <code>Cell None</code> remove a parede. O checkpoint molecular não substitui a declaração da cela.</p>
+<p><strong><a href="../../visualizador/index.html?exemplo=cell_release&amp;aba=trajetoria">Abrir C3 no laboratório</a></strong></p>
+<p><strong>Parede fixa:</strong> <a href="aula-zn_cell_fixed.zip">Pacote para executar</a> · <a href="inputs/zn_cell_fixed.inp" download="zn_cell_fixed.inp">Input</a> · <a href="resultado-zn_cell_fixed.zip">Resultados completos</a>. Execução de referência: 30,5 s</p>
+<p><strong>Sem parede:</strong> <a href="aula-zn_cell_none.zip">Pacote para executar</a> · <a href="inputs/zn_cell_none.inp" download="zn_cell_none.inp">Input</a> · <a href="resultado-zn_cell_none.zip">Resultados completos</a>. Execução de referência: 29,9 s</p>
+<details>
+<summary>Input da continuação com parede fixa</summary>
+<!-- input-source: inputs/zn_cell_fixed.inp -->
+<pre><code class="language-text"># Continuacao do mesmo estado comprimido em 1100 fs; sem reinicializar velocidades.
+! MD XTB2 ALPB(water) PAL8
+%maxcore 256
+%md
+ Randomize 42
+ Timestep 0.5_fs
+ Thermostat CSVR 300_K Timecon 100_fs
+ Cell Sphere 0, 0, 0, 4.985_A Spring 50
+ Cell Fixed
+ Restart &quot;comprimido.mdrestart&quot;
+ Dump Position Stride 1 Filename &quot;zn_cell_fixed-traj.xyz&quot;
+ Run 1000
+end
+* xyzfile 2 1 zn_comprimido.xyz
+</code></pre>
+<p>No ramo sem parede, as duas linhas Cell são substituídas por <code>Cell None</code>, mantendo o mesmo checkpoint e geometria.</p>
+</details>
+<ol>
+<li>Compare as duas condições em 1200, 1400 e 1600 fs.</li>
+<li>Meça as distâncias de uma mesma água ao Zn e observe se ela se afasta.</li>
+<li>Diferencie ausência de parede de uma parede que conserva o raio.</li>
+<li>Não interprete a mudança do potencial ao retirar a parede como calor de reação.</li>
+</ol>
+<h2 id="para-continuar">Para continuar</h2>
+<p>Esfera versus cubo com o mesmo volume, celas retangulares/elipsoidais e pressão anisotrópica são extensões conceituais. Não estão representadas pela animação esférica atual. Para gravar mais dados, veja o único <a href="../1-agua-dft/index.html#alem-das-posicoes">exemplo complementar de Dump na água</a>.</p>
+<p><strong>Módulo concluído:</strong> <a href="../7-dinamica-complexo/index.html">voltar ao 04b</a> · <a href="../11-formacao-quelato/index.html">seguir para 04c, formação do quelato</a> · <a href="../index.html">mapa da aula</a>.</p></article><nav class="route-nav route-fim" aria-label="Navegação do percurso — fim"><div class="route-status">Complemento opcional · Cell · C1 → C2 → C3</div><div class="route-controls"><a class="route-prev" href="../index.html">← Voltar ao percurso da aula</a><a class="route-next" href="../index.html#opcionais-e-referencias">Ver outros opcionais →</a></div><a class="route-map" href="../index.html">Mapa completo do percurso</a></nav></main></div><footer>Henrique de Castro Silva Junior e Virginia Camila Rufino Ferreira · ORCA 6.1.1 · Materiais e dados locais; links externos levam à documentação oficial.</footer></body></html>

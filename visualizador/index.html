@@ -5,15 +5,15 @@
   <meta name="description" content="Leia resultados de dinâmica molecular do ORCA: energias, temperatura, trajetórias e medidas geométricas. Tudo no seu navegador.">
   <title>Laboratório de trajetórias · AIMD com ORCA</title>
   <link rel="stylesheet" href="app.css?v=20261006-guide1">
-  <script defer src="orca-parser.js?v=20261006-wall-refresh1"></script><script defer src="charts.js?v=20261006-upload-zoom1"></script><script defer src="run-association.js?v=20261006-upload-zoom1"></script><script defer src="geometry.js?v=20261001-performance1"></script>
+  <script defer src="orca-parser.js?v=20261006-cell"></script><script defer src="charts.js?v=20261006-upload-zoom1"></script><script defer src="run-association.js?v=20261006-cell"></script><script defer src="geometry.js?v=20261001-performance1"></script>
   <script defer src="highlight-selection.js?v=20261001-temperature1"></script>
-  <script defer src="vendor/3Dmol-min.js?v=20261001-performance1"></script><script defer src="examples.js?v=20261005-exercise-parity"></script><script defer src="example-loader.js?v=20260929-loading1"></script><script defer src="app.js?v=20261006-wall-refresh1"></script>
+  <script defer src="vendor/3Dmol-min.js?v=20261001-performance1"></script><script defer src="examples.js?v=20261006-cell"></script><script defer src="example-loader.js?v=20260929-loading1"></script><script defer src="app.js?v=20261006-cell"></script>
 </head>
 <body>
 <a class="skip" href="#main">Ir para o conteúdo</a>
 <header class="topbar">
   <a class="brand" href="../exercicios/index.html"><span class="brand-icon" aria-hidden="true">◈</span><span>AIMD com ORCA<small>6º Workshop PPGQ–UERJ · 2026</small></span></a>
-  <nav aria-label="Apoio"><a href="../exercicios/index.html">Exercícios <span aria-hidden="true">↗</span></a><button type="button" class="text-button" id="help-button">Como usar</button><span class="privacy"><span aria-hidden="true">●</span> Seus arquivos ficam aqui</span></nav>
+  <nav aria-label="Apoio"><a id="exercise-return" href="../exercicios/index.html">← Voltar ao percurso</a><a href="../exercicios/index.html">Mapa dos exercícios <span aria-hidden="true">↗</span></a><button type="button" class="text-button" id="help-button">Como usar</button><span class="privacy"><span aria-hidden="true">●</span> Seus arquivos ficam aqui</span></nav>
 </header>
 <nav class="guide-shortcut" aria-label="Consulta rápida"><a href="../guia-md/index.html" target="_blank" rel="noopener" aria-label="Guia de parâmetros %md (abre em outra aba)">Guia de parâmetros <code>%md</code> ↗</a><span>Comandos, explicações e exemplos para consultar durante a aula</span></nav>
 <main id="main">
@@ -61,6 +61,9 @@
           <option value="timestep_abrupt">Timestep · Falha abrupta com 5 fs</option>
           <option value="thermostat_compare">Etanol · NVE × termostato</option>
           <option value="complex_short">Parede · Referência curta</option>
+          <option value="cell_rigidity">C1 · Cela: rigidez da parede · Spring 10 × 50</option>
+          <option value="cell_pressure">C2 · Cela elástica: pressão · 1 × 1000 bar</option>
+          <option value="cell_release">C3 · Cela comprimida: Fixed × None</option>
           <option value="water_dft">DFT · Dímero já calculado</option>
           <option value="solvent_single">DFT · Água isolada: vácuo × CPCM</option>
           <option value="aluminum">Al³⁺/amônia · Referência com ajuste SCC</option>
@@ -149,6 +152,7 @@
           <div id="molecule" tabindex="0" aria-label="Estrutura molecular interativa. Modo Girar: arraste para girar e use a roda para ampliar." aria-describedby="molecule-keyboard-help" role="application"></div>
           <p id="molecule-keyboard-help" class="sr-only">No modo Mover, use as setas para reposicionar a molécula. Shift com uma seta move mais longe. Tab avança aos controles. Escape fecha a área ampliada.</p>
           <div class="molecule-legend" id="molecule-legend"></div>
+          <p id="cell-status" class="small muted" role="status" hidden></p>
           <div class="playback">
             <div class="transport-buttons" role="group" aria-label="Reprodução da trajetória">
               <button type="button" class="button" id="previous-frame" aria-label="Quadro anterior" title="Quadro anterior">←</button>

@@ -1,0 +1,9 @@
+{
+  "case": "zn_cell_1000bar",
+  "seconds": 56.856,
+  "returncode": 0,
+  "normal": true,
+  "timed_out": false,
+  "runtime": "/home/henrique/aimd-workshop/cell-20261006/zn_cell_1000bar",
+  "source": "/mnt/c/Users/henri/OneDrive/Academic/Events/6WPPGQ-UERJ/cell-20261006/zn_cell_1000bar.inp"
+}

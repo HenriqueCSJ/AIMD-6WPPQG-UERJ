@@ -160,7 +160,7 @@
   # Thermostat None Region 1                  # Desliga somente o desta regiao.
   # Para NVE, substitua a linha CSVR ativa por Thermostat None.
 
-  # 11. DUMP: Position | Velocity | Force | GBW | EnGrad.
+  # 11. DUMP: Position | Velocity | Force | GBW | EnGrad; Properties testado em DFT.
   # Position/Velocity/Force: Format XYZ/PDB/DCD; Stride; Filename; Region; Replace; None.
   Dump Position Format XYZ Stride 1 Filename "trajetoria.xyz"
   # Stride n: grava a cada n passos; com dt=0.5 fs, Stride 10 = 5 fs entre frames.
@@ -169,12 +169,13 @@
   # Dump Position Format XYZ Stride 1 Filename "trajetoria.xyz" Replace
   # Replace apaga o arquivo uma vez; cuidado ao continuar uma trajetoria.
   # Dump Velocity Format XYZ Stride 1 Filename "velocidades.xyz"  # A/fs.
-  # Dump Force Format XYZ Stride 1 Filename "forcas.xyz"          # Hartree/A.
+  # Dump Force Format XYZ Stride 1 Filename "forcas.xyz"          # kJ/mol/A no ORCA 6.1.1 testado; leia o cabecalho.
   # Dump Position Format XYZ Stride 1 Filename "regiao1.xyz" Region 1
   # Dump Position Format PDB Stride 0 Filename "estrutura.pdb"
   # Dump Position Format DCD Stride 10 Filename "trajetoria.dcd"
   # DCD precisa de um snapshot PDB para identificar atomos; nao permite append.
   # Format e inferido da extensao quando omitido; sem ambos, padrao XYZ.
+  # Dump Properties                          # DFT testado; gera .prop.log; XTB2 nao gerou.
   # Dump GBW Stride 100 Filename "estado-"     # GBW individuais; prefixo sem .gbw.
   # Dump EnGrad Stride 100 Filename "gradiente-" # ENGRAD individuais, nao trajetoria.
   # GBW/EnGrad usam Stride/Filename; nao use Format nem Region.

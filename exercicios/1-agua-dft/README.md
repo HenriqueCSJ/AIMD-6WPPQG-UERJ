@@ -124,6 +124,59 @@ No **IV**, a atividade depende da variação do momento de dipolo durante a vibr
 
 Com as medidas internas da água em mãos, acrescente a segunda molécula e procure o que muda entre elas.
 
+<a id="alem-das-posicoes"></a>
+
+## Complemento opcional · Além das posições com Dump
+
+**Um único exemplo extra, usando a água isolada.** Salve posições, velocidades e forças nos mesmos instantes e veja que um filme de coordenadas não contém toda a informação da dinâmica. Esta variante NVE usa 100 fs, sem parede, com o mesmo estado inicial da água XTB2 acima; a execução de referência levou 4,1 s.
+
+[Pacote para executar](aula-agua_dump.zip) · [Input](inputs/agua_dump.inp) · [Resultados completos](resultado-agua_dump.zip)
+
+<details markdown="1"><summary>Abrir o input completo e as perguntas</summary>
+
+<!-- input-source: inputs/agua_dump.inp -->
+```text
+# Agua isolada: comparar ausencia e presenca de banho termico.
+! MD XTB2 PAL8
+%maxcore 256
+
+%md
+  Randomize 42
+  Initvel 100_K
+  Timestep 0.5_fs
+  Thermostat None
+  Dump Position Stride 1 Filename "agua_dump-traj.xyz"
+  Dump Velocity Stride 1 Filename "agua_dump-vel.xyz"
+  Dump Force Stride 1 Filename "agua_dump-force.xyz"
+  Run 200
+end
+* xyz 0 1
+  O          -0.00000000000561      0.00000000000000     -0.07350969363937
+  H           0.76032823354949      0.00000000000000      0.54103884681985
+  H          -0.76032823354388      0.00000000000000      0.54103884681952
+*
+```
+
+Execute `orca agua_dump.inp > agua_dump.out` em uma pasta nova, no cmd do Windows ou no terminal Ubuntu/WSL. Espere terminar.
+
+- **Position:** coordenadas em Å; carregue o XYZ de posições, o `.out` e o CSV de energia no laboratório.
+- **Velocity:** componentes da velocidade em Å/fs. Compare K = ½ Σ mᵢ|vᵢ|² com a energia cinética do CSV, após converter as unidades. Com m em u e v em Å/fs, multiplique essa soma por 10⁴ para obter kJ/mol.
+- **Force:** leia a unidade no comentário de cada quadro. **Nos arquivos ORCA 6.1.1 fornecidos, ela é kJ mol⁻¹ Å⁻¹**. O manual consultado diz Hartree/Å; não aplique essa unidade aos arquivos fornecidos. O quadro inicial de forças deste exemplo contém zeros de inicialização; examine a partir do passo 1.
+
+[Velocidades reais](resultados/agua_dump/agua_dump-vel.xyz) · [Forças reais](resultados/agua_dump/agua_dump-force.xyz) · [Posições](resultados/agua_dump/agua_dump-traj.xyz) · [Energia](resultados/agua_dump/agua_dump-md-ener.csv) · [Saída](resultados/agua_dump/agua_dump.out)
+
+O laboratório não interpreta XYZ de velocidades/forças como geometria. Abra esses arquivos como texto para esta atividade. A verificação com as 201 amostras reproduziu K com diferença máxima de 0,0014 kJ/mol, compatível com o arredondamento do CSV.
+
+**Outras saídas:** `Dump EnGrad` salva energia e gradiente; `Dump GBW` guarda estados eletrônicos individuais, cuja utilidade depende do método. A versão instalada também aceita **`Dump Properties`**: um teste BLYP-D3BJ/def2-SVP gerou dipolos em `.prop.log` a cada passo. Essa opção não produziu o log no teste XTB2 e não deve ser prometida para qualquer método. [Teste DFT e log de propriedades](verificacao-dump/README.md).
+
+Dipolo, cargas e polarizabilidade não são nomes intercambiáveis com `Position` no comando. Para propriedades eletrônicas, é necessário configurar uma rota compatível; um arquivo de velocidades sozinho não fornece intensidades IV/Raman. [Manual ORCA, Dump](https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html#dump).
+
+**Para responder:** em um instante escolhido, a água tem maior velocidade quando está mais afastada ou mais próxima da geometria de equilíbrio? Compare posição e velocidade; uma observação isolada não separa todos os modos normais.
+
+</details>
+
+**Continuar o percurso:** [01b · dímero de água](#dimero).
+
 <a id="dimero"></a>
 
 ## 01b · Duas águas: uma ligação H em movimento

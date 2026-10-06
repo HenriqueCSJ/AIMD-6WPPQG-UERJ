@@ -155,3 +155,8 @@ Para uma janela mais curta, compare os controles de 0,5 ps no [apoio](apoio.md) 
 - **preparacao_termica:** [Baixar input ORCA](inputs/preparacao_termica.inp) · [Baixar geometria inicial (.xyz)](estruturas/zn_solvato.xyz) (obrigatório; manter na mesma pasta do input).
 - **zn_parede:** [Baixar input ORCA](inputs/zn_parede.inp) · [Baixar geometria inicial (.xyz)](estruturas/zn_solvato.xyz) (obrigatório; manter na mesma pasta do input) · [Baixar checkpoint obrigatório](estruturas/preparacao_termica.mdrestart) (fornece o estado de continuação; manter junto do input).
 - **zn_sem_parede:** [Baixar input ORCA](inputs/zn_sem_parede.inp) · [Baixar geometria inicial (.xyz)](estruturas/zn_solvato.xyz) (obrigatório; manter na mesma pasta do input) · [Baixar checkpoint obrigatório](estruturas/preparacao_termica.mdrestart) (fornece o estado de continuação; manter junto do input).
+
+
+## Aprofundar Cell sem perder o percurso
+
+**[Complemento C1 → C2 → C3](../13-cell-pressao/README.md):** rigidez da parede, resposta à pressão e continuação com parede fixa ou removida. **Para seguir a aula, avance diretamente para [04c · formação do quelato](../11-formacao-quelato/README.md).**

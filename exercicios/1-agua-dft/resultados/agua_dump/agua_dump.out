@@ -1,0 +1,930 @@
+
+                                 *****************
+                                 * O   R   C   A *
+                                 *****************
+
+                                            #,                                       
+                                            ###                                      
+                                            ####                                     
+                                            #####                                    
+                                            ######                                   
+                                           ########,                                 
+                                     ,,################,,,,,                         
+                               ,,#################################,,                 
+                          ,,##########################################,,             
+                       ,#########################################, ''#####,          
+                    ,#############################################,,   '####,        
+                  ,##################################################,,,,####,       
+                ,###########''''           ''''###############################       
+              ,#####''   ,,,,##########,,,,          '''####'''          '####       
+            ,##' ,,,,###########################,,,                        '##       
+           ' ,,###''''                  '''############,,,                           
+         ,,##''                                '''############,,,,        ,,,,,,###''
+      ,#''                                            '''#######################'''  
+     '                                                          ''''####''''         
+             ,#######,   #######,   ,#######,      ##                                
+            ,#'     '#,  ##    ##  ,#'     '#,    #''#        ,####,    ,#,          
+            ##       ##  ##   ,#'  ##            #'  '#       #'       ,# #          
+            ##       ##  #######   ##           ,######,      #####,      #          
+            '#,     ,#'  ##    ##  '#,     ,#' ,#      #,     #,   #      #          
+             '#######'   ##     ##  '#######'  #'      '#     '####' #    #          
+
+
+
+                #########################################################
+                #                        -***-                          #
+                #          Department of theory and spectroscopy        #
+                #                                                       #
+                #                      Frank Neese                      #
+                #                                                       #
+                #     Directorship, Architecture, Infrastructure        #
+                #                    SHARK, DRIVERS                     #
+                #        Core code/Algorithms in most modules           #
+                #                                                       #
+                #        Max Planck Institute fuer Kohlenforschung      #
+                #                Kaiser Wilhelm Platz 1                 #
+                #                 D-45470 Muelheim/Ruhr                 #
+                #                      Germany                          #
+                #                                                       #
+                #                  All rights reserved                  #
+                #                        -***-                          #
+                #########################################################
+
+
+                         Program Version 6.1.1  -  RELEASE   -
+                                (GIT: $487d211c$)
+                          ($2025-11-21 10:33:24 +0100$)
+
+
+ With contributions from (in alphabetic order):
+[Max-Planck-Institut fuer Kohlenforschung]                               
+  Daniel Aravena         : Magnetic Suceptibility                        
+  Michael Atanasov       : Ab Initio Ligand Field Theory (pilot matlab implementation)
+  Alexander A. Auer      : GIAO ZORA, VPT2 properties, NMR spectrum      
+  Ute Becker             : All parallelization in ORCA, NUMFREQ, NUMCALC 
+  Giovanni Bistoni       : ED, misc. LED, open-shell LED, HFLD           
+  Dmytro Bykov           : pre 5.0 version of the SCF Hessian            
+  Marcos Casanova-Páez   : Triplet and SCS-CIS(D). UHF-(DLPNO)-IP/EA/STEOM-CCSD. UHF-CVS-IP/STEOM-CCSD   
+  Vijay G. Chilkuri      : MRCI spin determinant printing, contributions to CSF-ICE 
+  Pauline Colinet        : FMM embedding                                 
+  Dipayan Datta          : RHF DLPNO-CCSD density                        
+  Achintya Kumar Dutta   : EOM-CC, STEOM-CC                              
+  Nicolas Foglia         : Exact transition moments, OPA infrastructure, MCD improvements    
+  Dmitry Ganyushin       : Spin-Orbit,Spin-Spin,Magnetic field MRCI      
+  Miquel Garcia-Rates    : C-PCM and meta-GGA Hessian, CCSD/C-PCM, Gaussian charge scheme 
+  Tiago L. C. Gouveia    : GS-ROHF, GS-ROCIS                             
+  Yang Guo               : DLPNO-NEVPT2, F12-NEVPT2, CIM, IAO-localization        
+  Andreas Hansen         : Spin unrestricted coupled pair/coupled cluster methods 
+  Ingolf Harden          : AUTO-CI MPn and infrastructure                
+  Benjamin Helmich-Paris : MC-RPA, TRAH-(SCF,CASSCF), AVAS, COSX integrals, SCF dyn. polar., MC-PDFT, srDFT 
+  Lee Huntington         : MR-EOM, pCC                                   
+  Robert Izsak           : Overlap fitted RIJCOSX, COSX-SCS-MP3, EOM     
+  Riya Kayal             : Wick's Theorem for AUTO-CI, AUTO-CI UHF-CCSDT 
+  Emily Kempfer          : AUTO-CI RHF CISDT and CCSDT, approximate NEVPT4
+  Christian Kollmar      : KDIIS, OOCD, Brueckner-CCSD(T), CCSD density, CASPT2, CASPT2-K, improved NEVPT2 
+  Axel Koslowski         : Symmetry handling                             
+  Simone Kossmann        : meta-GGA functionals, TD-DFT gradient, OOMP2, (MP2 Hessian; deprecated post 5.0) 
+  Lucas Lang             : DCDCAS, Hyperfine gauge corrections, ICE-SOC+SSC
+  Marvin Lechner         : AUTO-CI (C++ implementation), FIC-MRCC        
+  Spencer Leger          : CASSCF response                               
+  Dagmar Lenk            : GEPOL surface, SMD, ORCA-2-JSON               
+  Dimitrios Liakos       : Extrapolation schemes; Compound Job, Property file
+  Dimitrios Manganas     : Further ROCIS development; embedding schemes. LFT, Crystal Embedding 
+  Dimitrios Pantazis     : SARC Basis sets                               
+  Anastasios Papadopoulos: AUTO-CI, single reference methods and gradients 
+  Taras Petrenko         : pre 6.0 DFT Hessian and TD-DFT gradient,  ECA, NRVS 
+  Petra Pikulova         : Analytic Raman intensities                    
+  Peter Pinski           : DLPNO-MP2, DLPNO-MP2 Gradient                 
+  Shashank Vittal Rao    : ES-AILFT, MagRelax                            
+  Christoph Reimann      : Effective Core Potentials                     
+  Marius Retegan         : Local ZFS, SOC                                
+  Christoph Riplinger    : Optimizer, TS searches, QM/MM, DLPNO-CCSD(T), (RO)-DLPNO pert. Triples 
+  Michael Roemelt        : Original ROCIS implementation, recursive CI coupling coefficients
+  Masaaki Saitow         : Open-shell DLPNO-CCSD energy and density      
+  Barbara Sandhoefer     : DKH picture change effects                    
+  Yorick L. A. Schmerwitz: GMF and freeze-and-release deltaSCF, NEB S-IDPP initial path                    
+  Kantharuban Sivalingam : CASSCF convergence/infrastructure, NEVPT2, NEVPT3, NEVPT4(SD), FIC-MRCI and CEPA variants
+  Bernardo de Souza      : ESD, SOC TD-DFT                               
+  Georgi L. Stoychev     : AutoAux, RI-MP2 NMR, DLPNO-MP2 response, X2C  
+  Van Anh Tran           : RI-MP2 g-tensors                              
+  Willem Van den Heuvel  : Paramagnetic NMR                              
+  Zikuan Wang            : NOTCH, Electric field optimization            
+  Frank Wennmohs         : Technical directorship and infrastructure     
+  Hang Xu                : AUTO-CI-Response properties                   
+                                                                         
+[FACCTs GmbH]                                                            
+  Markus Bursch, Nicolas Foglia, Miquel Garcia-Rates, Ingolf Harden, Hagen Neugebauer, Anastasios Papadopoulos, 
+  Christoph Riplinger, Bernardo de Souza, Georgi L. Stoychev                                                    
+                                                                 
+  APM, various basis sets, CI-OPT, improved COSX, DLPNO-Multilevel,           
+  DOCKER, DRACO, updates on ESD, Fragmentator, GOAT, IRC, LR-CPCM, L-BFGS, MBIS, meta-GGA TD-DFT gradient, ML-optimized integration grids, 
+  MM, NACMEs, nearIR, NEB, NEB-TS, NL-DFT gradient (VV10), 2- and 3-layer-ONIOM, interface openCOSMO-RS, QMMM,   
+  Crystal-QMMM, RESP, rigid body optimization, SF, symmetry and pop. for TD-DFT, various functionals, SOLVATOR                                   
+                                                                         
+[Other institutions]                                                     
+  V. Asgeirsson          : NEB                                           
+  Christoph Bannwarth    : sTDA-DFT, sTD-DFT, PBEh-3c, B97-3c, D3        
+  Giovanni Bistoni       : ETS/NOCV, ADLD/ADEX, COVALED                  
+  Martin Brehm           : Molecular dynamics                            
+  Ronald Cardenas        : ETS/NOCV                                      
+  Martina Colucci        : COVALED                                       
+  Sebastian Ehlert       : rSCAN, r2SCAN, r2SCAN-3c, D4, dhf basis sets  
+  Marvin Friede          : D4 for Fr, Ra, Ac-Lr                          
+  Lars Goerigk           : TD-DFT with DH, B97 family of functionals     
+  Stefan Grimme          : VdW corrections, initial TS optimization, DFT functionals, gCP, sTDA/sTD-DF 
+  Waldemar Hujo          : DFT-NL                                        
+  H. Jonsson             : NEB                                           
+  Holger Kruse           : gCP                                           
+  Marcel Mueller         : wB97X-3c, vDZP basis set                      
+  Hagen Neugebauer       : wr2SCAN, Native XTB                           
+  Gianluca Regni         : ADLD/ADEX                                     
+  Tobias Risthaus        : pre 6.0 range-separated hybrid DFT and stability analysis
+  Lukas Wittmann         : regularized MP2, r2SCAN double-hybrids, wr2SCAN        
+                                                                         
+We gratefully acknowledge several colleagues who have allowed us to      
+interface, adapt or use parts of their codes:                            
+  Ed Valeev, F. Pavosevic, A. Kumar             : LibInt (2-el integral package), F12 methods 
+  Garnet Chan, S. Sharma, J. Yang, R. Olivares  : DMRG                   
+  Ulf Ekstrom                                   : XCFun DFT Library      
+  Mihaly Kallay                                 : mrcc  (arbitrary order and MRCC methods)
+  Frank Weinhold                                : gennbo (NPA and NBO analysis)           
+  Simon Mueller                                 : openCOSMO-RS                            
+  Christopher J. Cramer and Donald G. Truhlar   : smd solvation model                     
+  S Lehtola, MJT Oliveira, MAL Marques          : LibXC Library                           
+  Liviu Ungur et al                             : ANISO software                          
+
+
+ Your calculation uses the libint2 library for the computation of 2-el integrals
+ For citations please refer to: http://libint.valeyev.net
+
+ Your ORCA version has been built with support for libXC version: 7.0.0
+ For citations please refer to: https://libxc.gitlab.io
+
+ This ORCA versions uses:
+   CBLAS   interface :  Fast vector & matrix operations
+   LAPACKE interface :  Fast linear algebra routines
+   SCALAPACK package :  Parallel linear algebra routines
+   Shared memory     :  Shared parallel matrices
+   BLAS/LAPACK       :  OpenBLAS 0.3.29  USE64BITINT DYNAMIC_ARCH NO_AFFINITY Haswell SINGLE_THREADED
+        Core in use  :  Haswell
+   Copyright (c) 2011-2014, The OpenBLAS Project
+
+
+  ***********************************
+  * Starting time: Tue Oct  6 09:01:36 2026
+  * Host name:     NotebookAW
+  * Process ID:    132219
+  * Working dir.:  /home/henrique/aimd-workshop/cell-20261006/agua_dump
+  ***********************************
+
+NOTE: MaxCore=256 MB was set to SCF,MP2,MDCI,CIPSI,MRCI,RASCI and CIS
+      => If you want to overwrite this, your respective input block should be placed after the MaxCore statement
+Your calculation utilizes the semiempirical GFN2-xTB method
+Please cite in your paper:
+Bannwarth, C.; Ehlert S.; Grimme, S. J. Chem. Theory Comput. 2019, 15, 1652.
+   
+
+================================================================================
+
+================================================================================
+                                        WARNINGS
+                       Please study these warnings very carefully!
+================================================================================
+
+
+WARNING: Gradients are needed
+  ===> : At least TightSCF should be used for SCF convergence
+
+WARNING: Found dipole moment calculation with XTB calculation
+  ===> : Switching off dipole moment calculation
+
+
+================================================================================
+                                       INPUT FILE
+================================================================================
+NAME = agua_dump.inp
+|  1> # Agua isolada: comparar ausencia e presenca de banho termico.
+|  2> ! MD XTB2 PAL8
+|  3> %maxcore 256
+|  4> 
+|  5> %md
+|  6>   Randomize 42
+|  7>   Initvel 100_K
+|  8>   Timestep 0.5_fs
+|  9>   Thermostat None
+| 10>   Dump Position Stride 1 Filename "agua_dump-traj.xyz"
+| 11>   Dump Velocity Stride 1 Filename "agua_dump-vel.xyz"
+| 12>   Dump Force Stride 1 Filename "agua_dump-force.xyz"
+| 13>   Run 200
+| 14> end
+| 15> * xyz 0 1
+| 16>   O          -0.00000000000561      0.00000000000000     -0.07350969363937
+| 17>   H           0.76032823354949      0.00000000000000      0.54103884681985
+| 18>   H          -0.76032823354388      0.00000000000000      0.54103884681952
+| 19> *
+| 20> 
+| 21>                          ****END OF INPUT****
+================================================================================
+
+-------------------------------------------------------------------------------------------
+
+MD module early startup:
+  Installed signal handlers.
+  Extracted executable name.
+  Initialized library credit list.
+  Parsed command line without errors.
+  Initialized console color.
+Done.
+
+Will write log file to "agua_dump.md.log".
+
+Command line:  /home/henrique/bin/orca611/orca_md -orca agua_dump
+
+-------------------------------------------------------------------------------------------
+
+
+     _____    ___    _   _       _                  ______ ______  _____   ___  
+    /  ___|  / _ \  | \ | |     | |           _    /  __  \| ___ \/  __ \ / _ \ 
+    \ `--.  / /_\ \ |  \| |   __| | _   _   _| |_  | |  | || |_/ /| /  \// /_\ \
+     `--. \ |  _  | | . ` |  / _` || | | | |_   _| | |  | ||    / | |    |  _  |
+    /\__/ / | | | | | |\  | | (_| || |_| |   |_|   | \__/ || |\ \ | \__/\| | | |
+    \____/  \_| |_/ \_| \_/  \__,_| \__, |          \____/ \_| \_| \____/\_| |_/
+                                     __/ |                                      
+                                    |___/                                       
+
+
+    ####################################################################
+    ########     Scriptable Nuclear Dynamics (SANdy) + ORCA     ########
+    ########           (c) Martin Brehm, 2016 - 2025            ########
+    ########           Paderborn University, Germany            ########
+    ########           https://sanscript.org/orcamd             ########
+    ####################################################################
+
+
+  * Compiled as ORCA module. Called from ORCA.
+  * ORCA base name: "agua_dump"
+  * Source code version: Jun 07 2025, compiled at Nov 24 2025 07:23:22.
+  * Enabled features: SAN_MD, SAN_INTERPRETER
+  * Libraries: KISS_FFT, LBFGSBC
+  * Executable name: "/home/henrique/bin/orca611/orca_md"
+  * Messages are redirected, Errors are redirected, Output is redirected, Input is redirected
+  * Running on NotebookAW at Tue Oct  6 09:01:37 2026 (PID 132251)
+  * Running in /home/henrique/aimd-workshop/cell-20261006/agua_dump
+
+    -----------------------------------------------
+
+    Technical information:
+
+  * Compiler:      LLVM, CLANG 20.1.6, "Clang 20.1.6 (/home/frankw/CompEnv/src/llvm2016/llvm-project/clang 47addd4540b4c393e478ba92bea2589e330c57fb)", Linux, __cplusplus=201103L
+  * Compile host:  x86_64, Little Endian, char=8bits, int=4b, long=8b, ll=8b, addr=8b, 0x01020304=4,3,2,1.
+  * Class sizes:   InputElem=248, ValuePair=112, Type=96, Value=8, VMToken=8, VMInst=8
+  * Compile flags: MMX, SSE, SSE2, SSE3, SSSE3, SSE4.1, SSE4.2, POPCNT, FMA3, AVX, AVX2
+  * Local machine: Intel(R) Core(TM) Ultra 9 185H (GenuineIntel), Family 6, Model 170, Stepping 4
+                   1 CPU, 11 cores, 22 threads,  Uptime 2h 04m 20s
+                   MMX, SSE, SSE2, SSE3, SSSE3, SSE4.1, SSE4.2, POPCNT, AES, FMA3, AVX, AVX2, SHA
+                   Caches: 11x L1d (528 KiB), 11x L1i (704 KiB), 11x L2 (22 MiB), 1x L3 (24 MiB)
+  * Op. System:    Ubuntu 24.04.4 LTS, Linux version 6.18.33.2-microsoft-standard-WSL2 
+  * Phys. Memory:  15.38 GiB total,  13.93 GiB free
+  * Stack size:    8.00 MiB
+
+
+The following libraries are included:
+
+  * KISS FFT,   Version 131.1.0 (02/2021), License: BSD 3-clause
+      (c) 2003-2010 Mark Borgerding, see https://github.com/mborgerding/kissfft
+
+  * L-BFGS-B-C, Version 3.0 (04/2011),     License: BSD 3-clause
+      (c) Stephen Becker, see https://github.com/stephenbeckr/L-BFGS-B-C
+
+  * MT19937 Pseudo Random Number Gen.,     License: Custom (permissive)
+      (c) 1997-2005 Makoto Matsumoto, Takuji Nishimura, Mutsuo Saito, see https://github.com/clibs/mt19937ar
+
+
+Initializing SAN engine...
+  24 physical quantities and 49 units added.
+  Initialized SAN language:
+    97 operators, 57 keywords, 4 namespaces, 35 types, 183 flags
+Done.
+
+
+>>> Reading Input File >>>
+
+Reading input file "agua_dump.mdinput" ...
+  248 bytes read.
+  9 lines.
+Tokenizing input...
+Found 30 tokens in file.
+  ( 20 identifiers,  7 numeric literals,  3 string literals )
+
+Warning: Line endings are non-uniform: 1 x \n, 8 x \r\n
+
+<<< Finished Reading Input File (took 0.000 seconds) <<<
+
+
+Using the following settings:
+  Interpret:              true
+  Execution:              SAN-VM
+  Parser verbose level:   1
+  Execute verbose level:  2
+  Syntax highlighting:    0
+  Static vars:            false
+  Dynamic types:          true
+  Max. recursion depth:   200
+  Max. nesting depth:     1000
+  Max. argument count:    100
+  Only parse:             false
+
+
+>>> Parsing Input Script >>>
+
+Handled 2 underscore identifiers.
+Handling module imports...
+  Importing module "Math" to global namespace.
+  Importing module "MD" to global namespace.
+Handled 2 module imports.
+Assigned 1 types.
+Parsed 1 types.
+Handled 10 variable occurrences.
+Assigned 9 identifiers.
+Handling functions,      iteration  1...
+                         iteration  2...
+                         iteration  3...
+Handling "FOR" loops...
+Handling AutoDecl,       iteration  1...
+No auto declarations.
+Assigned 8 flags, re-doing function handling...
+Handling functions ( 2), iteration  1...
+                         iteration  2...
+Handling "FOR" loops...
+Handling AutoDecl,       iteration  1...
+No auto declarations.
+Handling functions, final pass...
+Function handling done (2 macro-iterations, 0.001 seconds).
+Handling keywords,       iteration  1...
+Prepared 8 argument lists.
+Assigned 20 read-only flags.
+Assigned 30 simple VP flags.
+Assigned 29 tree IDs.
+
+<<< Finished Parsing Input Script (took 0.002 seconds) <<<
+
+
+SAN-VM: Compiling...
+  Optimization level: Not specified. Using default ("-O2").
+Done (took 0.000 seconds).
+
+
+  Part              # Tokens    # Registers    # Shortcuts    # Optimizations
+  ---------------------------------------------------------------------------
+  Main Program            56              0              0                  0
+
+
+-------------------------------------------------------------------------------------------
+
+>>> Initializing MD engine with interface "ORCA" >>>
+
+
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+>>>   Output of System Information (from ORCA)   >>>
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+---------------------------------
+CARTESIAN COORDINATES (ANGSTROEM)
+---------------------------------
+  O     -0.000000    0.000000   -0.073510
+  H      0.760328    0.000000    0.541039
+  H     -0.760328    0.000000    0.541039
+
+----------------------------
+CARTESIAN COORDINATES (A.U.)
+----------------------------
+  NO LB      ZA    FRAG     MASS         X           Y           Z
+   0 O     8.0000    0    15.999   -0.000000    0.000000   -0.138913
+   1 H     1.0000    0     1.008    1.436812    0.000000    1.022415
+   2 H     1.0000    0     1.008   -1.436812    0.000000    1.022415
+
+Doing XTB calculation. Basis set is not printed.
+
+############################################
+   Total Atom Count:               3
+   Total System Mass:         18.015 a.m.u.
+   Total Basis Dimension:          0
+   Total Electron Number:          0
+   Total Charge:                   0
+   Total Multiplicity:             1
+  ------------------------------------------
+   ReducePrint:                 true
+   Print Mulliken Pop:             1
+   Print Loewdin Pop:              1
+   Print Mayer Pop:                1
+   Print Orbital Energies:         1
+############################################
+
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+<<<          End of System Information           <<<
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+Initializing regions...
+
+Defined regions:
+         All:     3 atoms,     18.015 a.m.u.
+          QM:   All
+      Active:   All
+
+
+
+### System Geometry ###
+
+  * Region "All" = "Active" = "QM":
+      Bounding box: from (   -0.760 |    0.000 |   -0.074 )
+                      to (    0.760 |    0.000 |    0.541 ) Angstrom
+      System extent:     (    1.521 |    0.000 |    0.615 ) Angstrom
+      Center of mass:    (   -0.000 |    0.000 |   -0.005 ) Angstrom
+      Total mass:            18.015 a.m.u.
+
+      Moment of inertia: (         0.68 |         0.00 |        -0.00 )
+                         (         0.00 |         1.84 |         0.00 ) a.m.u. Angstrom^2
+                         (        -0.00 |         0.00 |         1.17 )
+      Singular values:   (         0.68 |         1.17 |         1.84 ) a.m.u. Angstrom^2
+
+
+
+Smallest interatomic distance from active region: 0.977634 Angstrom (atoms 0 - 2).
+
+
+<<< MD engine initialization done (took 0.346 seconds) <<<
+
+
+###############################################################
+########        Executing Input Script (SAN-VM)        ########
+###############################################################
+
+Execution verbose level is 2.
+
+-------------------------------------------------------------------------------------------
+
+
+
+>>>>>> Randomize( 42 )
+
+Initialized random number generator seed to 42.
+
+
+>>>>>> Initvel( 100_K )
+
+Old temperature of the total system is     0.000 K.
+
+Initializing atom velocities for region "all" to 100.000 K:
+  Creating Maxwell-Boltzmann distribution...
+  Temperature after random initialization is 77.965 K.
+  Rescaling velocities to match desired initial temperature (factor 1.132533)...
+  Removing initial center of mass movement...
+  Temperature after center of mass movement removal is 69.012 K.
+  Removing initial angular velocity...
+    Angular momentum before:  (  -0.00136437 |  -0.01241164 |   0.00571992 ) a.m.u. Angstrom^2 fs^-1
+    Angular velocity before:  (  -0.00201776 |  -0.00673950 |   0.00490791 ) fs^-1
+    Angular momentum after:   (  -0.00000000 |  -0.00000000 |   0.00000000 ) a.m.u. Angstrom^2 fs^-1
+    Angular velocity after:   (  -0.00000000 |  -0.00000000 |   0.00000000 ) fs^-1
+  Temperature after angular velocity removal is 53.714 K.
+  Rescaling velocities to match desired initial temperature (factor 1.364440)...
+Done.
+
+New temperature of the total system is   100.000 K.
+
+
+>>>>>> Timestep( 0.5_fs )
+
+Setting integration time step to 0.50 fs.
+
+The lightest element in the active region has an atomic mass of 1.008 a.m.u.
+Recommending time step not larger than 0.50 .. 1.00 fs.
+  --> choice seems reasonable
+
+
+>>>>>> Thermostat( None )
+
+
+
+>>>>>> Dump( Position, Stride, 1, Filename, "agua_dump-traj.xyz" )
+
+Modified writing position trajectory for region "all": Format XYZ, stride 1, filename "agua_dump-traj.xyz", append.
+
+
+>>>>>> Dump( Velocity, Stride, 1, Filename, "agua_dump-vel.xyz" )
+
+Switched on writing velocity trajectory for region "all": Format XYZ, stride 1, filename "agua_dump-vel.xyz", append.
+
+
+>>>>>> Dump( Force, Stride, 1, Filename, "agua_dump-force.xyz" )
+
+Switched on writing force trajectory for region "all": Format XYZ, stride 1, filename "agua_dump-force.xyz", append.
+
+
+>>>>>> Run( 200 )
+
+
+***************************************************
+****    Starting MD loop for      200 steps    ****
+***************************************************
+
+
+Defined regions:
+         All:     3 atoms,     18.015 a.m.u.
+          QM:   All
+      Active:   All
+
+
+Dump: Will write Position data of region "All" in XYZ format with stride 1 to "agua_dump-traj.xyz" (append).
+Dump: Will write Velocity data of region "All" in XYZ format with stride 1 to "agua_dump-vel.xyz" (append).
+Dump: Will write Force data of region "All" in XYZ format with stride 1 to "agua_dump-force.xyz" (append).
+
+Hint: To compute properties (dipole, etc.) in each step, specify "dump properties" before run.
+
+Will write restart file to "agua_dump.mdrestart" after each step.
+Will write energy statistics to "agua_dump-md-ener.csv" after each step.
+
+The system contains 9 active degrees of freedom (3 active atoms * 3).
+
+Smallest interatomic distance from active region: 0.977634 Angstrom (atoms 0 - 2).
+
+
+
+       Step |  Sim. Time | Iter |  t_Ener |  t_Grad |     Temp |     E_Kin |         E_Pot |         E_Tot |      Cons.Qty | E.Drift
+            |       [fs] |      |     [s] |     [s] |      [K] | [Hartree] |     [Hartree] |     [Hartree] |     [Hartree] |     [K]
+------------|------------|------|---------|---------|----------|-----------|---------------|---------------|---------------|-----------
+          0          0.0             0.02               100.00    0.001425       -5.069570       -5.068145                          
+          1          0.5             0.02               110.87    0.001580       -5.069897       -5.068317       -5.068317      0.00
+          2          1.0             0.02               132.74    0.001892       -5.070213       -5.068322       -5.068322     -0.16
+          3          1.5             0.01               148.97    0.002123       -5.070448       -5.068325       -5.068325     -0.29
+          4          2.0             0.01               155.50    0.002216       -5.070543       -5.068327       -5.068327     -0.35
+          5          2.5             0.01               150.63    0.002147       -5.070472       -5.068326       -5.068326     -0.29
+          6          3.0             0.01               135.89    0.001937       -5.070258       -5.068321       -5.068321     -0.15
+          7          3.5             0.01               115.55    0.001647       -5.069963       -5.068316       -5.068316      0.02
+          8          4.0             0.01                94.83    0.001351       -5.069664       -5.068313       -5.068313      0.15
+          9          4.5             0.02                77.62    0.001106       -5.069418       -5.068312       -5.068312      0.19
+         10          5.0             0.02                64.98    0.000926       -5.069240       -5.068314       -5.068314      0.13
+         11          5.5             0.02                55.27    0.000788       -5.069104       -5.068316       -5.068316      0.03
+         12          6.0             0.02                45.78    0.000652       -5.068970       -5.068318       -5.068318     -0.02
+         13          6.5             0.01                34.78    0.000496       -5.068813       -5.068317       -5.068317     -0.01
+         14          7.0             0.01                22.72    0.000324       -5.068639       -5.068315       -5.068315      0.08
+         15          7.5             0.02                12.14    0.000173       -5.068485       -5.068312       -5.068312      0.20
+         16          8.0             0.02                 6.61    0.000094       -5.068403       -5.068309       -5.068309      0.30
+         17          8.5             0.02                 9.14    0.000130       -5.068438       -5.068308       -5.068308      0.34
+         18          9.0             0.01                21.01    0.000299       -5.068608       -5.068309       -5.068309      0.30
+         19          9.5             0.01                41.05    0.000585       -5.068897       -5.068312       -5.068312      0.19
+         20         10.0             0.01                65.95    0.000940       -5.069256       -5.068316       -5.068316      0.05
+         21         10.5             0.02                91.12    0.001298       -5.069618       -5.068320       -5.068320     -0.10
+         22         11.0             0.02               112.21    0.001599       -5.069921       -5.068322       -5.068322     -0.19
+         23         11.5             0.01               126.54    0.001803       -5.070126       -5.068323       -5.068323     -0.19
+         24         12.0             0.01               133.90    0.001908       -5.070229       -5.068321       -5.068321     -0.12
+         25         12.5             0.02               136.22    0.001941       -5.070259       -5.068318       -5.068318     -0.03
+         26         13.0             0.01               136.17    0.001940       -5.070257       -5.068317       -5.068317      0.02
+         27         13.5             0.01               135.34    0.001929       -5.070246       -5.068317       -5.068317      0.00
+         28         14.0             0.02               133.23    0.001899       -5.070218       -5.068319       -5.068319     -0.08
+         29         14.5             0.01               127.60    0.001818       -5.070140       -5.068322       -5.068322     -0.16
+         30         15.0             0.02               115.99    0.001653       -5.069976       -5.068323       -5.068323     -0.20
+         31         15.5             0.01                97.42    0.001388       -5.069710       -5.068321       -5.068321     -0.15
+         32         16.0             0.01                73.37    0.001046       -5.069364       -5.068318       -5.068318     -0.03
+         33         16.5             0.01                47.49    0.000677       -5.068990       -5.068314       -5.068314      0.12
+         34         17.0             0.01                24.50    0.000349       -5.068659       -5.068310       -5.068310      0.26
+         35         17.5             0.02                 8.68    0.000124       -5.068431       -5.068307       -5.068307      0.35
+         36         18.0             0.01                 2.66    0.000038       -5.068345       -5.068307       -5.068307      0.36
+         37         18.5             0.02                 6.69    0.000095       -5.068404       -5.068309       -5.068309      0.29
+         38         19.0             0.01                18.77    0.000267       -5.068580       -5.068312       -5.068312      0.17
+         39         19.5             0.02                35.38    0.000504       -5.068820       -5.068316       -5.068316      0.05
+         40         20.0             0.01                52.78    0.000752       -5.069070       -5.068318       -5.068318     -0.04
+         41         20.5             0.01                68.38    0.000974       -5.069293       -5.068319       -5.068319     -0.05
+         42         21.0             0.02                81.61    0.001163       -5.069480       -5.068317       -5.068317     -0.01
+         43         21.5             0.01                93.78    0.001336       -5.069652       -5.068315       -5.068315      0.06
+         44         22.0             0.01               106.85    0.001523       -5.069837       -5.068314       -5.068314      0.09
+         45         22.5             0.01               121.65    0.001734       -5.070049       -5.068316       -5.068316      0.05
+         46         23.0             0.01               136.69    0.001948       -5.070267       -5.068319       -5.068319     -0.07
+         47         23.5             0.01               148.35    0.002114       -5.070437       -5.068323       -5.068323     -0.21
+         48         24.0             0.01               152.50    0.002173       -5.070499       -5.068326       -5.068326     -0.30
+         49         24.5             0.02               146.45    0.002087       -5.070413       -5.068326       -5.068326     -0.30
+         50         25.0             0.02               130.33    0.001857       -5.070180       -5.068323       -5.068323     -0.20
+         51         25.5             0.01               107.13    0.001527       -5.069845       -5.068318       -5.068318     -0.04
+         52         26.0             0.01                81.60    0.001163       -5.069477       -5.068314       -5.068314      0.12
+         53         26.5             0.01                58.63    0.000836       -5.069146       -5.068311       -5.068311      0.23
+         54         27.0             0.01                41.72    0.000595       -5.068904       -5.068310       -5.068310      0.27
+         55         27.5             0.02                32.08    0.000457       -5.068768       -5.068311       -5.068311      0.23
+         56         28.0             0.01                28.51    0.000406       -5.068720       -5.068313       -5.068313      0.13
+         57         28.5             0.01                28.18    0.000402       -5.068718       -5.068316       -5.068316      0.03
+         58         29.0             0.02                28.03    0.000399       -5.068717       -5.068318       -5.068318     -0.03
+         59         29.5             0.02                26.43    0.000377       -5.068694       -5.068317       -5.068317     -0.01
+         60         30.0             0.01                24.24    0.000345       -5.068660       -5.068314       -5.068314      0.10
+         61         30.5             0.02                24.72    0.000352       -5.068663       -5.068310       -5.068310      0.24
+         62         31.0             0.01                31.90    0.000455       -5.068763       -5.068308       -5.068308      0.32
+         63         31.5             0.02                48.16    0.000686       -5.068995       -5.068309       -5.068309      0.28
+         64         32.0             0.01                72.39    0.001032       -5.069345       -5.068313       -5.068313      0.13
+         65         32.5             0.02                99.93    0.001424       -5.069744       -5.068319       -5.068319     -0.08
+         66         33.0             0.01               124.43    0.001773       -5.070098       -5.068325       -5.068325     -0.26
+         67         33.5             0.01               140.52    0.002003       -5.070329       -5.068327       -5.068327     -0.34
+         68         34.0             0.02               145.81    0.002078       -5.070404       -5.068326       -5.068326     -0.30
+         69         34.5             0.01               141.32    0.002014       -5.070336       -5.068322       -5.068322     -0.18
+         70         35.0             0.01               130.56    0.001861       -5.070179       -5.068318       -5.068318     -0.04
+         71         35.5             0.02               117.82    0.001679       -5.069994       -5.068315       -5.068315      0.07
+         72         36.0             0.01               106.48    0.001517       -5.069832       -5.068314       -5.068314      0.11
+         73         36.5             0.01                97.93    0.001396       -5.069710       -5.068315       -5.068315      0.08
+         74         37.0             0.01                91.26    0.001301       -5.069618       -5.068317       -5.068317     -0.01
+         75         37.5             0.02                83.94    0.001196       -5.069516       -5.068320       -5.068320     -0.10
+         76         38.0             0.02                73.07    0.001041       -5.069363       -5.068322       -5.068322     -0.16
+         77         38.5             0.02                57.13    0.000814       -5.069135       -5.068321       -5.068321     -0.13
+         78         39.0             0.01                37.28    0.000531       -5.068848       -5.068317       -5.068317      0.00
+         79         39.5             0.02                17.67    0.000252       -5.068563       -5.068312       -5.068312      0.20
+         80         40.0             0.02                 4.21    0.000060       -5.068367       -5.068307       -5.068307      0.37
+         81         40.5             0.01                 2.04    0.000029       -5.068334       -5.068305       -5.068305      0.43
+         82         41.0             0.02                13.03    0.000186       -5.068493       -5.068307       -5.068307      0.35
+         83         41.5             0.01                34.66    0.000494       -5.068807       -5.068313       -5.068313      0.16
+         84         42.0             0.01                61.08    0.000870       -5.069189       -5.068319       -5.068319     -0.06
+         85         42.5             0.02                85.68    0.001221       -5.069544       -5.068323       -5.068323     -0.21
+         86         43.0             0.01               103.72    0.001478       -5.069803       -5.068324       -5.068324     -0.26
+         87         43.5             0.02               113.73    0.001621       -5.069943       -5.068323       -5.068323     -0.20
+         88         44.0             0.01               117.35    0.001672       -5.069992       -5.068320       -5.068320     -0.09
+         89         44.5             0.02               117.93    0.001681       -5.069997       -5.068316       -5.068316      0.02
+         90         45.0             0.01               118.79    0.001693       -5.070008       -5.068315       -5.068315      0.08
+         91         45.5             0.01               121.70    0.001734       -5.070050       -5.068315       -5.068315      0.07
+         92         46.0             0.01               126.13    0.001797       -5.070115       -5.068318       -5.068318     -0.02
+         93         46.5             0.01               129.38    0.001844       -5.070165       -5.068321       -5.068321     -0.14
+         94         47.0             0.02               127.64    0.001819       -5.070143       -5.068324       -5.068324     -0.25
+         95         47.5             0.02               117.60    0.001676       -5.070001       -5.068325       -5.068325     -0.29
+         96         48.0             0.01                98.29    0.001401       -5.069724       -5.068323       -5.068323     -0.21
+         97         48.5             0.02                72.14    0.001028       -5.069346       -5.068318       -5.068318     -0.03
+         98         49.0             0.01                44.69    0.000637       -5.068949       -5.068312       -5.068312      0.19
+         99         49.5             0.01                22.58    0.000322       -5.068629       -5.068307       -5.068307      0.35
+        100         50.0             0.02                10.73    0.000153       -5.068459       -5.068306       -5.068306      0.38
+        101         50.5             0.01                10.19    0.000145       -5.068454       -5.068309       -5.068309      0.28
+        102         51.0             0.01                18.06    0.000257       -5.068571       -5.068314       -5.068314      0.12
+        103         51.5             0.02                29.33    0.000418       -5.068736       -5.068318       -5.068318     -0.03
+        104         52.0             0.01                39.58    0.000564       -5.068884       -5.068320       -5.068320     -0.08
+        105         52.5             0.01                46.92    0.000669       -5.068987       -5.068318       -5.068318     -0.05
+        106         53.0             0.01                52.34    0.000746       -5.069062       -5.068316       -5.068316      0.05
+        107         53.5             0.01                58.64    0.000836       -5.069149       -5.068313       -5.068313      0.15
+        108         54.0             0.02                68.79    0.000980       -5.069292       -5.068311       -5.068311      0.20
+        109         54.5             0.01                84.34    0.001202       -5.069514       -5.068312       -5.068312      0.17
+        110         55.0             0.01               104.48    0.001489       -5.069804       -5.068315       -5.068315      0.07
+        111         55.5             0.01               126.04    0.001796       -5.070116       -5.068320       -5.068320     -0.08
+        112         56.0             0.01               144.26    0.002056       -5.070380       -5.068324       -5.068324     -0.24
+        113         56.5             0.02               154.38    0.002200       -5.070527       -5.068327       -5.068327     -0.34
+        114         57.0             0.01               153.31    0.002185       -5.070512       -5.068327       -5.068327     -0.34
+        115         57.5             0.02               141.04    0.002010       -5.070334       -5.068324       -5.068324     -0.24
+        116         58.0             0.01               120.75    0.001721       -5.070040       -5.068319       -5.068319     -0.07
+        117         58.5             0.01                97.67    0.001392       -5.069706       -5.068314       -5.068314      0.10
+        118         59.0             0.01                76.80    0.001095       -5.069406       -5.068312       -5.068312      0.19
+        119         59.5             0.01                60.93    0.000868       -5.069180       -5.068312       -5.068312      0.18
+        120         60.0             0.01                49.88    0.000711       -5.069025       -5.068314       -5.068314      0.10
+        121         60.5             0.02                41.50    0.000591       -5.068908       -5.068316       -5.068316      0.03
+        122         61.0             0.02                33.51    0.000477       -5.068795       -5.068317       -5.068317      0.00
+        123         61.5             0.01                25.11    0.000358       -5.068674       -5.068316       -5.068316      0.05
+        124         62.0             0.02                17.63    0.000251       -5.068564       -5.068313       -5.068313      0.14
+        125         62.5             0.01                13.83    0.000197       -5.068507       -5.068310       -5.068310      0.24
+        126         63.0             0.01                16.74    0.000239       -5.068547       -5.068308       -5.068308      0.30
+        127         63.5             0.01                28.22    0.000402       -5.068711       -5.068309       -5.068309      0.30
+        128         64.0             0.01                48.06    0.000685       -5.068996       -5.068311       -5.068311      0.22
+        129         64.5             0.01                73.73    0.001051       -5.069366       -5.068315       -5.068315      0.08
+        130         65.0             0.02               100.86    0.001437       -5.069757       -5.068320       -5.068320     -0.09
+        131         65.5             0.01               124.43    0.001773       -5.070097       -5.068323       -5.068323     -0.22
+        132         66.0             0.02               140.34    0.002000       -5.070325       -5.068325       -5.068325     -0.28
+        133         66.5             0.01               146.74    0.002091       -5.070415       -5.068324       -5.068324     -0.25
+        134         67.0             0.01               144.61    0.002061       -5.070382       -5.068321       -5.068321     -0.14
+        135         67.5             0.02               137.06    0.001953       -5.070271       -5.068318       -5.068318     -0.02
+        136         68.0             0.02               127.67    0.001819       -5.070135       -5.068316       -5.068316      0.06
+        137         68.5             0.02               118.56    0.001690       -5.070005       -5.068316       -5.068316      0.05
+        138         69.0             0.01               109.53    0.001561       -5.069879       -5.068318       -5.068318     -0.02
+        139         69.5             0.02                98.63    0.001406       -5.069725       -5.068320       -5.068320     -0.09
+        140         70.0             0.02                83.82    0.001195       -5.069515       -5.068320       -5.068320     -0.11
+        141         70.5             0.01                64.64    0.000921       -5.069240       -5.068319       -5.068319     -0.05
+        142         71.0             0.01                42.91    0.000612       -5.068927       -5.068315       -5.068315      0.07
+        143         71.5             0.01                22.31    0.000318       -5.068629       -5.068311       -5.068311      0.21
+        144         72.0             0.01                 7.05    0.000100       -5.068409       -5.068308       -5.068308      0.32
+        145         72.5             0.01                 0.41    0.000006       -5.068313       -5.068307       -5.068307      0.36
+        146         73.0             0.01                 3.68    0.000052       -5.068360       -5.068308       -5.068308      0.32
+        147         73.5             0.02                15.74    0.000224       -5.068535       -5.068311       -5.068311      0.22
+        148         74.0             0.02                33.45    0.000477       -5.068791       -5.068315       -5.068315      0.09
+        149         74.5             0.01                52.81    0.000753       -5.069071       -5.068318       -5.068318     -0.03
+        150         75.0             0.01                70.39    0.001003       -5.069323       -5.068319       -5.068319     -0.08
+        151         75.5             0.01                84.61    0.001206       -5.069525       -5.068319       -5.068319     -0.06
+        152         76.0             0.02                96.12    0.001370       -5.069686       -5.068317       -5.068317      0.02
+        153         76.5             0.02               107.04    0.001525       -5.069840       -5.068315       -5.068315      0.08
+        154         77.0             0.02               119.22    0.001699       -5.070014       -5.068315       -5.068315      0.08
+        155         77.5             0.02               132.56    0.001889       -5.070206       -5.068317       -5.068317     -0.01
+        156         78.0             0.01               144.48    0.002059       -5.070380       -5.068321       -5.068321     -0.14
+        157         78.5             0.01               150.90    0.002150       -5.070475       -5.068325       -5.068325     -0.27
+        158         79.0             0.01               148.27    0.002113       -5.070439       -5.068326       -5.068326     -0.31
+        159         79.5             0.02               135.31    0.001928       -5.070253       -5.068324       -5.068324     -0.26
+        160         80.0             0.01               113.69    0.001620       -5.069941       -5.068321       -5.068321     -0.12
+        161         80.5             0.01                87.46    0.001246       -5.069562       -5.068316       -5.068316      0.04
+        162         81.0             0.01                61.62    0.000878       -5.069190       -5.068312       -5.068312      0.18
+        163         81.5             0.01                40.60    0.000579       -5.068888       -5.068310       -5.068310      0.26
+        164         82.0             0.02                26.99    0.000385       -5.068694       -5.068309       -5.068309      0.27
+        165         82.5             0.01                21.11    0.000301       -5.068612       -5.068311       -5.068311      0.22
+        166         83.0             0.02                21.23    0.000303       -5.068616       -5.068314       -5.068314      0.12
+        167         83.5             0.02                24.57    0.000350       -5.068666       -5.068316       -5.068316      0.04
+        168         84.0             0.01                28.63    0.000408       -5.068725       -5.068317       -5.068317      0.00
+        169         84.5             0.01                32.52    0.000463       -5.068779       -5.068316       -5.068316      0.04
+        170         85.0             0.02                37.50    0.000534       -5.068848       -5.068313       -5.068313      0.13
+        171         85.5             0.01                46.30    0.000660       -5.068971       -5.068311       -5.068311      0.22
+        172         86.0             0.01                61.42    0.000875       -5.069186       -5.068310       -5.068310      0.24
+        173         86.5             0.01                83.15    0.001185       -5.069498       -5.068313       -5.068313      0.14
+        174         87.0             0.01               108.56    0.001547       -5.069865       -5.068318       -5.068318     -0.04
+        175         87.5             0.01               132.28    0.001885       -5.070209       -5.068324       -5.068324     -0.23
+        176         88.0             0.02               148.60    0.002118       -5.070445       -5.068327       -5.068327     -0.35
+        177         88.5             0.01               153.84    0.002192       -5.070520       -5.068327       -5.068327     -0.36
+        178         89.0             0.01               147.64    0.002104       -5.070429       -5.068325       -5.068325     -0.26
+        179         89.5             0.02               132.77    0.001892       -5.070212       -5.068320       -5.068320     -0.11
+        180         90.0             0.02               113.88    0.001623       -5.069939       -5.068316       -5.068316      0.04
+        181         90.5             0.02                95.64    0.001363       -5.069676       -5.068313       -5.068313      0.15
+        182         91.0             0.01                81.23    0.001158       -5.069470       -5.068312       -5.068312      0.17
+        183         91.5             0.01                71.44    0.001018       -5.069332       -5.068314       -5.068314      0.12
+        184         92.0             0.02                64.73    0.000922       -5.069239       -5.068317       -5.068317      0.02
+        185         92.5             0.01                58.10    0.000828       -5.069147       -5.068319       -5.068319     -0.08
+        186         93.0             0.01                48.69    0.000694       -5.069014       -5.068320       -5.068320     -0.12
+        187         93.5             0.02                35.51    0.000506       -5.068825       -5.068319       -5.068319     -0.06
+        188         94.0             0.01                20.56    0.000293       -5.068607       -5.068314       -5.068314      0.10
+        189         94.5             0.01                 8.52    0.000121       -5.068431       -5.068309       -5.068309      0.28
+        190         95.0             0.01                 4.83    0.000069       -5.068375       -5.068306       -5.068306      0.39
+        191         95.5             0.01                12.96    0.000185       -5.068491       -5.068306       -5.068306      0.38
+        192         96.0             0.02                32.32    0.000461       -5.068771       -5.068311       -5.068311      0.22
+        193         96.5             0.02                58.29    0.000831       -5.069148       -5.068317       -5.068317      0.00
+        194         97.0             0.01                84.28    0.001201       -5.069523       -5.068322       -5.068322     -0.18
+        195         97.5             0.01               104.61    0.001491       -5.069816       -5.068325       -5.068325     -0.27
+        196         98.0             0.01               116.59    0.001661       -5.069985       -5.068324       -5.068324     -0.24
+        197         98.5             0.02               120.93    0.001723       -5.070044       -5.068321       -5.068321     -0.13
+        198         99.0             0.01               120.72    0.001720       -5.070038       -5.068318       -5.068318     -0.01
+        199         99.5             0.02               119.63    0.001705       -5.070020       -5.068315       -5.068315      0.07
+        200        100.0             0.01               120.22    0.001713       -5.070028       -5.068315       -5.068315      0.08
+------------|------------|------|---------|---------|----------|-----------|---------------|---------------|---------------|-----------
+       Step |  Sim. Time | Iter |  t_Ener |  t_Grad |     Temp |     E_Kin |         E_Pot |         E_Tot |      Cons.Qty | E.Drift
+            |       [fs] |      |     [s] |     [s] |      [K] | [Hartree] |     [Hartree] |     [Hartree] |     [Hartree] |     [K]
+
+
+Finished MD run of 200 steps.
+
+
+The average temperature during this run was 78.86087 K.
+
+
+Smallest interatomic distance from active region: 0.976827 Angstrom (atoms 0 - 1).
+
+
+>>> Invariance Statistics >>>
+
+    The maximal deviation of the gradient from translational invariance was 4.984e-12 kJ mol^-1 Angstrom^-1.
+    This would introduce a center of mass drift of 0.000 Kelvin within 1.0 ps.
+
+    The maximal deviation of the gradient from rotational invariance (torque) was 1.660e-03 kJ mol^-1 rad^-1.
+    This would introduce an overall rotation of 0.001 Kelvin within 1.0 ps.
+
+<<< Invariance Statistics <<<
+
+
+### System Geometry ###
+
+  * Region "All" = "Active" = "QM":
+      Bounding box: from (   -0.786 |   -0.000 |   -0.070 )
+                      to (    0.786 |    0.000 |    0.510 ) Angstrom
+      System extent:     (    1.573 |    0.000 |    0.580 ) Angstrom
+      Center of mass:    (   -0.000 |    0.000 |   -0.005 ) Angstrom
+
+      Angular momentum:  (   0.00000000 |   0.00000028 |  -0.00000000 ) a.m.u. Angstrom^2 fs^-1
+      Angular velocity:  (   0.00000000 |   0.00000015 |  -0.00000000 ) fs^-1
+      Moment of inertia: (         0.60 |         0.00 |         0.00 )
+                         (         0.00 |         1.85 |        -0.00 ) a.m.u. Angstrom^2
+                         (         0.00 |        -0.00 |         1.25 )
+      Singular values:   (         0.60 |         1.25 |         1.85 ) a.m.u. Angstrom^2
+
+
+
+>>> Timing data >>>
+    MD loop was running for 3.010 seconds
+    Performance: 0.015 seconds/step, 119605.384 fs/hour.
+    Time spent within the MD module (overhead): 0.034 seconds (1.1300 % of total time).
+<<< Timing data <<<
+
+
+Finished MD loop.
+
+-------------------------------------------------------------------------------------------
+
+#######################################################################
+########        Finished Executing Input Script (SAN-VM)       ########
+#######################################################################
+
+    Total execution time: 3.010 seconds
+
+            28 instructions executed
+             8 function calls
+
+
+Timings for individual modules during the MD run:
+
+XTB module                        ...        2.914 sec (=   0.049 min)  88.0 %
+ORCA initialization               ...        0.346 sec (=   0.006 min)  10.4 %
+Self time inside of MD module     ...        0.052 sec (=   0.001 min)   1.6 %
+------------------------------------------------------------------------------
+Sum of individual times           ...        3.312 sec (=   0.055 min) 100.0 %
+
+Total wall time of MD module      ...        3.356 sec (=   0.056 min)
+             --> "dark time"      ...        0.044 sec (=   0.001 min)   1.3 %
+
+( The "dark time" is spent in the ORCA-internal routines for energy and gradient calculation,
+  but not inside of the sub-programs which do so. It contains operating system overhead for
+  spawning new processes in each MD step and some file I/O time. )
+
+
+
+    ###########################################################
+    ####     ORCA ab initio Molecular Dynamics leaving     ####
+    ####     Scriptable Nuclear Dynamics (SANdy) + ORCA    ####
+    ####           (c) Martin Brehm, 2016 - 2025           ####
+    ####           https://sanscript.org/orcamd            ####
+    ###########################################################
+
+
+-------------------------------------------------------------------------------------------
+
+
+--------------------------------
+SUGGESTED CITATIONS FOR THIS RUN
+--------------------------------
+
+Below you find a list of papers that are relevant to this ORCA run
+We neither can nor want to force you to cite these papers, but we appreciate if you do
+You receive ORCA, which is the product of decades of hard work by many enthusiastic individuals, for free
+The only thing we kindly ask in return is that you cite our papers,
+We deeply appreciate it, if you show your appreciation for ORCA by not just citing the generic ORCA reference.
+
+Please note that relegating all ORCA citations to the supporting information does *not* help us.
+SI sections are not indexed - citations you put there will not count into any citation statistics
+But we need these citations in order to attract the funding resources that allow us to do what we are doing
+
+Therefore, if you are a happy ORCA user, please consider citing a few of the papers listed below in the main body of your paper
+
+In addition to the list printed below, the program has created the file agua_dump.bibtex that contains the list in bibtex format
+You can import this file easily into all common literature databanks and citation aid programs
+
+It goes without saying that in many instances, there are alternative algorithms to achieve similar
+results as the ones you have gotten from ORCA. It is, of course, also the case that in some instances
+ORCA just re-implements algorithms worked out by others. We are fully aware of that and we are also
+fully appreciative of our colleagues work. Hence this citation list should not be read as indicating
+that the listed papers, which are focused on our own work, are the only ones worth citing. It simply
+meant to make it easier for users to cite ORCA specific papers. It is not a substitute for doing your
+own literature research and citing the relevant literature in a scientifically appropriate manner.
+
+List of essential papers. We consider these as the minimum necessary citations
+
+  1. Bannwarth, C.; Ehlert, S.; Grimme, S.
+     GFN2-xTB—An Accurate and Broadly Parametrized Self-Consistent Tight-Binding Quantum Chemical Method with Multipole Electrostatics and Density-Dependent Dispersion Contributions
+     J. Chem. Theory Comput. 2019 15(3), 1652-1671
+     doi.org/10.1021/acs.jctc.8b01176
+  2. Neese, F.
+     Software update: the ORCA program system, version 6.0
+     WIRES Comput. Molec. Sci. 2025 15(1), e70019
+     doi.org/10.1002/wcms.70019
+
+List of papers to cite with high priority. The work reported in these papers was absolutely
+necessary for this run to complete.
+Our perspective: the developers of density functionals and basis sets usually get cited in chemistry papers
+Good! But without the algorithms to do something with them, the functionals or basis sets would not do anything.
+Hence, in our opinion, the algorithm design and method developments papers are equally worthy of getting cited
+
+  1. Bannwarth, C.; Caldeweyher, E.; Ehlert, S.; Hansen, A.; Pracht, P.; Seibert, J.; Spicher, S.; Grimme, S.
+     Extended tight-binding quantum chemistry methods
+     WIRES Comput. Molec. Sci. 2020 11(2), e1493
+     doi.org/10.1002/wcms.1493
+
+List of suggested additional citations. These are papers that are important in the 'surrounding' of 
+of this run, or papers that preceded the highly important papers. If you like your results we are grateful for a citation.
+
+  1. Neese, F.
+     The ORCA program system
+     WIRES Comput. Molec. Sci. 2012 2(1), 73-78
+     doi.org/10.1002/wcms.81
+  2. Neese, F.
+     Software update: the ORCA program system, version 4.0
+     WIRES Comput. Molec. Sci. 2018 8(1), 1-6
+     doi.org/10.1002/wcms.1327
+  3. Neese, F.; Wennmohs, F.; Becker, U.; Riplinger, C.
+     The ORCA quantum chemistry program package
+     J. Chem. Phys. 2020 152(22), 224108
+     doi.org/10.1063/5.0004608
+  4. Neese, F.
+     Software update: The ORCA program system—Version 5.0
+     WIRES Comput. Molec. Sci. 2022 12(1), e1606
+     doi.org/10.1002/wcms.1606
+
+List of optional additional citations
+
+  1. Neese, F.
+     Approximate second-order SCF convergence for spin unrestricted wavefunctions
+     Chem. Phys. Lett. 2000 325(1-3), 93-98
+     doi.org/10.1016/s0009-2614(00)00662-x
+
+Timings for individual modules:
+
+Sum of individual times          ...        3.448 sec (=   0.057 min)
+Molecular Dynamics run           ...        3.448 sec (=   0.057 min) 100.0 %
+                             ****ORCA TERMINATED NORMALLY****
+TOTAL RUN TIME: 0 days 0 hours 0 minutes 3 seconds 924 msec

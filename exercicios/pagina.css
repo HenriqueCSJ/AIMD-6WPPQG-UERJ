@@ -4,3 +4,40 @@
 .course-nav .nav-group{font-size:11px;text-transform:uppercase;letter-spacing:.08em;margin:22px 10px 8px;color:var(--muted)}.course-nav .num{min-width:26px}.course-nav{max-height:calc(100vh - 48px);overflow-y:auto;scrollbar-width:thin}.course-nav .links a:not([aria-current]):hover{background:#e4eeed}.endnav a{max-width:48%}@media(max-width:900px){.course-nav{max-height:none;overflow:visible}}
 
 .course-nav .parameter-guide{background:#e4eeed;color:var(--accent);font-weight:700;border:1px solid #bfd6cc;margin:10px 0 16px}
+
+/* The lesson route stays separate from optional material and local sections. */
+.course-map{margin:0;padding:0;border:0;border-radius:0}
+.course-map>summary{font-size:15px;color:var(--ink);padding:8px 0 14px;line-height:1.4}
+.course-map>summary small{display:block;font-size:12px;color:var(--muted);font-weight:400;margin:5px 0 0 17px}
+.course-nav .links{list-style:none;margin:0;padding:0}
+.course-nav .links li{margin:0;min-width:0}
+.course-nav .nav-note{font-size:12px;line-height:1.45;margin:0 10px 10px;color:var(--muted)}
+.route-nav{border:1px solid #bfd6cc;background:#f2f8f6;border-radius:12px;padding:18px;margin:0 0 28px}
+.route-status{font-size:14px;font-weight:700;line-height:1.5;color:var(--ink)}
+.course-progress{display:block;width:100%;height:5px;border:0;border-radius:8px;overflow:hidden;margin:10px 0 16px;appearance:none;background:#d7e6e1}
+.course-progress::-webkit-progress-bar{background:#d7e6e1}
+.course-progress::-webkit-progress-value{background:var(--accent)}
+.course-progress::-moz-progress-bar{background:var(--accent)}
+.route-controls{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px;margin-top:12px}
+.route-controls a{display:flex;flex-direction:column;justify-content:center;min-height:54px;padding:10px 12px;background:white;border:1px solid var(--line);border-radius:8px;font-size:14px;font-weight:650;line-height:1.5;text-decoration:none}
+.route-controls a:hover{border-color:var(--accent);text-decoration:underline}
+.route-controls small{display:block;color:var(--muted);font-size:11px;letter-spacing:.04em;text-transform:uppercase;margin-bottom:3px}
+.route-next{text-align:right}
+.route-map{display:inline-block;margin-top:14px;font-size:12px}
+.route-fim{margin:36px 0 0}
+.section-nav{margin:24px 0 28px;padding:18px 20px;background:#f5f8fa;border:1px solid var(--line);border-radius:10px;font-size:14px;line-height:1.5}
+.section-nav>strong{display:block;margin-bottom:10px}
+.section-nav ul{list-style:none;display:flex;flex-wrap:wrap;gap:8px 18px;margin:0;padding:0}
+.section-nav li{margin:0}
+.section-nav a{display:inline-block;padding:4px 0}
+.section-nav a[aria-current=location]{font-weight:750;text-decoration-thickness:2px}
+.lesson-content h2{border-top:1px solid var(--line);padding-top:26px;margin-top:42px;scroll-margin-top:24px}
+.lesson-content h3{scroll-margin-top:24px}
+.complement-steps{display:flex;flex-wrap:wrap;align-items:center;gap:10px 20px;background:#f5f8fa;border-left:3px solid var(--accent);padding:12px 16px;margin:0 0 24px;font-size:13px;line-height:1.5}
+.complement-steps>span{flex-basis:100%;font-weight:700;color:var(--muted)}
+.complement-steps a{padding:4px 0}
+@media(min-width:851px){.course-map>summary{list-style:none;cursor:default;pointer-events:none}.course-map>summary::-webkit-details-marker{display:none}}
+@media(max-width:850px){.layout{gap:16px}.course-nav{padding:0 8px}.course-map>summary{padding:12px 14px;background:white;border:1px solid var(--line);border-radius:10px;min-height:48px}.course-map[open]>summary{margin-bottom:14px}.course-map>summary small{display:inline;margin-left:8px}.route-nav{padding:14px}.route-controls{gap:10px}.route-status{font-size:13px}.section-nav{padding:16px}.section-nav ul{display:block}.section-nav li+li{margin-top:4px}}
+@media(max-width:480px){main{padding:24px 16px}.brand{padding:18px 16px}.brand small{font-size:12px}.route-controls{grid-template-columns:1fr}.route-next{text-align:left}.route-controls a{min-height:58px}.course-nav .links{grid-template-columns:1fr}.course-map>summary small{display:block;margin-left:17px}.section-nav{font-size:13px}.complement-steps{display:block}.complement-steps>span,.complement-steps a{display:block}.complement-steps a{margin-top:6px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+@media print{.route-nav,.section-nav,.complement-steps{display:none}.lesson-content h2{padding-top:0}}

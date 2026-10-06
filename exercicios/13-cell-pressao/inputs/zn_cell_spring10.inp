@@ -1,0 +1,13 @@
+# Mesmo estado inicial do exercicio 04b; alvo de pressao em bar.
+! MD XTB2 ALPB(water) PAL8
+%maxcore 256
+%md
+ Randomize 42
+ Timestep 0.5_fs
+ Thermostat CSVR 300_K Timecon 100_fs
+ Cell Sphere 0, 0, 0, 6.0_A Spring 10
+ Restart "preparacao_termica.mdrestart"
+ Dump Position Stride 1 Filename "zn_cell_spring10-traj.xyz"
+ Run 1000
+end
+* xyzfile 2 1 zn_solvato.xyz
