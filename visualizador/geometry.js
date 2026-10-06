@@ -81,6 +81,29 @@
     return result;
   }
 
+  /* Display-only torsion presentation. Raw signed values and source segments
+     remain intact for exports. Unwrapping chooses the nearest periodic image
+     within each uninterrupted source segment; it cannot infer rotations larger
+     than 180 degrees between retained frames. Callers mark real gaps with a
+     segment change or gapBefore, rather than guessing a sampling stride. */
+  function dihedralSeries(samples,options={}){
+    let previous=null,offset=0,plotSegment=-1;
+    return samples.map(sample=>{
+      const valid=Number.isFinite(sample.value)&&(sample.time===undefined||Number.isFinite(sample.time));
+      if(!valid){previous=null;offset=0;return {...sample,displayValue:null,plotSegment:null};}
+      const interrupted=!previous||sample.segment!==previous.segment||sample.gapBefore===true||
+        (Number.isFinite(sample.time)&&Number.isFinite(previous.time)&&sample.time<=previous.time);
+      if(interrupted){offset=0;plotSegment++;}
+      else{
+        const delta=sample.value-previous.value;
+        if(delta>180){if(options.continuous)offset-=360;else plotSegment++;}
+        else if(delta< -180){if(options.continuous)offset+=360;else plotSegment++;}
+      }
+      previous=sample;
+      return {...sample,displayValue:sample.value+offset,plotSegment};
+    });
+  }
+
   function normaliseBonds(bonds){
     const pairs=[];
     if(Array.isArray(bonds)){
@@ -167,5 +190,5 @@
     return els[0]==='C'&&els[1]==='C'&&els[2]==='O'&&els[8]==='H'&&cc!==null&&co!==null&&oh!==null&&cco!==null&&cc>=1.0&&cc<=1.7&&co>=1.0&&co<=1.7&&oh>=.6&&oh<=1.3&&cco>=90&&cco<=150;
   }
 
-  return {ACCEPTORS,METALS,COVALENT_RADII,distance,angle,dihedral,inferCovalentBonds,hydrogenBonds,coordinationContacts,isEthanolSkeleton};
+  return {ACCEPTORS,METALS,COVALENT_RADII,distance,angle,dihedral,dihedralSeries,inferCovalentBonds,hydrogenBonds,coordinationContacts,isEthanolSkeleton};
 });

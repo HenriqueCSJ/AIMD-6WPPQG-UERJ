@@ -64,7 +64,7 @@ function session({inspectState=false,search='?exemplo=__test_no_auto__',presets=
   nodes.molecule.tabIndex=0;
   let source=fs.readFileSync(path.join(viewer,'app.js'),'utf8');
   // A test-only bridge supplies a renderer double without creating WebGL.
-  if(inspectState)source=source.replace(/\}\)\(\);\s*$/,'globalThis.__testExports={energyRows:energyExportRows};globalThis.__testState=state;globalThis.__testHighlights={drawHighlights,selectTrajectoryAtom};globalThis.__testTrajectory={renderTrajectoryChart,updateTrajectoryCursor};globalThis.__testRendering={drawFrame,clearTrajectoryScene,drawContactSuggestions};})();');
+  if(inspectState)source=source.replace(/\}\)\(\);\s*$/,'globalThis.__testExports={energyRows:energyExportRows,distanceRows:distanceExportRows};globalThis.__testState=state;globalThis.__testHighlights={drawHighlights,selectTrajectoryAtom};globalThis.__testTrajectory={renderTrajectoryChart,updateTrajectoryCursor};globalThis.__testRendering={drawFrame,clearTrajectoryScene,drawContactSuggestions};})();');
   vm.runInContext(source,context);
   // Preserve the old helper meaning: `true` opens Trajectory 3D through the
   // primary action, while the default opens the explicit energy comparison.
@@ -731,6 +731,61 @@ function renamedWaterUploads(){
  return {out:inputFile('water.out',read('.out')),csv:inputFile('water-md-ener.csv',read('-md-ener.csv')),xyz:inputFile('agua_xtb2_nve-traj.xyz',read('-traj.xyz'))};
 }
 async function upload(ui,files){await ui.nodes['file-input'].fire('change',{target:{files}});}
+
+test('both reported ethanol torsions keep their signed source values in continuous view and CSV',async()=>{
+ const context={window:{AIMD_EXAMPLES:{runs:{}}}};
+ vm.runInNewContext(fs.readFileSync(path.join(viewer,'examples/etanol_etapas.js'),'utf8'),context);
+ const run=context.window.AIMD_EXAMPLES.runs.etanol_etapas,ui=session({inspectState:true}),load=ui.choose('ethanol');
+ ui.requests[0].resolve({config:{runs:[run.key]},runs:[run]});await load;
+ ui.nodes['tab-distance'].fire('click');ui.nodes['geometry-type'].value='dihedral';ui.nodes['geometry-type'].fire('change');
+ for(const indices of [[4,0,1,2],[0,1,2,8]]){
+  ['atom-a','atom-b','atom-c','atom-d'].forEach((id,i)=>ui.nodes[id].value=indices[i]);ui.nodes['add-distance'].fire('click');
+ }
+ const chart=ui.nodes['distance-chart'].chart;
+ assert.equal(chart.series.length,2);assert.match(chart.title,/contínua/);
+ for(let i=0;i<2;i++){
+  const indices=[[4,0,1,2],[0,1,2,8]][i],series=chart.series[i];let wraps=0;
+  for(let n=0;n<run.xyz.frames.length;n++){
+   const p=series.points[n],frame=run.xyz.frames[n],raw=Geometry.dihedral(...indices.map(j=>frame.coords[j]));
+   assert.equal(p.rawValue,raw);assert.equal(p.x,frame.time);
+   assert.ok(Math.abs((p.y-raw)/360-Math.round((p.y-raw)/360))<1e-12);
+   if(n&&p.segment===series.points[n-1].segment){assert.ok(Math.abs(p.y-series.points[n-1].y)<=180+1e-9);if(Math.abs(raw-series.points[n-1].rawValue)>180)wraps++;}
+  }
+  assert.ok(wraps>0,'Each reported torsion has periodic crossings');
+ }
+ const rows=ui.exports.distanceRows();assert.equal(rows.length,1+2*run.xyz.frames.length);
+ assert.equal(rows[0][4],'diedro_assinado_graus');assert.equal(rows[0][5],'diedro_continuo_graus');
+ for(let i=1;i<rows.length;i++){const p=chart.series[Math.floor((i-1)/run.xyz.frames.length)].points[(i-1)%run.xyz.frames.length];assert.equal(rows[i][4],p.rawValue);assert.equal(rows[i][5],p.y);}
+ ui.nodes['dihedral-display'].value='signed';ui.nodes['dihedral-display'].fire('change');
+ const signed=ui.nodes['distance-chart'].chart;assert.deepEqual(Array.from(signed.yDomain),[-180,180]);assert.deepEqual(Array.from(signed.yTicks),[-180,-90,0,90,180]);
+ for(const series of signed.series)for(let n=0;n<series.points.length;n++){const p=series.points[n];assert.equal(p.y,p.rawValue);if(n&&Math.abs(p.y-series.points[n-1].y)>180)assert.notEqual(p.segment,series.points[n-1].segment);}
+ assert.equal(ui.exports.distanceRows()[0].length,5);
+ ui.nodes['geometry-type'].value='angle';ui.nodes['geometry-type'].fire('change');assert.equal(ui.nodes['dihedral-display-field'].hidden,true);
+});
+
+test('unstable ethanol keeps every recorded frame and refits fragments without resetting rotation',async()=>{
+ let atoms=[],fits=0,rotations=0;const styles=[];
+ const model={addAtoms(values){atoms=values;},selectedAtoms(){return atoms;},setStyle(selection,style){styles.push({selection,style});},setClickable(){}};
+ const renderer={setProjection(){},getView(){return [0,0,0,0,0,0,1,0];},setView(){},rotate(){rotations++;},zoomTo(){fits++;},zoom(){},render(){},resize(){},removeAllModels(){},removeAllShapes(){},addModel(){return model;}};
+ const ui=session({inspectState:true,molecularViewer:renderer}),context={window:{AIMD_EXAMPLES:{runs:{}}}};
+ for(const name of ['time-fs','time-ps','time-s','temperature','kinetic','potential','total','atoms'])ui.nodes['frame-'+name]=new Element();
+ for(const key of ['etanol_instavel','etanol_dt500']){
+  vm.runInNewContext(fs.readFileSync(path.join(viewer,`examples/${key}.js`),'utf8'),context);
+  const run=context.window.AIMD_EXAMPLES.runs[key],raw=OrcaReader.parseXYZ(fs.readFileSync(path.join(viewer,'..',run.files.find(f=>f.kind==='xyz').path),'utf8'));
+  const load=ui.choose(key,true);ui.requests.at(-1).resolve({config:{runs:[key]},runs:[run]});await load;
+  assert.equal(ui.nodes['follow-fragments'].checked,true);assert.equal(run.xyz.frames.length,raw.frames.length);
+  const initialRotations=rotations,initialFits=fits;
+  for(let frame=1;frame<run.xyz.frames.length;frame++){
+   ui.nodes['frame-slider'].value=frame;ui.nodes['frame-slider'].fire('input');
+   assert.equal(atoms.length,9);for(let i=0;i<atoms.length;i++)assert.deepEqual([atoms[i].x,atoms[i].y,atoms[i].z],raw.frames[frame].coords[i]);
+  }
+  assert.equal(fits-initialFits,run.xyz.frames.length-1);assert.equal(rotations,initialRotations);
+  assert.match(ui.nodes['fragment-framing-note'].textContent,/Esferas ampliadas/);assert.ok(styles.some(s=>s.selection.elem==='O'&&s.style.sphere?.radius>1));
+  const before=fits;ui.nodes['follow-fragments'].checked=false;ui.nodes['follow-fragments'].fire('change');
+  ui.nodes['previous-frame'].fire('click');assert.equal(fits,before);assert.equal(ui.nodes['fragment-framing-note'].hidden,true);
+ }
+ ui.nodes['clear-button'].fire('click');assert.equal(ui.nodes['fragment-framing-note'].hidden,true);
+});
 
 test('own files with different names populate every panel together, incrementally, without CSV, or without output',async()=>{
  for(const order of [['out,csv,xyz'],['out,csv','xyz'],['xyz','out,csv'],['out,xyz'],['csv,xyz'],['csv','csv,out,xyz','xyz']]){
