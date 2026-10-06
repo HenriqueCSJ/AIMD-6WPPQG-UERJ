@@ -1138,16 +1138,16 @@ test('new Zn preparation opens a useful empty state without replacing a loaded t
 });
 
 
-test('the zinc route follows the three stages and preserves uploaded data through normal preset loading',async()=>{
+test('the zinc route follows the four stages and preserves uploaded data through normal preset loading',async()=>{
  const ui=session({inspectState:true});
  await upload(ui,[inputFile('own-traj.xyz','1\nStep 0 t=0 fs\nH 0 0 0\n')]);const own=ui.state.runs.find(run=>!run.reference);
  assert.equal(ui.nodes['zn-course-route'].hidden,true);
- for(const [key,id] of [['zn_solvation','zn-route-04a'],['zn_hydration','zn-route-04b'],['chelation','zn-route-04c']]){
+ for(const [key,id] of [['zn_solvation','zn-route-04a'],['zn_hydration','zn-route-04b'],['chelation','zn-route-04c'],['zn_pressure','zn-route-04d']]){
   let prevented=0;const load=ui.nodes[id].fire('click',{preventDefault(){prevented++;}});
   assert.equal(prevented,1);assert.equal(ui.requests.at(-1).key,key);assert.equal(ui.nodes['example-select'].value,key);
   ui.requests.at(-1).resolve(preset(key));await load;
   assert.equal(ui.nodes['zn-course-route'].hidden,false);assert.equal(ui.nodes[id].getAttribute('aria-current'),'step');
-  for(const other of ['zn-route-04a','zn-route-04b','zn-route-04c'].filter(other=>other!==id))assert.equal(ui.nodes[other].getAttribute('aria-current'),null);
+  for(const other of ['zn-route-04a','zn-route-04b','zn-route-04c','zn-route-04d'].filter(other=>other!==id))assert.equal(ui.nodes[other].getAttribute('aria-current'),null);
   assert.ok(ui.state.runs.includes(own),'Own uploaded trajectory remains in the session');assert.equal(ui.state.tab,'trajectory');
  }
  const nonZn=ui.choose('water',true);ui.requests.at(-1).resolve(preset('water'));await nonZn;assert.equal(ui.nodes['zn-course-route'].hidden,true);

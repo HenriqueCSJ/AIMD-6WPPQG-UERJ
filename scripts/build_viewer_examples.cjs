@@ -3,6 +3,9 @@ const fs=require('node:fs'),path=require('node:path');
 const root=path.resolve(__dirname,'..'),R=require('../visualizador/orca-parser.js');
 const {buildSequence}=require('./build_viewer_sequence.cjs');
 const specs=[
+ ['zn_en_1bar','04d · en sem assistência · 1 bar · 5 ps','14-zn-en-pressao','zn_en_1bar_5ps'],
+ ['zn_en_1000bar','04d · en sem assistência · 1000 bar · 5 ps','14-zn-en-pressao','zn_en_1000bar_5ps'],
+ ['zn_en_4000bar','04d · en sem assistência · 4000 bar · 5 ps','14-zn-en-pressao','zn_en_4000bar_5ps'],
  ['zn_cell_spring10','C1 · Parede fixa · Spring 10','13-cell-pressao'],
  ['zn_cell_spring50','C1 · Parede fixa · Spring 50','13-cell-pressao'],
  ['zn_cell_1bar','C2 · Cela elástica · alvo 1 bar','13-cell-pressao'],
@@ -56,15 +59,15 @@ newHydrationKeys.forEach((key,index)=>{
  if([`${key}.out`,`${key}-md-ener.csv`,`${key}-traj.xyz`].every(file=>fs.existsSync(path.join(folder,file)))&&R.parseFile(fs.readFileSync(path.join(folder,`${key}.out`),'utf8'),`${key}.out`).metadata.normal===true)specs.push([key,newHydrationLabels[index],'7-dinamica-complexo']);
 });
 const runs={};
-for(const [key,label,lesson] of specs){
- const folder=`exercicios/${lesson}/resultados/${key}`,run={key,label,reference:true,files:[],warnings:[]};
+for(const [key,label,lesson,basename=key] of specs){
+ const folder=`exercicios/${lesson}/resultados/${basename}`,run={key,label,reference:true,files:[],warnings:[]};
  const courseFile=path.join(root,folder,'curso.json'),course=fs.existsSync(courseFile)?JSON.parse(fs.readFileSync(courseFile,'utf8')):null;
  if(key==='chelation_continuous'&&!course?.sequenceSources)throw new Error('Missing verified chelation sequence sources.');
  if(course?.sequenceSources){const assembled=buildSequence(path.join(root,folder),key,course);run.xyz=assembled.xyz;run.energy=assembled.energy;run.warnings.push(...assembled.warnings);run.files.push(...assembled.files.map(file=>({name:path.basename(file.relative),path:path.posix.normalize(`${folder}/${file.relative}`),kind:file.kind})));}
  if(['proton_shared_10ps','dimero_xtb2_5ps','etanol_nve_5ps'].includes(key))for(const file of [`${key}-md-ener.csv`,`${key}-traj.xyz`,'curso.json']){
   if(!fs.existsSync(path.join(root,folder,file)))throw new Error(`Missing verified extended source: ${folder}/${file}`);
  }
- const files=course?.sequenceSources?[]:[`${key}.out`,`${key}-md-ener.csv`,`${key}-traj.xyz`,`${key}-colvars.csv`];
+ const files=course?.sequenceSources?[]:[`${basename}.out`,`${basename}-md-ener.csv`,`${basename}-traj.xyz`,`${basename}-colvars.csv`];
  if(['zn_solvator','zn_solvator_2aguas','zn_ion_20h2o_solvator'].includes(key))files.push(`${key}.solvator.xyz`);
  if(key==='preparar_complexo')files.push('preparar_complexo.xyz');
  for(const file of files){const rel=`${folder}/${file}`,full=path.join(root,rel);if(!fs.existsSync(full))continue;
@@ -72,11 +75,13 @@ for(const [key,label,lesson] of specs){
   // Comments remain in the original linked XYZ, not duplicated in every bundled frame.
   if(parsed.frames){
    parsed.frames.forEach(f=>delete f.comment);
+   // Keep all 10,001 frames of each 97-atom 04d pressure case, and all
+   // original frames of the separate historical 43-atom Cell comparisons.
    // Keep motion-critical wall comparisons complete. Thinning their frames
    // makes the contraction and water response visibly step between samples.
    // Keep the small ethanol molecule complete so geometric extrema and the
    // fast O-H vibration are not aliased by the teaching reference preview.
-   const completeWall=key.startsWith('zn_h2o_')||key.startsWith('zn_cell_')||/^zn_(?:sem_)?parede(?:_longo)?$/.test(key);
+   const completeWall=key.startsWith('zn_en_')||key.startsWith('zn_h2o_')||key.startsWith('zn_cell_')||/^zn_(?:sem_)?parede(?:_longo)?$/.test(key);
    const stride=completeWall||['proton_shared_10ps','proton_shared','dimero_xtb2_5ps','etanol_nve_5ps','etanol_etapas','dimero_xtb2_2ps','al_agua_nh3_dt05','al_agua_nh3_scc'].includes(key)?1:Math.ceil(parsed.frames.length/1001);
    if(stride>1){const all=parsed.frames;parsed.previewStride=stride;parsed.originalFrameCount=all.length;parsed.frames=all.filter((f,i)=>i%stride===0||i===all.length-1);parsed.warnings.push(`Prévia da referência: 1 a cada ${stride} quadros, mais o último. Baixe/carregue o XYZ original para examinar todos. Tempos e coordenadas preservados, sem interpolação.`);}
   }
@@ -85,6 +90,10 @@ for(const [key,label,lesson] of specs){
  if(newHydrationKeys.includes(key)||key==='zn_ion_20h2o_solvator'){
   if(run.out?.metadata?.normal!==true)throw new Error(key+': new reference did not terminate normally.');
   if(run.xyz?.elements.length!==61||run.xyz.elements[0]!=='Zn'||run.xyz.elements.includes('N'))throw new Error(key+': expected Zn + 20 waters, without en.');
+ }
+ if(['zn_en_1bar','zn_en_1000bar','zn_en_4000bar'].includes(key)){
+  if(run.out?.metadata?.normal!==true)throw new Error(key+': pressure reference did not terminate normally.');
+  if(run.xyz?.elements.length!==97||run.xyz.frames.length!==10001||run.xyz.elements.filter(e=>e==='N').length!==6)throw new Error(key+': expected the complete 97-atom pressure trajectory.');
  }
  // Joined trajectories have verified stage metadata, not a fabricated whole-run .out.
  if(course){
@@ -112,6 +121,7 @@ if(fs.existsSync(path.join(root,preparedRelative))){
  runs.zn_20h2o_inicial={key:'zn_20h2o_inicial',label:'04a → 04b · Preparação radial +0,8 Å por água · 61 átomos',reference:true,xyz:prepared,files:[{name:'zn_20h2o_inicial.xyz',path:preparedRelative,kind:'xyz'}],warnings:['Preparação didática: translação rígida de cada água +0,8 Å na direção Zn→O; geometria interna preservada. Não é a saída bruta do SOLVATOR nem uma trajetória de MD.'],metadata:{charge:2,multiplicity:1}};
 }
 const presets={
+ zn_pressure:{runs:['zn_en_1bar','zn_en_1000bar','zn_en_4000bar'],tab:'trajectory'},
  zn_solvation:{runs:['zn2_isolado'],tab:'trajectory',preparationNote:true,loadMessage:'Estrutura inicial de Zn²⁺ carregada: um átomo, sem águas nem en. Execute SOLVATOR para obter a montagem de 20 águas. Não há dinâmica nem série de energia neste arquivo.',label:'04a · Zn²⁺ isolado + 20 águas: SOLVATOR',message:'A nova montagem parte somente do Zn²⁺ e acrescenta 20 águas, sem en. O input está disponível na atividade; ainda não há resultado pronto dessa montagem no laboratório. Execute um cálculo por vez e carregue a saída .out e a geometria .solvator.xyz. O histórico antigo usa um complexo já formado e não substitui este resultado.'},
  zn_hydration:{runs:[],tab:'trajectory',awaitingResults:true,label:'04b · Hidratação sem en e paredes',message:'Use o Zn²⁺ + 20 águas (61 átomos), sem en, produzido em 04a. Compare sem parede e com Spring 10, 50 e 200, mantendo o mesmo raio e as mesmas condições iniciais. Ainda não há trajetórias prontas desses novos controles. Execute um cálculo por vez e carregue .out, -md-ener.csv e -traj.xyz. Spring 200 continua sendo uma parede finita.'},
  cell_rigidity:{runs:['zn_cell_spring10','zn_cell_spring50'],tab:'trajectory'},
@@ -139,7 +149,7 @@ if(runs.zn_ion_20h2o_solvator){
 if(newHydrationKeys.every(key=>runs[key]))presets.zn_hydration={runs:newHydrationKeys,tab:'trajectory'};
 // Ordinary scripts, rather than fetch(), preserve direct file:// use offline.
 // The small manifest is loaded at startup; calculations are loaded on demand.
-const version='20261006-znwater1',sources={},folder=path.join(root,'visualizador/examples');
+const version='20261006-znpressure1',sources={},folder=path.join(root,'visualizador/examples');
 fs.mkdirSync(folder,{recursive:true});let totalBytes=0;
 for(const [key,run] of Object.entries(runs)){
  const filename=`${key}.js`,full=path.join(folder,filename);

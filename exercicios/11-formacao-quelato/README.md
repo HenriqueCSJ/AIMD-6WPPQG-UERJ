@@ -85,3 +85,6 @@ Compare separadamente o efeito da parede e o efeito da assistência ao primeiro 
 Os pares com/sem parede usam as mesmas posições e a mesma regra de inicialização das velocidades. A parede, quando presente, tem **raio 9 Å e Spring 50**. Nos inputs assistidos, o primeiro N (**N 61**) recebe a rampa durante **1 ps**; a restrição é removida e seguem **2 ps livres no mesmo input**, com continuidade de velocidades. **N 64 não recebe guia.** Nos inputs livres, nenhum N recebe restrição de coordenação.
 
 Execute um por vez e carregue os arquivos no laboratório. Registre primeiro se N 61 já está próximo na geometria de encontro; compare Zn–N 61 e Zn–N 64 ao longo do tempo. A referência pronta mostra fechamento depois da assistência; isso não garante fechamento nos novos controles livres ou sem parede. Não atribua aos novos inputs os resultados medidos anteriormente.
+
+
+**Próxima etapa do percurso:** [04d · en sem assistência sob 1, 1000 e 4000 bar](../14-zn-en-pressao/README.md). Os três controles partem do início do sistema de 97 átomos, com en afastada; não partem do quelato final nem da geometria de encontro selecionada acima.

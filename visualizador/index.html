@@ -4,11 +4,11 @@
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="Leia resultados de dinâmica molecular do ORCA: energias, temperatura, trajetórias e medidas geométricas. Tudo no seu navegador.">
   <title>Laboratório de trajetórias · AIMD com ORCA</title>
-  <link rel="stylesheet" href="app.css?v=20261006-znwater1">
-  <script defer src="orca-parser.js?v=20261006-cell"></script><script defer src="charts.js?v=20261006-circular1"></script><script defer src="run-association.js?v=20261006-cell"></script><script defer src="geometry.js?v=20261006-native-cadence1"></script>
+  <link rel="stylesheet" href="app.css?v=20261006-znpressure1">
+  <script defer src="orca-parser.js?v=20261006-znpressure1"></script><script defer src="charts.js?v=20261006-circular1"></script><script defer src="run-association.js?v=20261006-znpressure1"></script><script defer src="geometry.js?v=20261006-native-cadence1"></script>
   <script defer src="highlight-selection.js?v=20261001-temperature1"></script>
   <script defer src="dihedral-circle.js?v=20261006-circular1"></script>
-  <script defer src="vendor/3Dmol-min.js?v=20261001-performance1"></script><script defer src="examples.js?v=20261006-znwater1"></script><script defer src="example-loader.js?v=20261006-znwater1"></script><script defer src="app.js?v=20261006-znwater1"></script>
+  <script defer src="vendor/3Dmol-min.js?v=20261001-performance1"></script><script defer src="examples.js?v=20261006-znpressure1"></script><script defer src="example-loader.js?v=20261006-znpressure1"></script><script defer src="app.js?v=20261006-znpressure1"></script>
 </head>
 <body>
 <a class="skip" href="#main">Ir para o conteúdo</a>
@@ -47,6 +47,7 @@
           <option value="zn_solvation">04a · Zn²⁺ isolado + 20 águas: SOLVATOR</option>
           <option value="zn_hydration">04b · Hidratação sem en: sem parede × Spring 10 / 50 / 200</option>
           <option value="chelation">04c · en: primeiro N assistido → segundo N livre</option>
+          <option value="zn_pressure">04d · en sem assistência: 1 / 1000 / 4000 bar · 5 ps</option>
           <option value="proton_shared">05 · H₅O₂⁺: um próton entre duas águas · 10 ps</option>
         </optgroup>
         <optgroup label="Opcionais e referências">
@@ -82,6 +83,7 @@
       <li><a id="zn-route-04a" href="index.html?exemplo=zn_solvation&amp;aba=trajetoria"><strong>04a</strong><span>Construir Zn²⁺ + 20 águas</span></a></li>
       <li><a id="zn-route-04b" href="index.html?exemplo=zn_hydration&amp;aba=trajetoria"><strong>04b</strong><span>Hidratar e comparar paredes</span></a></li>
       <li><a id="zn-route-04c" href="index.html?exemplo=chelation&amp;aba=trajetoria"><strong>04c</strong><span>en: primeiro N assistido, segundo livre</span></a></li>
+      <li><a id="zn-route-04d" href="index.html?exemplo=zn_pressure&amp;aba=trajetoria"><strong>04d</strong><span>en sem assistência: três pressões</span></a></li>
     </ol>
   </nav>
 

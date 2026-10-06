@@ -1,0 +1,43 @@
+{
+  "status": "reverified_from_retained_sources",
+  "cases": {
+    "1": {
+      "target_pressure_bar": 1,
+      "frames": 10001,
+      "end_fs": 5000.0,
+      "closest_Zn_N_A": 3.260734237133221,
+      "final_CN_O": 6,
+      "final_CN_N": 0,
+      "initial_radius_A": 9.0,
+      "final_radius_reported_A": 47.639,
+      "mean_AvPress_last_ps_bar": 1.0904098975256185
+    },
+    "1000": {
+      "target_pressure_bar": 1000,
+      "frames": 10001,
+      "end_fs": 5000.0,
+      "closest_Zn_N_A": 3.5720553820596206,
+      "final_CN_O": 6,
+      "final_CN_N": 0,
+      "initial_radius_A": 9.0,
+      "final_radius_reported_A": 7.705,
+      "mean_AvPress_last_ps_bar": 1006.9267808047989
+    },
+    "4000": {
+      "target_pressure_bar": 4000,
+      "frames": 10001,
+      "end_fs": 5000.0,
+      "closest_Zn_N_A": 3.369739976895867,
+      "final_CN_O": 6,
+      "final_CN_N": 0,
+      "initial_radius_A": 9.0,
+      "final_radius_reported_A": 5.77,
+      "mean_AvPress_last_ps_bar": 4099.781837040739
+    }
+  },
+  "same_initial_geometry_as_04c": true,
+  "same_initial_velocities": true,
+  "no_directed_Zn_N_force": true,
+  "contact_cutoff_A": 2.6,
+  "note": "Independent finite nonperiodic Cell pressure branches; no coordination event observed within five ps."
+}

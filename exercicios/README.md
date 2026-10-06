@@ -7,15 +7,15 @@ Henrique de Castro Silva Junior · Virginia Camila Rufino Ferreira
 
 ## Como seguir sem se perder
 
-Use **Próximo** no topo ou no fim de cada atividade. O indicador **Etapa X de 8** e o mapa lateral mostram onde você está. A ordem é: água e dímero → etanol → timestep → aquecer/resfriar → Zn²⁺ + 20 águas pelo SOLVATOR → hidratação sem en e paredes → en e quelato → H compartilhado. Os complementos opcionais ficam em uma seção separada; entrar neles não é necessário para completar a aula.
+Use **Próximo** no topo ou no fim de cada atividade. O indicador **Etapa X de 9** e o mapa lateral mostram onde você está. A ordem é: água e dímero → etanol → timestep → aquecer/resfriar → Zn²⁺ + 20 águas pelo SOLVATOR → hidratação sem en e paredes → en e quelato → en sem assistência em três pressões → H compartilhado. Os complementos opcionais ficam em uma seção separada; entrar neles não é necessário para completar a aula.
 
-**[Começar na etapa 1 de 8](1-agua-dft/README.md)** · [Roteiro com horários](roteiro-4h.md)
+**[Começar na etapa 1 de 9](1-agua-dft/README.md)** · [Roteiro com horários](roteiro-4h.md)
 
 ## Caderno para ler no tablet
 
 **[Abrir o caderno completo em PDF](../materiais/caderno-aimd-orca-tablet.pdf)** · [Baixar os dez capítulos separados (ZIP)](../materiais/capitulos-aimd-tablet.zip)
 
-84 páginas em formato A5, com explicações, interpretações, 24 figuras e respostas comentadas. O mapa de leitura relaciona os dez capítulos às oito etapas da aula. Cell tem um capítulo próprio com C1 → C2 → C3; o dump é um único complemento no capítulo da água. Sumário e marcadores são clicáveis. Versão de estudo atualizada em **6 de outubro de 2026**.
+84 páginas em formato A5, com explicações, interpretações, 24 figuras e respostas comentadas. O PDF preserva o mapa anterior de oito etapas. A nova etapa 04d está disponível nas páginas do curso e no laboratório. Cell tem um capítulo próprio com C1 → C2 → C3; o dump é um único complemento no capítulo da água. Sumário e marcadores são clicáveis. Versão de estudo atualizada em **6 de outubro de 2026**.
 
 ## Durante a aula
 
@@ -43,9 +43,9 @@ Cinco etapas contínuas no mesmo input. Acompanhe a temperatura e o diedro C–C
 
 ### 04 · Zn²⁺: primeiro as águas, depois a en
 
-[A · Zn²⁺ isolado + 20 águas com SOLVATOR](6-complexo-solvator/README.md) → [B · Hidratação sem en e rigidez da parede](7-dinamica-complexo/README.md) → [C · Primeiro N assistido, segundo N livre](11-formacao-quelato/README.md)
+[A · Zn²⁺ isolado + 20 águas com SOLVATOR](6-complexo-solvator/README.md) → [B · Hidratação sem en e rigidez da parede](7-dinamica-complexo/README.md) → [C · Primeiro N assistido, segundo N livre](11-formacao-quelato/README.md) → [D · Sem assistência: 1, 1000 e 4000 bar](14-zn-en-pressao/README.md)
 
-**45 min antes do intervalo + 20 min no retorno.** Comece pelo Zn²⁺ isolado. SOLVATOR acrescenta **20 águas**: 61 átomos, sem en. Estude a hidratação sem en e compare as **quatro referências prontas de 1 ps**: sem parede e Spring 10/50/200, com o mesmo raio de 6,5 Å e as mesmas posições e velocidades iniciais. Só então passe à en: a referência pronta de 97 átomos mostra o primeiro N assistido, a remoção da restrição e o fechamento livre do segundo N. Essa referência foi preparada separadamente e não deriva da nova montagem de 04a. As entradas antigas com quelato pré-formado ficam no histórico.
+**45 min antes do intervalo + 20 min no retorno.** Comece pelo Zn²⁺ isolado. SOLVATOR acrescenta **20 águas**: 61 átomos, sem en. Estude a hidratação sem en e compare as **quatro referências prontas de 1 ps**: sem parede e Spring 10/50/200, com o mesmo raio de 6,5 Å e as mesmas posições e velocidades iniciais. Só então passe à en: a referência pronta de 97 átomos mostra o primeiro N assistido, a remoção da restrição e o fechamento livre do segundo N. Essa referência foi preparada separadamente e não deriva da nova montagem de 04a. Em **04d**, compare três trajetórias livres de 5 ps do sistema de 97 átomos, desde o início com en afastada, sob alvos de 1, 1000 e 4000 bar. A pressão altera a parede móvel; nenhum N recebe assistência. As entradas antigas com quelato pré-formado ficam no histórico.
 
 ### 05 · Um próton entre duas águas
 

@@ -174,7 +174,32 @@
       }
     }
     const finalWall=wallInfos.filter(info=>info.phase==='final').at(-1);if(finalWall)metadata.finalWallInfo=finalWall;
-    if(initialWalls.length>1)metadata.cellProgramUnsupported=true;
+    if(initialWalls.length>1){
+      // Consecutive Run commands may retain one elastic cell while changing
+      // only the thermostat. Require both the input and executed boundary
+      // states to prove continuity; never infer it from the number of Runs.
+      const commands=input.map(line=>line.replace(/^\s*\|\s*\d+>\s*/, '').split('#')[0].trim()).filter(Boolean);
+      const cellCommands=commands.filter(line=>/^(?:Cell|Walls)\b/i.test(line));
+      const runCount=commands.filter(line=>/^Run\b/i.test(line)).length;
+      const sameSphere=(a,b)=>a&&b&&a.radius===b.radius&&['x','y','z'].every(k=>a.center[k]===b.center[k]);
+      const first=initialWalls[0];
+      const continuous=cellCommands.length===1&&commands.indexOf(cellCommands[0])<commands.findIndex(line=>/^Run\b/i.test(line))
+        &&!commands.some(line=>/^(?:Restart|Initpos|Region|Manage_Region|If|Loop)\b/i.test(line))
+        &&metadata.stages.length===runCount&&initialWalls.length===runCount&&wallInfos.length===runCount*2
+        &&initialWalls.every((info,i)=>{
+          const stage=metadata.stages[i],start=rows[info.rowStart],end=wallInfos[i*2+1];
+          if(wallInfos[i*2]!==info||end?.phase!=='final'||!info.elastic||!end.elastic||!info.sphere||!(info.density>0)
+            ||info.targetPressure!==first.targetPressure||end.targetPressure!==first.targetPressure
+            ||!['x','y','z'].every(k=>info.sphere.center[k]===first.sphere.center[k])
+            ||start?.time!==stage.startFs||rows[end.rowStart-1]?.time!==stage.endFs)return false;
+          if(!i)return true;
+          const previous=wallInfos[i*2-1],before=rows[info.rowStart-1];
+          return previous.rowStart===info.rowStart&&sameSphere(previous.sphere,info.sphere)
+            &&previous.density===info.density&&before?.step===start.step&&before?.time===start.time;
+        });
+      metadata.cellProgramUnsupported=!continuous;
+      if(continuous){const row=rows[first.rowStart];metadata.initialWallInfo={...first,time:row.time,step:row.step};metadata.continuousCellRuns=runCount;}
+    }
     if(initialWalls.some(info=>info.elastic)){metadata.dynamicCell=true;metadata.wall=true;metadata.ensemble='unknown';}
     if(rows.length) {
       segmentRows(rows,warnings,'Saída .out');

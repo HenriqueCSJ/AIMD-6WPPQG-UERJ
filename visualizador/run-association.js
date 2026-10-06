@@ -17,7 +17,17 @@
   // assuming conserved cell mass. This is not a direct radius dump or an
   // interpolation; uncertainty from the printed initial density is retained.
   function cellIndex(run){
-    const rows=energy(run)?.rows||[];
+    let rows=energy(run)?.rows||[];
+    const metadata=run?.metadata||run?.out?.metadata||{};
+    if(metadata.continuousCellRuns>1){
+      // ORCA repeats the boundary row with empty cell columns at the start
+      // of the next Run. Keep its measured predecessor only when executed
+      // wall states have proved continuity. Conflicting measurements remain
+      // ambiguous, and missing samples elsewhere remain missing.
+      const key=row=>JSON.stringify([row.time,row.step,row.sourceKey??null,row.sourceStep??null]);
+      const measured=new Set(rows.filter(row=>row.cellDensity>0).map(key));
+      rows=rows.filter(row=>!(row.cellDensity===null&&row.averagePressure===null&&measured.has(key(row))));
+    }
     return timeIndex(rows,()=>true,['averagePressure','cellDensity']);
   }
   function cellState(run,frame,index){

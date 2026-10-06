@@ -14,7 +14,7 @@ test('exercise links resolve retained data while the main menu stays focused',()
  const directOnly=['water_nve','water_csvr','solvator','complex','complex_short','solvator_two','water_short','ethanol_short','proton_shared_short','chelation_previous'];
  assert.deepEqual([...options,...directOnly].sort(),Object.keys(store.presets).sort());
  const main=select.match(/<optgroup label="Durante a aula · cinco blocos">([\s\S]*?)<\/optgroup>/)[1];
- assert.deepEqual([...main.matchAll(/<option value="([^"]+)"/g)].map(m=>m[1]),['water_single','water_thermostat','water','ethanol','timestep','thermostat','zn_solvation','zn_hydration','chelation','proton_shared']);
+ assert.deepEqual([...main.matchAll(/<option value="([^"]+)"/g)].map(m=>m[1]),['water_single','water_thermostat','water','ethanol','timestep','thermostat','zn_solvation','zn_hydration','chelation','zn_pressure','proton_shared']);
  assert.equal((select.match(/<optgroup /g)||[]).length,2);
  for(const key of directOnly)assert.ok(!options.includes(key),key+' is linked from its exercise, not duplicated in the menu');
  for(const [name,preset] of Object.entries(store.presets))for(const key of preset.runs){
@@ -109,4 +109,24 @@ test('the hydration comparison loads four complete original 61-atom runs with co
  }
  assert.deepEqual(Array.from(store.presets.complex.runs),['zn_parede_longo','zn_sem_parede_longo']);
  assert.deepEqual(Array.from(store.presets.solvator.runs),['zn_solvator','preparar_complexo']);
+});
+
+
+test('04d pressure comparison preserves all three unassisted 97-atom 5 ps trajectories and their original records',()=>{
+ const keys=['zn_en_1bar','zn_en_1000bar','zn_en_4000bar'];assert.deepEqual(Array.from(store.presets.zn_pressure.runs),keys);
+ const loaded=keys.map(key=>bundle(key));
+ for(const run of loaded){
+  const basename=run.key+'_5ps',base=`exercicios/14-zn-en-pressao/resultados/${basename}/${basename}`;
+  const rawXYZ=R.parseXYZ(read(base+'-traj.xyz'),basename+'-traj.xyz'),rawCSV=R.parseEnergyCSV(read(base+'-md-ener.csv'),basename+'-md-ener.csv'),input=read(base+'.inp');
+  assert.equal(run.out.metadata.normal,true);assert.equal(run.out.metadata.timestep,.25);
+  assert.equal(run.xyz.elements.length,97);assert.equal(run.xyz.elements.filter(e=>e==='Zn').length,1);assert.equal(run.xyz.elements.filter(e=>e==='O').length,20);assert.equal(run.xyz.elements.filter(e=>e==='N').length,6);
+  assert.equal(run.xyz.frames.length,10001);assert.equal(run.xyz.previewStride,undefined);assert.equal(run.xyz.originalFrameCount,undefined);
+  assert.deepEqual(run.xyz.elements,rawXYZ.elements);assert.deepEqual(run.xyz.frames[0].coords,loaded[0].xyz.frames[0].coords);
+  for(let i=0;i<10001;i++){assert.equal(run.xyz.frames[i].time,i*.5);assert.equal(run.xyz.frames[i].time,rawXYZ.frames[i].time);assert.deepEqual(run.xyz.frames[i].coords,JSON.parse(JSON.stringify(rawXYZ.frames[i].coords)));}
+  assert.deepEqual(run.energy.rows,JSON.parse(JSON.stringify(rawCSV.rows)));assert.equal(run.energy.rows[0].time,0);assert.equal(run.energy.rows.at(-1).time,5000);
+  assert.doesNotMatch(input,/^\s*Restraint\b/im,'Pressure reference contains no Zn-N restraint');assert.match(input,/Thermostat CSVR 300_K Timecon 20_fs/);assert.match(input,/Thermostat CSVR 300_K Timecon 100_fs/);
+  assert.equal((input.match(/^\s*Run\s+/gm)||[]).length,2);assert.match(input,/Run 2000/);assert.match(input,/Run 18000/);
+  for(const file of run.files)assert.ok(fs.existsSync(path.join(root,file.path)),file.path);
+ }
+ const lesson=read('exercicios/14-zn-en-pressao/README.md');assert.match(lesson,/seis O e nenhum N/);assert.match(lesson,/não começam no quelato final nem na geometria de encontro/);
 });

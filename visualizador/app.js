@@ -26,12 +26,13 @@
     [['aluminum'],'9-aluminio-amonia/index.html','Al³⁺ e amônia'],
     [['proton_shared','proton_shared_short'],'10-proton-compartilhado/index.html','05 · Próton compartilhado'],
     [['chelation','chelation_previous'],'11-formacao-quelato/index.html','04c · Formação do quelato'],
+    [['zn_pressure'],'14-zn-en-pressao/index.html','04d · en sem assistência e pressão'],
     [['proton_droplet','proton_droplet_400k','proton_droplet_500k','proton_droplet_600k'],'12-gota-protonada/index.html','Gota protonada'],
     [['cell_rigidity'],'13-cell-pressao/index.html#parede-e-rigidez','C1 · Parede e rigidez'],
     [['cell_pressure'],'13-cell-pressao/index.html#pressao-e-volume','C2 · Pressão e volume'],
     [['cell_release'],'13-cell-pressao/index.html#fixar-ou-remover','C3 · Fixar ou remover']
   ].flatMap(([keys,path,label])=>keys.map(key=>[key,{href:`../exercicios/${path}`,label}])));
-  const znStages=[['zn_solvation','zn-route-04a'],['zn_hydration','zn-route-04b'],['chelation','zn-route-04c']];
+  const znStages=[['zn_solvation','zn-route-04a'],['zn_hydration','zn-route-04b'],['chelation','zn-route-04c'],['zn_pressure','zn-route-04d']];
   function updateZnStages(preset){
     const active=preset==='chelation_previous'?'chelation':preset,show=znStages.some(([key])=>key===active);
     $('zn-course-route').hidden=!show;

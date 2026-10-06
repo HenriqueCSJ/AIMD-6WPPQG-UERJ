@@ -18,3 +18,6 @@
 **Consulta durante a aula:** [guia interativo dos parâmetros de `%md`](https://henriquecsj.github.io/AIMD-6WPPQG-UERJ/guia-md/), com busca, explicações e exemplos copiáveis.
 
 **Ao concluir:** abra um terminal novo, entre na pasta do input e use `orca arquivo.inp > arquivo.out &` no Ubuntu. No Windows nativo, use o Prompt de Comando com `orca arquivo.inp > arquivo.out`. Não é necessário repetir caminhos de instalação durante os exercícios.
+
+
+**Percurso depois da instalação:** [abra as nove etapas](../exercicios/README.md). No bloco do Zn, siga 04a (20 águas), 04b (hidratação e paredes), 04c (primeiro N assistido, segundo livre) e [04d (en sem assistência: 1, 1000 e 4000 bar)](../exercicios/14-zn-en-pressao/README.md), antes do próton compartilhado. As referências de pressão estão prontas; não é necessário executar três dinâmicas durante a aula.

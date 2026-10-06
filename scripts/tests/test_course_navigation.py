@@ -45,20 +45,20 @@ class CourseNavigationTests(unittest.TestCase):
     def routes(self, page):
         return [nav for nav in Document(page).navs if 'route-nav' in nav['attrs'].get('class', '')]
 
-    def test_all_eight_core_pages_have_same_previous_next_at_top_and_end(self):
-        self.assertEqual(len(PAGES.COURSE), 8)
-        self.assertEqual(PAGES.BADGES[:8], ['01', '02a', '02b', '03', '04a', '04b', '04c', '05'])
-        for index in range(1, 9):
+    def test_all_nine_core_pages_have_same_previous_next_at_top_and_end(self):
+        self.assertEqual(len(PAGES.COURSE), 9)
+        self.assertEqual(PAGES.BADGES[:9], ['01', '02a', '02b', '03', '04a', '04b', '04c', '04d', '05'])
+        for index in range(1, 10):
             with self.subTest(index=index):
                 page = self.page(index)
                 top, bottom = self.routes(page)
                 self.assertEqual(top['links'], bottom['links'])
-                self.assertIn(f'Etapa {index} de 8', page)
+                self.assertIn(f'Etapa {index} de 9', page)
                 prev = [a for a in top['links'] if a.get('rel') == 'prev']
                 self.assertEqual(len(prev), 1)
                 self.assertEqual(prev[0]['href'], '../index.html' if index == 1 else f'../{PAGES.COURSE[index - 2][0]}/index.html')
                 nxt = [a for a in top['links'] if a.get('rel') == 'next']
-                if index < 8:
+                if index < 9:
                     self.assertEqual(nxt[0]['href'], f'../{PAGES.COURSE[index][0]}/index.html')
                 else:
                     self.assertEqual(nxt, [])
@@ -74,7 +74,7 @@ class CourseNavigationTests(unittest.TestCase):
 
     def test_cell_has_three_independent_anchored_steps_and_return(self):
         source = '# Cell\n\nComplemento.\n\n' + '\n\n'.join(f'<a id="{anchor}"></a>\n\n## {label}\n\nConteúdo.' for anchor, label in PAGES.CELL_STEPS)
-        page = self.page(9, source)
+        page = self.page(len(PAGES.COURSE) + 1, source)
         doc = Document(page)
         self.assertIn('Complemento opcional · Cell', page)
         self.assertNotIn('<progress', page)

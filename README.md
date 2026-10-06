@@ -39,7 +39,7 @@ A imagem acima conserva uma prévia anterior do complexo pré-formado. O bloco a
 1. **[Água: da molécula à ligação H](exercicios/1-agua-dft/README.md)** — [01a: movimento, energia e temperatura](exercicios/1-agua-dft/README.md#agua-isolada) → [01b: dímero e reorientação](exercicios/1-agua-dft/README.md#dimero).
 2. **[Etanol e timestep](exercicios/3-xtb2-etanol/README.md)** — controle, instabilidade e correção.
 3. **[Aquecer e resfriar](exercicios/5-termostato/README.md)** — termostato, diedro e etapas contínuas.
-4. **[Zn²⁺ → águas → en](exercicios/6-complexo-solvator/README.md)** — SOLVATOR adiciona 20 águas ao íon isolado; compare hidratação sem en e rigidez da parede; depois observe o [primeiro N assistido e o segundo N livre](exercicios/11-formacao-quelato/README.md) em uma referência independente.
+4. **[Zn²⁺ → águas → en](exercicios/6-complexo-solvator/README.md)** — SOLVATOR adiciona 20 águas ao íon isolado; compare hidratação sem en e rigidez da parede; depois observe o [primeiro N assistido e o segundo N livre](exercicios/11-formacao-quelato/README.md) em uma referência independente. Em [04d](exercicios/14-zn-en-pressao/README.md), compare en sem assistência sob alvos de **1, 1000 e 4000 bar**.
 5. **[H₅O₂⁺](exercicios/10-proton-compartilhado/README.md)** — um próton compartilhado entre duas águas.
 
 **[Opcionais e referências](exercicios/README.md#opcionais-e-referencias):** DFT/CPCM, gotas protonadas de 300 a 600 K, água em C₆₀ e outros controles. A lista do laboratório separa estes materiais do percurso da aula.

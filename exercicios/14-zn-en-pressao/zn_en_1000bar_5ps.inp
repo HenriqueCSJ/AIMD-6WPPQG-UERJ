@@ -1,0 +1,17 @@
+# Paired pressure pilot from separated fragments; no coordination restraints.
+! MD XTB2 ALPB(water) PAL8
+%maxcore 256
+%md
+  Timestep 0.25_fs
+  Randomize 42
+  Initvel 300_K
+  Cell Sphere 0, 0, 0, 9.0_A Spring 50 Elastic 100_fs, 0.0005 Pressure 1000
+  Dump Position Stride 2 Filename "zn_en_1000bar_5ps-traj.xyz"
+  Dump Velocity Stride 2000 Filename "zn_en_1000bar_5ps-vel.xyz"
+  Thermostat CSVR 300_K Timecon 20_fs
+  Run 2000
+  # Continue inside the same MD process, preserving the elastic wall history.
+  Thermostat CSVR 300_K Timecon 100_fs
+  Run 18000
+end
+* xyzfile 2 1 zn_20h2o_3en_r9.xyz
