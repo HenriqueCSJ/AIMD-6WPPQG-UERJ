@@ -80,10 +80,11 @@ test('real 5fs failure is explicit and partial; corrected run reaches 500fs',()=
 });
 
 test('fixed sphere geometry is read without inventing unknown units or elastic boundaries',()=>{
- const parse=line=>R.parseOut('ORCA\n| 1> ! MD XTB2\n| 2> '+line).metadata;
+ const parse=lines=>R.parseOut('ORCA\n| 1> ! MD XTB2\n'+lines.split('\n').map((line,i)=>`| ${i+2}> ${line}`).join('\n')).metadata;
  assert.deepEqual(parse('Walls Sphere 0, 0, 0, 6.0_A Spring 50.0').wallSphere,{center:{x:0,y:0,z:0},radius:6});
  assert.equal(parse('Walls Sphere 0, 0, 0, 6.0_Bohr Spring 50.0').wallSphere,null);
  assert.equal(parse('Walls Sphere 0, 0, 0, 6.0_A Spring 50.0 Elastic 10, 0.01').wallSphere,null);
+ assert.equal(parse('Cell Sphere 0, 0, 0, 6.0_A Spring 50.0\nCell Sphere 0, 0, 0, 9.0_A Spring 50.0').wallSphere,null,'A changing cell must not be drawn as the first sphere');
 });
 
 test('a sequential thermostat program preserves ramp endpoints and later holds',()=>{

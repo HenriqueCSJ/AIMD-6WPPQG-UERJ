@@ -433,7 +433,7 @@
   }
   function clearTrajectoryScene(){
     clearAtomLabels();clearContactShapes();state.viewer?.removeAllModels();state.viewer?.removeAllShapes();state.viewer?.render();
-    state.model=null;state.viewRun=null;state.renderAtoms=null;state.renderFrame=null;state.styleKey=null;state.frameGeometry=null;
+    state.model=null;state.viewRun=null;state.renderAtoms=null;state.renderFrame=null;state.styleKey=null;state.frameGeometry=null;state.wallSphere=null;
     state.playbackRanges=[];state.playbackRangeRun=null;
     state.trajectoryChart=null;state.trajectoryTemperatureChart=null;state.energyIndex=null;state.temperatureIndex=null;state.frameIndex=null;
   }
@@ -612,12 +612,13 @@
     try{if(!state.viewer){state.viewer=$3Dmol.createViewer($('molecule'),{backgroundColor:'white',orthographic:true,antialias:true});state.viewer.setProjection('orthographic');state.initialView=state.viewer.getView().slice();}
       const changedRun=state.viewRun!==run.id;
       if(changedRun){clearAtomLabels();state.frame=0;state.selectedAtom=null;state.viewRun=run.id;state.timeFormat=timeFormat(run.xyz.frames);ensureTrajectoryReadouts();$('frame-slider').value='0';state.viewer.removeAllModels();state.model=state.viewer.addModel();state.renderAtoms=null;state.renderFrame=null;state.styleKey=null;state.frameGeometry=null;}
-      if(changedRun)drawWall(run);
+      const wallSphere=metadata(run).wallSphere||null,changedWall=state.wallSphere!==wallSphere;
+      if(changedRun||changedWall){drawWall(run);state.wallSphere=wallSphere;}
       renderHighlights(run,changedRun);
       $('frame-slider').max=run.xyz.frames.length-1;$('frame-number').max=run.xyz.frames.length;
       ensureTrajectoryReadouts();renderContactLegend(run);
 
-      state.viewer.resize();renderTrajectoryChart(run);drawFrame(changedRun);
+      state.viewer.resize();renderTrajectoryChart(run);drawFrame(changedRun||changedWall);
     }catch(error){state.viewRun=null;stop();console.error('Falha ao desenhar a trajetória',run.key,error);$('trajectory-content').hidden=true;$('trajectory-empty').hidden=false;$('trajectory-empty').textContent='Não foi possível desenhar esta trajetória. Tente abrir o exemplo novamente; se persistir, confira se o navegador permite WebGL. Gráficos e medidas geométricas continuam disponíveis.';}
   }
   function drawAtomLabels(run,atoms,highlighted){

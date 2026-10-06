@@ -35,7 +35,7 @@ class Element{
   querySelectorAll(selector){if(selector==='a[href],button,input,select,textarea,[tabindex]'){const found=[];for(const child of this.children){if(child.tabIndex>=0)found.push(child);found.push(...child.querySelectorAll(selector));}return found;}return this.controls.filter(control=>selector==='[data-run]'?control.dataset.run:selector==='[data-remove]'?control.dataset.remove:false);}
   scrollIntoView(){}
 }
-function session({inspectState=false,search='?exemplo=__test_no_auto__',presets={water:true}}={}){
+function session({inspectState=false,search='?exemplo=__test_no_auto__',presets={water:true},molecularViewer=null}={}){
   const html=fs.readFileSync(path.join(viewer,'index.html'),'utf8'),nodes={};
   for(const match of html.matchAll(/<([\w-]+)\b[^>]*\bid="([^"]+)"[^>]*>/g))nodes[match[2]]=new Element(match[1]);
   for(const [id,value] of Object.entries({'energy-mode':'delta','energy-unit':'kj','time-unit':'fs','distance-source':'xyz','geometry-type':'distance','highlight-kind':'atom','highlight-color':'#e6007e','highlight-size':'1.6','highlight-atom':'0','playback-duration':'60','playback-speed':'1'}))nodes[id].value=value;
@@ -59,6 +59,7 @@ function session({inspectState=false,search='?exemplo=__test_no_auto__',presets=
     addEventListener(){},AIMD_EXAMPLES:{presets},AIMDExampleLoader:{loadPreset:key=>{const pending=deferred();requests.push({key,...pending});return pending.promise;}}
   });
   context.window=context;
+  if(molecularViewer)context.$3Dmol={createViewer:()=>molecularViewer};
   for(const node of Object.values(nodes))node.ownerDocument=context.document;context.document.body.ownerDocument=context.document;
   nodes.molecule.tabIndex=0;
   let source=fs.readFileSync(path.join(viewer,'app.js'),'utf8');
@@ -871,4 +872,23 @@ test('a crop between different segments or missing values never creates a connec
    const series=ui.nodes['energy-chart'].chart.series.find(s=>s.name==='Total · E');
    assert.ok(!series||series.points.length===0||series.points.some(p=>p.y===null));
  }
+});
+
+
+test('a wall appears when the output is added after its trajectory without changing run or frame',async()=>{
+ const curves=[];let atoms=[];
+ const model={addAtoms(values){atoms=values;},selectedAtoms(){return atoms;},setStyle(){},setClickable(){}};
+ const viewer={setProjection(){},getView(){return [0,0,0,0,0,0,1,0];},setView(){},rotate(){},zoomTo(){},zoom(){},render(){},resize(){},removeAllModels(){},removeAllShapes(){curves.length=0;},addModel(){return model;},addCurve(value){curves.push(value);}};
+ const ui=session({inspectState:true,molecularViewer:viewer});
+ for(const name of ['time-fs','time-ps','time-s','temperature','kinetic','potential','total','atoms'])ui.nodes['frame-'+name]=new Element();
+ const xyz=inputFile('calc-traj.xyz','2\nStep 0 t=0.0 fs\nO 0 0 0\nH 0 0 1\n2\nStep 1 t=0.5 fs\nO 0 0 0\nH 0 0 1.01\n');
+ const csv=inputFile('calc-md-ener.csv','# Step; Sim. Time; E_Tot\n0;0;-1\n1;0.5;-1.01\n');
+ const out=inputFile('calc.out','Program Version 6.1.1\n| 1> ! XTB2 MD\n| 2> %md\n| 3> Cell Sphere 1, 2, 3, 9_A Spring 25\n| 4> end\nORCA TERMINATED NORMALLY\n');
+ await upload(ui,[xyz,csv]);assert.equal(curves.length,0);const id=ui.state.runs[0].id;
+ ui.nodes['frame-slider'].value='1';ui.nodes['frame-slider'].fire('input');assert.equal(ui.state.frame,1);
+ await upload(ui,[out]);assert.equal(ui.state.runs.length,1);assert.equal(ui.state.viewRun,id);assert.equal(ui.state.frame,1);
+ assert.equal(curves.length,3);assert.match(ui.nodes['molecule-legend'].innerHTML,/Parede suave.*9 Å/);
+ for(const curve of curves)for(const p of curve.points)assert.ok(Math.abs(Math.hypot(p.x-1,p.y-2,p.z-3)-9)<1e-12);
+ await upload(ui,[out]);assert.equal(curves.length,3,'No duplicate outlines on reimport');
+ ui.nodes['clear-button'].fire('click');assert.equal(curves.length,0);assert.equal(ui.state.wallSphere,null);
 });

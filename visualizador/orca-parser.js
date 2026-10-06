@@ -122,7 +122,8 @@
     const changingConditions=new Set(thermostats).size>1||new Set(timesteps).size>1||/\bThermostat\b[^\n]*\bRamp\b/i.test(input);
     const activeThermostat=thermo&&!/^none$/i.test(thermo[1]);
     // Read only an unambiguous, fixed sphere in Angstrom; other geometries stay undisplayed.
-    const sphereLine=(input.match(/^.*\b(?:Cell|Walls)\s+Sphere\b.*$/im)||[])[0]||'';
+    const wallLines=input.match(/^\s*(?:Cell|Walls)\b.*$/gim)||[];
+    const sphereLine=wallLines.length===1?wallLines[0]:'';
     const sphere=sphereLine.match(/\b(?:Cell|Walls)\s+Sphere\s+([+-]?[\d.]+)\s*,\s*([+-]?[\d.]+)\s*,\s*([+-]?[\d.]+)\s*,\s*([\d.]+)(?:_A(?:ngstrom)?)?(?=\s*(?:Spring\b|Fixed\b|$))/im);
     const sphereValues=sphere?sphere.slice(1,5).map(Number):null;
     const wallSphere=sphereValues&&sphereValues.every(Number.isFinite)&&sphereValues[3]>0&&!/\b(?:Elastic|Pressure)\b/i.test(sphereLine)?{center:{x:sphereValues[0],y:sphereValues[1],z:sphereValues[2]},radius:sphereValues[3]}:null;
@@ -149,6 +150,7 @@
       warnings.unshift('O .out pode imprimir apenas parte dos passos. Adicione o arquivo -md-ener.csv para a série completa.');
     }
     if(metadata.changingConditions)warnings.push('O input contém mudanças de timestep, termostato ou temperatura-alvo. Confira cada etapa; a programação não prova que a execução a completou.');
+    if(metadata.wall&&!metadata.wallSphere)warnings.push('Confinamento reconhecido, mas este formato de parede não tem desenho disponível. Apenas uma esfera fixa em Angstrom é representada; confira as declarações no .out.');
     if(metadata.failed)warnings.push('O ORCA registrou término com erro. Os dados exibidos são parciais.');
     else if(!metadata.normal)warnings.push('O arquivo não contém a mensagem de término normal. Pode estar incompleto ou em andamento.');
     const actualFail=markers.has(6);
