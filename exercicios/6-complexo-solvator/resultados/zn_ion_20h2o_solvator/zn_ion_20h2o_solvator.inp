@@ -1,0 +1,11 @@
+# Etapa 04a: apenas Zn2+ como soluto; acrescentar 20 aguas.
+! XTB2 ALPB(water) PAL8
+%maxcore 256
+%solvator
+  nsolv 20
+  clustermode stochastic
+  fixsolute true
+end
+* xyz 2 1
+Zn 0.0 0.0 0.0
+*

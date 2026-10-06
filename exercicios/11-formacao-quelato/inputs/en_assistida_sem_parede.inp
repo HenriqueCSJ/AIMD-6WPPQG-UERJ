@@ -1,0 +1,22 @@
+# 04c: referencia independente; 97 atomos = Zn + 20 H2O + 3 en.
+# Mesmo encontro hidratado retido em todos os quatro ramos.
+# NAO e uma continuacao da nova montagem SOLVATOR de 61 atomos.
+! MD XTB2 ALPB(water) PAL8
+%maxcore 256
+%md
+  Timestep 0.25_fs
+  Randomize 93001
+  Initvel 300_K
+  Thermostat CSVR 300_K Timecon 100_fs
+  Cell None
+  Dump Position Stride 4 Filename "en_assistida_sem_parede-traj.xyz"
+  Manage_Colvar Define 1 Distance Atom 0 Atom 61
+  Manage_Colvar Define 2 Distance Atom 0 Atom 64
+  # Somente o primeiro N recebe forca de aproximacao durante 1 ps.
+  Restraint Add Colvar 1 Harmonic Spring 200.0 Upper Ramp 3.886868 2.2
+  Run 4000
+  # Retirar a assistencia e observar o segundo N por mais 2 ps.
+  Restraint Reset Colvar 1
+  Run 8000
+end
+* xyzfile 2 1 encontro_real_R1.xyz

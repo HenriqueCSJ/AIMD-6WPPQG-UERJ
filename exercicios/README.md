@@ -7,7 +7,7 @@ Henrique de Castro Silva Junior · Virginia Camila Rufino Ferreira
 
 ## Como seguir sem se perder
 
-Use **Próximo** no topo ou no fim de cada atividade. O indicador **Etapa X de 8** e o mapa lateral mostram onde você está. A ordem é: água e dímero → etanol → timestep → aquecer/resfriar → SOLVATOR → parede → quelato → H compartilhado. Os complementos opcionais ficam em uma seção separada; entrar neles não é necessário para completar a aula.
+Use **Próximo** no topo ou no fim de cada atividade. O indicador **Etapa X de 8** e o mapa lateral mostram onde você está. A ordem é: água e dímero → etanol → timestep → aquecer/resfriar → Zn²⁺ + 20 águas pelo SOLVATOR → hidratação sem en e paredes → en e quelato → H compartilhado. Os complementos opcionais ficam em uma seção separada; entrar neles não é necessário para completar a aula.
 
 **[Começar na etapa 1 de 8](1-agua-dft/README.md)** · [Roteiro com horários](roteiro-4h.md)
 
@@ -41,11 +41,11 @@ Observe o diedro, compare as energias e descubra por que o cálculo fica instáv
 
 Cinco etapas contínuas no mesmo input. Acompanhe a temperatura e o diedro C–C–O–H por **5 ps = 5 × 10⁻¹² s**. Execução de referência: **2min30**. Alvo do termostato e temperatura instantânea são coisas diferentes.
 
-### 04 · Zn–en: solvente, parede e quelato
+### 04 · Zn²⁺: primeiro as águas, depois a en
 
-[A · Construir com SOLVATOR](6-complexo-solvator/README.md) → [B · Comparar com/sem parede](7-dinamica-complexo/README.md) → [C · Identificar a formação do quelato](11-formacao-quelato/README.md)
+[A · Zn²⁺ isolado + 20 águas com SOLVATOR](6-complexo-solvator/README.md) → [B · Hidratação sem en e rigidez da parede](7-dinamica-complexo/README.md) → [C · Primeiro N assistido, segundo N livre](11-formacao-quelato/README.md)
 
-**45 min antes do intervalo + 20 min no retorno.** SOLVATOR e dinâmica com parede são executados ao vivo; os controles e a associação Zn–en são interpretados a partir de resultados prontos. Veja a diferença entre reter água perto do complexo e coordená-la ao metal. Na associação, identifique dois N da mesma en e duas águas deslocadas. A aproximação inicial foi guiada e está identificada na atividade.
+**45 min antes do intervalo + 20 min no retorno.** Comece pelo Zn²⁺ isolado. SOLVATOR acrescenta **20 águas**: 61 átomos, sem en. Estude a hidratação sem en e compare as **quatro referências prontas de 1 ps**: sem parede e Spring 10/50/200, com o mesmo raio de 6,5 Å e as mesmas posições e velocidades iniciais. Só então passe à en: a referência pronta de 97 átomos mostra o primeiro N assistido, a remoção da restrição e o fechamento livre do segundo N. Essa referência foi preparada separadamente e não deriva da nova montagem de 04a. As entradas antigas com quelato pré-formado ficam no histórico.
 
 ### 05 · Um próton entre duas águas
 
@@ -62,7 +62,7 @@ Estes materiais ficam fora do percurso obrigatório. Abra as trajetórias pronta
 - **[DFT e solvente implícito](2-solvente-implicito/README.md):** compare o dímero no vácuo e com CPCM, usando o mesmo método. Nenhuma execução DFT é exigida durante a aula.
 - **[Gota protonada, 300/400/500/600 K](12-gota-protonada/README.md):** investigue transferência, compartilhamento, retornos e dispersão. Aquecer não garante propagação sustentada; as condições partem do mesmo checkpoint.
 - **[Água dentro de C₆₀](8-agua-no-fulereno/README.md):** confinamento por uma gaiola molecular, com trajetória pronta. Execução de referência: cerca de 4 min.
-- **[Hidratação do Zn a partir de águas afastadas](7-dinamica-complexo/hidratacao.html):** observe a primeira camada se formar; a referência de 5 ps não forma o quelato.
+- **[Referência anterior: Zn, águas e en afastados](7-dinamica-complexo/hidratacao.html):** a en já está presente neste sistema anterior; a referência de 5 ps não forma o quelato. Para hidratação sem en, siga 04b.
 - **[Al³⁺/água/amônia](9-aluminio-amonia/README.md):** arquivo de testes com XTB2 e ajuste de convergência. Não é parte da aula; a reprodução DFT foi interrompida.
 
 Controles adicionais de timestep e termostato e dinâmicas curtas estão agrupados em **Opcionais e referências** na lista do laboratório. Não é necessário executar todas as variantes.

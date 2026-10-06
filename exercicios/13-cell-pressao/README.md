@@ -1,10 +1,12 @@
 # C · Celas de simulação e pressão
 
-[← Percurso da aula](../README.md) · [Retomar 04b](../7-dinamica-complexo/README.md) · [Guia %md](../../guia-md/index.html)
+[← Percurso da aula](../README.md) · [Retomar a hidratação atual (04b)](../7-dinamica-complexo/README.md) · [Consultar o sistema histórico de 43 átomos](../7-dinamica-complexo/historico.md) · [Guia %md](../../guia-md/index.html)
 
-**Complemento opcional · siga C1 → C2 → C3.** O percurso principal continua do 04b para o 04c. Este módulo aprofunda o confinamento usando o mesmo complexo Zn–en hidratado, com 43 átomos. As referências estão prontas; não é necessário executar todas para acompanhar.
+**Complemento opcional · siga C1 → C2 → C3.** O percurso principal continua do 04b para o 04c. Este módulo aprofunda o confinamento usando o **complexo Zn–en pré-formado do histórico, com 43 átomos**. **Não é uma continuação da hidratação atual de 04b**, que usa Zn²⁺ + 20 águas, 61 átomos e nenhuma en. As referências estão prontas; não é necessário executar todas para acompanhar.
 
 O comando `Cell` define uma parede repulsiva suave, **sem periodicidade**. Ela pode ter tamanho fixo ou responder à pressão. `Spring` controla a rigidez, em kJ mol⁻¹ Å⁻²; `Pressure` define o alvo em bar. A versão 6.1.1 testada aceita `Cell` e avisa que o nome foi atualizado para `Walls`; esse aviso isolado não indica falha. [Manual oficial, Cell](https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html#cell).
+
+Nos comentários dos inputs originais preservados, “estado inicial do exercício 04b” refere-se ao **antigo 04b do complexo pré-formado**. O checkpoint de 100 fs, os raios de 6 Å e os resultados abaixo pertencem somente àquele sistema.
 
 ## Preparar e executar
 
@@ -22,7 +24,7 @@ Espere terminar antes de iniciar o próximo. Troque o nome para executar outra v
 
 ## C1 · Parede e rigidez
 
-**Pergunta:** a parede retém as águas sem alterar o movimento? Comece pela [comparação com/sem parede do 04b](../7-dinamica-complexo/README.md). Reter uma água perto do complexo e coordená-la ao Zn são observações distintas.
+**Pergunta:** a parede retém as águas sem alterar o movimento? Comece pela [comparação histórica com/sem parede no complexo pré-formado](../7-dinamica-complexo/historico.md). Reter uma água perto do complexo e coordená-la ao Zn são observações distintas.
 
 Agora compare duas paredes com **raio fixo de 6 Å**, `Spring 10` e `Spring 50`, por 500 fs adicionais. Ambas partem do mesmo checkpoint de 100 fs e terminam em 600 fs, com XTB2/ALPB(water), CSVR a 300 K e timestep de 0,5 fs.
 

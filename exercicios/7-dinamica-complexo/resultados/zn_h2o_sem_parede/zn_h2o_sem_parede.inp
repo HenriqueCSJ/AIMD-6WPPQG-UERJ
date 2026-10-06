@@ -1,0 +1,17 @@
+# 04b: Zn2+ + 20 H2O, sem etilenodiamina (61 atomos).
+# Use a MESMA montagem SOLVATOR em todos os quatro ramos.
+# Use a preparacao fornecida: aguas transladadas rigidamente +0.8 A apos SOLVATOR.
+# Raio fixo 6.5 A; Spring finito, inclusive no ramo mais rigido.
+! MD XTB2 ALPB(water) PAL8
+%maxcore 256
+%md
+  Timestep 0.25_fs
+  Randomize 42
+  Initvel 300_K
+  Thermostat CSVR 300_K Timecon 100_fs
+  Cell None
+  Dump Position Stride 2 Filename "zn_h2o_sem_parede-traj.xyz"
+  Dump Velocity Stride 2000 Filename "zn_h2o_sem_parede-vel.xyz"
+  Run 4000
+end
+* xyzfile 2 1 zn_20h2o_inicial.xyz

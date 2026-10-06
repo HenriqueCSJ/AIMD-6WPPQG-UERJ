@@ -33,6 +33,7 @@
     }
     async function loadPreset(key){
       const config=store?.presets?.[key];
+      if(config?.awaitingResults===true&&Array.isArray(config.runs)&&config.runs.length===0)return {config,runs:[]};
       if(!config||!Array.isArray(config.runs)||!config.runs.length)throw new Error('O exemplo não foi encontrado. Você pode escolher outro ou carregar seus próprios arquivos.');
       const runs=await Promise.all(config.runs.map(loadRun));
       return {config,runs};

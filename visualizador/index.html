@@ -4,11 +4,11 @@
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="Leia resultados de dinâmica molecular do ORCA: energias, temperatura, trajetórias e medidas geométricas. Tudo no seu navegador.">
   <title>Laboratório de trajetórias · AIMD com ORCA</title>
-  <link rel="stylesheet" href="app.css?v=20261006-circular1">
+  <link rel="stylesheet" href="app.css?v=20261006-znwater1">
   <script defer src="orca-parser.js?v=20261006-cell"></script><script defer src="charts.js?v=20261006-circular1"></script><script defer src="run-association.js?v=20261006-cell"></script><script defer src="geometry.js?v=20261006-native-cadence1"></script>
   <script defer src="highlight-selection.js?v=20261001-temperature1"></script>
   <script defer src="dihedral-circle.js?v=20261006-circular1"></script>
-  <script defer src="vendor/3Dmol-min.js?v=20261001-performance1"></script><script defer src="examples.js?v=20261006-playback2"></script><script defer src="example-loader.js?v=20260929-loading1"></script><script defer src="app.js?v=20261006-circular1"></script>
+  <script defer src="vendor/3Dmol-min.js?v=20261001-performance1"></script><script defer src="examples.js?v=20261006-znwater1"></script><script defer src="example-loader.js?v=20261006-znwater1"></script><script defer src="app.js?v=20261006-znwater1"></script>
 </head>
 <body>
 <a class="skip" href="#main">Ir para o conteúdo</a>
@@ -44,9 +44,9 @@
           <option value="ethanol">02a · Etanol: NVE · 5 ps</option>
           <option value="timestep">02b · Timestep: instabilidade e correção</option>
           <option value="thermostat">03 · Etanol: aquecer e resfriar</option>
-          <option value="solvator">04a · Zn–en: construir com SOLVATOR</option>
-          <option value="complex">04b · Zn–en: efeito da parede</option>
-          <option value="chelation">04c · Zn–en: hidratação e quelação</option>
+          <option value="zn_solvation">04a · Zn²⁺ isolado + 20 águas: SOLVATOR</option>
+          <option value="zn_hydration">04b · Hidratação sem en: sem parede × Spring 10 / 50 / 200</option>
+          <option value="chelation">04c · en: primeiro N assistido → segundo N livre</option>
           <option value="proton_shared">05 · H₅O₂⁺: um próton entre duas águas · 10 ps</option>
         </optgroup>
         <optgroup label="Opcionais e referências">
@@ -56,12 +56,11 @@
           <option value="proton_droplet_500k">Gota protonada · 500 K</option>
           <option value="proton_droplet_600k">Gota protonada · 600 K</option>
           <option value="fullerene">Água dentro de C₆₀</option>
-          <option value="hydration">Zn · Águas afastadas: hidratação curta</option>
-          <option value="hydration_long">Zn · Hidratação e encontro em 5 ps</option>
+          <option value="hydration">Histórico · Zn + águas + en: hidratação curta</option>
+          <option value="hydration_long">Histórico · Zn + águas + en: encontro em 5 ps</option>
           <option value="timestep_accuracy">Timestep · Precisão e custo</option>
           <option value="timestep_abrupt">Timestep · Falha abrupta com 5 fs</option>
           <option value="thermostat_compare">Etanol · NVE × termostato</option>
-          <option value="complex_short">Parede · Referência curta</option>
           <option value="cell_rigidity">C1 · Cela: rigidez da parede · Spring 10 × 50</option>
           <option value="cell_pressure">C2 · Cela elástica: pressão · 1 × 1000 bar</option>
           <option value="cell_release">C3 · Cela comprimida: Fixed × None</option>
@@ -71,10 +70,20 @@
         </optgroup>
       </select>
       <div class="example-actions"><button class="button secondary" id="example-button" type="button">Abrir trajetória <span aria-hidden="true">→</span></button><button class="button" id="example-energy-button" type="button">Comparar energias</button></div>
+      <aside id="example-preparation" class="interpret" hidden aria-live="polite"></aside>
       <p id="example-load-status" class="muted small" role="status" aria-live="polite" hidden></p><button class="button small-button" id="example-retry" type="button" hidden>Tentar novamente</button>
       <p class="muted small">Comece pela água isolada e siga “Durante a aula”. Explore os opcionais depois, no seu ritmo.</p>
     </div>
   </section>
+
+  <nav id="zn-course-route" class="zn-course-route" aria-label="Percurso do zinco no laboratório" hidden>
+    <p><strong>Zn²⁺ → águas → en</strong><span>Siga uma etapa de cada vez</span></p>
+    <ol>
+      <li><a id="zn-route-04a" href="index.html?exemplo=zn_solvation&amp;aba=trajetoria"><strong>04a</strong><span>Construir Zn²⁺ + 20 águas</span></a></li>
+      <li><a id="zn-route-04b" href="index.html?exemplo=zn_hydration&amp;aba=trajetoria"><strong>04b</strong><span>Hidratar e comparar paredes</span></a></li>
+      <li><a id="zn-route-04c" href="index.html?exemplo=chelation&amp;aba=trajetoria"><strong>04c</strong><span>en: primeiro N assistido, segundo livre</span></a></li>
+    </ol>
+  </nav>
 
   <div id="message" class="message" role="status" aria-live="polite" hidden></div>
   <section id="workspace" hidden aria-label="Análise dos resultados">

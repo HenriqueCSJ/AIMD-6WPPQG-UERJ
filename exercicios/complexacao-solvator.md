@@ -2,9 +2,9 @@
 
 [← Roteiro de 4 horas](roteiro-4h.md)
 
-**Registro histórico da preparação inicial. Para a aula atual, siga [04a · SOLVATOR](6-complexo-solvator/README.md), [04b · efeito da parede, 2 ps](7-dinamica-complexo/README.md) e [04c · hidratação e quelação](11-formacao-quelato/README.md).** Os controles de 0,5 ps descritos abaixo são referências opcionais; a sequência de quelação já está disponível.
+**Registro histórico do complexo pré-formado. O percurso atual começa pelo Zn²⁺ isolado: [04a · Zn²⁺ + 20 águas no SOLVATOR](6-complexo-solvator/README.md) → [04b · hidratação sem en e paredes, 1 ps](7-dinamica-complexo/README.md) → [04c · primeiro N assistido, segundo N livre](11-formacao-quelato/README.md).** Os sistemas de 25/43 átomos descritos abaixo pertencem à organização anterior e estão preservados somente como histórico.
 
-**Escolha confirmada por Henrique:** Zn²⁺ e um ligante pequeno, etilenodiamina; SOLVATOR deve ser usado durante a aula. **Estado:** preparação computacional concluída com PAL8; [04a · SOLVATOR](6-complexo-solvator/README.md) e [04b · efeito da parede](7-dinamica-complexo/README.md) incluem inputs comentados e resultados reais. Permanece necessário o ensaio integral da aula.
+**Escolha histórica, substituída na organização atual:** Zn²⁺ e um ligante pequeno, etilenodiamina; SOLVATOR deve ser usado durante a aula. **Estado:** preparação computacional concluída com PAL8; [SOLVATOR histórico](6-complexo-solvator/historico.md) e [parede no complexo pré-formado](7-dinamica-complexo/historico.md) preservam os inputs e resultados originais. Permanece necessário o ensaio integral da aula.
 
 ## Caso principal
 
@@ -19,7 +19,7 @@ Usar o complexo pré-formado resolve um problema pedagógico: permite que todos 
 3. [Candidato solvatado, 43 átomos](6-complexo-solvator/resultados/zn_solvator/zn_solvator.solvator.xyz).
 4. [Relaxação de todos os átomos](6-complexo-solvator/resultados/relaxar_solvato/relaxar_solvato.xyz), convergida em 20,8 s, seguida de [preparação térmica de 100 fs](7-dinamica-complexo/inputs/preparacao_termica.inp). Essa preparação não demonstra equilíbrio convergido.
 5. [MD com parede](7-dinamica-complexo/inputs/zn_parede.inp) e [controle sem parede](7-dinamica-complexo/inputs/zn_sem_parede.inp): o mesmo reinício conserva posições e velocidades, e cada etapa acrescenta 0,5 ps. Tempos reais de 26,1 e 25,8 s.
-6. [Atividade de leitura de energias, temperatura e distâncias no aplicativo](7-dinamica-complexo/README.md). Os doze Colvars permanecem nos [resultados históricos](7-dinamica-complexo/apoio.md); os inputs de aula medem distâncias a partir do XYZ no aplicativo.
+6. [Atividade histórica de leitura de energias, temperatura e distâncias](7-dinamica-complexo/historico.md). Os doze Colvars permanecem nos [resultados históricos](7-dinamica-complexo/historico-apoio.md); os inputs de aula medem distâncias a partir do XYZ no aplicativo.
 
 Todos usam `XTB2 ALPB(water) PAL8`, com o executável externo configurado como `otool_xtb`. `Native-XTB2` foi rejeitado pelo SOLVATOR no teste anterior com ORCA 6.1.1. [Preparação do xTB](../tutoriais/05-xtb-solvator.md).
 

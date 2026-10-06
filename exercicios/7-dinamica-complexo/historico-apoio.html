@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Histórico · Zn²⁺: hidratação e paredes · AIMD / ORCA</title><link rel="stylesheet" href="../pagina.css?v=20261006-course3"><script defer src="../pagina.js?v=20261006-course3"></script></head>
+<body><a class="skip" href="#conteudo">Ir para o conteúdo</a><header class="brand"><a href="../index.html"><strong>AIMD com ORCA</strong><small>6º Workshop PPGQ–UERJ · 7 de outubro de 2026</small></a><div class="logos"><img src="../../assets/uerj-logo.png" alt="UERJ"><img src="../../assets/ufrrj-logo-compacto.png" alt="UFRRJ"></div></header><div class="layout"><nav class="course-nav" aria-label="Mapa dos exercícios"><details class="course-map" open><summary>Mapa dos exercícios <small>8 etapas + complementos opcionais</small></summary><a class="home" href="../index.html">Visão geral do percurso</a><a class="parameter-guide" href="../../guia-md/index.html" target="_blank" rel="noopener" aria-label="Guia de parâmetros %md (abre em outra aba)">Guia de parâmetros %md ↗</a><h3 class="nav-group">Durante a aula · siga nesta ordem</h3><ol class="links"><li><a href="../1-agua-dft/index.html"><span class="num">01</span><span>Água: molécula e dímero</span></a></li><li><a href="../3-xtb2-etanol/index.html"><span class="num">02a</span><span>Etanol: controle</span></a></li><li><a href="../4-timestep/index.html"><span class="num">02b</span><span>Timestep e correção</span></a></li><li><a href="../5-termostato/index.html"><span class="num">03</span><span>Aquecer e resfriar</span></a></li><li><a href="../6-complexo-solvator/index.html"><span class="num">04a</span><span>Zn²⁺ + 20 águas: SOLVATOR</span></a></li><li><a href="../7-dinamica-complexo/index.html"><span class="num">04b</span><span>Zn²⁺: hidratação e paredes</span></a></li><li><a href="../11-formacao-quelato/index.html"><span class="num">04c</span><span>en: primeiro N assistido, segundo N livre</span></a></li><li><a href="../10-proton-compartilhado/index.html"><span class="num">05</span><span>Um próton entre duas águas</span></a></li></ol><h3 class="nav-group">Complementos opcionais e referências</h3><p class="nav-note">A sequência da aula segue diretamente entre as oito etapas acima.</p><ol class="links"><li><a href="../13-cell-pressao/index.html"><span class="num">C</span><span>Cell: parede, pressão e volume</span></a></li><li><a href="../2-solvente-implicito/index.html"><span class="num">↗</span><span>DFT e solvente contínuo</span></a></li><li><a href="../12-gota-protonada/index.html"><span class="num">↗</span><span>Gota protonada: 300–600 K</span></a></li><li><a href="../8-agua-no-fulereno/index.html"><span class="num">↗</span><span>Água dentro de C₆₀</span></a></li><li><a href="../9-aluminio-amonia/index.html"><span class="num">↗</span><span>Al³⁺/amônia: referência</span></a></li></ol></details></nav><main id="conteudo"><nav class="route-nav route-topo" aria-label="Navegação do percurso — topo"><div class="route-status">Apoio à atividade · Zn²⁺: hidratação e paredes</div><div class="route-controls"><a class="route-prev" href="index.html">← Voltar à atividade</a><a class="route-next" href="../index.html">Mapa do percurso</a></div><a class="route-map" href="../index.html">Mapa completo do percurso</a></nav><article class="lesson-content"><blockquote>
+<p><strong>Apoio histórico do complexo pré-formado (43 átomos).</strong> Os números e índices abaixo pertencem exclusivamente a esse sistema. <a href="index.html">Voltar à atividade atual</a>.</p>
+</blockquote>
+<h1 id="apoio-acompanhar-o-complexo-e-o-confinamento">Apoio · Acompanhar o complexo e o confinamento</h1><nav class="section-nav" aria-label="Seções desta página"><strong>Nesta página</strong><ul><li><a href="#entenda-as-escolhas">Entenda as escolhas</a></li><li><a href="#resultados-de-referencia">Resultados de referência</a></li><li><a href="#preparacao-termica-fornecida">Preparação térmica fornecida</a></li><li><a href="#para-discutir">Para discutir</a></li><li><a href="#manual-do-orca">Manual do ORCA</a></li></ul></nav>
+<p><a href="index.html">← Voltar à atividade</a> · <a href="../../visualizador/index.html">Abrir o aplicativo</a></p>
+<p>Estes controles de 0,5 ps mostram como ler o relógio de um restart e medir coordenação e afastamento. A referência principal de 2 ps também muda a força da parede: <code>Spring 10.0</code> nos controles curtos e <code>Spring 50.0</code> no caso longo, ambos com raio de 6 Å. Portanto, diferenças entre essas referências não isolam o efeito da duração. Para avaliar somente a janela de observação, compare os primeiros 500 fs com os 2 ps completos da mesma trajetória longa (relógio de 100 a 600 fs versus 100 a 2100 fs).</p>
+<h2 id="entenda-as-escolhas">Entenda as escolhas</h2>
+<p>A contagem de átomos no ORCA começa em <strong>zero</strong>. Aqui Zn é o átomo 0; os N do ligante são 1 e 4. As primeiras águas têm O em 13, 16, 19 e 22; confira a lista completa no arquivo de índices. A parede de MD é uma força repulsiva suave fora da região definida por <code>Walls</code> (a grafia <code>Cell</code> também aparece nos inputs dessas referências), não uma caixa periódica. Se nenhum átomo atingir a fronteira, não haverá evidência de retenção pelo confinamento.</p>
+<p>Abra o <a href="../../visualizador/index.html">Laboratório de trajetórias</a> e carregue o <code>*-md-ener.csv</code>, o <code>.out</code> e o <code>*-traj.xyz</code> deste cálculo. O aplicativo prepara os gráficos de energia/temperatura e a animação. Na aba <strong>Geometria</strong>, escolha dois átomos; a medida é calculada do XYZ. O CSV original usa fs, Hartree e K; a conversão de unidades fica explícita na tela.</p>
+<p><a href="estruturas/indices-atomos.txt">Índices dos átomos</a> · <a href="../6-complexo-solvator/resultados/relaxar_solvato/relaxar_solvato.xyz" download="relaxar_solvato.xyz">Geometria relaxada antes da preparação térmica</a>.</p>
+<p><strong>Relógio da simulação:</strong> a preparação fornecida cobre 0–100 fs. <code>Restart</code> conserva esse relógio: os novos 1.000 passos vão de <strong>100 a 600 fs</strong>, adicionando <strong>500 fs = 0,5 ps = 5 × 10⁻¹³ s</strong>. O CSV contém 1.001 registros, incluindo o estado de reinício; o XYZ desta etapa tem 1.000 quadros, de 100,5 a 600 fs. Compare arquivos pelo tempo, não pelo número da linha.</p>
+<p><strong>Arquivos de distâncias:</strong> os CSVs de Colvars abaixo pertencem às referências prontas. Os inputs didáticos curtos de preparação e dos controles com/sem parede não incluem essas medições; neles, use a aba <strong>Geometria</strong> para medir diretamente no XYZ. Para gerar também os CSVs, use o input original da referência (<a href="resultados/preparacao_termica/preparacao_termica.inp" download="preparacao_termica.inp">preparação</a>, <a href="resultados/zn_parede/zn_parede.inp" download="zn_parede.inp">com parede</a>, <a href="resultados/zn_sem_parede/zn_sem_parede.inp" download="zn_sem_parede.inp">sem parede</a>), mantendo os arquivos auxiliares indicados para cada execução na mesma pasta.</p>
+<p><strong>Quais colunas usar:</strong> no CSV de Colvars, selecione <code>Colvar … Position / Angstrom</code>, que contém as distâncias. As colunas <code>Internal Force</code> são forças, não distâncias. Colvars 1–2 medem Zn–N; 3–6, os quatro O inicialmente coordenados; 7–12, os seis O acrescentados. Essas definições apenas medem: não mantêm as distâncias fixas.</p>
+<p><strong>Escolha da parede:</strong> após centralizar o Zn da geometria relaxada na origem, o átomo mais distante estava a 5,087 Å. Escolhemos <strong>raio de 6,0 Å</strong> e <code>Spring 10.0</code> (kJ mol⁻¹ Å⁻²), com folga inicial de 0,913 Å. O centro permanece na origem; ele não acompanha o Zn. A força age sobre cada átomo que ultrapassa o raio.</p>
+<h2 id="resultados-de-referencia">Resultados de referência</h2>
+<p>Os tempos abaixo incluem a inicialização do ORCA e foram medidos em um Intel Core Ultra 9 185H. Use-os para organizar a reprodução; o desempenho varia entre computadores.</p>
+<h3 id="zn_parede">zn_parede</h3>
+<p>Tempo de execução: <strong>26.12 s</strong>, com PAL8.</p>
+<ul>
+<li><a href="resultados/zn_parede/zn_parede.out">Saída completa</a></li>
+<li><a href="resultados/zn_parede/zn_parede-md-ener.csv">Energias e temperatura — CSV</a></li>
+<li><a href="resultados/zn_parede/zn_parede-colvars.csv">Distâncias — CSV</a></li>
+<li><a href="resultados/zn_parede/zn_parede-traj.xyz" download="zn_parede-traj.xyz">Trajetória — XYZ</a></li>
+<li><a href="resultados/zn_parede/zn_parede.mdrestart" download="zn_parede.mdrestart">Estado de reinício</a></li>
+<li><a href="resultados/zn_parede/execucao.json">Registro da execução</a></li>
+</ul>
+<p>O CSV contém <strong>1001 registros</strong>, de <strong>100 a 600 fs</strong>, cobrindo <strong>500 fs nesta etapa</strong>. A diferença final E(t) − E(início da etapa) é <strong>0.0437 Eh</strong>; o intervalo máximo–mínimo de E é <strong>0.0448 Eh</strong>. A temperatura variou de <strong>142.4 a 345.5 K</strong>. São descrições desta trajetória, não estimativas de equilíbrio.</p>
+<p><a href="resultados/zn_parede/analise.json">Diagnósticos numéricos desta referência</a>.</p>
+<h3 id="zn_sem_parede">zn_sem_parede</h3>
+<p>Tempo de execução: <strong>25.80 s</strong>, com PAL8.</p>
+<ul>
+<li><a href="resultados/zn_sem_parede/zn_sem_parede.out">Saída completa</a></li>
+<li><a href="resultados/zn_sem_parede/zn_sem_parede-md-ener.csv">Energias e temperatura — CSV</a></li>
+<li><a href="resultados/zn_sem_parede/zn_sem_parede-colvars.csv">Distâncias — CSV</a></li>
+<li><a href="resultados/zn_sem_parede/zn_sem_parede-traj.xyz" download="zn_sem_parede-traj.xyz">Trajetória — XYZ</a></li>
+<li><a href="resultados/zn_sem_parede/zn_sem_parede.mdrestart" download="zn_sem_parede.mdrestart">Estado de reinício</a></li>
+<li><a href="resultados/zn_sem_parede/execucao.json">Registro da execução</a></li>
+</ul>
+<p>O CSV contém <strong>1001 registros</strong>, de <strong>100 a 600 fs</strong>, cobrindo <strong>500 fs nesta etapa</strong>. A diferença final E(t) − E(início da etapa) é <strong>0.0446 Eh</strong>; o intervalo máximo–mínimo de E é <strong>0.0458 Eh</strong>. A temperatura variou de <strong>142.4 a 329.9 K</strong>. São descrições desta trajetória, não estimativas de equilíbrio.</p>
+<p><a href="resultados/zn_sem_parede/analise.json">Diagnósticos numéricos desta referência</a>.</p>
+<p><strong>Leitura dos dados:</strong> a primeira ultrapassagem do raio de 6 Å na trajetória com parede ocorreu em <strong>166.5 fs</strong>. O maior raio atômico observado foi <strong>6.608 Å com parede</strong> e <strong>7.283 Å sem parede</strong>. A parede é suave: permite ultrapassar o raio e aplica uma força de retorno. A redução do afastamento neste controle é observável, mas uma trajetória de 0,5 ps não demonstra retenção indefinida.</p>
+<p>Os dois N permaneceram próximos ao Zn nesta referência com parede: aproximadamente <strong>1,95–2,15 Å</strong> e <strong>1,91–2,16 Å</strong>. Os quatro O inicialmente coordenados também permaneceram próximos; isso descreve estes 0,5 ps e não determina estabilidade termodinâmica ou uma constante de formação. As distâncias do CSV foram conferidas contra as coordenadas XYZ no mesmo instante.</p>
+<h2 id="preparacao-termica-fornecida">Preparação térmica fornecida</h2>
+<p>Uma trajetória de <strong>100 fs = 0,1 ps = 10⁻¹³ s</strong> prepara o estado inicial comum. Não é uma execução adicional obrigatória nem uma demonstração de equilíbrio convergido.</p>
+<p><a href="inputs/preparacao_termica.inp" download="preparacao_termica.inp">Baixar input ORCA</a> · <a href="estruturas/zn_solvato.xyz" download="zn_solvato.xyz">Baixar geometria inicial (.xyz)</a> (obrigatório; manter na mesma pasta do input) · <a href="estruturas/preparacao_termica.mdrestart" download="preparacao_termica.mdrestart">Baixar reinício usado nos dois controles</a></p>
+<details>
+<summary>Ver input comentado da preparação</summary>
+<p><a href="resultados/preparacao_termica/preparacao_termica.inp" download="preparacao_termica.inp">Input original usado na referência</a>.</p>
+<!-- input-source: inputs/preparacao_termica.inp -->
+<pre><code class="language-text"># Apoio: prepara o estado comum para os dois controles.
+! MD XTB2 ALPB(water) PAL8
+%maxcore 256
+
+%md
+  Timestep 0.5_fs
+  Randomize 42
+  # Velocidades iniciais; nao mantem a temperatura fixa.
+  Initvel 300_K
+  # Banho a 300 K; acoplamento em 100 fs.
+  Thermostat CSVR 300_K Timecon 100_fs
+  # Parede suave: centro (0,0,0), raio 6 A.
+  Walls Sphere 0, 0, 0, 6.0_A Spring 10.0
+  Dump Position Stride 1 Filename &quot;preparacao_termica-traj.xyz&quot;
+  # 200 x 0.5 fs = 100 fs (1e-13 s).
+  Run 200
+end
+
+# Carga 2, multiplicidade 1; XYZ na mesma pasta.
+* xyzfile 2 1 zn_solvato.xyz
+</code></pre>
+</details>
+<h3 id="preparacao_termica">preparacao_termica</h3>
+<p>Tempo de execução: <strong>6.24 s</strong>, com PAL8.</p>
+<ul>
+<li><a href="resultados/preparacao_termica/preparacao_termica.out">Saída completa</a></li>
+<li><a href="resultados/preparacao_termica/preparacao_termica-md-ener.csv">Energias e temperatura — CSV</a></li>
+<li><a href="resultados/preparacao_termica/preparacao_termica-colvars.csv">Distâncias — CSV</a></li>
+<li><a href="resultados/preparacao_termica/preparacao_termica-traj.xyz" download="preparacao_termica-traj.xyz">Trajetória — XYZ</a></li>
+<li><a href="resultados/preparacao_termica/preparacao_termica.mdrestart" download="preparacao_termica.mdrestart">Estado de reinício</a></li>
+<li><a href="resultados/preparacao_termica/execucao.json">Registro da execução</a></li>
+</ul>
+<p>O CSV contém <strong>201 registros</strong>, de <strong>0 a 100 fs</strong>, cobrindo <strong>100 fs nesta etapa</strong>. A diferença final E(t) − E(início da etapa) é <strong>0.0194 Eh</strong>; o intervalo máximo–mínimo de E é <strong>0.023 Eh</strong>. A temperatura variou de <strong>120.8 a 300.0 K</strong>. São descrições desta trajetória, não estimativas de equilíbrio.</p>
+<p><a href="resultados/preparacao_termica/analise.json">Diagnósticos numéricos desta referência</a>.</p>
+<h2 id="para-discutir">Para discutir</h2>
+<ol>
+<li>As duas distâncias Zn–N permanecem próximas de seus valores iniciais?</li>
+<li>Quais águas estão mais próximas do metal? A conectividade desenhada pelo visualizador coincide com as distâncias?</li>
+<li>A parede atuou nesta trajetória? Como você verificou?</li>
+<li>O que podemos concluir se não observamos troca de ligantes em 0,5 ps?</li>
+</ol>
+<details>
+<summary>Conferir o raciocínio depois da atividade</summary>
+<p>Use as séries de distâncias e a trajetória, não apenas traços de ligação automáticos. Um arquivo de Colvars mede geometria; não prova a existência ou ruptura de uma ligação por um único corte. Ausência de troca em uma trajetória curta não demonstra inércia cinética nem estabilidade termodinâmica. O raio e a maior distância à origem permitem verificar se a fronteira foi alcançada. Em NVT, a energia molecular pode variar pela troca com o banho.</p>
+</details>
+<h2 id="manual-do-orca">Manual do ORCA</h2>
+<ul>
+<li><a href="https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html#cell">Cell: paredes de MD</a></li>
+<li><a href="https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html#manage-colvar">Distâncias e Colvars</a></li>
+<li><a href="https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html#restart">Restart</a></li>
+<li><a href="https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html#thermostat">Termostatos</a></li>
+</ul>
+<p><strong>Antes de avançar:</strong> registre o input usado, a duração física, uma observação e uma limitação da interpretação.</p></article><nav class="route-nav route-fim" aria-label="Navegação do percurso — fim"><div class="route-status">Apoio à atividade · Zn²⁺: hidratação e paredes</div><div class="route-controls"><a class="route-prev" href="index.html">← Voltar à atividade</a><a class="route-next" href="../index.html">Mapa do percurso</a></div><a class="route-map" href="../index.html">Mapa completo do percurso</a></nav></main></div><footer>Henrique de Castro Silva Junior e Virginia Camila Rufino Ferreira · ORCA 6.1.1 · Materiais e dados locais; links externos levam à documentação oficial.</footer></body></html>

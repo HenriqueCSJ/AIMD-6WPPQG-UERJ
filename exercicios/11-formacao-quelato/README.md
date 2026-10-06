@@ -1,4 +1,4 @@
-# 04c · Zn–en: hidratação, primeiro N e fechamento do quelato
+# 04c · en: primeiro N assistido, segundo N livre
 
 [← Percurso](../README.md) · [Aplicativo de análise](../../visualizador/index.html)
 
@@ -8,11 +8,11 @@
 
 [**Abrir hidratação → primeiro N assistido → segundo N livre**](../../visualizador/index.html?exemplo=chelation&aba=trajetoria) · [Baixar os arquivos e inputs](resultado-chelation-continuous.zip)
 
-Na comparação com parede, o complexo já estava formado. Agora começamos com o ligante afastado para perguntar como aparece uma coordenação bidentada. O percurso acompanha o mesmo sistema: **Zn²⁺, 20 águas e três etilenodiaminas (en)**. No início, dez oxigênios estão a 3,1 Å do Zn, dez a 5,0 Å e todos os N, a pelo menos 6,5 Å. Ao final, há **quatro águas e uma en bidentada** na primeira esfera. **Apenas N 61 recebeu ajuda para se aproximar. N 64 e as águas não receberam restrições externas para induzir a coordenação.**
+**Depois de estudar a hidratação sem en em 04a–b, passamos ao ligante.** A trajetória pronta abaixo é uma **referência independente de 97 átomos**, preparada anteriormente; ela não foi calculada a partir da nova saída do SOLVATOR nem dos controles de hidratação de 61 átomos. Dentro desta referência, o percurso acompanha o mesmo sistema: **Zn²⁺, 20 águas e três etilenodiaminas (en)**. No início, dez oxigênios estão a 3,1 Å do Zn, dez a 5,0 Å e todos os N, a pelo menos 6,5 Å. Ao final, há **quatro águas e uma en bidentada** na primeira esfera. **Apenas N 61 recebeu ajuda para se aproximar. N 64 e as águas não receberam restrições externas para induzir a coordenação.**
 
 ## 1. Veja a sequência nos cálculos prontos
 
-Selecione **04c · Zn–en: hidratação e quelação** no aplicativo. O controle **Trecho para repetir** permite observar cada etapa com calma; **Trajetória completa** percorre todas. O relógio exibido é o **tempo acumulado da sequência**, de 0 a 10083 fs.
+Selecione **04c · en: primeiro N assistido → segundo N livre** no aplicativo. O controle **Trecho para repetir** permite observar cada etapa com calma; **Trajetória completa** percorre todas. O relógio exibido é o **tempo acumulado da sequência**, de 0 a 10083 fs.
 
 1. **Hidratação · 0–500 fs.** As águas se aproximam sem força imposta Zn–O. A primeira cruza o corte de 2,6 Å em **33,5 fs**; seis águas, até **66,5 fs**.
 2. **Encontro com a en · 500–7083 fs.** O Zn permanece hidratado; a en alcança uma posição de encontro, ainda sem coordenação Zn–N.
@@ -69,3 +69,19 @@ O terceiro arquivo de hidratação foi interrompido após 9864 fs. O percurso us
 - **Continuação; o percurso utiliza o trecho até 7083 fs:** [Baixar input ORCA](resultados/chelation_continuous/etapas/r9_rep1_05000_10000fs/r9_rep1_05000_10000fs.inp) · [Baixar geometria inicial (.xyz)](estruturas/zn_20h2o_3en_r9.xyz) (obrigatório; manter na mesma pasta do input) · [Baixar checkpoint obrigatório](resultados/chelation_continuous/etapas/r9_rep1_00500_05000fs/r9_rep1_00500_05000fs.mdrestart) (fornece o estado de continuação; manter junto do input).
 
 A geometria acima é o início da sequência de hidratação. Nas continuações, o checkpoint fornece posições, velocidades e o estado dinâmico. Os inputs `m01a_N_sem_vies_agua` e `m02_livre_apos_N1` listados acima usam a geometria de encontro selecionada: o primeiro reinicializa velocidades; o segundo exige o checkpoint do primeiro.
+
+
+## 5. Repetir a en com pares controlados
+
+**Os novos controles abaixo estão preparados, mas ainda não foram executados.** Todos partem da mesma geometria de encontro retida, **`encontro_real_R1.xyz`**, com 97 átomos. Ela pertence à referência anterior; não deriva da montagem nova de 61 átomos. Os pacotes incluem essa geometria.
+
+Compare separadamente o efeito da parede e o efeito da assistência ao primeiro N:
+
+- **en livre, sem parede:** [input](inputs/en_livre_sem_parede.inp) · [pacote](aula-en_livre_sem_parede.zip).
+- **en livre, com parede:** [input](inputs/en_livre_com_parede.inp) · [pacote](aula-en_livre_com_parede.zip).
+- **primeiro N assistido, sem parede:** [input](inputs/en_assistida_sem_parede.inp) · [pacote](aula-en_assistida_sem_parede.zip).
+- **primeiro N assistido, com parede:** [input](inputs/en_assistida_com_parede.inp) · [pacote](aula-en_assistida_com_parede.zip).
+
+Os pares com/sem parede usam as mesmas posições e a mesma regra de inicialização das velocidades. A parede, quando presente, tem **raio 9 Å e Spring 50**. Nos inputs assistidos, o primeiro N (**N 61**) recebe a rampa durante **1 ps**; a restrição é removida e seguem **2 ps livres no mesmo input**, com continuidade de velocidades. **N 64 não recebe guia.** Nos inputs livres, nenhum N recebe restrição de coordenação.
+
+Execute um por vez e carregue os arquivos no laboratório. Registre primeiro se N 61 já está próximo na geometria de encontro; compare Zn–N 61 e Zn–N 64 ao longo do tempo. A referência pronta mostra fechamento depois da assistência; isso não garante fechamento nos novos controles livres ou sem parede. Não atribua aos novos inputs os resultados medidos anteriormente.

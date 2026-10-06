@@ -114,7 +114,7 @@ test('the main example action defaults to trajectory while explicit tabs remain 
 });
 
 test('linked variants keep valid reopen buttons without permanent menu entries',async()=>{
-  for(const key of ['water_nve','water_csvr','solvator_two','proton_shared_short','water_short','ethanol_short','chelation_previous']){
+  for(const key of ['water_nve','water_csvr','solvator','complex','complex_short','solvator_two','proton_shared_short','water_short','ethanol_short','chelation_previous']){
     const ui=session({search:`?exemplo=${key}&aba=trajetoria`,inspectState:true,presets:{[key]:true}});
     assert.doesNotMatch(ui.html,new RegExp(`<option\\b[^>]*value="${key}"`));
     assert.equal(ui.requests.length,1);assert.equal(ui.requests[0].key,key);
@@ -1121,4 +1121,45 @@ test('real elastic reference keeps the shipped 3Dmol sparse shape registry bound
  }
  assert.equal(fits,1,'Changing the wall does not reset the camera');
  ui.nodes['clear-button'].fire('click');assert.equal(renderer.shapes.length,0);
+});
+
+
+test('new Zn preparation opens a useful empty state without replacing a loaded trajectory',async()=>{
+ const ui=session({inspectState:true}),old=ui.choose('water',true);ui.requests[0].resolve(preset('water'));await old;
+ const before=ui.state.runs[0],selected=ui.nodes['trajectory-run'].value;
+ for(const key of ['zn_solvation','zn_hydration']){
+  const load=ui.choose(key,true);ui.requests.at(-1).resolve({config:{runs:[],awaitingResults:true,label:key,message:'61 átomos, sem en; execute e carregue seus próprios arquivos.'},runs:[]});await load;
+  assert.strictEqual(ui.state.runs[0],before);assert.equal(ui.nodes['trajectory-run'].value,selected);
+  assert.equal(ui.nodes['example-preparation'].hidden,false);assert.match(ui.nodes['example-preparation'].innerHTML,/sem en/);assert.match(ui.nodes['example-preparation'].innerHTML,/Abrir a atividade e seus inputs/);
+  assert.equal(ui.nodes['example-retry'].hidden,true);assert.equal(ui.state.exampleLoading,false);
+ }
+ const real=ui.choose('water',true);ui.requests.at(-1).resolve(preset('water'));await real;
+ assert.equal(ui.nodes['example-preparation'].hidden,true);
+});
+
+
+test('the zinc route follows the three stages and preserves uploaded data through normal preset loading',async()=>{
+ const ui=session({inspectState:true});
+ await upload(ui,[inputFile('own-traj.xyz','1\nStep 0 t=0 fs\nH 0 0 0\n')]);const own=ui.state.runs.find(run=>!run.reference);
+ assert.equal(ui.nodes['zn-course-route'].hidden,true);
+ for(const [key,id] of [['zn_solvation','zn-route-04a'],['zn_hydration','zn-route-04b'],['chelation','zn-route-04c']]){
+  let prevented=0;const load=ui.nodes[id].fire('click',{preventDefault(){prevented++;}});
+  assert.equal(prevented,1);assert.equal(ui.requests.at(-1).key,key);assert.equal(ui.nodes['example-select'].value,key);
+  ui.requests.at(-1).resolve(preset(key));await load;
+  assert.equal(ui.nodes['zn-course-route'].hidden,false);assert.equal(ui.nodes[id].getAttribute('aria-current'),'step');
+  for(const other of ['zn-route-04a','zn-route-04b','zn-route-04c'].filter(other=>other!==id))assert.equal(ui.nodes[other].getAttribute('aria-current'),null);
+  assert.ok(ui.state.runs.includes(own),'Own uploaded trajectory remains in the session');assert.equal(ui.state.tab,'trajectory');
+ }
+ const nonZn=ui.choose('water',true);ui.requests.at(-1).resolve(preset('water'));await nonZn;assert.equal(ui.nodes['zn-course-route'].hidden,true);
+ const requestCount=ui.requests.length;ui.nodes['zn-route-04a'].fire('click',{ctrlKey:true,preventDefault(){throw new Error('Modified link must retain native behavior');}});assert.equal(ui.requests.length,requestCount);
+});
+
+test('the pending hydration stage stays explicit and clearing or uploading removes stale stage context',async()=>{
+ const ui=session({inspectState:true}),old=ui.choose('zn_solvation',true);ui.requests[0].resolve(preset('zn_solvation'));await old;
+ const before=ui.state.runs[0],pending=ui.nodes['zn-route-04b'].fire('click',{preventDefault(){}});
+ ui.requests.at(-1).resolve({config:{runs:[],awaitingResults:true,label:'04b',message:'Sem resultado novo; carregue seus arquivos.'},runs:[]});await pending;
+ assert.strictEqual(ui.state.runs[0],before);assert.equal(ui.nodes['zn-route-04b'].getAttribute('aria-current'),'step');assert.equal(ui.nodes['example-preparation'].hidden,false);
+ await upload(ui,[inputFile('own-traj.xyz','1\nStep 0 t=0 fs\nH 0 0 0\n')]);
+ assert.equal(ui.nodes['zn-course-route'].hidden,true);assert.equal(ui.nodes['example-preparation'].hidden,true);assert.equal(ui.state.znPreparationPreset,null);
+ ui.nodes['clear-button'].fire('click');assert.equal(ui.nodes['zn-course-route'].hidden,true);
 });

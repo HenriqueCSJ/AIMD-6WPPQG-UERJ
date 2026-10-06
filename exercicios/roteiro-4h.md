@@ -13,7 +13,7 @@
 - **14h15–14h30:** descanso.
 - **14h30–14h55 · 03:** etanol com aquecimento e resfriamento em etapas.
 - **14h55–15h05:** margem para dúvidas e execuções mais lentas.
-- **15h05–15h50 · 04a–b:** SOLVATOR e efeito da parede no complexo Zn–en.
+- **15h05–15h50 · 04a–b:** Zn²⁺ isolado + 20 águas com SOLVATOR; hidratação sem en, sem parede e com duas rigidezes de parede.
 - **15h50–16h00:** margem e organização dos arquivos para o retorno.
 
 ## Intervalo
@@ -23,17 +23,17 @@
 ## Segundo bloco
 
 - **17h00–17h05:** retomada.
-- **17h05–17h25 · 04c:** formação do quelato Zn–en, com trajetória pronta e aproximação inicial guiada.
+- **17h05–17h25 · 04c:** en no Zn hidratado: primeiro N assistido, segundo N livre, em referência pronta independente.
 - **17h25–17h45 · 05:** executar H₅O₂⁺ e acompanhar o próton compartilhado.
 - **17h45–17h50:** margem.
 - **17h50–18h00:** síntese, perguntas e opções para continuar depois.
 
 ## O que será executado
 
-Água isolada XTB2, NVE e CSVR, conforme o tempo disponível; dímero XTB2; etanol NVE; etanol instável e corrigido; etanol em cinco etapas; SOLVATOR; dinâmica do complexo com parede; H₅O₂⁺. Usamos resultados prontos para os controles e para a formação do quelato. O ramo sem parede pode ser executado depois da aula.
+Água isolada XTB2, NVE e CSVR, conforme o tempo disponível; dímero XTB2; etanol NVE; etanol instável e corrigido; etanol em cinco etapas; SOLVATOR; dinâmica de hidratação do Zn²⁺ com 20 águas e parede; H₅O₂⁺. Os quatro controles de hidratação sem en já têm resultados prontos de 1 ps; usamos também a referência independente de formação do quelato. Os novos pares livre/assistido com/sem parede da en são inputs para reprodução posterior, ainda sem resultados novos. O ramo sem parede pode ser executado depois da aula.
 
 A água DFT da abertura é observada nos resultados fornecidos. O par XTB2 também tem [comparação pronta NVE × CSVR da própria água](../visualizador/index.html?exemplo=water_thermostat&aba=trajetoria): 500 fs por condição, com cerca de 18 s e 15 s de execução na máquina de referência. A reprodução local não é condição para avançar.
 
-As execuções principais anteriormente medidas somaram cerca de 14 minutos na máquina de referência, usando SOLVATOR com seis águas e incluindo a repetição do etanol corrigido, distribuídos ao longo das atividades. Esse valor não inclui os novos inputs da água, o trabalho dos alunos com arquivos, inputs, medidas e interpretação e não prevê o desempenho de outros computadores. Se uma execução atrasar, carregue o resultado fornecido e continue a atividade.
+As quatro novas referências de hidratação sem en levaram cerca de 2min27 a 2min44 por ramo na máquina de referência. O tempo antigo de cerca de 14 minutos incluía SOLVATOR com seis águas sobre o complexo pré-formado. Ele não prevê a montagem atual de 20 águas nem os novos controles de hidratação. O trabalho dos alunos com arquivos, inputs, medidas e interpretação e o desempenho de cada computador também variam. Se uma execução atrasar, carregue o resultado fornecido e continue a atividade.
 
 As comparações adicionais DFT/CPCM, gotas protonadas em diferentes temperaturas, H₂O@C₆₀, hidratação adicional e Al³⁺/amônia ficam em [Opcionais e referências](README.md#opcionais-e-referencias). Não são tarefas a concluir durante a aula. A instalação do ambiente é preparação anterior ao encontro.

@@ -1,114 +1,75 @@
 <!doctype html>
-<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>04a · Zn–en: SOLVATOR · AIMD / ORCA</title><link rel="stylesheet" href="../pagina.css?v=20261006-course3"><script defer src="../pagina.js?v=20261006-course3"></script></head>
-<body><a class="skip" href="#conteudo">Ir para o conteúdo</a><header class="brand"><a href="../index.html"><strong>AIMD com ORCA</strong><small>6º Workshop PPGQ–UERJ · 7 de outubro de 2026</small></a><div class="logos"><img src="../../assets/uerj-logo.png" alt="UERJ"><img src="../../assets/ufrrj-logo-compacto.png" alt="UFRRJ"></div></header><div class="layout"><nav class="course-nav" aria-label="Mapa dos exercícios"><details class="course-map" open><summary>Mapa dos exercícios <small>8 etapas + complementos opcionais</small></summary><a class="home" href="../index.html">Visão geral do percurso</a><a class="parameter-guide" href="../../guia-md/index.html" target="_blank" rel="noopener" aria-label="Guia de parâmetros %md (abre em outra aba)">Guia de parâmetros %md ↗</a><h3 class="nav-group">Durante a aula · siga nesta ordem</h3><ol class="links"><li><a href="../1-agua-dft/index.html"><span class="num">01</span><span>Água: molécula e dímero</span></a></li><li><a href="../3-xtb2-etanol/index.html"><span class="num">02a</span><span>Etanol: controle</span></a></li><li><a href="../4-timestep/index.html"><span class="num">02b</span><span>Timestep e correção</span></a></li><li><a href="../5-termostato/index.html"><span class="num">03</span><span>Aquecer e resfriar</span></a></li><li><a href="../6-complexo-solvator/index.html" aria-current="page"><span class="num">04a</span><span>Zn–en: SOLVATOR</span></a></li><li><a href="../7-dinamica-complexo/index.html"><span class="num">04b</span><span>Zn–en: parede</span></a></li><li><a href="../11-formacao-quelato/index.html"><span class="num">04c</span><span>Zn–en: formar o quelato</span></a></li><li><a href="../10-proton-compartilhado/index.html"><span class="num">05</span><span>Um próton entre duas águas</span></a></li></ol><h3 class="nav-group">Complementos opcionais e referências</h3><p class="nav-note">A sequência da aula segue diretamente entre as oito etapas acima.</p><ol class="links"><li><a href="../13-cell-pressao/index.html"><span class="num">C</span><span>Cell: parede, pressão e volume</span></a></li><li><a href="../2-solvente-implicito/index.html"><span class="num">↗</span><span>DFT e solvente contínuo</span></a></li><li><a href="../12-gota-protonada/index.html"><span class="num">↗</span><span>Gota protonada: 300–600 K</span></a></li><li><a href="../8-agua-no-fulereno/index.html"><span class="num">↗</span><span>Água dentro de C₆₀</span></a></li><li><a href="../9-aluminio-amonia/index.html"><span class="num">↗</span><span>Al³⁺/amônia: referência</span></a></li></ol></details></nav><main id="conteudo"><nav class="route-nav route-topo" aria-label="Navegação do percurso — topo"><div class="route-status">Etapa 5 de 8 · Bloco 04a<progress class="course-progress" value="5" max="8" aria-label="Etapa 5 de 8"></progress></div><div class="route-controls"><a class="route-prev" rel="prev" href="../5-termostato/index.html"><small>Anterior</small><span>← Aquecer e resfriar</span></a><a class="route-next" rel="next" href="../7-dinamica-complexo/index.html"><small>Próximo</small><span>Zn–en: parede →</span></a></div><a class="route-map" href="../index.html">Mapa completo do percurso</a></nav><article class="lesson-content"><h1 id="04a-construir-o-ambiente-com-solvator">04a · Construir o ambiente com SOLVATOR</h1><nav class="section-nav" aria-label="Seções desta página"><strong>Nesta página</strong><ul><li><a href="#1-prepare">1. Prepare</a></li><li><a href="#2-execute">2. Execute</a></li><li><a href="#3-veja-e-interprete">3. Veja e interprete</a></li><li><a href="#inputs-das-variantes-e-preparacoes">Inputs das variantes e preparações</a></li></ul></nav>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>04a · Zn²⁺ + 20 águas: SOLVATOR · AIMD / ORCA</title><link rel="stylesheet" href="../pagina.css?v=20261006-course3"><script defer src="../pagina.js?v=20261006-course3"></script></head>
+<body><a class="skip" href="#conteudo">Ir para o conteúdo</a><header class="brand"><a href="../index.html"><strong>AIMD com ORCA</strong><small>6º Workshop PPGQ–UERJ · 7 de outubro de 2026</small></a><div class="logos"><img src="../../assets/uerj-logo.png" alt="UERJ"><img src="../../assets/ufrrj-logo-compacto.png" alt="UFRRJ"></div></header><div class="layout"><nav class="course-nav" aria-label="Mapa dos exercícios"><details class="course-map" open><summary>Mapa dos exercícios <small>8 etapas + complementos opcionais</small></summary><a class="home" href="../index.html">Visão geral do percurso</a><a class="parameter-guide" href="../../guia-md/index.html" target="_blank" rel="noopener" aria-label="Guia de parâmetros %md (abre em outra aba)">Guia de parâmetros %md ↗</a><h3 class="nav-group">Durante a aula · siga nesta ordem</h3><ol class="links"><li><a href="../1-agua-dft/index.html"><span class="num">01</span><span>Água: molécula e dímero</span></a></li><li><a href="../3-xtb2-etanol/index.html"><span class="num">02a</span><span>Etanol: controle</span></a></li><li><a href="../4-timestep/index.html"><span class="num">02b</span><span>Timestep e correção</span></a></li><li><a href="../5-termostato/index.html"><span class="num">03</span><span>Aquecer e resfriar</span></a></li><li><a href="../6-complexo-solvator/index.html" aria-current="page"><span class="num">04a</span><span>Zn²⁺ + 20 águas: SOLVATOR</span></a></li><li><a href="../7-dinamica-complexo/index.html"><span class="num">04b</span><span>Zn²⁺: hidratação e paredes</span></a></li><li><a href="../11-formacao-quelato/index.html"><span class="num">04c</span><span>en: primeiro N assistido, segundo N livre</span></a></li><li><a href="../10-proton-compartilhado/index.html"><span class="num">05</span><span>Um próton entre duas águas</span></a></li></ol><h3 class="nav-group">Complementos opcionais e referências</h3><p class="nav-note">A sequência da aula segue diretamente entre as oito etapas acima.</p><ol class="links"><li><a href="../13-cell-pressao/index.html"><span class="num">C</span><span>Cell: parede, pressão e volume</span></a></li><li><a href="../2-solvente-implicito/index.html"><span class="num">↗</span><span>DFT e solvente contínuo</span></a></li><li><a href="../12-gota-protonada/index.html"><span class="num">↗</span><span>Gota protonada: 300–600 K</span></a></li><li><a href="../8-agua-no-fulereno/index.html"><span class="num">↗</span><span>Água dentro de C₆₀</span></a></li><li><a href="../9-aluminio-amonia/index.html"><span class="num">↗</span><span>Al³⁺/amônia: referência</span></a></li></ol></details></nav><main id="conteudo"><nav class="route-nav route-topo" aria-label="Navegação do percurso — topo"><div class="route-status">Etapa 5 de 8 · Bloco 04a<progress class="course-progress" value="5" max="8" aria-label="Etapa 5 de 8"></progress></div><div class="route-controls"><a class="route-prev" rel="prev" href="../5-termostato/index.html"><small>Anterior</small><span>← Aquecer e resfriar</span></a><a class="route-next" rel="next" href="../7-dinamica-complexo/index.html"><small>Próximo</small><span>Zn²⁺: hidratação e paredes →</span></a></div><a class="route-map" href="../index.html">Mapa completo do percurso</a></nav><article class="lesson-content"><h1 id="04a-zn2-isolado-20-aguas-com-solvator">04a · Zn²⁺ isolado + 20 águas com SOLVATOR</h1><nav class="section-nav" aria-label="Seções desta página"><strong>Nesta página</strong><ul><li><a href="#1-comece-pelo-ion-isolado">1. Comece pelo íon isolado</a></li><li><a href="#2-execute-a-montagem">2. Execute a montagem</a></li><li><a href="#3-confira-a-estrutura-gerada">3. Confira a estrutura gerada</a></li><li><a href="#4-distinga-a-montagem-bruta-da-preparacao-para-hidratar">4. Distinga a montagem bruta da preparação para hidratar</a></li><li><a href="#antes-de-avancar">Antes de avançar</a></li></ul></nav>
 <p><a href="../index.html">← Percurso</a> · <a href="../../visualizador/index.html">Aplicativo de análise</a></p>
-<p><strong>Parte do bloco Zn–en (45 min com a parede) · Zn²⁺–etilenodiamina · carga +2 · singlete</strong></p>
+<p><strong>Bloco Zn²⁺ → águas → en · carga +2 · singlete · sem en nesta etapa</strong></p>
 <blockquote>
-<p><strong>Pergunta da atividade:</strong> Como acrescentar águas explícitas a um complexo já preparado?</p>
+<p><strong>Pergunta:</strong> como construir um ambiente de águas explícitas a partir somente do íon Zn²⁺?</p>
 </blockquote>
-<h2 id="1-prepare">1. Prepare</h2>
-<p>No dímero, duas águas permitiam medir uma ligação H. Ao redor de um metal, precisamos distinguir águas diretamente coordenadas e águas da camada externa. O ponto de partida tem Zn, etilenodiamina e quatro águas: <strong>25 átomos</strong>. O SOLVATOR acrescentará seis águas, chegando a <strong>43 átomos</strong>. ALPB(water) representa o solvente implícito; as águas acrescentadas representam moléculas explícitas. O controle térmico será definido na dinâmica da próxima atividade.</p>
-<p><a href="aula-zn_solvator.zip">Baixar os arquivos da atividade</a> · <a href="estruturas/zn_en.xyz" download="zn_en.xyz">Baixar a estrutura</a></p>
-<p>Extraia o pacote. Ele contém o input e os arquivos que precisam ficar juntos. Use uma pasta para esta atividade.</p>
-<h2 id="2-execute">2. Execute</h2>
-<p>Salve este conteúdo como <strong><code>zn_solvator.inp</code></strong>; ele já está no pacote.</p>
-<p><a href="inputs/zn_solvator.inp" download="zn_solvator.inp">Baixar input ORCA</a> · <a href="estruturas/zn_en.xyz" download="zn_en.xyz">Baixar geometria inicial (.xyz)</a> (obrigatório; manter na mesma pasta do input) · <a href="aula-zn_solvator.zip">Baixar pacote com os arquivos necessários</a></p>
-<!-- input-source: inputs/zn_solvator.inp -->
+<h2 id="1-comece-pelo-ion-isolado">1. Comece pelo íon isolado</h2>
+<p>O soluto inicial contém <strong>um único átomo: Zn</strong>. O SOLVATOR acrescenta <strong>20 moléculas de água</strong>. A contagem final esperada é <strong>1 + 20 × 3 = 61 átomos</strong>, sem etilenodiamina (en). ALPB(water) representa o ambiente implícito; as 20 águas são moléculas explícitas.</p>
+<p>A en entra somente em 04c, depois de estudarmos a hidratação e o efeito das paredes em 04b.</p>
+<h2 id="2-execute-a-montagem">2. Execute a montagem</h2>
+<p><a href="inputs/zn_ion_20h2o_solvator.inp" download="zn_ion_20h2o_solvator.inp">Baixar input ORCA</a> · <a href="aula-zn_ion_20h2o_solvator.zip">Baixar pacote da montagem</a> · <a href="estruturas/zn2_isolado.xyz" download="zn2_isolado.xyz">Consultar o Zn isolado em XYZ</a></p>
+<p>O Zn inicial está escrito dentro do input; não há XYZ auxiliar obrigatório nesta execução.</p>
+<!-- input-source: inputs/zn_ion_20h2o_solvator.inp -->
 
-<pre><code class="language-text"># SOLVATOR: acrescenta aguas explicitas ao complexo.
+<pre><code class="language-text"># Etapa 04a: apenas Zn2+ como soluto; acrescentar 20 aguas.
 ! XTB2 ALPB(water) PAL8
 %maxcore 256
-
 %solvator
-  # Numero de novas aguas; o soluto fica fixo na montagem.
-  nsolv 6
-  clustermode docking
+  nsolv 20
+  clustermode stochastic
   fixsolute true
 end
-
-# Carga 2, multiplicidade 1; XYZ na mesma pasta.
-* xyzfile 2 1 zn_en.xyz
+* xyz 2 1
+Zn 0.0 0.0 0.0
+*
 </code></pre>
-<p><strong>Repare nestas escolhas:</strong></p>
 <ul>
-<li><code>nsolv 6</code> significa seis águas novas, além das quatro já presentes.</li>
-<li><code>fixsolute true</code> mantém o conjunto inicial fixo durante a montagem.</li>
+<li><code>nsolv 20</code> acrescenta vinte águas ao íon isolado.</li>
+<li><code>fixsolute true</code> mantém o Zn fixo durante a montagem.</li>
+<li><code>clustermode stochastic</code> seleciona o procedimento de construção indicado no input.</li>
 </ul>
 <details>
-<summary>Executar no Ubuntu / WSL2 — recomendado</summary>
-<p>Entre na <strong>pasta extraída do exercício</strong>, onde estão o input e seus arquivos auxiliares. Com a <a href="https://github.com/HenriqueCSJ/AIMD-6WPPQG-UERJ/blob/main/tutoriais/01-wsl2-ubuntu-orca.md">instalação concluída</a>, execute:</p>
-<pre><code class="language-bash">orca zn_solvator.inp &gt; zn_solvator.out &amp;
+<summary>Executar no Ubuntu / WSL2</summary>
+<p>Na pasta do input, com ORCA já <a href="https://github.com/HenriqueCSJ/AIMD-6WPPQG-UERJ/blob/main/tutoriais/01-wsl2-ubuntu-orca.md">instalado</a>:</p>
+<pre><code class="language-bash">orca zn_ion_20h2o_solvator.inp &gt; zn_ion_20h2o_solvator.out &amp;
 </code></pre>
-<p>Espere o cálculo encerrar antes de iniciar outro. Os resultados ficam nessa mesma pasta; veja <a href="../index.html#como-executar">como acompanhar a execução</a>.</p>
+<p>Espere encerrar antes de iniciar outro cálculo. Veja <a href="../index.html#como-executar">como acompanhar</a>.</p>
 </details>
 <details>
-<summary>Alternativa: executar no Windows nativo</summary>
-<p>Abra o <strong>Prompt de Comando (<code>cmd</code>) na pasta extraída</strong>, com ORCA e MS-MPI já <a href="https://github.com/HenriqueCSJ/AIMD-6WPPQG-UERJ/blob/main/tutoriais/02-windows-orca-msmpi.md">configurados no Path</a>:</p>
-<pre><code class="language-bat">orca zn_solvator.inp &gt; zn_solvator.out
+<summary>Alternativa no Windows nativo</summary>
+<p>No Prompt de Comando (<code>cmd</code>), na pasta do input, com ORCA e MS-MPI <a href="https://github.com/HenriqueCSJ/AIMD-6WPPQG-UERJ/blob/main/tutoriais/02-windows-orca-msmpi.md">configurados</a>:</p>
+<pre><code class="language-bat">orca zn_ion_20h2o_solvator.inp &gt; zn_ion_20h2o_solvator.out
 </code></pre>
-<p>Espere o prompt voltar antes de iniciar outro cálculo. Os arquivos de resultado ficam nessa mesma pasta.</p>
+<p>Espere o prompt voltar antes de iniciar outro cálculo.</p>
 </details>
-<h2 id="3-veja-e-interprete">3. Veja e interprete</h2>
-<p>Ative <strong>Coordenação</strong> e <strong>Ligações H</strong> no visualizador. Identifique os dois N da etilenodiamina ligados geometricamente ao Zn e compare águas próximas do metal com as acrescentadas ao redor. <strong>SOLVATOR constrói um arranjo de solvatação</strong>; não é uma trajetória de associação do ligante nem demonstra uma constante de formação. O exercício seguinte pergunta se essa camada externa permanece por perto.</p>
-<p><a href="../../visualizador/index.html">Carregar meus arquivos no aplicativo</a> · <a href="../../visualizador/index.html?exemplo=solvator&amp;aba=trajetoria">Comparar estrutura inicial e seis águas adicionadas</a> · <a href="../../visualizador/index.html?exemplo=solvator_two&amp;aba=trajetoria">Comparar estrutura inicial e duas águas adicionadas</a></p>
+<h2 id="3-confira-a-estrutura-gerada">3. Confira a estrutura gerada</h2>
+<p><a href="../../visualizador/index.html?exemplo=zn_solvation&amp;aba=trajetoria">Abrir 04a no laboratório</a> · <a href="../../visualizador/index.html">Carregar meus arquivos</a></p>
+<p><strong>A nova montagem de 20 águas está disponível como referência estática.</strong> No laboratório, alterne entre o Zn isolado, a montagem SOLVATOR bruta e a preparação radial para 04b. Para seus próprios arquivos, execute a montagem e carregue a saída <code>.out</code> e <strong><code>zn_ion_20h2o_solvator.solvator.xyz</code></strong>. Confira o término no <code>.out</code> antes de usar a geometria.</p>
 <ol>
-<li>Clique em <strong>Limpar sessão</strong> se houver outro exemplo aberto. Carregue <code>zn_solvator.out</code>, <strong><code>zn_solvator.solvator.xyz</code></strong> e a <a href="estruturas/zn_en.xyz" download="zn_en.xyz">estrutura inicial <code>zn_en.xyz</code></a> no aplicativo.</li>
-<li>Mantenha os dois sistemas selecionados. Na aba <strong>Trajetória</strong>, alterne o campo <strong>Simulação</strong> entre a estrutura inicial de 25 átomos e a estrutura solvatada de 43 átomos. O número de átomos mudou como esperado?</li>
-<li>As seis novas águas estão todas coordenadas ao Zn? Inspecione as posições e distâncias.</li>
+<li>Verifique <strong>61 átomos</strong>, sendo um Zn, 20 O e 40 H; não deve haver N.</li>
+<li>Meça as distâncias Zn–O e observe quais águas ficam mais próximas.</li>
+<li>Ative <strong>Coordenação</strong> e <strong>Ligações H</strong>. Os traços são critérios geométricos; a estrutura XYZ não contém ordens de ligação.</li>
+<li>Preserve a geometria <strong>bruta</strong> gerada pelo SOLVATOR; a geometria de partida de 04b será uma preparação didática declarada, não uma cópia idêntica dessa saída.</li>
 </ol>
-<blockquote>
-<p><strong>Para levar:</strong> SOLVATOR constrói uma estrutura candidata. Seu histórico de montagem não é uma trajetória de MD.</p>
-</blockquote>
+<p><strong>SOLVATOR fornece uma estrutura candidata de solvatação.</strong> A montagem não é uma trajetória de dinâmica molecular, não demonstra equilíbrio e não mede uma constante de formação. Não chame o histórico de construção de filme de hidratação.</p>
+<h2 id="4-distinga-a-montagem-bruta-da-preparacao-para-hidratar">4. Distinga a montagem bruta da preparação para hidratar</h2>
+<p>SOLVATOR pode colocar águas próximas já na montagem. Na referência nova conferida, <strong>três O já estão abaixo de 2,6 Å do Zn</strong>. Isso impede chamar todo contato inicial de coordenação formada pela dinâmica.</p>
+<p>Para observar as águas se aproximarem em 04b, usamos uma <strong>preparação didática explícita</strong>: cada água é transladada rigidamente <strong>0,8 Å para fora</strong>, na direção radial Zn→O. O e seus dois H recebem a mesma translação; a geometria interna da água é preservada. O Zn permanece na origem. Essa preparação remove os contatos iniciais abaixo do corte de 2,6 Å e não é uma otimização nem um resultado de MD.</p>
+<p><a href="resultado-zn_ion_20h2o_solvator.zip">Baixar o pacote de resultados da montagem</a> · <a href="resultados/zn_ion_20h2o_solvator/zn_ion_20h2o_solvator.solvator.xyz" download="zn_ion_20h2o_solvator.solvator.xyz">Baixar a montagem bruta</a> · <a href="resultados/zn_ion_20h2o_solvator/zn_ion_20h2o_solvator.out">Saída SOLVATOR</a> · <a href="estruturas/zn_20h2o_inicial.xyz" download="zn_20h2o_inicial.xyz">Baixar a preparação radial</a></p>
+<p>Conserve os dois arquivos separados: a montagem bruta <code>.solvator.xyz</code> e a preparação <strong><code>zn_20h2o_inicial.xyz</code></strong> de 04b. Se você refizer SOLVATOR, não presuma que sua montagem será idêntica; confira os contatos e use a geometria comum fornecida para reproduzir a comparação pronta.</p>
 <details>
-<summary>Opcional: montagem mais curta</summary>
-<p>Troque seis por duas águas para praticar em menos tempo: o resultado tem 31 átomos. Execute somente uma versão. Na etapa 04b todos usarão o sistema fornecido de 43 átomos.</p>
-<p><a href="../../visualizador/index.html?exemplo=solvator_two&amp;aba=trajetoria">Abrir a referência pronta com duas águas adicionadas</a>. No seletor da trajetória, alterne entre o complexo inicial de 25 átomos e a estrutura de 31 átomos produzida pelo SOLVATOR. Esta comparação mostra as duas estruturas, sem representar uma trajetória de dinâmica.</p>
-<p><a href="inputs/zn_solvator_2aguas.inp" download="zn_solvator_2aguas.inp">Baixar input ORCA</a> · <a href="estruturas/zn_en.xyz" download="zn_en.xyz">Baixar geometria inicial (.xyz)</a> (obrigatório; manter na mesma pasta do input) · <a href="aula-zn_solvator_2aguas.zip">Baixar pacote com os arquivos necessários</a></p>
-<!-- input-source: inputs/zn_solvator_2aguas.inp -->
-<pre><code class="language-text"># Alternativa curta: acrescenta somente duas aguas.
-! XTB2 ALPB(water) PAL8
-%maxcore 256
-
-%solvator
-  # Numero de novas aguas; o soluto fica fixo na montagem.
-  nsolv 2
-  clustermode docking
-  fixsolute true
-end
-
-# Carga 2, multiplicidade 1; XYZ na mesma pasta.
-* xyzfile 2 1 zn_en.xyz
+<summary>Opcional: reproduzir a preparação com Python 3</summary>
+<p>Para reproduzir a translação sobre a sua saída SOLVATOR, baixe <strong><a href="preparar_aguas.py">preparar_aguas.py</a></strong> (também incluído no pacote da montagem). Requer somente Python 3, sem bibliotecas adicionais. O aluno pode usar diretamente a estrutura preparada fornecida e seguir a aula sem Python.</p>
+<p>Na pasta do script e do XYZ bruto, execute:</p>
+<pre><code class="language-text">python preparar_aguas.py zn_ion_20h2o_solvator.solvator.xyz
 </code></pre>
-<details>
-<summary>Executar no Ubuntu / WSL2 — recomendado</summary>
-<p>Entre na <strong>pasta extraída do exercício</strong>, onde estão o input e seus arquivos auxiliares. Com a <a href="https://github.com/HenriqueCSJ/AIMD-6WPPQG-UERJ/blob/main/tutoriais/01-wsl2-ubuntu-orca.md">instalação concluída</a>, execute:</p>
-<pre><code class="language-bash">orca zn_solvator_2aguas.inp &gt; zn_solvator_2aguas.out &amp;
-</code></pre>
-<p>Espere o cálculo encerrar antes de iniciar outro. Os resultados ficam nessa mesma pasta; veja <a href="../index.html#como-executar">como acompanhar a execução</a>.</p>
+<p>No Ubuntu, use <code>python3</code> se esse for o comando da instalação. O script escreve <strong><code>zn_20h2o_inicial.xyz</code></strong>, preservando o arquivo bruto. Ele verifica 61 átomos na ordem Zn seguida de vinte grupos O–H–H, coordenadas finitas e águas intactas. Centraliza o Zn na origem e desloca <strong>O e seus dois H juntos</strong>, 0,8 Å para fora na direção Zn→O, mantendo a geometria interna.</p>
+<p>O script rejeita uma montagem que ainda tenha O a <strong>2,6 Å ou menos</strong> do Zn, ou qualquer átomo a <strong>6,5 Å ou mais</strong> do centro. Também recusa sobrescrever um destino existente. Como sua montagem SOLVATOR pode diferir da referência, uma recusa pede usar a estrutura fornecida para a comparação da aula; não significa que a saída bruta foi alterada. O script não executa ORCA, otimização nem dinâmica.</p>
 </details>
-<details>
-<summary>Alternativa: executar no Windows nativo</summary>
-<p>Abra o <strong>Prompt de Comando (<code>cmd</code>) na pasta extraída</strong>, com ORCA e MS-MPI já <a href="https://github.com/HenriqueCSJ/AIMD-6WPPQG-UERJ/blob/main/tutoriais/02-windows-orca-msmpi.md">configurados no Path</a>:</p>
-<pre><code class="language-bat">orca zn_solvator_2aguas.inp &gt; zn_solvator_2aguas.out
-</code></pre>
-<p>Espere o prompt voltar antes de iniciar outro cálculo. Os arquivos de resultado ficam nessa mesma pasta.</p>
-</details>
-</details>
-<p>Para observar a formação da primeira camada de águas, abra também <a href="../7-dinamica-complexo/hidratacao.html">Zn, águas e en inicialmente afastados</a>. O SOLVATOR desta atividade parte de um complexo preparado; não mostra sua formação por dinâmica.</p>
-<p><strong>Na próxima atividade</strong>, use a estrutura relaxada e o reinício fornecidos. Não é preciso executar otimização e preparação térmica durante a aula.</p>
-<details>
-<summary>Referências, preparação e explicações adicionais</summary>
-<p>Compare a estrutura inicial com a montagem de seis águas ou com a alternativa de duas águas. Os inputs abaixo permitem reproduzir cada construção.</p>
-<ul>
-<li><strong>zn_solvator:</strong> <a href="resultados/zn_solvator/zn_solvator.inp" download="zn_solvator.inp">input completo usado</a> · <a href="resultados/zn_solvator/zn_solvator.out">saída</a> · <a href="resultados/zn_solvator/zn_solvator.solvator.xyz" download="zn_solvator.solvator.xyz">estrutura</a>.</li>
-<li><strong>zn_solvator_2aguas:</strong> <a href="resultados/zn_solvator_2aguas/zn_solvator_2aguas.inp" download="zn_solvator_2aguas.inp">input completo usado</a> · <a href="resultados/zn_solvator_2aguas/zn_solvator_2aguas.out">saída</a> · <a href="resultados/zn_solvator_2aguas/zn_solvator_2aguas.solvator.xyz" download="zn_solvator_2aguas.solvator.xyz">estrutura</a>.</li>
-</ul>
-<p><a href="apoio.html">Consultar preparação, números e respostas</a>.</p>
-</details>
-<p><strong>Manual:</strong> <a href="https://www.faccts.de/docs/orca/6.1/manual/contents/structurereactivity/solvator.html">SOLVATOR</a>.</p>
-<p><strong>Antes de avançar:</strong> anote uma mudança no input, uma observação e uma conclusão que esta estrutura ainda não permite.</p>
-<h2 id="inputs-das-variantes-e-preparacoes">Inputs das variantes e preparações</h2>
-<ul>
-<li><strong>preparar_complexo:</strong> <a href="inputs/preparar_complexo.inp" download="preparar_complexo.inp">Baixar input ORCA</a> · <a href="estruturas/zn_en_inicial.xyz" download="zn_en_inicial.xyz">Baixar geometria inicial (.xyz)</a> (obrigatório; manter na mesma pasta do input).</li>
-<li><strong>relaxar_solvato:</strong> <a href="inputs/relaxar_solvato.inp" download="relaxar_solvato.inp">Baixar input ORCA</a> · <a href="estruturas/zn_solvator.xyz" download="zn_solvator.xyz">Baixar geometria inicial (.xyz)</a> (obrigatório; manter na mesma pasta do input).</li>
-</ul></article><nav class="route-nav route-fim" aria-label="Navegação do percurso — fim"><div class="route-status">Etapa 5 de 8 · Bloco 04a<progress class="course-progress" value="5" max="8" aria-label="Etapa 5 de 8"></progress></div><div class="route-controls"><a class="route-prev" rel="prev" href="../5-termostato/index.html"><small>Anterior</small><span>← Aquecer e resfriar</span></a><a class="route-next" rel="next" href="../7-dinamica-complexo/index.html"><small>Próximo</small><span>Zn–en: parede →</span></a></div><a class="route-map" href="../index.html">Mapa completo do percurso</a></nav></main></div><footer>Henrique de Castro Silva Junior e Virginia Camila Rufino Ferreira · ORCA 6.1.1 · Materiais e dados locais; links externos levam à documentação oficial.</footer></body></html>
+<h2 id="antes-de-avancar">Antes de avançar</h2>
+<p>Registre a contagem de águas, uma distância Zn–O e uma conclusão que a montagem ainda não permite. Siga para <strong><a href="../7-dinamica-complexo/index.html">04b · Hidratação sem en e paredes</a></strong>.</p>
+<p><a href="apoio.html">Entenda o modelo e confira a contagem</a> · <a href="historico.html">Histórico: complexo Zn–en pré-formado, 25/43 átomos</a></p>
+<p><strong>Manual:</strong> <a href="https://www.faccts.de/docs/orca/6.1/manual/contents/structurereactivity/solvator.html">SOLVATOR</a>.</p></article><nav class="route-nav route-fim" aria-label="Navegação do percurso — fim"><div class="route-status">Etapa 5 de 8 · Bloco 04a<progress class="course-progress" value="5" max="8" aria-label="Etapa 5 de 8"></progress></div><div class="route-controls"><a class="route-prev" rel="prev" href="../5-termostato/index.html"><small>Anterior</small><span>← Aquecer e resfriar</span></a><a class="route-next" rel="next" href="../7-dinamica-complexo/index.html"><small>Próximo</small><span>Zn²⁺: hidratação e paredes →</span></a></div><a class="route-map" href="../index.html">Mapa completo do percurso</a></nav></main></div><footer>Henrique de Castro Silva Junior e Virginia Camila Rufino Ferreira · ORCA 6.1.1 · Materiais e dados locais; links externos levam à documentação oficial.</footer></body></html>

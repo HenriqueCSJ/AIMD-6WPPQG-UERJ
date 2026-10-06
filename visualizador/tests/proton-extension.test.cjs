@@ -65,11 +65,12 @@ test('main and short proton presets remain distinct and the manifest and browser
  assert.deepEqual(examples.presets.proton_shared_short.runs,['proton_shared']);
  assert.equal(examples.runs.proton_shared.xyz.frames.length,8001);
  assert.equal(examples.runs.proton_shared.xyz.frames.at(-1).time,2000);
- assert.equal(examples.version,'20261006-playback2');
- assert.match(examples.sources.proton_shared_10ps.src,/\?v=20261006-playback2$/);
+ assert.ok(examples.version);
+ assert.equal(new URL(examples.sources.proton_shared_10ps.src,'https://local.invalid/').searchParams.get('v'),examples.version);
  const html=read('visualizador/index.html');
  assert.match(html,/<option value="proton_shared">[^<]*10 ps<\/option>/);
  assert.doesNotMatch(html,/<option\b[^>]*value="proton_shared_short"/);
- assert.match(html,/examples\.js\?v=20261006-playback2/);assert.match(html,/app\.js\?v=20261006-circular1/);
+ const manifestURL=new URL(html.match(/<script[^>]+src="([^"]*examples\.js[^"]*)"/)[1],'https://local.invalid/');
+ assert.equal(manifestURL.searchParams.get('v'),examples.version);assert.match(html,/app\.js\?v=[^"\s]+/);
  assert.match(html,/geometry\.js\?v=20261006-native-cadence1/);assert.match(html,/vendor\/3Dmol-min\.js\?v=20261001-performance1/);
 });

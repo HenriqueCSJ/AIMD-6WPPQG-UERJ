@@ -1,155 +1,109 @@
-# 04a · Construir o ambiente com SOLVATOR
+# 04a · Zn²⁺ isolado + 20 águas com SOLVATOR
 
 [← Percurso](../README.md) · [Aplicativo de análise](../../visualizador/index.html)
 
-**Parte do bloco Zn–en (45 min com a parede) · Zn²⁺–etilenodiamina · carga +2 · singlete**
+**Bloco Zn²⁺ → águas → en · carga +2 · singlete · sem en nesta etapa**
 
-> **Pergunta da atividade:** Como acrescentar águas explícitas a um complexo já preparado?
+> **Pergunta:** como construir um ambiente de águas explícitas a partir somente do íon Zn²⁺?
 
-## 1. Prepare
+## 1. Comece pelo íon isolado
 
-No dímero, duas águas permitiam medir uma ligação H. Ao redor de um metal, precisamos distinguir águas diretamente coordenadas e águas da camada externa. O ponto de partida tem Zn, etilenodiamina e quatro águas: **25 átomos**. O SOLVATOR acrescentará seis águas, chegando a **43 átomos**. ALPB(water) representa o solvente implícito; as águas acrescentadas representam moléculas explícitas. O controle térmico será definido na dinâmica da próxima atividade.
+O soluto inicial contém **um único átomo: Zn**. O SOLVATOR acrescenta **20 moléculas de água**. A contagem final esperada é **1 + 20 × 3 = 61 átomos**, sem etilenodiamina (en). ALPB(water) representa o ambiente implícito; as 20 águas são moléculas explícitas.
 
-[Baixar os arquivos da atividade](aula-zn_solvator.zip) · [Baixar a estrutura](estruturas/zn_en.xyz)
+A en entra somente em 04c, depois de estudarmos a hidratação e o efeito das paredes em 04b.
 
-Extraia o pacote. Ele contém o input e os arquivos que precisam ficar juntos. Use uma pasta para esta atividade.
+## 2. Execute a montagem
 
-## 2. Execute
+[Baixar input ORCA](inputs/zn_ion_20h2o_solvator.inp) · [Baixar pacote da montagem](aula-zn_ion_20h2o_solvator.zip) · [Consultar o Zn isolado em XYZ](estruturas/zn2_isolado.xyz)
 
-Salve este conteúdo como **`zn_solvator.inp`**; ele já está no pacote.
+O Zn inicial está escrito dentro do input; não há XYZ auxiliar obrigatório nesta execução.
 
-[Baixar input ORCA](inputs/zn_solvator.inp) · [Baixar geometria inicial (.xyz)](estruturas/zn_en.xyz) (obrigatório; manter na mesma pasta do input) · [Baixar pacote com os arquivos necessários](aula-zn_solvator.zip)
-
-<!-- input-source: inputs/zn_solvator.inp -->
+<!-- input-source: inputs/zn_ion_20h2o_solvator.inp -->
 ```text
-# SOLVATOR: acrescenta aguas explicitas ao complexo.
+# Etapa 04a: apenas Zn2+ como soluto; acrescentar 20 aguas.
 ! XTB2 ALPB(water) PAL8
 %maxcore 256
-
 %solvator
-  # Numero de novas aguas; o soluto fica fixo na montagem.
-  nsolv 6
-  clustermode docking
+  nsolv 20
+  clustermode stochastic
   fixsolute true
 end
-
-# Carga 2, multiplicidade 1; XYZ na mesma pasta.
-* xyzfile 2 1 zn_en.xyz
+* xyz 2 1
+Zn 0.0 0.0 0.0
+*
 ```
 
-**Repare nestas escolhas:**
+- `nsolv 20` acrescenta vinte águas ao íon isolado.
+- `fixsolute true` mantém o Zn fixo durante a montagem.
+- `clustermode stochastic` seleciona o procedimento de construção indicado no input.
 
-- `nsolv 6` significa seis águas novas, além das quatro já presentes.
-- `fixsolute true` mantém o conjunto inicial fixo durante a montagem.
+<details markdown="1"><summary>Executar no Ubuntu / WSL2</summary>
 
-<details markdown="1"><summary>Executar no Ubuntu / WSL2 — recomendado</summary>
-
-Entre na **pasta extraída do exercício**, onde estão o input e seus arquivos auxiliares. Com a [instalação concluída](../../tutoriais/01-wsl2-ubuntu-orca.md), execute:
+Na pasta do input, com ORCA já [instalado](../../tutoriais/01-wsl2-ubuntu-orca.md):
 
 ```bash
-orca zn_solvator.inp > zn_solvator.out &
+orca zn_ion_20h2o_solvator.inp > zn_ion_20h2o_solvator.out &
 ```
 
-Espere o cálculo encerrar antes de iniciar outro. Os resultados ficam nessa mesma pasta; veja [como acompanhar a execução](../README.md#como-executar).
+Espere encerrar antes de iniciar outro cálculo. Veja [como acompanhar](../README.md#como-executar).
 
 </details>
 
-<details markdown="1"><summary>Alternativa: executar no Windows nativo</summary>
+<details markdown="1"><summary>Alternativa no Windows nativo</summary>
 
-Abra o **Prompt de Comando (`cmd`) na pasta extraída**, com ORCA e MS-MPI já [configurados no Path](../../tutoriais/02-windows-orca-msmpi.md):
+No Prompt de Comando (`cmd`), na pasta do input, com ORCA e MS-MPI [configurados](../../tutoriais/02-windows-orca-msmpi.md):
 
 ```bat
-orca zn_solvator.inp > zn_solvator.out
+orca zn_ion_20h2o_solvator.inp > zn_ion_20h2o_solvator.out
 ```
 
-Espere o prompt voltar antes de iniciar outro cálculo. Os arquivos de resultado ficam nessa mesma pasta.
+Espere o prompt voltar antes de iniciar outro cálculo.
 
 </details>
 
-## 3. Veja e interprete
+## 3. Confira a estrutura gerada
 
-Ative **Coordenação** e **Ligações H** no visualizador. Identifique os dois N da etilenodiamina ligados geometricamente ao Zn e compare águas próximas do metal com as acrescentadas ao redor. **SOLVATOR constrói um arranjo de solvatação**; não é uma trajetória de associação do ligante nem demonstra uma constante de formação. O exercício seguinte pergunta se essa camada externa permanece por perto.
+[Abrir 04a no laboratório](../../visualizador/index.html?exemplo=zn_solvation&aba=trajetoria) · [Carregar meus arquivos](../../visualizador/index.html)
 
+**A nova montagem de 20 águas está disponível como referência estática.** No laboratório, alterne entre o Zn isolado, a montagem SOLVATOR bruta e a preparação radial para 04b. Para seus próprios arquivos, execute a montagem e carregue a saída `.out` e **`zn_ion_20h2o_solvator.solvator.xyz`**. Confira o término no `.out` antes de usar a geometria.
 
-[Carregar meus arquivos no aplicativo](../../visualizador/index.html) · [Comparar estrutura inicial e seis águas adicionadas](../../visualizador/index.html?exemplo=solvator&aba=trajetoria) · [Comparar estrutura inicial e duas águas adicionadas](../../visualizador/index.html?exemplo=solvator_two&aba=trajetoria)
+1. Verifique **61 átomos**, sendo um Zn, 20 O e 40 H; não deve haver N.
+2. Meça as distâncias Zn–O e observe quais águas ficam mais próximas.
+3. Ative **Coordenação** e **Ligações H**. Os traços são critérios geométricos; a estrutura XYZ não contém ordens de ligação.
+4. Preserve a geometria **bruta** gerada pelo SOLVATOR; a geometria de partida de 04b será uma preparação didática declarada, não uma cópia idêntica dessa saída.
 
-1. Clique em **Limpar sessão** se houver outro exemplo aberto. Carregue `zn_solvator.out`, **`zn_solvator.solvator.xyz`** e a [estrutura inicial `zn_en.xyz`](estruturas/zn_en.xyz) no aplicativo.
-2. Mantenha os dois sistemas selecionados. Na aba **Trajetória**, alterne o campo **Simulação** entre a estrutura inicial de 25 átomos e a estrutura solvatada de 43 átomos. O número de átomos mudou como esperado?
-3. As seis novas águas estão todas coordenadas ao Zn? Inspecione as posições e distâncias.
+**SOLVATOR fornece uma estrutura candidata de solvatação.** A montagem não é uma trajetória de dinâmica molecular, não demonstra equilíbrio e não mede uma constante de formação. Não chame o histórico de construção de filme de hidratação.
 
-> **Para levar:** SOLVATOR constrói uma estrutura candidata. Seu histórico de montagem não é uma trajetória de MD.
+## 4. Distinga a montagem bruta da preparação para hidratar
 
-<details markdown="1"><summary>Opcional: montagem mais curta</summary>
+SOLVATOR pode colocar águas próximas já na montagem. Na referência nova conferida, **três O já estão abaixo de 2,6 Å do Zn**. Isso impede chamar todo contato inicial de coordenação formada pela dinâmica.
 
-Troque seis por duas águas para praticar em menos tempo: o resultado tem 31 átomos. Execute somente uma versão. Na etapa 04b todos usarão o sistema fornecido de 43 átomos.
+Para observar as águas se aproximarem em 04b, usamos uma **preparação didática explícita**: cada água é transladada rigidamente **0,8 Å para fora**, na direção radial Zn→O. O e seus dois H recebem a mesma translação; a geometria interna da água é preservada. O Zn permanece na origem. Essa preparação remove os contatos iniciais abaixo do corte de 2,6 Å e não é uma otimização nem um resultado de MD.
 
-[Abrir a referência pronta com duas águas adicionadas](../../visualizador/index.html?exemplo=solvator_two&aba=trajetoria). No seletor da trajetória, alterne entre o complexo inicial de 25 átomos e a estrutura de 31 átomos produzida pelo SOLVATOR. Esta comparação mostra as duas estruturas, sem representar uma trajetória de dinâmica.
+[Baixar o pacote de resultados da montagem](resultado-zn_ion_20h2o_solvator.zip) · [Baixar a montagem bruta](resultados/zn_ion_20h2o_solvator/zn_ion_20h2o_solvator.solvator.xyz) · [Saída SOLVATOR](resultados/zn_ion_20h2o_solvator/zn_ion_20h2o_solvator.out) · [Baixar a preparação radial](estruturas/zn_20h2o_inicial.xyz)
 
-[Baixar input ORCA](inputs/zn_solvator_2aguas.inp) · [Baixar geometria inicial (.xyz)](estruturas/zn_en.xyz) (obrigatório; manter na mesma pasta do input) · [Baixar pacote com os arquivos necessários](aula-zn_solvator_2aguas.zip)
+Conserve os dois arquivos separados: a montagem bruta `.solvator.xyz` e a preparação **`zn_20h2o_inicial.xyz`** de 04b. Se você refizer SOLVATOR, não presuma que sua montagem será idêntica; confira os contatos e use a geometria comum fornecida para reproduzir a comparação pronta.
 
-<!-- input-source: inputs/zn_solvator_2aguas.inp -->
+<details markdown="1"><summary>Opcional: reproduzir a preparação com Python 3</summary>
+
+Para reproduzir a translação sobre a sua saída SOLVATOR, baixe **[preparar_aguas.py](preparar_aguas.py)** (também incluído no pacote da montagem). Requer somente Python 3, sem bibliotecas adicionais. O aluno pode usar diretamente a estrutura preparada fornecida e seguir a aula sem Python.
+
+Na pasta do script e do XYZ bruto, execute:
+
 ```text
-# Alternativa curta: acrescenta somente duas aguas.
-! XTB2 ALPB(water) PAL8
-%maxcore 256
-
-%solvator
-  # Numero de novas aguas; o soluto fica fixo na montagem.
-  nsolv 2
-  clustermode docking
-  fixsolute true
-end
-
-# Carga 2, multiplicidade 1; XYZ na mesma pasta.
-* xyzfile 2 1 zn_en.xyz
+python preparar_aguas.py zn_ion_20h2o_solvator.solvator.xyz
 ```
 
-<details markdown="1"><summary>Executar no Ubuntu / WSL2 — recomendado</summary>
+No Ubuntu, use `python3` se esse for o comando da instalação. O script escreve **`zn_20h2o_inicial.xyz`**, preservando o arquivo bruto. Ele verifica 61 átomos na ordem Zn seguida de vinte grupos O–H–H, coordenadas finitas e águas intactas. Centraliza o Zn na origem e desloca **O e seus dois H juntos**, 0,8 Å para fora na direção Zn→O, mantendo a geometria interna.
 
-Entre na **pasta extraída do exercício**, onde estão o input e seus arquivos auxiliares. Com a [instalação concluída](../../tutoriais/01-wsl2-ubuntu-orca.md), execute:
-
-```bash
-orca zn_solvator_2aguas.inp > zn_solvator_2aguas.out &
-```
-
-Espere o cálculo encerrar antes de iniciar outro. Os resultados ficam nessa mesma pasta; veja [como acompanhar a execução](../README.md#como-executar).
+O script rejeita uma montagem que ainda tenha O a **2,6 Å ou menos** do Zn, ou qualquer átomo a **6,5 Å ou mais** do centro. Também recusa sobrescrever um destino existente. Como sua montagem SOLVATOR pode diferir da referência, uma recusa pede usar a estrutura fornecida para a comparação da aula; não significa que a saída bruta foi alterada. O script não executa ORCA, otimização nem dinâmica.
 
 </details>
 
-<details markdown="1"><summary>Alternativa: executar no Windows nativo</summary>
+## Antes de avançar
 
-Abra o **Prompt de Comando (`cmd`) na pasta extraída**, com ORCA e MS-MPI já [configurados no Path](../../tutoriais/02-windows-orca-msmpi.md):
+Registre a contagem de águas, uma distância Zn–O e uma conclusão que a montagem ainda não permite. Siga para **[04b · Hidratação sem en e paredes](../7-dinamica-complexo/README.md)**.
 
-```bat
-orca zn_solvator_2aguas.inp > zn_solvator_2aguas.out
-```
-
-Espere o prompt voltar antes de iniciar outro cálculo. Os arquivos de resultado ficam nessa mesma pasta.
-
-</details>
-
-</details>
-
-Para observar a formação da primeira camada de águas, abra também [Zn, águas e en inicialmente afastados](../7-dinamica-complexo/hidratacao.html). O SOLVATOR desta atividade parte de um complexo preparado; não mostra sua formação por dinâmica.
-
-**Na próxima atividade**, use a estrutura relaxada e o reinício fornecidos. Não é preciso executar otimização e preparação térmica durante a aula.
-
-<details markdown="1"><summary>Referências, preparação e explicações adicionais</summary>
-
-Compare a estrutura inicial com a montagem de seis águas ou com a alternativa de duas águas. Os inputs abaixo permitem reproduzir cada construção.
-
-- **zn_solvator:** [input completo usado](resultados/zn_solvator/zn_solvator.inp) · [saída](resultados/zn_solvator/zn_solvator.out) · [estrutura](resultados/zn_solvator/zn_solvator.solvator.xyz).
-- **zn_solvator_2aguas:** [input completo usado](resultados/zn_solvator_2aguas/zn_solvator_2aguas.inp) · [saída](resultados/zn_solvator_2aguas/zn_solvator_2aguas.out) · [estrutura](resultados/zn_solvator_2aguas/zn_solvator_2aguas.solvator.xyz).
-
-[Consultar preparação, números e respostas](apoio.md).
-
-</details>
+[Entenda o modelo e confira a contagem](apoio.md) · [Histórico: complexo Zn–en pré-formado, 25/43 átomos](historico.md)
 
 **Manual:** [SOLVATOR](https://www.faccts.de/docs/orca/6.1/manual/contents/structurereactivity/solvator.html).
-
-**Antes de avançar:** anote uma mudança no input, uma observação e uma conclusão que esta estrutura ainda não permite.
-
-## Inputs das variantes e preparações
-
-- **preparar_complexo:** [Baixar input ORCA](inputs/preparar_complexo.inp) · [Baixar geometria inicial (.xyz)](estruturas/zn_en_inicial.xyz) (obrigatório; manter na mesma pasta do input).
-- **relaxar_solvato:** [Baixar input ORCA](inputs/relaxar_solvato.inp) · [Baixar geometria inicial (.xyz)](estruturas/zn_solvator.xyz) (obrigatório; manter na mesma pasta do input).

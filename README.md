@@ -30,14 +30,16 @@ O laboratório abre na trajetória 3D. Gire ou arraste a molécula, amplie a ár
 
 <a href="https://henriquecsj.github.io/AIMD-6WPPQG-UERJ/visualizador/?exemplo=complex&amp;aba=trajetoria"><img src="assets/laboratorio-energia-preview.jpg" width="960" alt="Prévia real do laboratório de trajetórias: complexo de zinco, águas, parede e contatos tracejados. Clique para abrir o exemplo interativo."></a>
 
-**[Explorar o complexo de Zn²⁺ →](https://henriquecsj.github.io/AIMD-6WPPQG-UERJ/visualizador/?exemplo=complex&aba=trajetoria)**
+**[Explorar a hidratação do Zn²⁺ →](https://henriquecsj.github.io/AIMD-6WPPQG-UERJ/visualizador/?exemplo=zn_hydration&aba=trajetoria)**
+
+A imagem acima conserva uma prévia anterior do complexo pré-formado. O bloco atual começa pelo Zn²⁺ isolado e 20 águas, sem en.
 
 ### Durante a aula: cinco blocos
 
 1. **[Água: da molécula à ligação H](exercicios/1-agua-dft/README.md)** — [01a: movimento, energia e temperatura](exercicios/1-agua-dft/README.md#agua-isolada) → [01b: dímero e reorientação](exercicios/1-agua-dft/README.md#dimero).
 2. **[Etanol e timestep](exercicios/3-xtb2-etanol/README.md)** — controle, instabilidade e correção.
 3. **[Aquecer e resfriar](exercicios/5-termostato/README.md)** — termostato, diedro e etapas contínuas.
-4. **[Zn–en](exercicios/6-complexo-solvator/README.md)** — SOLVATOR, parede e [formação do quelato](exercicios/11-formacao-quelato/README.md) com trajetória pronta.
+4. **[Zn²⁺ → águas → en](exercicios/6-complexo-solvator/README.md)** — SOLVATOR adiciona 20 águas ao íon isolado; compare hidratação sem en e rigidez da parede; depois observe o [primeiro N assistido e o segundo N livre](exercicios/11-formacao-quelato/README.md) em uma referência independente.
 5. **[H₅O₂⁺](exercicios/10-proton-compartilhado/README.md)** — um próton compartilhado entre duas águas.
 
 **[Opcionais e referências](exercicios/README.md#opcionais-e-referencias):** DFT/CPCM, gotas protonadas de 300 a 600 K, água em C₆₀ e outros controles. A lista do laboratório separa estes materiais do percurso da aula.

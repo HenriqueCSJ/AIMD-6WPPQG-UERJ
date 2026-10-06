@@ -1,6 +1,6 @@
 # XTB2 e SOLVATOR: confira antes da aula
 
-[← Tutoriais](README.md) · [04a · Construir com SOLVATOR](../exercicios/6-complexo-solvator/README.md)
+[← Tutoriais](README.md) · [04a · Zn²⁺ isolado + 20 águas](../exercicios/6-complexo-solvator/README.md)
 
 Nos inputs do minicurso usaremos **`! XTB2`**, acrescentando `ALPB(water)` quando houver solvente implícito. Não é necessário chamar o programa xTB manualmente durante os exercícios: o ORCA faz essa chamada.
 
@@ -27,6 +27,8 @@ Espere o cálculo terminar. No Ubuntu, `tail -f agua_solvator_external.out` acom
 Confira `ORCA TERMINATED NORMALLY`, o término normal do SOLVATOR e o arquivo final com **9 átomos** na primeira linha. Abra esse XYZ no Avogadro. A montagem não é uma trajetória de MD: é uma condição inicial para um cálculo posterior.
 
 O piloto Linux/WSL2 terminou normalmente em 7,385 s neste computador; esse tempo não é uma previsão para outros sistemas. A variante Windows deste teste ainda precisa de verificação local.
+
+**Este teste é somente uma verificação da instalação.** Na atividade 04a, o soluto é Zn²⁺ isolado e `nsolv 20` acrescenta vinte águas (61 átomos), sem en. A montagem SOLVATOR bruta e a preparação radial declarada para a hidratação são estruturas diferentes. Depois de passar neste teste pequeno, siga o input próprio da atividade.
 
 ## 2. Somente se o ORCA não encontrar o xTB
 

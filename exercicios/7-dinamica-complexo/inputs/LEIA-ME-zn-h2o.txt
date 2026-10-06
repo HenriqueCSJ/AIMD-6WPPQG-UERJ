@@ -1,0 +1,5 @@
+04b: os pacotes incluem o input e zn_20h2o_inicial.xyz. A estrutura tem 61 atomos: Zn+20H2O, sem en.
+Preparacao: apos SOLVATOR, transladar rigidamente cada agua +0.8 A para fora, preservando O-H e H-O-H.
+Use a MESMA estrutura em pastas separadas e execute um calculo por vez.
+Controles: Cell None; Cell Sphere 0,0,0,6.5_A com Spring 10/50/200.
+Spring 200 continua sendo potencial harmonico finito, nao parede impenetravel.

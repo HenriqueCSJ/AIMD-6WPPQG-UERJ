@@ -6,7 +6,7 @@ import markdown
 
 ROOT = Path(__file__).resolve().parents[1]
 EX = ROOT / 'exercicios'
-COURSE = [('1-agua-dft', 'Água: molécula e dímero'), ('3-xtb2-etanol', 'Etanol: controle'), ('4-timestep', 'Timestep e correção'), ('5-termostato', 'Aquecer e resfriar'), ('6-complexo-solvator', 'Zn–en: SOLVATOR'), ('7-dinamica-complexo', 'Zn–en: parede'), ('11-formacao-quelato', 'Zn–en: formar o quelato'), ('10-proton-compartilhado', 'Um próton entre duas águas')]
+COURSE = [('1-agua-dft', 'Água: molécula e dímero'), ('3-xtb2-etanol', 'Etanol: controle'), ('4-timestep', 'Timestep e correção'), ('5-termostato', 'Aquecer e resfriar'), ('6-complexo-solvator', 'Zn²⁺ + 20 águas: SOLVATOR'), ('7-dinamica-complexo', 'Zn²⁺: hidratação e paredes'), ('11-formacao-quelato', 'en: primeiro N assistido, segundo N livre'), ('10-proton-compartilhado', 'Um próton entre duas águas')]
 OPTIONAL = [('13-cell-pressao', 'Cell: parede, pressão e volume'), ('2-solvente-implicito', 'DFT e solvente contínuo'), ('12-gota-protonada', 'Gota protonada: 300–600 K'), ('8-agua-no-fulereno', 'Água dentro de C₆₀'), ('9-aluminio-amonia', 'Al³⁺/amônia: referência')]
 LESSONS = COURSE + OPTIONAL
 BADGES = ['01', '02a', '02b', '03', '04a', '04b', '04c', '05'] + ['C'] + ['↗'] * (len(OPTIONAL) - 1)
@@ -89,8 +89,8 @@ def build_page(folder, title, source, index, filename='index.html'):
         resolved = (folder / href).resolve()
         if href.endswith('README.md') and (resolved.parent == EX or resolved.parent.name in dict(LESSONS)):
             href = href[:-len('README.md')] + 'index.html'
-        elif href.endswith('apoio.md') and resolved.parent.name in dict(LESSONS):
-            href = href[:-len('apoio.md')] + 'apoio.html'
+        elif href.endswith('.md') and resolved.parent.name in dict(LESSONS) and resolved.stem in ('apoio', 'historico', 'historico-apoio', 'hidratacao'):
+            href = href[:-3] + '.html'
         elif href.endswith('roteiro-4h.md') and resolved.parent == EX:
             href = href[:-len('roteiro-4h.md')] + 'roteiro-4h.html'
         elif href.endswith('.md') and resolved.parent == ROOT / 'tutoriais':
@@ -132,6 +132,10 @@ def main():
         support = EX / slug / 'apoio.md'
         if support.exists():
             render(support.parent, f'Apoio · {title}', support.read_text(encoding='utf-8'), n, 'apoio.html')
+        for historical_name in ('historico', 'historico-apoio'):
+            historical = EX / slug / f'{historical_name}.md'
+            if historical.exists():
+                render(historical.parent, f'Histórico · {title}', historical.read_text(encoding='utf-8'), n, f'{historical_name}.html')
         hydration = EX / slug / 'hidratacao.md'
         if hydration.exists():
             render(hydration.parent, 'Ver a camada de águas se formar', hydration.read_text(encoding='utf-8'), n, 'hidratacao.html')

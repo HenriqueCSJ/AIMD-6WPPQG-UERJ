@@ -1,120 +1,86 @@
 <!doctype html>
-<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>04b · Zn–en: parede · AIMD / ORCA</title><link rel="stylesheet" href="../pagina.css?v=20261006-course3"><script defer src="../pagina.js?v=20261006-course3"></script></head>
-<body><a class="skip" href="#conteudo">Ir para o conteúdo</a><header class="brand"><a href="../index.html"><strong>AIMD com ORCA</strong><small>6º Workshop PPGQ–UERJ · 7 de outubro de 2026</small></a><div class="logos"><img src="../../assets/uerj-logo.png" alt="UERJ"><img src="../../assets/ufrrj-logo-compacto.png" alt="UFRRJ"></div></header><div class="layout"><nav class="course-nav" aria-label="Mapa dos exercícios"><details class="course-map" open><summary>Mapa dos exercícios <small>8 etapas + complementos opcionais</small></summary><a class="home" href="../index.html">Visão geral do percurso</a><a class="parameter-guide" href="../../guia-md/index.html" target="_blank" rel="noopener" aria-label="Guia de parâmetros %md (abre em outra aba)">Guia de parâmetros %md ↗</a><h3 class="nav-group">Durante a aula · siga nesta ordem</h3><ol class="links"><li><a href="../1-agua-dft/index.html"><span class="num">01</span><span>Água: molécula e dímero</span></a></li><li><a href="../3-xtb2-etanol/index.html"><span class="num">02a</span><span>Etanol: controle</span></a></li><li><a href="../4-timestep/index.html"><span class="num">02b</span><span>Timestep e correção</span></a></li><li><a href="../5-termostato/index.html"><span class="num">03</span><span>Aquecer e resfriar</span></a></li><li><a href="../6-complexo-solvator/index.html"><span class="num">04a</span><span>Zn–en: SOLVATOR</span></a></li><li><a href="../7-dinamica-complexo/index.html" aria-current="page"><span class="num">04b</span><span>Zn–en: parede</span></a></li><li><a href="../11-formacao-quelato/index.html"><span class="num">04c</span><span>Zn–en: formar o quelato</span></a></li><li><a href="../10-proton-compartilhado/index.html"><span class="num">05</span><span>Um próton entre duas águas</span></a></li></ol><h3 class="nav-group">Complementos opcionais e referências</h3><p class="nav-note">A sequência da aula segue diretamente entre as oito etapas acima.</p><ol class="links"><li><a href="../13-cell-pressao/index.html"><span class="num">C</span><span>Cell: parede, pressão e volume</span></a></li><li><a href="../2-solvente-implicito/index.html"><span class="num">↗</span><span>DFT e solvente contínuo</span></a></li><li><a href="../12-gota-protonada/index.html"><span class="num">↗</span><span>Gota protonada: 300–600 K</span></a></li><li><a href="../8-agua-no-fulereno/index.html"><span class="num">↗</span><span>Água dentro de C₆₀</span></a></li><li><a href="../9-aluminio-amonia/index.html"><span class="num">↗</span><span>Al³⁺/amônia: referência</span></a></li></ol></details></nav><main id="conteudo"><nav class="route-nav route-topo" aria-label="Navegação do percurso — topo"><div class="route-status">Etapa 6 de 8 · Bloco 04b<progress class="course-progress" value="6" max="8" aria-label="Etapa 6 de 8"></progress></div><div class="route-controls"><a class="route-prev" rel="prev" href="../6-complexo-solvator/index.html"><small>Anterior</small><span>← Zn–en: SOLVATOR</span></a><a class="route-next" rel="next" href="../11-formacao-quelato/index.html"><small>Próximo</small><span>Zn–en: formar o quelato →</span></a></div><a class="route-map" href="../index.html">Mapa completo do percurso</a></nav><article class="lesson-content"><h1 id="04b-manter-as-aguas-perto-do-complexo">04b · Manter as águas perto do complexo</h1><nav class="section-nav" aria-label="Seções desta página"><strong>Nesta página</strong><ul><li><a href="#1-compare-a-mesma-condicao-inicial">1. Compare a mesma condição inicial</a></li><li><a href="#2-execute-com-parede">2. Execute com parede</a></li><li><a href="#3-veja-a-agua-que-se-afasta">3. Veja a água que se afasta</a></li><li><a href="#resultados-para-comparar">Resultados para comparar</a></li><li><a href="#no-retorno-do-intervalo">No retorno do intervalo</a></li><li><a href="#inputs-das-variantes-e-preparacoes">Inputs das variantes e preparações</a></li><li><a href="#aprofundar-cell-sem-perder-o-percurso">Aprofundar Cell sem perder o percurso</a></li></ul></nav>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>04b · Zn²⁺: hidratação e paredes · AIMD / ORCA</title><link rel="stylesheet" href="../pagina.css?v=20261006-course3"><script defer src="../pagina.js?v=20261006-course3"></script></head>
+<body><a class="skip" href="#conteudo">Ir para o conteúdo</a><header class="brand"><a href="../index.html"><strong>AIMD com ORCA</strong><small>6º Workshop PPGQ–UERJ · 7 de outubro de 2026</small></a><div class="logos"><img src="../../assets/uerj-logo.png" alt="UERJ"><img src="../../assets/ufrrj-logo-compacto.png" alt="UFRRJ"></div></header><div class="layout"><nav class="course-nav" aria-label="Mapa dos exercícios"><details class="course-map" open><summary>Mapa dos exercícios <small>8 etapas + complementos opcionais</small></summary><a class="home" href="../index.html">Visão geral do percurso</a><a class="parameter-guide" href="../../guia-md/index.html" target="_blank" rel="noopener" aria-label="Guia de parâmetros %md (abre em outra aba)">Guia de parâmetros %md ↗</a><h3 class="nav-group">Durante a aula · siga nesta ordem</h3><ol class="links"><li><a href="../1-agua-dft/index.html"><span class="num">01</span><span>Água: molécula e dímero</span></a></li><li><a href="../3-xtb2-etanol/index.html"><span class="num">02a</span><span>Etanol: controle</span></a></li><li><a href="../4-timestep/index.html"><span class="num">02b</span><span>Timestep e correção</span></a></li><li><a href="../5-termostato/index.html"><span class="num">03</span><span>Aquecer e resfriar</span></a></li><li><a href="../6-complexo-solvator/index.html"><span class="num">04a</span><span>Zn²⁺ + 20 águas: SOLVATOR</span></a></li><li><a href="../7-dinamica-complexo/index.html" aria-current="page"><span class="num">04b</span><span>Zn²⁺: hidratação e paredes</span></a></li><li><a href="../11-formacao-quelato/index.html"><span class="num">04c</span><span>en: primeiro N assistido, segundo N livre</span></a></li><li><a href="../10-proton-compartilhado/index.html"><span class="num">05</span><span>Um próton entre duas águas</span></a></li></ol><h3 class="nav-group">Complementos opcionais e referências</h3><p class="nav-note">A sequência da aula segue diretamente entre as oito etapas acima.</p><ol class="links"><li><a href="../13-cell-pressao/index.html"><span class="num">C</span><span>Cell: parede, pressão e volume</span></a></li><li><a href="../2-solvente-implicito/index.html"><span class="num">↗</span><span>DFT e solvente contínuo</span></a></li><li><a href="../12-gota-protonada/index.html"><span class="num">↗</span><span>Gota protonada: 300–600 K</span></a></li><li><a href="../8-agua-no-fulereno/index.html"><span class="num">↗</span><span>Água dentro de C₆₀</span></a></li><li><a href="../9-aluminio-amonia/index.html"><span class="num">↗</span><span>Al³⁺/amônia: referência</span></a></li></ol></details></nav><main id="conteudo"><nav class="route-nav route-topo" aria-label="Navegação do percurso — topo"><div class="route-status">Etapa 6 de 8 · Bloco 04b<progress class="course-progress" value="6" max="8" aria-label="Etapa 6 de 8"></progress></div><div class="route-controls"><a class="route-prev" rel="prev" href="../6-complexo-solvator/index.html"><small>Anterior</small><span>← Zn²⁺ + 20 águas: SOLVATOR</span></a><a class="route-next" rel="next" href="../11-formacao-quelato/index.html"><small>Próximo</small><span>en: primeiro N assistido, segundo N livre →</span></a></div><a class="route-map" href="../index.html">Mapa completo do percurso</a></nav><article class="lesson-content"><h1 id="04b-hidratacao-sem-en-e-rigidez-da-parede">04b · Hidratação sem en e rigidez da parede</h1><nav class="section-nav" aria-label="Seções desta página"><strong>Nesta página</strong><ul><li><a href="#1-preserve-a-mesma-condicao-inicial">1. Preserve a mesma condição inicial</a></li><li><a href="#2-compare-ausencia-de-parede-e-tres-valores-de-spring">2. Compare ausência de parede e três valores de Spring</a></li><li><a href="#3-observe-a-hidratacao-e-a-atuacao-da-parede">3. Observe a hidratação e a atuação da parede</a></li><li><a href="#4-so-depois-passe-a-en">4. Só depois passe à en</a></li></ul></nav>
 <p><a href="../index.html">← Percurso</a> · <a href="../../visualizador/index.html">Aplicativo de análise</a></p>
-<p><strong>Parte do bloco Zn–en (45 min com SOLVATOR) · Zn²⁺–etilenodiamina + águas · 43 átomos</strong></p>
+<p><strong>Zn²⁺ + 20 águas · 61 átomos · carga +2 · singlete · sem en</strong></p>
 <blockquote>
-<p><strong>Pergunta:</strong> manter uma água perto do complexo significa coordená-la ao Zn?</p>
+<p><strong>Pergunta:</strong> o que muda na hidratação quando removemos a parede ou aumentamos sua rigidez?</p>
 </blockquote>
-<h2 id="1-compare-a-mesma-condicao-inicial">1. Compare a mesma condição inicial</h2>
-<p>O SOLVATOR construiu uma camada externa de águas. Agora acompanhe sua permanência ao redor do complexo e compare retenção espacial com coordenação direta. As duas trajetórias partem do <strong>mesmo arquivo de reinício</strong>, com as mesmas posições e velocidades, após 100 fs de preparação. Ambas usam XTB2/ALPB(water), CSVR a 300 K, timestep de 0,5 fs e mais <strong>2 ps = 2 × 10⁻¹² s</strong>. Apenas a parede muda. O relógio vai de 100 a 2100 fs.</p>
-<p>ALPB modifica o ambiente eletrostático; não impede uma água explícita de se afastar. A parede acrescenta uma força restauradora quando um átomo ultrapassa o raio escolhido.</p>
-<h2 id="2-execute-com-parede">2. Execute com parede</h2>
-<p><a href="aula-zn_parede_longo.zip">Pacote para executar</a> · <a href="inputs/zn_parede_longo.inp" download="zn_parede_longo.inp">Baixar input ORCA</a> · <a href="estruturas/zn_solvato.xyz" download="zn_solvato.xyz">Baixar geometria inicial (.xyz)</a> (obrigatório; manter na mesma pasta do input) · <a href="estruturas/preparacao_termica.mdrestart" download="preparacao_termica.mdrestart">Baixar checkpoint obrigatório</a> (fornece o estado de continuação; manter junto do input)</p>
-<!-- input-source: inputs/zn_parede_longo.inp -->
-
-<pre><code class="language-text"># Complexo com XTB2/ALPB; PAL8 = 8 threads do xTB.
+<h2 id="1-preserve-a-mesma-condicao-inicial">1. Preserve a mesma condição inicial</h2>
+<p>Comece pela montagem de Zn²⁺ + 20 águas de <strong><a href="../6-complexo-solvator/index.html">04a</a></strong>. Neste bloco não há en nem quelato pré-formado. Conte os átomos e confira os índices antes de comparar.</p>
+<p><strong>Os quatro controles de 1 ps estão disponíveis como trajetórias de referência.</strong> A geometria comum foi preparada a partir da saída verificada do novo SOLVATOR. Não use a antiga estrutura de 43 átomos no lugar dela.</p>
+<p>O arquivo comum <strong><code>zn_20h2o_inicial.xyz</code></strong> é uma preparação da nova montagem SOLVATOR: cada água foi transladada rigidamente <strong>0,8 Å para fora na direção Zn→O</strong>, mantendo suas distâncias e ângulos internos. O Zn permanece na origem; não há otimização intermediária. Essa intervenção didática afasta todas as águas além do corte inicial de 2,6 Å para observar a aproximação durante a MD. <strong>Não é a saída bruta do SOLVATOR.</strong> Use o mesmo <a href="estruturas/zn_20h2o_inicial.xyz" download="zn_20h2o_inicial.xyz">arquivo preparado</a> em todos os controles, junto dos respectivos inputs. As distâncias iniciais Zn–O vão de <strong>3,174 a 5,722 Å</strong>; nenhum O está abaixo de 2,6 Å. O maior raio atômico é <strong>6,141 Å</strong>, menor que a parede de 6,5 Å.</p>
+<p>As variantes usam <strong>XTB2/ALPB(water), timestep de 0,25 fs, velocidades inicializadas a 300 K, semente 42 e CSVR a 300 K com acoplamento de 100 fs</strong>. São <strong>4000 passos = 1000 fs = 1 ps</strong> por controle. As posições e velocidades iniciais foram conferidas e são <strong>idênticas nos quatro controles</strong>; a parede é a variável comparada.</p>
+<h2 id="2-compare-ausencia-de-parede-e-tres-valores-de-spring">2. Compare ausência de parede e três valores de Spring</h2>
+<p><a href="aula-zn_h2o_paredes.zip">Baixar todos os inputs de parede</a></p>
+<ul>
+<li><strong>Sem parede:</strong> <a href="inputs/zn_h2o_sem_parede.inp" download="zn_h2o_sem_parede.inp">input</a> · <a href="aula-zn_h2o_sem_parede.zip">pacote</a>.</li>
+<li><strong>Parede suave · Spring 10:</strong> <a href="inputs/zn_h2o_spring10.inp" download="zn_h2o_spring10.inp">input</a> · <a href="aula-zn_h2o_spring10.zip">pacote</a>.</li>
+<li><strong>Parede intermediária · Spring 50:</strong> <a href="inputs/zn_h2o_spring50.inp" download="zn_h2o_spring50.inp">input</a> · <a href="aula-zn_h2o_spring50.zip">pacote</a>.</li>
+<li><strong>Parede mais rígida · Spring 200:</strong> <a href="inputs/zn_h2o_spring200.inp" download="zn_h2o_spring200.inp">input</a> · <a href="aula-zn_h2o_spring200.zip">pacote</a>.</li>
+</ul>
+<p>Os três controles com parede usam <strong>esfera de raio 6,5 Å e centro fixo (0, 0, 0)</strong>. O centro não acompanha o Zn. A geometria gerada precisa ser inspecionada: registre os raios atômicos iniciais para saber se algum átomo já alcança essa fronteira. <code>Spring</code> está em kJ mol⁻¹ Å⁻².</p>
+<details>
+<summary>Input comentado · parede suave, Spring 10</summary>
+<!-- input-source: inputs/zn_h2o_spring10.inp -->
+<pre><code class="language-text"># 04b: Zn2+ + 20 H2O, sem etilenodiamina (61 atomos).
+# Use a MESMA montagem SOLVATOR em todos os quatro ramos.
+# Use a preparacao fornecida: aguas transladadas rigidamente +0.8 A apos SOLVATOR.
+# Raio fixo 6.5 A; Spring finito, inclusive no ramo mais rigido.
 ! MD XTB2 ALPB(water) PAL8
 %maxcore 256
-
 %md
-  Timestep 0.5_fs
+  Timestep 0.25_fs
   Randomize 42
-  # Banho a 300 K; acoplamento em 100 fs.
+  Initvel 300_K
   Thermostat CSVR 300_K Timecon 100_fs
-  # Parede suave: centro (0,0,0), raio 6 A.
-  Walls Sphere 0, 0, 0, 6.0_A Spring 50.0
-  # Retoma posicoes, velocidades e relogio fornecidos.
-  Restart &quot;preparacao_termica.mdrestart&quot;
-  Dump Position Stride 1 Filename &quot;zn_parede_longo-traj.xyz&quot;
-  # Novo trecho: 4000 x 0.5 fs = 2000 fs (2e-12 s).
+  Cell Sphere 0, 0, 0, 6.5_A Spring 10.0
+  Dump Position Stride 2 Filename &quot;zn_h2o_spring10-traj.xyz&quot;
+  Dump Velocity Stride 2000 Filename &quot;zn_h2o_spring10-vel.xyz&quot;
   Run 4000
 end
-
-# Carga 2, multiplicidade 1; XYZ na mesma pasta.
-* xyzfile 2 1 zn_solvato.xyz
+* xyzfile 2 1 zn_20h2o_inicial.xyz
 </code></pre>
+</details>
+<p>Aumentar <code>Spring</code> torna a repulsão mais rígida. <strong>Spring 200 ainda é um potencial finito</strong>, não uma fronteira impenetrável. A parede muda o modelo físico nas bordas; ela não representa uma caixa periódica nem água líquida infinita. ALPB, por si só, não confina as águas explícitas.</p>
+<p>Execute <strong>um cálculo por vez</strong>. Se o tempo da aula permitir somente um, escolha a parede suave e guarde as outras comparações para depois. Não use resultados do histórico como se fossem esses novos controles.</p>
 <details>
 <summary>Executar no Ubuntu / WSL2</summary>
-<p>Entre na <strong>pasta extraída do exercício</strong>, onde estão o input e seus arquivos auxiliares. Com a <a href="https://github.com/HenriqueCSJ/AIMD-6WPPQG-UERJ/blob/main/tutoriais/01-wsl2-ubuntu-orca.md">instalação concluída</a>, execute:</p>
-<pre><code class="language-bash">orca zn_parede_longo.inp &gt; zn_parede_longo.out &amp;
+<p>Na pasta do input e da geometria comum, com ORCA já <a href="https://github.com/HenriqueCSJ/AIMD-6WPPQG-UERJ/blob/main/tutoriais/01-wsl2-ubuntu-orca.md">instalado</a>:</p>
+<pre><code class="language-bash">orca zn_h2o_spring10.inp &gt; zn_h2o_spring10.out &amp;
 </code></pre>
-<p>Espere o cálculo encerrar antes de iniciar outro. Os resultados ficam nessa mesma pasta; veja <a href="../index.html#como-executar">como acompanhar a execução</a>.</p>
+<p>Espere encerrar antes de executar a próxima variante. Substitua o basename pelo do controle escolhido.</p>
 </details>
 <details>
 <summary>Alternativa no Windows nativo</summary>
-<p>Abra o <strong>Prompt de Comando (<code>cmd</code>) na pasta extraída</strong>, com ORCA e MS-MPI já <a href="https://github.com/HenriqueCSJ/AIMD-6WPPQG-UERJ/blob/main/tutoriais/02-windows-orca-msmpi.md">configurados no Path</a>:</p>
-<pre><code class="language-bat">orca zn_parede_longo.inp &gt; zn_parede_longo.out
+<p>No Prompt de Comando (<code>cmd</code>), na pasta dos arquivos, com ORCA e MS-MPI <a href="https://github.com/HenriqueCSJ/AIMD-6WPPQG-UERJ/blob/main/tutoriais/02-windows-orca-msmpi.md">configurados</a>:</p>
+<pre><code class="language-bat">orca zn_h2o_spring10.inp &gt; zn_h2o_spring10.out
 </code></pre>
-<p>Espere o prompt voltar antes de iniciar outro cálculo. Os arquivos de resultado ficam nessa mesma pasta.</p>
+<p>Espere o prompt voltar antes de iniciar outro cálculo.</p>
 </details>
-<p>O pacote inclui o reinício. <strong>Raio 6 Å</strong>, centro fixo na origem e <code>Spring 50.0</code> em kJ mol⁻¹ Å⁻². A parede é suave: os átomos podem ultrapassar um pouco o raio antes de serem repelidos. Ela modifica o modelo físico e não representa uma caixa periódica nem solvente infinito.</p>
-<h2 id="3-veja-a-agua-que-se-afasta">3. Veja a água que se afasta</h2>
-<p><a href="../../visualizador/index.html?exemplo=complex&amp;aba=trajetoria">Abrir a comparação 3D</a> · <a href="../../visualizador/index.html">Carregar meus arquivos</a></p>
+<h2 id="3-observe-a-hidratacao-e-a-atuacao-da-parede">3. Observe a hidratação e a atuação da parede</h2>
+<p><a href="../../visualizador/index.html?exemplo=zn_hydration&amp;aba=trajetoria">Abrir 04b no laboratório</a> · <a href="../../visualizador/index.html">Carregar meus arquivos</a></p>
+<p>Carregue juntos <strong><code>.out</code></strong>, <strong><code>-md-ener.csv</code></strong> e <strong><code>-traj.xyz</code></strong> de cada cálculo. Use as caixas para escolher até quatro simulações e o campo <strong>Simulação</strong> para alternar a trajetória.</p>
 <ol>
-<li>Reproduza a referência <strong>sem parede</strong> até o fim. Uma água da camada externa se afasta.</li>
-<li>Troque para <strong>com parede</strong>. O contorno mostra onde começa a repulsão.</li>
-<li>Em <strong>Geometria → Distância</strong>, compare <strong>Zn 0 — O 25</strong>. Os índices começam em zero.</li>
-<li>Confira também <strong>Zn 0 — N 1</strong> e <strong>Zn 0 — N 4</strong>: retenção espacial e coordenação são observações diferentes.</li>
+<li>Compare as distâncias Zn–O no início e ao longo do tempo. Quais águas formam a primeira camada? A saída bruta de SOLVATOR tem três O próximos; a preparação usada nestas MD começa com zero O abaixo de 2,6 Å. Confira qual estrutura está aberta antes de dizer que algo se formou durante a MD.</li>
+<li>Compare as águas da camada externa. Quais se afastam mais? Elas realmente alcançam a fronteira da parede?</li>
+<li>Observe sem parede, Spring 10, Spring 50 e Spring 200 no mesmo intervalo físico. A retenção espacial não prova coordenação Zn–O.</li>
+<li>Relacione movimento, energia e temperatura. O mesmo termostato não apaga a mudança física introduzida pela parede. A rigidez maior pode exigir atenção ao timestep; término normal sozinho não garante uma comparação adequada.</li>
 </ol>
-<p><strong>Ative os dois tipos de contato no 3D.</strong> Os traços de coordenação ligam geometricamente Zn a N/O próximos (corte inicial 2,6 Å); os tracejados de ligação H mostram contatos O/N–H···O/N que atendem aos cortes de distância e ângulo. Eles ajudam a distinguir <strong>primeira esfera de coordenação</strong> de <strong>águas externas conectadas por ligações H</strong>. São sugestões geométricas; o XYZ não contém ordens de ligação ou informação completa sobre caráter aceptor.</p>
-<p><strong>Previsão para testar:</strong> reter O 25 a cerca de 4 Å não o transforma em ligante diretamente coordenado ao Zn. Se a água fica perto, mas fora do corte de coordenação, a parede preservou a vizinhança de solvente, não criou uma ligação Zn–O. Confira isso no filme e na curva.</p>
-<p>Nesta execução, a distância final Zn 0–O 25 foi <strong>9.13 Å sem parede</strong> e <strong>4.19 Å com parede</strong>. O maior raio atômico em relação à origem atingiu <strong>9.28 Å sem parede</strong> e <strong>6.30 Å com parede</strong>. Esses números descrevem estas trajetórias; não são limites universais de evaporação.</p>
-<p><strong>O ganho:</strong> conservar uma região finita de solvente explícito ao redor do sistema durante a demonstração. <strong>O custo:</strong> forças artificiais nas bordas alteram o movimento; raio pequeno ou parede muito rígida podem distorcer a estrutura e exigir timestep menor. Aqui a perda de uma água significa afastamento no modelo de aglomerado, não uma taxa de evaporação de solução macroscópica.</p>
-<details>
-<summary>Executar também o controle sem parede</summary>
-<p><a href="aula-zn_sem_parede_longo.zip">Pacote para executar</a> · <a href="inputs/zn_sem_parede_longo.inp" download="zn_sem_parede_longo.inp">Baixar input ORCA</a> · <a href="estruturas/zn_solvato.xyz" download="zn_solvato.xyz">Baixar geometria inicial (.xyz)</a> (obrigatório; manter na mesma pasta do input) · <a href="estruturas/preparacao_termica.mdrestart" download="preparacao_termica.mdrestart">Baixar checkpoint obrigatório</a> (fornece o estado de continuação; manter junto do input)</p>
-<!-- input-source: inputs/zn_sem_parede_longo.inp -->
-<pre><code class="language-text"># Controle: mesmo estado inicial, agora sem parede.
-! MD XTB2 ALPB(water) PAL8
-%maxcore 256
-
-%md
-  Timestep 0.5_fs
-  Randomize 42
-  # Banho a 300 K; acoplamento em 100 fs.
-  Thermostat CSVR 300_K Timecon 100_fs
-  # Retoma posicoes, velocidades e relogio fornecidos.
-  Restart &quot;preparacao_termica.mdrestart&quot;
-  Dump Position Stride 1 Filename &quot;zn_sem_parede_longo-traj.xyz&quot;
-  # Novo trecho: 4000 x 0.5 fs = 2000 fs (2e-12 s).
-  Run 4000
-end
-
-# Carga 2, multiplicidade 1; XYZ na mesma pasta.
-* xyzfile 2 1 zn_solvato.xyz
-</code></pre>
-<details>
-<summary>Executar no Ubuntu / WSL2</summary>
-<p>Entre na <strong>pasta extraída do exercício</strong>, onde estão o input e seus arquivos auxiliares. Com a <a href="https://github.com/HenriqueCSJ/AIMD-6WPPQG-UERJ/blob/main/tutoriais/01-wsl2-ubuntu-orca.md">instalação concluída</a>, execute:</p>
-<pre><code class="language-bash">orca zn_sem_parede_longo.inp &gt; zn_sem_parede_longo.out &amp;
-</code></pre>
-<p>Espere o cálculo encerrar antes de iniciar outro. Os resultados ficam nessa mesma pasta; veja <a href="../index.html#como-executar">como acompanhar a execução</a>.</p>
-</details>
-<details>
-<summary>Alternativa no Windows nativo</summary>
-<p>Abra o <strong>Prompt de Comando (<code>cmd</code>) na pasta extraída</strong>, com ORCA e MS-MPI já <a href="https://github.com/HenriqueCSJ/AIMD-6WPPQG-UERJ/blob/main/tutoriais/02-windows-orca-msmpi.md">configurados no Path</a>:</p>
-<pre><code class="language-bat">orca zn_sem_parede_longo.inp &gt; zn_sem_parede_longo.out
-</code></pre>
-<p>Espere o prompt voltar antes de iniciar outro cálculo. Os arquivos de resultado ficam nessa mesma pasta.</p>
-</details>
-</details>
-<h2 id="resultados-para-comparar">Resultados para comparar</h2>
+<h3 id="resultados-desta-comparacao">Resultados desta comparação</h3>
+<p>Todos os ramos terminaram normalmente e usam <strong>2001 quadros reais, de 0 a 1000 fs, a cada 0,5 fs</strong>, sem redução no laboratório. As energias conservam os <strong>4001 registros nativos</strong>, com os tempos impressos pelo ORCA. Veja a <a href="resultados/verificacao-hidratacao.json">verificação dos quatro controles</a>.</p>
+<p>Em todos os ramos, o primeiro O entra abaixo do corte Zn–O de <strong>2,6 Å em 51 fs</strong>, e seis O atendem ao critério em <strong>77,5 fs</strong>. A hidratação inicial ocorre nos quatro casos; a presença da parede não é condição para esses contatos aparecerem nesta referência.</p>
+<p>Ao final de 1 ps, os números de O abaixo do corte são <strong>6 sem parede, 6 com Spring 10, 5 com Spring 50 e 6 com Spring 200</strong>. São contagens geométricas do quadro final; não devem ser tratadas como populações de equilíbrio.</p>
+<p>O <strong>maior raio atômico ao longo da trajetória, medido a partir do centro fixo da parede</strong>, foi <strong>17,639 Å sem parede</strong>, <strong>7,842 Å com Spring 10</strong>, <strong>7,219 Å com Spring 50</strong> e <strong>6,853 Å com Spring 200</strong>. Compare esses valores com o raio de <strong>6,5 Å</strong>: mesmo Spring 200 permite penetração além da borda. Maior rigidez reduz o afastamento observado nesta janela, sem tornar a parede impenetrável.</p>
 <ul>
-<li><strong>zn_parede_longo:</strong> <a href="resultados/zn_parede_longo/zn_parede_longo.inp" download="zn_parede_longo.inp">input usado</a> · <a href="resultados/zn_parede_longo/zn_parede_longo.out">saída</a> · <a href="resultados/zn_parede_longo/zn_parede_longo-md-ener.csv">energias</a> · <a href="resultados/zn_parede_longo/zn_parede_longo-traj.xyz" download="zn_parede_longo-traj.xyz">trajetória</a>.</li>
-<li><strong>zn_sem_parede_longo:</strong> <a href="resultados/zn_sem_parede_longo/zn_sem_parede_longo.inp" download="zn_sem_parede_longo.inp">input usado</a> · <a href="resultados/zn_sem_parede_longo/zn_sem_parede_longo.out">saída</a> · <a href="resultados/zn_sem_parede_longo/zn_sem_parede_longo-md-ener.csv">energias</a> · <a href="resultados/zn_sem_parede_longo/zn_sem_parede_longo-traj.xyz" download="zn_sem_parede_longo-traj.xyz">trajetória</a>.</li>
+<li><strong>Sem parede:</strong> <a href="resultado-zn_h2o_sem_parede.zip">resultados completos</a> · <a href="resultados/zn_h2o_sem_parede/zn_h2o_sem_parede.out">saída</a> · <a href="resultados/zn_h2o_sem_parede/zn_h2o_sem_parede-md-ener.csv">energia</a> · <a href="resultados/zn_h2o_sem_parede/zn_h2o_sem_parede-traj.xyz" download="zn_h2o_sem_parede-traj.xyz">trajetória</a>.</li>
+<li><strong>Spring 10:</strong> <a href="resultado-zn_h2o_spring10.zip">resultados completos</a> · <a href="resultados/zn_h2o_spring10/zn_h2o_spring10.out">saída</a> · <a href="resultados/zn_h2o_spring10/zn_h2o_spring10-md-ener.csv">energia</a> · <a href="resultados/zn_h2o_spring10/zn_h2o_spring10-traj.xyz" download="zn_h2o_spring10-traj.xyz">trajetória</a>.</li>
+<li><strong>Spring 50:</strong> <a href="resultado-zn_h2o_spring50.zip">resultados completos</a> · <a href="resultados/zn_h2o_spring50/zn_h2o_spring50.out">saída</a> · <a href="resultados/zn_h2o_spring50/zn_h2o_spring50-md-ener.csv">energia</a> · <a href="resultados/zn_h2o_spring50/zn_h2o_spring50-traj.xyz" download="zn_h2o_spring50-traj.xyz">trajetória</a>.</li>
+<li><strong>Spring 200:</strong> <a href="resultado-zn_h2o_spring200.zip">resultados completos</a> · <a href="resultados/zn_h2o_spring200/zn_h2o_spring200.out">saída</a> · <a href="resultados/zn_h2o_spring200/zn_h2o_spring200-md-ener.csv">energia</a> · <a href="resultados/zn_h2o_spring200/zn_h2o_spring200-traj.xyz" download="zn_h2o_spring200-traj.xyz">trajetória</a>.</li>
 </ul>
-<p>Para uma janela mais curta, compare os controles de 0,5 ps no <a href="apoio.html">apoio</a> e no <a href="../../visualizador/index.html?exemplo=complex_short">aplicativo</a>. <strong>Manual:</strong> <a href="https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html#cell">Paredes, seção Cell</a> · <a href="https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html#restart">Restart</a>. O ORCA 6.1.1 usado aceita a grafia <code>Walls</code>.</p>
-<p><strong>Extensão opcional:</strong> <a href="hidratacao.html">veja as águas inicialmente afastadas se coordenarem ao Zn</a>, com a en ainda distante. Há uma referência de 250 fs para a hidratação e outra de 5 ps para acompanhar o encontro; a segunda ainda não forma o quelato. A comparação com/sem parede desta atividade usa o complexo já formado.</p>
-<h2 id="no-retorno-do-intervalo">No retorno do intervalo</h2>
-<p><a href="../11-formacao-quelato/index.html">04c · Identificar a formação do quelato</a>: use a trajetória pronta de outro sistema, com aproximação inicial guiada, para acompanhar os dois N da mesma en e a saída de duas águas.</p>
-<h2 id="inputs-das-variantes-e-preparacoes">Inputs das variantes e preparações</h2>
-<ul>
-<li><strong>controle_dt025_31A:</strong> <a href="inputs/controle_dt025_31A.inp" download="controle_dt025_31A.inp">Baixar input ORCA</a> · <a href="estruturas/zn_aguas_en_31A.xyz" download="zn_aguas_en_31A.xyz">Baixar geometria inicial (.xyz)</a> (obrigatório; manter na mesma pasta do input).</li>
-<li><strong>hidratacao_associacao_31A:</strong> <a href="inputs/hidratacao_associacao_31A.inp" download="hidratacao_associacao_31A.inp">Baixar input ORCA</a> · <a href="estruturas/zn_aguas_en_31A.xyz" download="zn_aguas_en_31A.xyz">Baixar geometria inicial (.xyz)</a> (obrigatório; manter na mesma pasta do input).</li>
-<li><strong>preparacao_termica:</strong> <a href="inputs/preparacao_termica.inp" download="preparacao_termica.inp">Baixar input ORCA</a> · <a href="estruturas/zn_solvato.xyz" download="zn_solvato.xyz">Baixar geometria inicial (.xyz)</a> (obrigatório; manter na mesma pasta do input).</li>
-<li><strong>zn_parede:</strong> <a href="inputs/zn_parede.inp" download="zn_parede.inp">Baixar input ORCA</a> · <a href="estruturas/zn_solvato.xyz" download="zn_solvato.xyz">Baixar geometria inicial (.xyz)</a> (obrigatório; manter na mesma pasta do input) · <a href="estruturas/preparacao_termica.mdrestart" download="preparacao_termica.mdrestart">Baixar checkpoint obrigatório</a> (fornece o estado de continuação; manter junto do input).</li>
-<li><strong>zn_sem_parede:</strong> <a href="inputs/zn_sem_parede.inp" download="zn_sem_parede.inp">Baixar input ORCA</a> · <a href="estruturas/zn_solvato.xyz" download="zn_solvato.xyz">Baixar geometria inicial (.xyz)</a> (obrigatório; manter na mesma pasta do input) · <a href="estruturas/preparacao_termica.mdrestart" download="preparacao_termica.mdrestart">Baixar checkpoint obrigatório</a> (fornece o estado de continuação; manter junto do input).</li>
-</ul>
-<h2 id="aprofundar-cell-sem-perder-o-percurso">Aprofundar Cell sem perder o percurso</h2>
-<p><strong><a href="../13-cell-pressao/index.html">Complemento C1 → C2 → C3</a>:</strong> rigidez da parede, resposta à pressão e continuação com parede fixa ou removida. <strong>Para seguir a aula, avance diretamente para <a href="../11-formacao-quelato/index.html">04c · formação do quelato</a>.</strong></p></article><nav class="route-nav route-fim" aria-label="Navegação do percurso — fim"><div class="route-status">Etapa 6 de 8 · Bloco 04b<progress class="course-progress" value="6" max="8" aria-label="Etapa 6 de 8"></progress></div><div class="route-controls"><a class="route-prev" rel="prev" href="../6-complexo-solvator/index.html"><small>Anterior</small><span>← Zn–en: SOLVATOR</span></a><a class="route-next" rel="next" href="../11-formacao-quelato/index.html"><small>Próximo</small><span>Zn–en: formar o quelato →</span></a></div><a class="route-map" href="../index.html">Mapa completo do percurso</a></nav></main></div><footer>Henrique de Castro Silva Junior e Virginia Camila Rufino Ferreira · ORCA 6.1.1 · Materiais e dados locais; links externos levam à documentação oficial.</footer></body></html>
+<p>Uma dinâmica curta descreve esse modelo e essa janela, sem demonstrar equilíbrio, retenção indefinida ou uma taxa macroscópica de evaporação. Se você repetir os cálculos, extraia os números dos seus próprios arquivos antes de compará-los à referência.</p>
+<h2 id="4-so-depois-passe-a-en">4. Só depois passe à en</h2>
+<p>Siga para <strong><a href="../11-formacao-quelato/index.html">04c · Primeiro N assistido, segundo N livre</a></strong>. A referência pronta de 97 átomos foi preparada separadamente, com Zn²⁺, 20 águas e três en. Não é uma continuação calculada a partir da nova saída de 04a–b. Nela, apenas o primeiro N recebe ajuda; depois a restrição é removida e o segundo N fecha livremente o quelato.</p>
+<p><a href="apoio.html">Entenda os controles</a> · <a href="historico.html">Histórico: parede no complexo pré-formado de 43 átomos</a> · <a href="hidratacao.html">Referência anterior com águas e en afastados</a></p>
+<p><strong>Complemento opcional:</strong> <a href="../13-cell-pressao/index.html">Cell: rigidez, pressão e parede móvel</a>. As referências desse complemento pertencem ao sistema pré-formado indicado ali; seus resultados não substituem estes controles de hidratação sem en.</p>
+<p><strong>Manual:</strong> <a href="https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html#cell">Cell e paredes</a> · <a href="https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html#thermostat">Termostatos</a>.</p></article><nav class="route-nav route-fim" aria-label="Navegação do percurso — fim"><div class="route-status">Etapa 6 de 8 · Bloco 04b<progress class="course-progress" value="6" max="8" aria-label="Etapa 6 de 8"></progress></div><div class="route-controls"><a class="route-prev" rel="prev" href="../6-complexo-solvator/index.html"><small>Anterior</small><span>← Zn²⁺ + 20 águas: SOLVATOR</span></a><a class="route-next" rel="next" href="../11-formacao-quelato/index.html"><small>Próximo</small><span>en: primeiro N assistido, segundo N livre →</span></a></div><a class="route-map" href="../index.html">Mapa completo do percurso</a></nav></main></div><footer>Henrique de Castro Silva Junior e Virginia Camila Rufino Ferreira · ORCA 6.1.1 · Materiais e dados locais; links externos levam à documentação oficial.</footer></body></html>

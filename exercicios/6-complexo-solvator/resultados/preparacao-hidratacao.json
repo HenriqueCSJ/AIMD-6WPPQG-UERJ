@@ -1,0 +1,12 @@
+{
+  "source": "zn_ion_20h2o_solvator.solvator.xyz",
+  "preparation": "rigid radial translation +0.8 A per whole water; Zn unchanged; no geometry optimization",
+  "atoms": 61,
+  "raw_contacts_ZnO_below_2_6": 3,
+  "initial_contacts_ZnO_below_2_6": 0,
+  "initial_ZnO_min_A": 3.174162620698885,
+  "initial_ZnO_max_A": 5.7223463224962785,
+  "max_initial_radius_A": 6.141076562634752,
+  "max_intrawater_distance_change_A": 4.440892098500626e-16,
+  "fixed_wall_radius_A": 6.5
+}

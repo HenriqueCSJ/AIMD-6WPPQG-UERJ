@@ -35,7 +35,7 @@ test('menu presets and retained direct links resolve all runs and original downl
   const {store,loader}=bundledLoader();
   const selector=read('index.html').match(/<select id="example-select">([\s\S]*?)<\/select>/)[1];
   const exposed=[...selector.matchAll(/<option value="([^"]+)"/g)].map(match=>match[1]);
-  const directLinks=['water_nve','water_csvr','solvator_two','proton_shared_short','water_short','ethanol_short','chelation_previous'];
+  const directLinks=['water_nve','water_csvr','solvator','complex','complex_short','solvator_two','proton_shared_short','water_short','ethanol_short','chelation_previous'];
   assert.deepEqual(Object.keys(store.presets).sort(),[...exposed,...directLinks].sort());
   assert.deepEqual(Array.from(store.presets.chelation.runs),['chelation_continuous']);
   assert.deepEqual(Array.from(store.presets.chelation_previous.runs),['chelation']);
@@ -160,4 +160,20 @@ test('a timed out browser script rejects instead of keeping the loading state fo
   vm.runInContext(read('example-loader.js'),context);
   const request=context.AIMDExampleLoader.loadPreset('one');await Promise.resolve();timeout();
   await assert.rejects(request,/demorou demais/);assert.equal(script.removed,true);
+});
+
+
+test('new Zn presets expose measured data only when their complete retained references exist',async()=>{
+ const {loader,requested}=bundledLoader();
+ const hydration=await loader.loadPreset('zn_hydration');
+ if(hydration.config.awaitingResults){assert.equal(hydration.runs.length,0);assert.equal(requested.length,0);}
+ else{
+  assert.equal(hydration.runs.length,4);
+  for(const run of hydration.runs){assert.equal(run.out.metadata.normal,true);assert.equal(run.xyz.elements.length,61);assert.equal(run.xyz.elements.includes('N'),false);assert.equal(run.xyz.previewStride,undefined);}
+ }
+ const initial=await loader.loadPreset('zn_solvation'),ion=initial.runs.find(run=>run.key==='zn2_isolado');
+ assert.deepEqual(Array.from(ion.xyz.elements),['Zn']);assert.equal(ion.xyz.frames.length,1);assert.equal(ion.energy,undefined);assert.equal(ion.out,undefined);
+ const solvator=initial.runs.find(run=>run.key==='zn_ion_20h2o_solvator');
+ if(solvator){assert.equal(solvator.out.metadata.normal,true);assert.equal(solvator.xyz.elements.length,61);assert.equal(solvator.xyz.frames.length,1);assert.equal(solvator.energy,undefined);}
+ else{assert.equal(initial.config.preparationNote,true);assert.match(initial.config.message,/ainda não há resultado pronto/);}
 });

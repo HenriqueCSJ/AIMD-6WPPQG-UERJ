@@ -1,132 +1,31 @@
-# Apoio · Acompanhar o complexo e o confinamento
+# Apoio · Hidratação sem en e comparação controlada
 
-[← Voltar à atividade](README.md) · [Abrir o aplicativo](../../visualizador/index.html)
+[← Voltar a 04b](README.md)
 
-Estes controles de 0,5 ps mostram como ler o relógio de um restart e medir coordenação e afastamento. A referência principal de 2 ps também muda a força da parede: `Spring 10.0` nos controles curtos e `Spring 50.0` no caso longo, ambos com raio de 6 Å. Portanto, diferenças entre essas referências não isolam o efeito da duração. Para avaliar somente a janela de observação, compare os primeiros 500 fs com os 2 ps completos da mesma trajetória longa (relógio de 100 a 600 fs versus 100 a 2100 fs).
+Os quatro controles atuais usam **61 átomos e nenhum N**. Mantenha o mesmo arquivo XYZ, estado eletrônico, método, timestep, semente, inicialização de velocidades, termostato, duração e cadência de gravação. Nos controles com parede, mantenha também centro e raio; varie somente `Spring`. No controle sem parede, retire a força de parede.
 
-## Entenda as escolhas
+## Rigidez não é dureza infinita
 
-A contagem de átomos no ORCA começa em **zero**. Aqui Zn é o átomo 0; os N do ligante são 1 e 4. As primeiras águas têm O em 13, 16, 19 e 22; confira a lista completa no arquivo de índices. A parede de MD é uma força repulsiva suave fora da região definida por `Walls` (a grafia `Cell` também aparece nos inputs dessas referências), não uma caixa periódica. Se nenhum átomo atingir a fronteira, não haverá evidência de retenção pelo confinamento.
+Uma parede esférica finita pode ser ultrapassada pelos átomos. `Spring 10`, `50` e `200` controlam a força de retorno, não uma barreira impenetrável. Se a trajetória nunca alcança a fronteira, não atribua uma diferença observada à retenção pela parede sem evidência.
 
-Abra o [Laboratório de trajetórias](../../visualizador/index.html) e carregue o `*-md-ener.csv`, o `.out` e o `*-traj.xyz` deste cálculo. O aplicativo prepara os gráficos de energia/temperatura e a animação. Na aba **Geometria**, escolha dois átomos; a medida é calculada do XYZ. O CSV original usa fs, Hartree e K; a conversão de unidades fica explícita na tela.
+## Compare observações diferentes
 
-[Índices dos átomos](estruturas/indices-atomos.txt) · [Geometria relaxada antes da preparação térmica](../6-complexo-solvator/resultados/relaxar_solvato/relaxar_solvato.xyz).
+Retenção perto do centro e primeira esfera de coordenação não são a mesma medida. Use distâncias Zn–O para a primeira esfera, distâncias ao centro para verificar a borda, e as trajetórias e energias para interpretar cada caso. Tracejados no 3D são critérios geométricos, não ordens de ligação.
 
-**Relógio da simulação:** a preparação fornecida cobre 0–100 fs. `Restart` conserva esse relógio: os novos 1.000 passos vão de **100 a 600 fs**, adicionando **500 fs = 0,5 ps = 5 × 10⁻¹³ s**. O CSV contém 1.001 registros, incluindo o estado de reinício; o XYZ desta etapa tem 1.000 quadros, de 100,5 a 600 fs. Compare arquivos pelo tempo, não pelo número da linha.
+As posições e velocidades iniciais das quatro referências foram conferidas como idênticas; as trajetórias divergem conforme as forças aplicadas. Não compare um reinício antigo do complexo de 43 átomos com uma inicialização nova de 61 átomos como se apenas a parede mudasse.
 
-**Arquivos de distâncias:** os CSVs de Colvars abaixo pertencem às referências prontas. Os inputs didáticos curtos de preparação e dos controles com/sem parede não incluem essas medições; neles, use a aba **Geometria** para medir diretamente no XYZ. Para gerar também os CSVs, use o input original da referência ([preparação](resultados/preparacao_termica/preparacao_termica.inp), [com parede](resultados/zn_parede/zn_parede.inp), [sem parede](resultados/zn_sem_parede/zn_sem_parede.inp)), mantendo os arquivos auxiliares indicados para cada execução na mesma pasta.
+## Resultados conferidos e sua leitura
 
-**Quais colunas usar:** no CSV de Colvars, selecione `Colvar … Position / Angstrom`, que contém as distâncias. As colunas `Internal Force` são forças, não distâncias. Colvars 1–2 medem Zn–N; 3–6, os quatro O inicialmente coordenados; 7–12, os seis O acrescentados. Essas definições apenas medem: não mantêm as distâncias fixas.
+Todos os ramos têm 2001 quadros de 0–1000 fs e 4001 registros de energia. Os XYZ usam cadência de 0,5 fs; o timestep da integração é 0,25 fs. Os tempos impressos no CSV têm uma casa decimal, portanto não reconstrua o relógio original a partir do número da linha ou de uma malha ideal.
 
-**Escolha da parede:** após centralizar o Zn da geometria relaxada na origem, o átomo mais distante estava a 5,087 Å. Escolhemos **raio de 6,0 Å** e `Spring 10.0` (kJ mol⁻¹ Å⁻²), com folga inicial de 0,913 Å. O centro permanece na origem; ele não acompanha o Zn. A força age sobre cada átomo que ultrapassa o raio.
+A preparação começa com **zero contatos Zn–O abaixo de 2,6 Å**. Nos quatro ramos, o primeiro aparece em 51 fs e seis aparecem em 77,5 fs. No quadro final, a contagem é 6, 6, **5** e 6, na ordem sem parede, Spring 10, 50 e 200. Não afirme que todos terminam com seis O dentro do corte.
 
-## Resultados de referência
+O maior raio atômico **no quadro final**, em relação à origem fixa, é **17,639 Å sem parede**, **7,181 Å com Spring 10**, **6,686 Å com Spring 50** e **6,542 Å com Spring 200**. Esses valores diferem dos máximos ao longo de todo o filme apresentados na atividade. Ambos mostram que a parede suave pode ser ultrapassada.
 
-Os tempos abaixo incluem a inicialização do ORCA e foram medidos em um Intel Core Ultra 9 185H. Use-os para organizar a reprodução; o desempenho varia entre computadores.
+As distâncias O–H verificadas em todos os quadros ficam entre aproximadamente **0,914 e 1,046 Å**. Não foi observada ruptura dessas águas nos trechos utilizados. A parede limita o afastamento do agregado sem garantir uma primeira esfera invariável ou um estado de equilíbrio.
 
-### zn_parede
+## Limites e arquivos anteriores
 
-Tempo de execução: **26.12 s**, com PAL8.
+A montagem SOLVATOR bruta e a preparação com afastamento radial de 0,8 Å são geometrias diferentes. A segunda conserva cada água internamente e fornece o estado comum dos quatro controles. Confira os dados medidos de cada controle antes de concluir como a parede atuou. Os resultados novos estão disponíveis na [atividade principal](README.md#resultados-desta-comparacao) e na [verificação numérica](resultados/verificacao-hidratacao.json).
 
-- [Saída completa](resultados/zn_parede/zn_parede.out)
-- [Energias e temperatura — CSV](resultados/zn_parede/zn_parede-md-ener.csv)
-- [Distâncias — CSV](resultados/zn_parede/zn_parede-colvars.csv)
-- [Trajetória — XYZ](resultados/zn_parede/zn_parede-traj.xyz)
-- [Estado de reinício](resultados/zn_parede/zn_parede.mdrestart)
-- [Registro da execução](resultados/zn_parede/execucao.json)
-
-O CSV contém **1001 registros**, de **100 a 600 fs**, cobrindo **500 fs nesta etapa**. A diferença final E(t) − E(início da etapa) é **0.0437 Eh**; o intervalo máximo–mínimo de E é **0.0448 Eh**. A temperatura variou de **142.4 a 345.5 K**. São descrições desta trajetória, não estimativas de equilíbrio.
-
-[Diagnósticos numéricos desta referência](resultados/zn_parede/analise.json).
-
-### zn_sem_parede
-
-Tempo de execução: **25.80 s**, com PAL8.
-
-- [Saída completa](resultados/zn_sem_parede/zn_sem_parede.out)
-- [Energias e temperatura — CSV](resultados/zn_sem_parede/zn_sem_parede-md-ener.csv)
-- [Distâncias — CSV](resultados/zn_sem_parede/zn_sem_parede-colvars.csv)
-- [Trajetória — XYZ](resultados/zn_sem_parede/zn_sem_parede-traj.xyz)
-- [Estado de reinício](resultados/zn_sem_parede/zn_sem_parede.mdrestart)
-- [Registro da execução](resultados/zn_sem_parede/execucao.json)
-
-O CSV contém **1001 registros**, de **100 a 600 fs**, cobrindo **500 fs nesta etapa**. A diferença final E(t) − E(início da etapa) é **0.0446 Eh**; o intervalo máximo–mínimo de E é **0.0458 Eh**. A temperatura variou de **142.4 a 329.9 K**. São descrições desta trajetória, não estimativas de equilíbrio.
-
-[Diagnósticos numéricos desta referência](resultados/zn_sem_parede/analise.json).
-
-**Leitura dos dados:** a primeira ultrapassagem do raio de 6 Å na trajetória com parede ocorreu em **166.5 fs**. O maior raio atômico observado foi **6.608 Å com parede** e **7.283 Å sem parede**. A parede é suave: permite ultrapassar o raio e aplica uma força de retorno. A redução do afastamento neste controle é observável, mas uma trajetória de 0,5 ps não demonstra retenção indefinida.
-
-Os dois N permaneceram próximos ao Zn nesta referência com parede: aproximadamente **1,95–2,15 Å** e **1,91–2,16 Å**. Os quatro O inicialmente coordenados também permaneceram próximos; isso descreve estes 0,5 ps e não determina estabilidade termodinâmica ou uma constante de formação. As distâncias do CSV foram conferidas contra as coordenadas XYZ no mesmo instante.
-
-## Preparação térmica fornecida
-
-Uma trajetória de **100 fs = 0,1 ps = 10⁻¹³ s** prepara o estado inicial comum. Não é uma execução adicional obrigatória nem uma demonstração de equilíbrio convergido.
-
-[Baixar input ORCA](inputs/preparacao_termica.inp) · [Baixar geometria inicial (.xyz)](estruturas/zn_solvato.xyz) (obrigatório; manter na mesma pasta do input) · [Baixar reinício usado nos dois controles](estruturas/preparacao_termica.mdrestart)
-
-<details markdown="1"><summary>Ver input comentado da preparação</summary>
-
-[Input original usado na referência](resultados/preparacao_termica/preparacao_termica.inp).
-
-<!-- input-source: inputs/preparacao_termica.inp -->
-```text
-# Apoio: prepara o estado comum para os dois controles.
-! MD XTB2 ALPB(water) PAL8
-%maxcore 256
-
-%md
-  Timestep 0.5_fs
-  Randomize 42
-  # Velocidades iniciais; nao mantem a temperatura fixa.
-  Initvel 300_K
-  # Banho a 300 K; acoplamento em 100 fs.
-  Thermostat CSVR 300_K Timecon 100_fs
-  # Parede suave: centro (0,0,0), raio 6 A.
-  Walls Sphere 0, 0, 0, 6.0_A Spring 10.0
-  Dump Position Stride 1 Filename "preparacao_termica-traj.xyz"
-  # 200 x 0.5 fs = 100 fs (1e-13 s).
-  Run 200
-end
-
-# Carga 2, multiplicidade 1; XYZ na mesma pasta.
-* xyzfile 2 1 zn_solvato.xyz
-```
-
-</details>
-
-### preparacao_termica
-
-Tempo de execução: **6.24 s**, com PAL8.
-
-- [Saída completa](resultados/preparacao_termica/preparacao_termica.out)
-- [Energias e temperatura — CSV](resultados/preparacao_termica/preparacao_termica-md-ener.csv)
-- [Distâncias — CSV](resultados/preparacao_termica/preparacao_termica-colvars.csv)
-- [Trajetória — XYZ](resultados/preparacao_termica/preparacao_termica-traj.xyz)
-- [Estado de reinício](resultados/preparacao_termica/preparacao_termica.mdrestart)
-- [Registro da execução](resultados/preparacao_termica/execucao.json)
-
-O CSV contém **201 registros**, de **0 a 100 fs**, cobrindo **100 fs nesta etapa**. A diferença final E(t) − E(início da etapa) é **0.0194 Eh**; o intervalo máximo–mínimo de E é **0.023 Eh**. A temperatura variou de **120.8 a 300.0 K**. São descrições desta trajetória, não estimativas de equilíbrio.
-
-[Diagnósticos numéricos desta referência](resultados/preparacao_termica/analise.json).
-
-## Para discutir
-
-1. As duas distâncias Zn–N permanecem próximas de seus valores iniciais?
-2. Quais águas estão mais próximas do metal? A conectividade desenhada pelo visualizador coincide com as distâncias?
-3. A parede atuou nesta trajetória? Como você verificou?
-4. O que podemos concluir se não observamos troca de ligantes em 0,5 ps?
-
-<details markdown="1"><summary>Conferir o raciocínio depois da atividade</summary>
-
-Use as séries de distâncias e a trajetória, não apenas traços de ligação automáticos. Um arquivo de Colvars mede geometria; não prova a existência ou ruptura de uma ligação por um único corte. Ausência de troca em uma trajetória curta não demonstra inércia cinética nem estabilidade termodinâmica. O raio e a maior distância à origem permitem verificar se a fronteira foi alcançada. Em NVT, a energia molecular pode variar pela troca com o banho.
-
-</details>
-
-## Manual do ORCA
-
-- [Cell: paredes de MD](https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html#cell)
-- [Distâncias e Colvars](https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html#manage-colvar)
-- [Restart](https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html#restart)
-- [Termostatos](https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html#thermostat)
-
-**Antes de avançar:** registre o input usado, a duração física, uma observação e uma limitação da interpretação.
+O [apoio histórico](historico-apoio.md) conserva os dados medidos, inputs, reinícios e índices do complexo pré-formado de 43 átomos. A [referência anterior de hidratação com en presente](hidratacao.md) também permanece separada. Esses arquivos não compõem a nova comparação sem en.

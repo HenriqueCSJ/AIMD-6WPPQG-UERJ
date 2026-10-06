@@ -1,3 +1,5 @@
+> **Referência anterior com en presente desde o início.** Não é o controle atual de hidratação sem en de 04b. [Voltar a 04b](README.md).
+
 # Ver a camada de águas se formar
 
 [← 04b · Efeito da parede](README.md) · [Abrir o filme curto](../../visualizador/index.html?exemplo=hydration&aba=trajetoria)

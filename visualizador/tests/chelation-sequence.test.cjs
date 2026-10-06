@@ -35,6 +35,9 @@ test('velocity-reset boundary preserves both energies and selects the following 
  const frame=run.xyz.frames.find(frame=>frame.time===boundary);assert.ok(frame);assert.equal(frame.sourceKey,course.sequenceSources.find(source=>source.velocityReset).key);assert.equal(frame.sourceTime,0);
  for(const stage of course.metadata.stages){assert.ok(run.xyz.frames.some(frame=>frame.time===stage.startFs),`Stage start ${stage.startFs}`);assert.ok(run.xyz.frames.some(frame=>frame.time===stage.endFs),`Stage end ${stage.endFs}`);}
  assert.deepEqual(store.presets.chelation.runs,['chelation_continuous']);assert.deepEqual(store.presets.chelation_previous.runs,['chelation']);assert.equal(store.runs.chelation.xyz.elements.length,97);
- const html=read('visualizador/index.html');assert.equal((html.match(/<option value="chelation">/g)||[]).length,1);assert.doesNotMatch(html,/<option value="chelation_previous">/);assert.match(html,/Zn–en: hidratação e quelação/);
- assert.equal(store.version,'20261006-playback2');assert.match(html,/examples\.js\?v=20261006-playback2/);assert.match(html,/app\.js\?v=20261006-circular1/);assert.match(html,/charts\.js\?v=20261006-circular1/);
+ const html=read('visualizador/index.html');assert.equal((html.match(/<option value="chelation">/g)||[]).length,1);assert.doesNotMatch(html,/<option value="chelation_previous">/);assert.match(html,/<option value="chelation">04c · en: primeiro N assistido → segundo N livre<\/option>/);
+ const manifestURL=new URL(html.match(/<script[^>]+src="([^"]*examples\.js[^"]*)"/)[1],'https://local.invalid/');
+ assert.ok(store.version);assert.equal(manifestURL.searchParams.get('v'),store.version);
+ for(const source of Object.values(store.sources))assert.equal(new URL(source.src,'https://local.invalid/').searchParams.get('v'),store.version);
+ assert.match(html,/app\.js\?v=[^"\s]+/);assert.match(html,/charts\.js\?v=20261006-circular1/);
 });
