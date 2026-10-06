@@ -49,6 +49,9 @@ Thumbs.db
 # Resultados didaticos completos para baixar no site
 !exercicios/*/resultado-*.zip
 
+# Capitulos do caderno de estudo para tablet
+!materiais/capitulos-aimd-tablet.zip
+
 # Evidencia curta de unidades e propriedades no exemplo complementar de Dump
 !exercicios/1-agua-dft/verificacao-dump/probe_properties_dft.prop.log
 !exercicios/1-agua-dft/verificacao-dump/probe_properties_dft-step000002.engrad
