@@ -1,6 +1,6 @@
 # Apoio · Uma molécula de água em movimento
 
-[← Voltar à atividade](README.md) · [Abrir o aplicativo](../../visualizador/index.html)
+[← Voltar à atividade](README.md) · [Abrir o aplicativo](../../visualizador/index.html?exemplo=water&aba=trajetoria)
 
 Use este apoio para relacionar o passo de integração, a energia e a temperatura da água isolada. A preparação da geometria e os dados DFT permitem conferir as medidas realizadas em 01a.
 
@@ -8,7 +8,7 @@ Use este apoio para relacionar o passo de integração, a energia e a temperatur
 
 `Timestep 0.5_fs` avança meio femtossegundo a cada passo. `Run 40` produz **20 fs = 0,020 ps = 2 × 10⁻¹⁴ s**. `Randomize 42` fixa a semente de inicialização; `Initvel 300_K` prepara velocidades, e `Thermostat None` deixa a trajetória sem banho térmico. As posições não são otimizadas a cada passo: as forças determinam a aceleração.
 
-Abra o [Laboratório de trajetórias](../../visualizador/index.html) e carregue o `*-md-ener.csv`, o `.out` e o `*-traj.xyz` deste cálculo. O aplicativo prepara os gráficos de energia/temperatura e a animação. Na aba **Geometria**, escolha dois átomos; a medida é calculada do XYZ. O CSV original usa fs, Hartree e K; a conversão de unidades fica explícita na tela.
+Abra o [Laboratório de trajetórias](../../visualizador/index.html?exemplo=water&aba=trajetoria) e carregue o `*-md-ener.csv`, o `.out` e o `*-traj.xyz` deste cálculo. O aplicativo prepara os gráficos de energia/temperatura e a animação. Na aba **Geometria**, escolha dois átomos; a medida é calculada do XYZ. O CSV original usa fs, Hartree e K; a conversão de unidades fica explícita na tela.
 
 ## Temperatura e modos vibracionais
 
@@ -64,7 +64,7 @@ Os inputs são os mesmos da atividade: geometria inicial e semente iguais, `Init
 
 Estes cálculos já foram feitos pelos ministrantes. Não são novas execuções obrigatórias na aula. A otimização fornece uma geometria convergida no critério escolhido; sem análise vibracional, não afirmamos que ela seja um mínimo confirmado por frequências.
 
-<details markdown="1"><summary>Input e resultados: preparar_agua</summary>
+<details markdown="1" open><summary>Input e resultados: preparar_agua</summary>
 
 [Baixar input ORCA](inputs/preparar_agua.inp) · [Baixar geometria inicial (.xyz)](estruturas/agua_inicial.xyz) (opcional para executar; as coordenadas já estão no input)
 

@@ -2,7 +2,7 @@
 
 # 04a · Construir o ambiente com SOLVATOR
 
-[← Percurso](../README.md) · [Aplicativo de análise](../../visualizador/index.html)
+[← Percurso](../README.md) · [Aplicativo de análise](../../visualizador/index.html?exemplo=solvator&aba=trajetoria)
 
 **Parte do bloco Zn–en (45 min com a parede) · Zn²⁺–etilenodiamina · carga +2 · singlete**
 
@@ -73,7 +73,7 @@ Espere o prompt voltar antes de iniciar outro cálculo. Os arquivos de resultado
 Ative **Coordenação** e **Ligações H** no visualizador. Identifique os dois N da etilenodiamina ligados geometricamente ao Zn e compare águas próximas do metal com as acrescentadas ao redor. **SOLVATOR constrói um arranjo de solvatação**; não é uma trajetória de associação do ligante nem demonstra uma constante de formação. O exercício seguinte pergunta se essa camada externa permanece por perto.
 
 
-[Carregar meus arquivos no aplicativo](../../visualizador/index.html) · [Comparar estrutura inicial e seis águas adicionadas](../../visualizador/index.html?exemplo=solvator&aba=trajetoria) · [Comparar estrutura inicial e duas águas adicionadas](../../visualizador/index.html?exemplo=solvator_two&aba=trajetoria)
+[Carregar meus arquivos no aplicativo](../../visualizador/index.html?exemplo=solvator&aba=trajetoria) · [Comparar estrutura inicial e seis águas adicionadas](../../visualizador/index.html?exemplo=solvator&aba=trajetoria) · [Comparar estrutura inicial e duas águas adicionadas](../../visualizador/index.html?exemplo=solvator_two&aba=trajetoria)
 
 1. Clique em **Limpar sessão** se houver outro exemplo aberto. Carregue `zn_solvator.out`, **`zn_solvator.solvator.xyz`** e a [estrutura inicial `zn_en.xyz`](estruturas/zn_en.xyz) no aplicativo.
 2. Mantenha os dois sistemas selecionados. Na aba **Trajetória**, alterne o campo **Simulação** entre a estrutura inicial de 25 átomos e a estrutura solvatada de 43 átomos. O número de átomos mudou como esperado?
@@ -81,7 +81,7 @@ Ative **Coordenação** e **Ligações H** no visualizador. Identifique os dois 
 
 > **Para levar:** SOLVATOR constrói uma estrutura candidata. Seu histórico de montagem não é uma trajetória de MD.
 
-<details markdown="1"><summary>Opcional: montagem mais curta</summary>
+<details markdown="1" open><summary>Opcional: montagem mais curta</summary>
 
 Troque seis por duas águas para praticar em menos tempo: o resultado tem 31 átomos. Execute somente uma versão. Na etapa 04b todos usarão o sistema fornecido de 43 átomos.
 

@@ -1,6 +1,6 @@
 # Apoio · Ganhar velocidade com XTB2
 
-[← Voltar à atividade](README.md) · [Abrir o aplicativo](../../visualizador/index.html)
+[← Voltar à atividade](README.md) · [Abrir o aplicativo](../../visualizador/index.html?exemplo=ethanol&aba=trajetoria)
 
 O controle de etanol ajuda a distinguir vibração de O–H e libração da hidroxila. Consulte a preparação da geometria e as medidas desta janela de 0,5 ps antes de comparar timestep ou termostato.
 
@@ -8,7 +8,7 @@ O controle de etanol ajuda a distinguir vibração de O–H e libração da hidr
 
 **1.000 × 0,5 fs = 500 fs = 0,5 ps = 5 × 10⁻¹³ s.** Este caso não usa termostato, solvente nem parede. Não compare energias absolutas de DFT e XTB2 como se tivessem o mesmo zero. Uma trajetória curta de uma molécula isolada não representa, por si só, etanol líquido.
 
-Abra o [Laboratório de trajetórias](../../visualizador/index.html) e carregue o `*-md-ener.csv`, o `.out` e o `*-traj.xyz` deste cálculo. O aplicativo prepara os gráficos de energia/temperatura e a animação. Na aba **Geometria**, escolha dois átomos; a medida é calculada do XYZ. O CSV original usa fs, Hartree e K; a conversão de unidades fica explícita na tela.
+Abra o [Laboratório de trajetórias](../../visualizador/index.html?exemplo=ethanol&aba=trajetoria) e carregue o `*-md-ener.csv`, o `.out` e o `*-traj.xyz` deste cálculo. O aplicativo prepara os gráficos de energia/temperatura e a animação. Na aba **Geometria**, escolha dois átomos; a medida é calculada do XYZ. O CSV original usa fs, Hartree e K; a conversão de unidades fica explícita na tela.
 
 ## Resultados de referência
 
@@ -32,7 +32,7 @@ O CSV contém **1001 registros**, de **0 a 500 fs**, cobrindo **500 fs nesta eta
 
 Estes cálculos já foram feitos pelos ministrantes. Não são novas execuções obrigatórias na aula. A otimização fornece uma geometria convergida no critério escolhido; sem análise vibracional, não afirmamos que ela seja um mínimo confirmado por frequências.
 
-<details markdown="1"><summary>Input e resultados: preparar_etanol</summary>
+<details markdown="1" open><summary>Input e resultados: preparar_etanol</summary>
 
 [Baixar input ORCA](inputs/preparar_etanol.inp) · [Baixar geometria inicial (.xyz)](estruturas/etanol_inicial.xyz) (opcional para executar; as coordenadas já estão no input)
 

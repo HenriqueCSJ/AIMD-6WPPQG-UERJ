@@ -1,7 +1,7 @@
 <!doctype html>
-<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>04b · Zn²⁺: hidratação e paredes · AIMD / ORCA</title><link rel="stylesheet" href="../pagina.css?v=20261006-course3"><script defer src="../pagina.js?v=20261006-course3"></script></head>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>04b · Zn²⁺: hidratação e paredes · AIMD / ORCA</title><link rel="stylesheet" href="../pagina.css?v=20261006-inputs4"><script defer src="../pagina.js?v=20261006-inputs4"></script></head>
 <body><a class="skip" href="#conteudo">Ir para o conteúdo</a><header class="brand"><a href="../index.html"><strong>AIMD com ORCA</strong><small>6º Workshop PPGQ–UERJ · 7 de outubro de 2026</small></a><div class="logos"><img src="../../assets/uerj-logo.png" alt="UERJ"><img src="../../assets/ufrrj-logo-compacto.png" alt="UFRRJ"></div></header><div class="layout"><nav class="course-nav" aria-label="Mapa dos exercícios"><details class="course-map" open><summary>Mapa dos exercícios <small>9 etapas + complementos opcionais</small></summary><a class="home" href="../index.html">Visão geral do percurso</a><a class="parameter-guide" href="../../guia-md/index.html" target="_blank" rel="noopener" aria-label="Guia de parâmetros %md (abre em outra aba)">Guia de parâmetros %md ↗</a><h3 class="nav-group">Durante a aula · siga nesta ordem</h3><ol class="links"><li><a href="../1-agua-dft/index.html"><span class="num">01</span><span>Água: molécula e dímero</span></a></li><li><a href="../3-xtb2-etanol/index.html"><span class="num">02a</span><span>Etanol: controle</span></a></li><li><a href="../4-timestep/index.html"><span class="num">02b</span><span>Timestep e correção</span></a></li><li><a href="../5-termostato/index.html"><span class="num">03</span><span>Aquecer e resfriar</span></a></li><li><a href="../6-complexo-solvator/index.html"><span class="num">04a</span><span>Zn²⁺ + 20 águas: SOLVATOR</span></a></li><li><a href="../7-dinamica-complexo/index.html" aria-current="page"><span class="num">04b</span><span>Zn²⁺: hidratação e paredes</span></a></li><li><a href="../11-formacao-quelato/index.html"><span class="num">04c</span><span>en: primeiro N assistido, segundo N livre</span></a></li><li><a href="../14-zn-en-pressao/index.html"><span class="num">04d</span><span>Zn–en sem assistência: 1 / 1000 / 4000 bar</span></a></li><li><a href="../10-proton-compartilhado/index.html"><span class="num">05</span><span>Um próton entre duas águas</span></a></li></ol><h3 class="nav-group">Complementos opcionais e referências</h3><p class="nav-note">A sequência da aula segue diretamente entre as 9 etapas acima.</p><ol class="links"><li><a href="../13-cell-pressao/index.html"><span class="num">C</span><span>Cell: parede, pressão e volume</span></a></li><li><a href="../2-solvente-implicito/index.html"><span class="num">↗</span><span>DFT e solvente contínuo</span></a></li><li><a href="../12-gota-protonada/index.html"><span class="num">↗</span><span>Gota protonada: 300–600 K</span></a></li><li><a href="../8-agua-no-fulereno/index.html"><span class="num">↗</span><span>Água dentro de C₆₀</span></a></li><li><a href="../9-aluminio-amonia/index.html"><span class="num">↗</span><span>Al³⁺/amônia: referência</span></a></li></ol></details></nav><main id="conteudo"><nav class="route-nav route-topo" aria-label="Navegação do percurso — topo"><div class="route-status">Etapa 6 de 9 · Bloco 04b<progress class="course-progress" value="6" max="9" aria-label="Etapa 6 de 9"></progress></div><div class="route-controls"><a class="route-prev" rel="prev" href="../6-complexo-solvator/index.html"><small>Anterior</small><span>← Zn²⁺ + 20 águas: SOLVATOR</span></a><a class="route-next" rel="next" href="../11-formacao-quelato/index.html"><small>Próximo</small><span>en: primeiro N assistido, segundo N livre →</span></a></div><a class="route-map" href="../index.html">Mapa completo do percurso</a></nav><article class="lesson-content"><h1 id="04b-hidratacao-sem-en-e-rigidez-da-parede">04b · Hidratação sem en e rigidez da parede</h1><nav class="section-nav" aria-label="Seções desta página"><strong>Nesta página</strong><ul><li><a href="#1-preserve-a-mesma-condicao-inicial">1. Preserve a mesma condição inicial</a></li><li><a href="#2-compare-ausencia-de-parede-e-tres-valores-de-spring">2. Compare ausência de parede e três valores de Spring</a></li><li><a href="#3-observe-a-hidratacao-e-a-atuacao-da-parede">3. Observe a hidratação e a atuação da parede</a></li><li><a href="#4-so-depois-passe-a-en">4. Só depois passe à en</a></li><li><a href="#geometria-copiar-e-colar-ou-baixar">Geometria: copiar e colar ou baixar</a></li></ul></nav>
-<p><a href="../index.html">← Percurso</a> · <a href="../../visualizador/index.html">Aplicativo de análise</a></p>
+<p><a href="../index.html">← Percurso</a> · <a href="../../visualizador/index.html?exemplo=zn_hydration&amp;aba=trajetoria">Aplicativo de análise</a></p>
 <p><strong>Zn²⁺ + 20 águas · 61 átomos · carga +2 · singlete · sem en</strong></p>
 <blockquote>
 <p><strong>Pergunta:</strong> o que muda na hidratação quando removemos a parede ou aumentamos sua rigidez?</p>
@@ -18,6 +18,8 @@
 </ul>
 <p><strong>Input completo · <code>zn_h2o_sem_parede.inp</code> — copie e salve com esse nome.</strong></p>
 <!-- input-source: inputs/zn_h2o_sem_parede.inp -->
+<div class="input-resources" data-input="exercicios/7-dinamica-complexo/inputs/zn_h2o_sem_parede.inp"><p><strong>zn_h2o_sem_parede.inp</strong> · Dinâmica executada; resultados disponíveis.</p><div class="input-downloads"><a href="inputs/zn_h2o_sem_parede.inp" download>Baixar input completo</a><a href="estruturas/zn_20h2o_inicial.xyz" download>Baixar estrutura · zn_20h2o_inicial.xyz</a><a href="aula-zn_h2o_sem_parede.zip" download>Pacote para executar</a><a href="resultados-completos.zip" download>Resultados completos deste exercício · todas as variantes</a><a class="open-input-lab" href="../../visualizador/index.html?exemplo=arquivo_zn_h2o_sem_parede&amp;aba=trajetoria">Abrir no laboratório com tudo carregado</a></div></div>
+
 
 <pre><code class="language-text"># 04b: Zn2+ + 20 H2O, sem etilenodiamina (61 atomos).
 # Use a MESMA montagem SOLVATOR em todos os quatro ramos.
@@ -42,6 +44,8 @@ end
 </ul>
 <p><strong>Input completo · <code>zn_h2o_spring10.inp</code> — copie e salve com esse nome.</strong></p>
 <!-- input-source: inputs/zn_h2o_spring10.inp -->
+<div class="input-resources" data-input="exercicios/7-dinamica-complexo/inputs/zn_h2o_spring10.inp"><p><strong>zn_h2o_spring10.inp</strong> · Dinâmica executada; resultados disponíveis.</p><div class="input-downloads"><a href="inputs/zn_h2o_spring10.inp" download>Baixar input completo</a><a href="estruturas/zn_20h2o_inicial.xyz" download>Baixar estrutura · zn_20h2o_inicial.xyz</a><a href="aula-zn_h2o_spring10.zip" download>Pacote para executar</a><a href="resultados-completos.zip" download>Resultados completos deste exercício · todas as variantes</a><a class="open-input-lab" href="../../visualizador/index.html?exemplo=arquivo_zn_h2o_spring10&amp;aba=trajetoria">Abrir no laboratório com tudo carregado</a></div></div>
+
 
 <pre><code class="language-text"># 04b: Zn2+ + 20 H2O, sem etilenodiamina (61 atomos).
 # Use a MESMA montagem SOLVATOR em todos os quatro ramos.
@@ -66,6 +70,8 @@ end
 </ul>
 <p><strong>Input completo · <code>zn_h2o_spring50.inp</code> — copie e salve com esse nome.</strong></p>
 <!-- input-source: inputs/zn_h2o_spring50.inp -->
+<div class="input-resources" data-input="exercicios/7-dinamica-complexo/inputs/zn_h2o_spring50.inp"><p><strong>zn_h2o_spring50.inp</strong> · Dinâmica executada; resultados disponíveis.</p><div class="input-downloads"><a href="inputs/zn_h2o_spring50.inp" download>Baixar input completo</a><a href="estruturas/zn_20h2o_inicial.xyz" download>Baixar estrutura · zn_20h2o_inicial.xyz</a><a href="aula-zn_h2o_spring50.zip" download>Pacote para executar</a><a href="resultados-completos.zip" download>Resultados completos deste exercício · todas as variantes</a><a class="open-input-lab" href="../../visualizador/index.html?exemplo=arquivo_zn_h2o_spring50&amp;aba=trajetoria">Abrir no laboratório com tudo carregado</a></div></div>
+
 
 <pre><code class="language-text"># 04b: Zn2+ + 20 H2O, sem etilenodiamina (61 atomos).
 # Use a MESMA montagem SOLVATOR em todos os quatro ramos.
@@ -90,6 +96,8 @@ end
 </ul>
 <p><strong>Input completo · <code>zn_h2o_spring200.inp</code> — copie e salve com esse nome.</strong></p>
 <!-- input-source: inputs/zn_h2o_spring200.inp -->
+<div class="input-resources" data-input="exercicios/7-dinamica-complexo/inputs/zn_h2o_spring200.inp"><p><strong>zn_h2o_spring200.inp</strong> · Dinâmica executada; resultados disponíveis.</p><div class="input-downloads"><a href="inputs/zn_h2o_spring200.inp" download>Baixar input completo</a><a href="estruturas/zn_20h2o_inicial.xyz" download>Baixar estrutura · zn_20h2o_inicial.xyz</a><a href="aula-zn_h2o_spring200.zip" download>Pacote para executar</a><a href="resultados-completos.zip" download>Resultados completos deste exercício · todas as variantes</a><a class="open-input-lab" href="../../visualizador/index.html?exemplo=arquivo_zn_h2o_spring200&amp;aba=trajetoria">Abrir no laboratório com tudo carregado</a></div></div>
+
 
 <pre><code class="language-text"># 04b: Zn2+ + 20 H2O, sem etilenodiamina (61 atomos).
 # Use a MESMA montagem SOLVATOR em todos os quatro ramos.
@@ -127,7 +135,7 @@ end
 <p>Espere o prompt voltar antes de iniciar outro cálculo.</p>
 </details>
 <h2 id="3-observe-a-hidratacao-e-a-atuacao-da-parede">3. Observe a hidratação e a atuação da parede</h2>
-<p><a href="../../visualizador/index.html?exemplo=zn_hydration&amp;aba=trajetoria">Abrir 04b no laboratório</a> · <a href="../../visualizador/index.html">Carregar meus arquivos</a></p>
+<p><a href="../../visualizador/index.html?exemplo=zn_hydration&amp;aba=trajetoria">Abrir 04b no laboratório</a> · <a href="../../visualizador/index.html?exemplo=zn_hydration&amp;aba=trajetoria">Carregar meus arquivos</a></p>
 <p>Carregue juntos <strong><code>.out</code></strong>, <strong><code>-md-ener.csv</code></strong> e <strong><code>-traj.xyz</code></strong> de cada cálculo. Use as caixas para escolher até quatro simulações e o campo <strong>Simulação</strong> para alternar a trajetória.</p>
 <ol>
 <li>Compare as distâncias Zn–O no início e ao longo do tempo. Quais águas formam a primeira camada? A saída bruta de SOLVATOR tem três O próximos; a preparação usada nestas MD começa com zero O abaixo de 2,6 Å. Confira qual estrutura está aberta antes de dizer que algo se formou durante a MD.</li>

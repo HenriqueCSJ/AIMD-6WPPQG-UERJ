@@ -1,0 +1,537 @@
+
+Will write log file to "probe_properties_dft.md.log".
+
+Command line:  /home/henrique/bin/orca611/orca_md -orca probe_properties_dft
+
+-------------------------------------------------------------------------------------------
+
+
+     _____    ___    _   _       _                  ______ ______  _____   ___  
+    /  ___|  / _ \  | \ | |     | |           _    /  __  \| ___ \/  __ \ / _ \ 
+    \ `--.  / /_\ \ |  \| |   __| | _   _   _| |_  | |  | || |_/ /| /  \// /_\ \
+     `--. \ |  _  | | . ` |  / _` || | | | |_   _| | |  | ||    / | |    |  _  |
+    /\__/ / | | | | | |\  | | (_| || |_| |   |_|   | \__/ || |\ \ | \__/\| | | |
+    \____/  \_| |_/ \_| \_/  \__,_| \__, |          \____/ \_| \_| \____/\_| |_/
+                                     __/ |                                      
+                                    |___/                                       
+
+
+    ####################################################################
+    ########     Scriptable Nuclear Dynamics (SANdy) + ORCA     ########
+    ########           (c) Martin Brehm, 2016 - 2025            ########
+    ########           Paderborn University, Germany            ########
+    ########           https://sanscript.org/orcamd             ########
+    ####################################################################
+
+
+  * Compiled as ORCA module. Called from ORCA.
+  * ORCA base name: "probe_properties_dft"
+  * Source code version: Jun 07 2025, compiled at Nov 24 2025 07:23:22.
+  * Enabled features: SAN_MD, SAN_INTERPRETER
+  * Libraries: KISS_FFT, LBFGSBC
+  * Executable name: "/home/henrique/bin/orca611/orca_md"
+  * Messages are redirected, Errors are redirected, Output is redirected, Input is redirected
+  * Running on NotebookAW at Tue Oct  6 09:00:55 2026 (PID 131514)
+  * Running in /home/henrique/aimd-workshop/cell-20261006/probe_properties_dft
+
+    -----------------------------------------------
+
+    Technical information:
+
+  * Compiler:      LLVM, CLANG 20.1.6, "Clang 20.1.6 (/home/frankw/CompEnv/src/llvm2016/llvm-project/clang 47addd4540b4c393e478ba92bea2589e330c57fb)", Linux, __cplusplus=201103L
+  * Compile host:  x86_64, Little Endian, char=8bits, int=4b, long=8b, ll=8b, addr=8b, 0x01020304=4,3,2,1.
+  * Class sizes:   InputElem=248, ValuePair=112, Type=96, Value=8, VMToken=8, VMInst=8
+  * Compile flags: MMX, SSE, SSE2, SSE3, SSSE3, SSE4.1, SSE4.2, POPCNT, FMA3, AVX, AVX2
+  * Local machine: Intel(R) Core(TM) Ultra 9 185H (GenuineIntel), Family 6, Model 170, Stepping 4
+                   1 CPU, 11 cores, 22 threads,  Uptime 2h 03m 38s
+                   MMX, SSE, SSE2, SSE3, SSSE3, SSE4.1, SSE4.2, POPCNT, AES, FMA3, AVX, AVX2, SHA
+                   Caches: 11x L1d (528 KiB), 11x L1i (704 KiB), 11x L2 (22 MiB), 1x L3 (24 MiB)
+  * Op. System:    Ubuntu 24.04.4 LTS, Linux version 6.18.33.2-microsoft-standard-WSL2 
+  * Phys. Memory:  15.38 GiB total,  14.26 GiB free
+  * Stack size:    8.00 MiB
+
+
+The following libraries are included:
+
+  * KISS FFT,   Version 131.1.0 (02/2021), License: BSD 3-clause
+      (c) 2003-2010 Mark Borgerding, see https://github.com/mborgerding/kissfft
+
+  * L-BFGS-B-C, Version 3.0 (04/2011),     License: BSD 3-clause
+      (c) Stephen Becker, see https://github.com/stephenbeckr/L-BFGS-B-C
+
+  * MT19937 Pseudo Random Number Gen.,     License: Custom (permissive)
+      (c) 1997-2005 Makoto Matsumoto, Takuji Nishimura, Mutsuo Saito, see https://github.com/clibs/mt19937ar
+
+
+Initializing SAN engine...
+  24 physical quantities and 49 units added.
+  Initialized SAN language:
+    97 operators, 57 keywords, 4 namespaces, 35 types, 183 flags
+Done.
+
+
+>>> Reading Input File >>>
+
+Reading input file "probe_properties_dft.mdinput" ...
+  404 bytes read.
+  12 lines.
+Tokenizing input...
+Found 61 tokens in file.
+  ( 36 identifiers,      18 numeric literals,  4 operators,  
+     3 string literals )
+Line endings are uniform: 12 x \n
+
+<<< Finished Reading Input File (took 0.000 seconds) <<<
+
+
+Using the following settings:
+  Interpret:              true
+  Execution:              SAN-VM
+  Parser verbose level:   1
+  Execute verbose level:  2
+  Syntax highlighting:    0
+  Static vars:            false
+  Dynamic types:          true
+  Max. recursion depth:   200
+  Max. nesting depth:     1000
+  Max. argument count:    100
+  Only parse:             false
+
+
+>>> Parsing Input Script >>>
+
+Handled 6 underscore identifiers.
+Handling module imports...
+  Importing module "Math" to global namespace.
+  Importing module "MD" to global namespace.
+Handled 2 module imports.
+Handled 4 operators.
+Grouped 2 commas.
+Removed 2 commas.
+Handled 21 variable occurrences.
+Assigned 13 identifiers.
+Handling functions,      iteration  1...
+                         iteration  2...
+                         iteration  3...
+Handling "FOR" loops...
+Handling AutoDecl,       iteration  1...
+No auto declarations.
+Assigned 17 flags, re-doing function handling...
+Handling functions ( 2), iteration  1...
+  Moving "Void" argument 2 ("Thermostat") of function "Initvel" up 1 levels to "ROOT".
+                         iteration  2...
+Handling "FOR" loops...
+Handling AutoDecl,       iteration  1...
+No auto declarations.
+Handling functions, final pass...
+  Moving "Void" argument 13 ("Dump") of function "Cell" up 1 levels to "ROOT".
+Function handling done (2 macro-iterations, 0.002 seconds).
+Handling keywords,       iteration  1...
+Prepared 12 argument lists.
+Assigned 39 read-only flags.
+Assigned 53 simple VP flags.
+Assigned 52 tree IDs.
+
+Warning: The "Cell" command has been renamed to "Walls". Please adapt your input.
+In probe_properties_dft.mdinput:5:
+     Cell Sphere 0, 0, 0, 3_A Spring 10 Elastic 5_fs, 0.001 Pressure 1000
+     ^^^^
+
+
+<<< Finished Parsing Input Script (took 0.003 seconds) <<<
+
+
+SAN-VM: Compiling...
+  Optimization level: Not specified. Using default ("-O2").
+Done (took 0.000 seconds).
+
+
+  Part              # Tokens    # Registers    # Shortcuts    # Optimizations
+  ---------------------------------------------------------------------------
+  Main Program            72              0              0                  0
+
+
+-------------------------------------------------------------------------------------------
+
+>>> Initializing MD engine with interface "ORCA" >>>
+
+
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+>>>   Output of System Information (from ORCA)   >>>
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+(the output of geometry and basis set information is missing in the MD log file,
+ as it is written to the screen directly by ORCA.)
+
+############################################
+   Total Atom Count:               3
+   Total System Mass:         18.015 a.m.u.
+   Total Basis Dimension:         24
+   Total Electron Number:         10
+   Total Charge:                   0
+   Total Multiplicity:             1
+   Spin Treatment:        Restricted
+  ------------------------------------------
+   ReducePrint:                 true
+   Print Mulliken Pop:             1
+   Print Loewdin Pop:              1
+   Print Mayer Pop:                1
+   Print Orbital Energies:         1
+############################################
+
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+<<<          End of System Information           <<<
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+Initializing regions...
+
+Defined regions:
+         All:     3 atoms,     18.015 a.m.u.
+          QM:   All
+      Active:   All
+
+
+
+### System Geometry ###
+
+  * Region "All" = "Active" = "QM":
+      Bounding box: from (   -0.000 |   -0.763 |   -0.074 )
+                      to (    0.000 |    0.763 |    0.511 ) Angstrom
+      System extent:     (    0.000 |    1.527 |    0.584 ) Angstrom
+      Center of mass:    (   -0.000 |   -0.000 |   -0.008 ) Angstrom
+      Total mass:            18.015 a.m.u.
+
+      Moment of inertia: (         1.79 |         0.00 |        -0.00 )
+                         (         0.00 |         0.61 |         0.00 ) a.m.u. Angstrom^2
+                         (        -0.00 |         0.00 |         1.17 )
+      Singular values:   (         1.79 |         1.17 |         0.61 ) a.m.u. Angstrom^2
+
+
+
+Smallest interatomic distance from active region: 0.961275 Angstrom (atoms 0 - 1).
+
+
+<<< MD engine initialization done (took 0.379 seconds) <<<
+
+
+###############################################################
+########        Executing Input Script (SAN-VM)        ########
+###############################################################
+
+Execution verbose level is 2.
+
+-------------------------------------------------------------------------------------------
+
+
+
+>>>>>> Timestep( 0.5_fs )
+
+Setting integration time step to 0.50 fs.
+
+The lightest element in the active region has an atomic mass of 1.008 a.m.u.
+Recommending time step not larger than 0.50 .. 1.00 fs.
+  --> choice seems reasonable
+
+
+>>>>>> Randomize( 42 )
+
+Initialized random number generator seed to 42.
+
+
+>>>>>> Initvel( 300_K )
+
+Old temperature of the total system is     0.000 K.
+
+Initializing atom velocities for region "all" to 300.000 K:
+  Creating Maxwell-Boltzmann distribution...
+  Temperature after random initialization is 233.894 K.
+  Rescaling velocities to match desired initial temperature (factor 1.132533)...
+  Removing initial center of mass movement...
+  Temperature after center of mass movement removal is 207.037 K.
+  Removing initial angular velocity...
+    Angular momentum before:  (   0.01202067 |  -0.00692739 |  -0.01537592 ) a.m.u. Angstrom^2 fs^-1
+    Angular velocity before:  (   0.00673099 |  -0.01133448 |  -0.01308933 ) fs^-1
+    Angular momentum after:   (  -0.00000000 |  -0.00000000 |  -0.00000000 ) a.m.u. Angstrom^2 fs^-1
+    Angular velocity after:   (  -0.00000000 |  -0.00000000 |  -0.00000000 ) fs^-1
+  Temperature after angular velocity removal is 158.836 K.
+  Rescaling velocities to match desired initial temperature (factor 1.374316)...
+Done.
+
+New temperature of the total system is   300.000 K.
+
+
+>>>>>> Thermostat( CSVR, 300_K, Timecon, 100_fs )
+
+Switching on thermostat for region "All": Type CSVR, temperature 300.00 K, time constant 100.00 fs, global.
+
+
+>>>>>> Cell( Sphere, 0, 0, 0, 3_A, Spring, 10, Elastic, 5_fs, 0.001, Pressure, 1000 )
+
+
+Warning: The "Cell" command has been renamed to "Walls". Please adapt your input.
+In probe_properties_dft.mdinput:5:
+     Cell Sphere 0, 0, 0, 3_A Spring 10 Elastic 5_fs, 0.001 Pressure 1000
+     ^^^^
+
+
+Note: In function func_Walls(): Found length value "0" without unit - assuming it is in Angstrom.
+In probe_properties_dft.mdinput:5:
+     Cell Sphere 0, 0, 0, 3_A Spring 10 Elastic 5_fs, 0.001 Pressure 1000
+                 ^
+
+
+Note: In function func_Walls(): Found length value "0" without unit - assuming it is in Angstrom.
+In probe_properties_dft.mdinput:5:
+     Cell Sphere 0, 0, 0, 3_A Spring 10 Elastic 5_fs, 0.001 Pressure 1000
+                    ^
+
+
+Note: In function func_Walls(): Found length value "0" without unit - assuming it is in Angstrom.
+In probe_properties_dft.mdinput:5:
+     Cell Sphere 0, 0, 0, 3_A Spring 10 Elastic 5_fs, 0.001 Pressure 1000
+                       ^
+
+Switched on spherical wall with center ( 0.00 | 0.00 | 0.00 ) and radius 3.00 Angstrom.
+
+Note: In function func_Walls(): Found spring constant value "10" without unit - assuming it is in kJ mol^-1 Angstrom^-2.
+In probe_properties_dft.mdinput:5:
+     Cell Sphere 0, 0, 0, 3_A Spring 10 Elastic 5_fs, 0.001 Pressure 1000
+                                     ^^
+
+Set wall spring constant to 10.000 kJ mol^-1 Angstrom^-2.
+Switched wall to elastic with t_avg = 5.0 fs and c_response = 0.00100 Angstrom bar^-1.
+
+Note: In function func_Walls(): Found pressure value "1000" without unit - assuming it is in bar.
+In probe_properties_dft.mdinput:5:
+     Cell Sphere 0, 0, 0, 3_A Spring 10 Elastic 5_fs, 0.001 Pressure 1000
+                                                                     ^^^^
+
+Set external wall pressure to 1000.00 bar (isotropic).
+
+
+>>>>>> Dump( Position, Stride, 1, Filename, "probe_properties_dft-traj.xyz" )
+
+Modified writing position trajectory for region "all": Format XYZ, stride 1, filename "probe_properties_dft-traj.xyz", append.
+
+
+>>>>>> Dump( Velocity, Stride, 1, Filename, "probe_properties_dft-vel.xyz" )
+
+Switched on writing velocity trajectory for region "all": Format XYZ, stride 1, filename "probe_properties_dft-vel.xyz", append.
+
+
+>>>>>> Dump( Force, Stride, 1, Filename, "probe_properties_dft-force.xyz" )
+
+Switched on writing force trajectory for region "all": Format XYZ, stride 1, filename "probe_properties_dft-force.xyz", append.
+
+
+>>>>>> Dump( Properties )
+
+Switched on writing properties every 1 steps.
+Will append properties to file "probe_properties_dft.prop.log".
+
+
+>>>>>> Dump( EnGrad, Stride, 2 )
+
+Switched on writing EnGrad files every 2 steps to file "probe_properties_dft-step<number>.engrad".
+
+
+>>>>>> Run( 4 )
+
+
+***************************************************
+****    Starting MD loop for        4 steps    ****
+***************************************************
+
+
+>>> Initial Wall Info >>>
+    Active wall has spherical geometry.
+    Wall centered at ( 0.000 | 0.000 | 0.000 ) with radius 3.000 Angstrom.
+    All atoms are inside the wall.
+    The atom closest to the wall has a distance of 2.082 Angstrom.
+    Wall volume:     113.097 Angstrom^3
+    Wall surface:    113.097 Angstrom^2
+    Cell mass density: 0.2645 g/cm^3
+    Spring constant of the wall is 10.000 kJ mol^-1 Angstrom^-2.
+    Wall is elastic with t_avg = 5.0 fs and c_response = 0.00100 Angstrom bar^-1.
+    Size change is isotropic.
+    External pressure is 1000.00 bar (isotropic).
+<<< Initial Wall Info <<<
+
+
+Defined regions:
+         All:     3 atoms,     18.015 a.m.u.
+          QM:   All
+      Active:   All
+
+
+Dump: Will write Position data of region "All" in XYZ format with stride 1 to "probe_properties_dft-traj.xyz" (append).
+Dump: Will write Velocity data of region "All" in XYZ format with stride 1 to "probe_properties_dft-vel.xyz" (append).
+Dump: Will write Force data of region "All" in XYZ format with stride 1 to "probe_properties_dft-force.xyz" (append).
+Dump: Will write EnGrad file every 2 steps to "probe_properties_dft-step<number>.engrad" (e.g. "probe_properties_dft-step000001.engrad").
+Dump: Will append properties every 1 steps to file "probe_properties_dft.prop.log".
+
+Active Thermostats:
+  (*) Region "All": Type CSVR, temperature 300.00 K, time constant 100.00 fs, global.
+
+
+Will write restart file to "probe_properties_dft.mdrestart" after each step.
+Will write energy statistics to "probe_properties_dft-md-ener.csv" after each step.
+
+The system contains 9 active degrees of freedom (3 active atoms * 3).
+
+Smallest interatomic distance from active region: 0.961275 Angstrom (atoms 0 - 1).
+
+
+
+       Step |  Sim. Time | Iter |  t_Ener |  t_Grad |     Temp |     E_Kin |         E_Pot |         E_Tot |      Cons.Qty | E.Drift | Av.Press. | Cell Dens.
+            |       [fs] |      |     [s] |     [s] |      [K] | [Hartree] |     [Hartree] |     [Hartree] |     [Hartree] |     [K] |     [bar] |  [g cm^-3]
+------------|------------|------|---------|---------|----------|-----------|---------------|---------------|---------------|---------|-----------|--------------
+          0          0.0      8      2.26               300.00    0.004275      -76.337467      -76.333192                                                   
+          1          0.5      6      1.85      0.55     279.44    0.003982      -76.336745      -76.332763      -76.332893      0.00        0.00       0.2645
+          2          1.0      4      1.71      0.51     218.62    0.003115      -76.335934      -76.332819      -76.332877      0.55        0.00       0.2645
+          3          1.5      4      1.76      0.51     175.04    0.002494      -76.335292      -76.332797      -76.332869      0.81        0.00       0.2645
+          4          2.0      3      1.81      0.51     162.94    0.002322      -76.334925      -76.332603      -76.332873      0.69        0.00       0.2645
+------------|------------|------|---------|---------|----------|-----------|---------------|---------------|---------------|---------|-----------|--------------
+       Step |  Sim. Time | Iter |  t_Ener |  t_Grad |     Temp |     E_Kin |         E_Pot |         E_Tot |      Cons.Qty | E.Drift | Av.Press. | Cell Dens.
+            |       [fs] |      |     [s] |     [s] |      [K] | [Hartree] |     [Hartree] |     [Hartree] |     [Hartree] |     [K] |     [bar] |  [g cm^-3]
+
+
+Finished MD run of 4 steps.
+
+
+The average temperature during this run was 227.20518 K.
+
+
+Smallest interatomic distance from active region: 0.940503 Angstrom (atoms 0 - 2).
+
+
+>>> Invariance Statistics >>>
+
+    The maximal deviation of the gradient from translational invariance was 4.436e-11 kJ mol^-1 Angstrom^-1.
+    This would introduce a center of mass drift of 0.000 Kelvin within 1.0 ps.
+
+    The maximal deviation of the gradient from rotational invariance (torque) was 3.265e-02 kJ mol^-1 rad^-1.
+    This would introduce an overall rotation of 0.406 Kelvin within 1.0 ps.
+
+<<< Invariance Statistics <<<
+
+
+>>> Final Wall Info >>>
+    Active wall has spherical geometry.
+    Wall centered at ( 0.000 | 0.000 | 0.000 ) with radius 3.000 Angstrom.
+    All atoms are inside the wall.
+    The atom closest to the wall has a distance of 2.070 Angstrom.
+    Wall volume:     113.097 Angstrom^3
+    Wall surface:    113.097 Angstrom^2
+    Cell mass density: 0.2645 g/cm^3
+    Spring constant of the wall is 10.000 kJ mol^-1 Angstrom^-2.
+    Wall is elastic with t_avg = 5.0 fs and c_response = 0.00100 Angstrom bar^-1.
+    Size change is isotropic.
+    External pressure is 1000.00 bar (isotropic).
+    Total volume work was 0.000 kJ mol^-1.
+<<< Final Wall Info <<<
+
+
+### System Geometry ###
+
+  * Region "All" = "Active" = "QM":
+      Bounding box: from (   -0.000 |   -0.781 |   -0.068 )
+                      to (    0.000 |    0.800 |    0.474 ) Angstrom
+      System extent:     (    0.000 |    1.581 |    0.542 ) Angstrom
+      Center of mass:    (   -0.000 |   -0.000 |   -0.008 ) Angstrom
+
+      Angular momentum:  (   0.00000191 |   0.00000000 |  -0.00000000 ) a.m.u. Angstrom^2 fs^-1
+      Angular velocity:  (   0.00000108 |   0.00000000 |  -0.00000000 ) fs^-1
+      Moment of inertia: (         1.77 |        -0.00 |        -0.00 )
+                         (        -0.00 |         0.51 |        -0.02 ) a.m.u. Angstrom^2
+                         (        -0.00 |        -0.02 |         1.26 )
+      Singular values:   (         1.77 |         0.51 |         1.26 ) a.m.u. Angstrom^2
+
+
+
+Thermostat Summary:
+  (*) Region "All": Injected 0.71 kJ mol^-1 of energy into the system (equivalent to 18.95 K).
+
+
+>>> Timing data >>>
+    MD loop was running for 11.468 seconds
+    Performance: 2.867 seconds/step, 627.820 fs/hour.
+    Average SCF iterations/step: 5.000
+    Time spent within the MD module (overhead): 0.001 seconds (0.0128 % of total time).
+<<< Timing data <<<
+
+
+Finished MD loop.
+
+
+>>>>>> Screendump
+
+##############################################
+###      Screen dump of current state      ###
+##############################################
+_Temperature_  (in Kelvin)
+    162.9357764794
+_PotentialEnergy_  (in Hartree)
+    -76.3349248834
+_TotalEnergy_  (in Hartree)
+    -76.3326029430
+_ConservedQuantity_  (in Hartree)
+    -76.3328729758
+_AtomPosition_  (in Angstrom)
+       0  O          -0.0000000000       -0.0012382839       -0.0678697796
+       1  H           0.0000000001        0.8004448343        0.4737026523
+       2  H          -0.0000000001       -0.7807907627        0.4582901903
+_AtomVelocity_  (in Angstrom fs^-1)
+       0  O          -0.0000000000        0.0000014864        0.0016501471
+       1  H           0.0000000001        0.0202747215       -0.0127213366
+       2  H          -0.0000000001       -0.0202983129       -0.0134698373
+_AtomAcceleration_  (in Angstrom fs^-2)
+       0  O          -0.0000000000        0.0007594918       -0.0012783049
+       1  H          -0.0000000000       -0.0018231123        0.0059750217
+       2  H           0.0000000002       -0.0102315597        0.0143142648
+####################################
+###      End of screen dump      ###
+####################################
+
+
+-------------------------------------------------------------------------------------------
+
+#######################################################################
+########        Finished Executing Input Script (SAN-VM)       ########
+#######################################################################
+
+    Total execution time: 11.469 seconds
+
+            36 instructions executed
+            12 function calls
+
+
+Timings for individual modules during the MD run:
+
+Startup calculation               ...        2.358 sec (=   0.039 min)  20.1 %
+SCF iterations                    ...        4.875 sec (=   0.081 min)  41.6 %
+Property calculations             ...        2.024 sec (=   0.034 min)  17.3 %
+SCF gradient evaluation           ...        2.077 sec (=   0.035 min)  17.7 %
+ORCA initialization               ...        0.379 sec (=   0.006 min)   3.2 %
+Self time inside of MD module     ...        0.004 sec (=   0.000 min)   0.0 %
+------------------------------------------------------------------------------
+Sum of individual times           ...       11.716 sec (=   0.195 min) 100.0 %
+
+Total wall time of MD module      ...       11.848 sec (=   0.197 min)
+             --> "dark time"      ...        0.132 sec (=   0.002 min)   1.1 %
+
+( The "dark time" is spent in the ORCA-internal routines for energy and gradient calculation,
+  but not inside of the sub-programs which do so. It contains operating system overhead for
+  spawning new processes in each MD step and some file I/O time. )
+
+
+
+    ###########################################################
+    ####     ORCA ab initio Molecular Dynamics leaving     ####
+    ####     Scriptable Nuclear Dynamics (SANdy) + ORCA    ####
+    ####           (c) Martin Brehm, 2016 - 2025           ####
+    ####           https://sanscript.org/orcamd            ####
+    ###########################################################
+

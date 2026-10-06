@@ -1,0 +1,96 @@
+{
+  "case": "p03_equilibrar",
+  "normal_termination": true,
+  "checkpoint_step": 2000.0,
+  "checkpoint_time_fs": 500.0,
+  "energy_rows": 2001,
+  "energy_first_fs": 0.0,
+  "energy_last_fs": 500.0,
+  "frames": 1001,
+  "trajectory_first_fs": 0.0,
+  "trajectory_last_fs": 500.0,
+  "temperature_range_K": [
+    127.15,
+    328.01
+  ],
+  "temperature_mean_K": 232.64622188905545,
+  "temperature_windows": [
+    {
+      "start_fs": 0,
+      "end_fs": 100,
+      "mean_K": 187.27145000000004,
+      "min_K": 127.15,
+      "max_K": 300.0
+    },
+    {
+      "start_fs": 100,
+      "end_fs": 200,
+      "mean_K": 196.69695,
+      "min_K": 158.76,
+      "max_K": 235.08
+    },
+    {
+      "start_fs": 200,
+      "end_fs": 300,
+      "mean_K": 221.157475,
+      "min_K": 175.54,
+      "max_K": 266.29
+    },
+    {
+      "start_fs": 300,
+      "end_fs": 400,
+      "mean_K": 263.72965,
+      "min_K": 222.28,
+      "max_K": 328.01
+    },
+    {
+      "start_fs": 400,
+      "end_fs": 500,
+      "mean_K": 294.1983,
+      "min_K": 260.29,
+      "max_K": 319.77
+    }
+  ],
+  "conserved_span_kJ_mol": 0.4962194318774277,
+  "conserved_last_minus_first_reported_kJ_mol": 0.1864104743801588,
+  "conserved_slope_kJ_mol_ps": -0.07699496160945786,
+  "Etot_span_kJ_mol": 439.15944819690964,
+  "Etot_last_minus_initial_kJ_mol": 431.3354592712386,
+  "wall_radius_A": 8.5,
+  "max_fixed_origin_radius_A": 9.511072297539824,
+  "frames_touching_or_beyond_wall": 799,
+  "max_O_centroid_displacement_from_origin_A": 0.11304605256292725,
+  "max_nearest_OH_A": 1.1354530149118145,
+  "min_OO_A": 2.3750699663865205,
+  "min_HH_A": 1.3562833556750429,
+  "shared_frames": 0,
+  "non_simple_frames": 0,
+  "nearest_O_H_crossings": 0,
+  "persistent_segments_by_threshold_fs": {
+    "20": [
+      {
+        "O": 0,
+        "start_fs": 0.0,
+        "end_fs": 500.0,
+        "span_fs": 500.0
+      }
+    ],
+    "50": [
+      {
+        "O": 0,
+        "start_fs": 0.0,
+        "end_fs": 500.0,
+        "span_fs": 500.0
+      }
+    ],
+    "100": [
+      {
+        "O": 0,
+        "start_fs": 0.0,
+        "end_fs": 500.0,
+        "span_fs": 500.0
+      }
+    ]
+  },
+  "limits": "NVT mechanical energy need not be constant. Inspect conserved quantity. Geometric contacts and residence thresholds do not alone establish transport or equilibrium."
+}

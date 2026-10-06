@@ -1,0 +1,8 @@
+{
+  "checkpoint_atoms": 97,
+  "time_fs": 500,
+  "step": 2000,
+  "finite_positions_velocities_forces": true,
+  "last_xyz_max_position_difference_A": 4.9670045854099953e-11,
+  "comment": "Root checked actual complete restart and last saved trajectory frame."
+}

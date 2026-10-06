@@ -21,7 +21,7 @@ const deferred=()=>{let resolve,reject;const promise=new Promise((a,b)=>{resolve
 
 test('startup manifest contains no trajectories and only the requested calculation is loaded',async()=>{
   const {store,loader,requested}=bundledLoader();
-  assert.ok(Buffer.byteLength(read('examples.js'))<10000);
+  assert.ok(Buffer.byteLength(read('examples.js'))<50000);
   assert.equal(Object.keys(store.runs).length,0);
   const result=await loader.loadPreset('water');
   assert.equal(requested.length,1);
@@ -36,7 +36,8 @@ test('menu presets and retained direct links resolve all runs and original downl
   const selector=read('index.html').match(/<select id="example-select">([\s\S]*?)<\/select>/)[1];
   const exposed=[...selector.matchAll(/<option value="([^"]+)"/g)].map(match=>match[1]);
   const directLinks=['water_nve','water_csvr','solvator','complex','complex_short','solvator_two','proton_shared_short','water_short','ethanol_short','chelation_previous'];
-  assert.deepEqual(Object.keys(store.presets).sort(),[...exposed,...directLinks].sort());
+  const inputPresets=Object.keys(JSON.parse(read('../exercicios/arquivos-exercicios.json')).presets);
+  assert.deepEqual(Object.keys(store.presets).sort(),[...exposed,...directLinks,...inputPresets].sort());
   assert.deepEqual(Array.from(store.presets.chelation.runs),['chelation_continuous']);
   assert.deepEqual(Array.from(store.presets.chelation_previous.runs),['chelation']);
   assert.ok(store.sources.chelation_continuous);

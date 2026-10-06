@@ -1,7 +1,7 @@
 <!doctype html>
-<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>05 · Um próton entre duas águas · AIMD / ORCA</title><link rel="stylesheet" href="../pagina.css?v=20261006-course3"><script defer src="../pagina.js?v=20261006-course3"></script></head>
-<body><a class="skip" href="#conteudo">Ir para o conteúdo</a><header class="brand"><a href="../index.html"><strong>AIMD com ORCA</strong><small>6º Workshop PPGQ–UERJ · 7 de outubro de 2026</small></a><div class="logos"><img src="../../assets/uerj-logo.png" alt="UERJ"><img src="../../assets/ufrrj-logo-compacto.png" alt="UFRRJ"></div></header><div class="layout"><nav class="course-nav" aria-label="Mapa dos exercícios"><details class="course-map" open><summary>Mapa dos exercícios <small>9 etapas + complementos opcionais</small></summary><a class="home" href="../index.html">Visão geral do percurso</a><a class="parameter-guide" href="../../guia-md/index.html" target="_blank" rel="noopener" aria-label="Guia de parâmetros %md (abre em outra aba)">Guia de parâmetros %md ↗</a><h3 class="nav-group">Durante a aula · siga nesta ordem</h3><ol class="links"><li><a href="../1-agua-dft/index.html"><span class="num">01</span><span>Água: molécula e dímero</span></a></li><li><a href="../3-xtb2-etanol/index.html"><span class="num">02a</span><span>Etanol: controle</span></a></li><li><a href="../4-timestep/index.html"><span class="num">02b</span><span>Timestep e correção</span></a></li><li><a href="../5-termostato/index.html"><span class="num">03</span><span>Aquecer e resfriar</span></a></li><li><a href="../6-complexo-solvator/index.html"><span class="num">04a</span><span>Zn²⁺ + 20 águas: SOLVATOR</span></a></li><li><a href="../7-dinamica-complexo/index.html"><span class="num">04b</span><span>Zn²⁺: hidratação e paredes</span></a></li><li><a href="../11-formacao-quelato/index.html"><span class="num">04c</span><span>en: primeiro N assistido, segundo N livre</span></a></li><li><a href="../14-zn-en-pressao/index.html"><span class="num">04d</span><span>Zn–en sem assistência: 1 / 1000 / 4000 bar</span></a></li><li><a href="../10-proton-compartilhado/index.html" aria-current="page"><span class="num">05</span><span>Um próton entre duas águas</span></a></li></ol><h3 class="nav-group">Complementos opcionais e referências</h3><p class="nav-note">A sequência da aula segue diretamente entre as 9 etapas acima.</p><ol class="links"><li><a href="../13-cell-pressao/index.html"><span class="num">C</span><span>Cell: parede, pressão e volume</span></a></li><li><a href="../2-solvente-implicito/index.html"><span class="num">↗</span><span>DFT e solvente contínuo</span></a></li><li><a href="../12-gota-protonada/index.html"><span class="num">↗</span><span>Gota protonada: 300–600 K</span></a></li><li><a href="../8-agua-no-fulereno/index.html"><span class="num">↗</span><span>Água dentro de C₆₀</span></a></li><li><a href="../9-aluminio-amonia/index.html"><span class="num">↗</span><span>Al³⁺/amônia: referência</span></a></li></ol></details></nav><main id="conteudo"><nav class="route-nav route-topo" aria-label="Navegação do percurso — topo"><div class="route-status">Etapa 9 de 9 · Bloco 05<progress class="course-progress" value="9" max="9" aria-label="Etapa 9 de 9"></progress></div><div class="route-controls"><a class="route-prev" rel="prev" href="../14-zn-en-pressao/index.html"><small>Anterior</small><span>← Zn–en sem assistência: 1 / 1000 / 4000 bar</span></a><a class="route-next" href="../index.html"><small>Percurso concluído</small><span>Voltar ao mapa →</span></a></div><a class="route-map" href="../index.html">Mapa completo do percurso</a></nav><article class="lesson-content"><h1 id="05-h5o2-onde-esta-o-proton">05 · H₅O₂⁺: onde está o próton?</h1><nav class="section-nav" aria-label="Seções desta página"><strong>Nesta página</strong><ul><li><a href="#1-prepare">1. Prepare</a></li><li><a href="#2-execute-ou-use-a-referencia">2. Execute ou use a referência</a></li><li><a href="#3-meca-e-interprete">3. Meça e interprete</a></li><li><a href="#arquivos-e-consulta">Arquivos e consulta</a></li><li><a href="#inputs-das-variantes-e-preparacoes">Inputs das variantes e preparações</a></li></ul></nav>
-<p><a href="../index.html">← Percurso</a> · <a href="../../visualizador/index.html">Aplicativo de análise</a></p>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>05 · Um próton entre duas águas · AIMD / ORCA</title><link rel="stylesheet" href="../pagina.css?v=20261006-inputs4"><script defer src="../pagina.js?v=20261006-inputs4"></script></head>
+<body><a class="skip" href="#conteudo">Ir para o conteúdo</a><header class="brand"><a href="../index.html"><strong>AIMD com ORCA</strong><small>6º Workshop PPGQ–UERJ · 7 de outubro de 2026</small></a><div class="logos"><img src="../../assets/uerj-logo.png" alt="UERJ"><img src="../../assets/ufrrj-logo-compacto.png" alt="UFRRJ"></div></header><div class="layout"><nav class="course-nav" aria-label="Mapa dos exercícios"><details class="course-map" open><summary>Mapa dos exercícios <small>9 etapas + complementos opcionais</small></summary><a class="home" href="../index.html">Visão geral do percurso</a><a class="parameter-guide" href="../../guia-md/index.html" target="_blank" rel="noopener" aria-label="Guia de parâmetros %md (abre em outra aba)">Guia de parâmetros %md ↗</a><h3 class="nav-group">Durante a aula · siga nesta ordem</h3><ol class="links"><li><a href="../1-agua-dft/index.html"><span class="num">01</span><span>Água: molécula e dímero</span></a></li><li><a href="../3-xtb2-etanol/index.html"><span class="num">02a</span><span>Etanol: controle</span></a></li><li><a href="../4-timestep/index.html"><span class="num">02b</span><span>Timestep e correção</span></a></li><li><a href="../5-termostato/index.html"><span class="num">03</span><span>Aquecer e resfriar</span></a></li><li><a href="../6-complexo-solvator/index.html"><span class="num">04a</span><span>Zn²⁺ + 20 águas: SOLVATOR</span></a></li><li><a href="../7-dinamica-complexo/index.html"><span class="num">04b</span><span>Zn²⁺: hidratação e paredes</span></a></li><li><a href="../11-formacao-quelato/index.html"><span class="num">04c</span><span>en: primeiro N assistido, segundo N livre</span></a></li><li><a href="../14-zn-en-pressao/index.html"><span class="num">04d</span><span>Zn–en sem assistência: 1 / 1000 / 4000 bar</span></a></li><li><a href="../10-proton-compartilhado/index.html" aria-current="page"><span class="num">05</span><span>Um próton entre duas águas</span></a></li></ol><h3 class="nav-group">Complementos opcionais e referências</h3><p class="nav-note">A sequência da aula segue diretamente entre as 9 etapas acima.</p><ol class="links"><li><a href="../13-cell-pressao/index.html"><span class="num">C</span><span>Cell: parede, pressão e volume</span></a></li><li><a href="../2-solvente-implicito/index.html"><span class="num">↗</span><span>DFT e solvente contínuo</span></a></li><li><a href="../12-gota-protonada/index.html"><span class="num">↗</span><span>Gota protonada: 300–600 K</span></a></li><li><a href="../8-agua-no-fulereno/index.html"><span class="num">↗</span><span>Água dentro de C₆₀</span></a></li><li><a href="../9-aluminio-amonia/index.html"><span class="num">↗</span><span>Al³⁺/amônia: referência</span></a></li></ol></details></nav><main id="conteudo"><nav class="route-nav route-topo" aria-label="Navegação do percurso — topo"><div class="route-status">Etapa 9 de 9 · Bloco 05<progress class="course-progress" value="9" max="9" aria-label="Etapa 9 de 9"></progress></div><div class="route-controls"><a class="route-prev" rel="prev" href="../14-zn-en-pressao/index.html"><small>Anterior</small><span>← Zn–en sem assistência: 1 / 1000 / 4000 bar</span></a><a class="route-next" href="../index.html"><small>Percurso concluído</small><span>Voltar ao mapa →</span></a></div><a class="route-map" href="../index.html">Mapa completo do percurso</a></nav><article class="lesson-content"><h1 id="05-h5o2-onde-esta-o-proton">05 · H₅O₂⁺: onde está o próton?</h1><nav class="section-nav" aria-label="Seções desta página"><strong>Nesta página</strong><ul><li><a href="#1-otimizacao-preparar-o-h5o2">1. Otimização: preparar o H₅O₂⁺</a></li><li><a href="#2-dinamica-primeiros-2-ps-a-300-k">2. Dinâmica: primeiros 2 ps a 300 K</a></li><li><a href="#3-continuacao-de-2-ate-10-ps">3. Continuação: de 2 até 10 ps</a></li><li><a href="#4-executar-e-abrir-os-resultados">4. Executar e abrir os resultados</a></li><li><a href="#5-meca-e-interprete">5. Meça e interprete</a></li><li><a href="#arquivos-e-consulta">Arquivos e consulta</a></li></ul></nav>
+<p><a href="../index.html">← Percurso</a> · <a href="../../visualizador/index.html?exemplo=proton_shared&amp;aba=trajetoria">Laboratório com os 10 ps carregados</a></p>
 <p><strong>Núcleo da aula · 20 min · executar ou abrir o resultado pronto · 7 átomos</strong></p>
 <blockquote>
 <p><strong>Pergunta:</strong> quando um H muda de proximidade entre dois O, ele permaneceu no novo lado ou voltou logo depois?</p>
@@ -9,10 +9,52 @@
 <p>No dímero neutro da abertura, as águas mudam a orientação da ligação H e preservam suas ligações O–H covalentes. Aqui, o dímero protonado H₅O₂⁺ permite acompanhar o H compartilhado. Usamos GFN2-xTB, um método semiempírico de estrutura eletrônica, com núcleos clássicos. Não há solvente implícito, parede ou força aplicada para transferir o H.</p>
 <p><strong>Para observar com calma:</strong> o laboratório abre a referência completa de <strong>10 ps</strong>, com <strong>40001 quadros</strong>. Um ciclo automático de reprodução leva <strong>78 s</strong>; escolha <strong>120 s</strong> em <strong>Duração a 1×</strong>, ou reduza <strong>Velocidade</strong>, para acompanhar cada passagem por mais tempo. Esses controles não alteram o tempo físico.</p>
 <p>O input curto abaixo permite executar os primeiros <strong>2 ps</strong> durante a aula. A referência longa preserva esses mesmos 2 ps e acrescenta <strong>8 ps por restart</strong>, sem reinicializar posições ou velocidades.</p>
-<h2 id="1-prepare">1. Prepare</h2>
-<p><a href="aula-proton_shared.zip">Pacote para executar</a> · <a href="inputs/proton_shared.inp" download="proton_shared.inp">Baixar input ORCA</a> · <a href="estruturas/h5o2_otimizado.xyz" download="h5o2_otimizado.xyz">Baixar geometria inicial (.xyz)</a> (opcional para executar; as coordenadas já estão no input)</p>
-<p>Extraia o pacote numa pasta nova. Os índices do aplicativo começam em <strong>zero</strong>: <strong>O 0, O 1 e H 2</strong> compõem a unidade O–H–O; H 3–6 são os demais hidrogênios. A carga total é +1 e a multiplicidade é 1.</p>
+<h2 id="1-otimizacao-preparar-o-h5o2">1. Otimização: preparar o H₅O₂⁺</h2>
+<p>Comece com os sete átomos da geometria inicial e relaxe a estrutura. Salve o input abaixo como <strong><code>z00_otimizar.inp</code></strong>. Esta etapa é uma otimização de geometria; não produz uma dinâmica molecular.</p>
+<p><a href="estruturas/h5o2_inicial.xyz" download="h5o2_inicial.xyz">Estrutura inicial</a> · <a href="estruturas/h5o2_otimizado.xyz" download="h5o2_otimizado.xyz">Estrutura otimizada</a> · <a href="resultados/otimizacao/z00_otimizar.out">Resultado da otimização</a>.</p>
+<!-- input-source: inputs/z00_otimizar.inp -->
+<div class="input-resources" data-input="exercicios/10-proton-compartilhado/inputs/z00_otimizar.inp"><p><strong>z00_otimizar.inp</strong> · Otimização executada; estruturas inicial e final, sem dinâmica.</p><div class="input-downloads"><a href="inputs/z00_otimizar.inp" download>Baixar input completo</a><a href="estruturas/h5o2_inicial.xyz" download>Baixar estrutura · h5o2_inicial.xyz</a><a href="resultado-z00_otimizar.zip" download>Resultados completos desta etapa</a><a href="resultados-completos.zip" download>Resultados completos deste exercício · todas as variantes</a><a class="open-input-lab" href="../../visualizador/index.html?exemplo=arquivo_z00_otimizar&amp;aba=trajetoria">Abrir estruturas inicial e otimizada no laboratório</a></div></div>
+
+
+<pre><code class="language-text"># Dimero protonado isolado; relaxar antes da dinamica.
+! XTB2 Opt TightOpt PAL8
+%maxcore 256
+%geom MaxIter 200 end
+* xyz 1 1
+O -1.225000  0.000000  0.000000
+O  1.225000  0.000000  0.000000
+H  0.080000  0.015000 -0.008000
+H -1.810000  0.765000  0.010000
+H -1.825000 -0.758000 -0.020000
+H  1.820000  0.015000  0.763000
+H  1.813000 -0.010000 -0.770000
+*
+</code></pre>
+<h2 id="2-dinamica-primeiros-2-ps-a-300-k">2. Dinâmica: primeiros 2 ps a 300 K</h2>
+<p>Use a estrutura otimizada. Salve este input como <strong><code>z01_dinamica.inp</code></strong> e a geometria como <strong><code>h5o2_otimizado.xyz</code></strong>, na mesma pasta. O checkpoint produzido, <strong><code>z01_dinamica.mdrestart</code></strong>, será usado na próxima etapa. São 8000 passos de 0,25 fs, sem parede nem força de transferência.</p>
+<p>Os índices do laboratório começam em zero: <strong>O 0, O 1 e H 2</strong> formam a unidade O–H–O; H 3–6 são os outros hidrogênios. A carga total é +1 e a multiplicidade é 1.</p>
+<!-- input-source: inputs/z01_dinamica.inp -->
+<div class="input-resources" data-input="exercicios/10-proton-compartilhado/inputs/z01_dinamica.inp"><p><strong>z01_dinamica.inp</strong> · Dinâmica executada; resultados disponíveis.</p><div class="input-downloads"><a href="inputs/z01_dinamica.inp" download>Baixar input completo</a><a href="estruturas/h5o2_otimizado.xyz" download>Baixar estrutura · h5o2_otimizado.xyz</a><a href="resultado-proton_shared.zip" download>Resultados completos desta etapa</a><a href="resultados-completos.zip" download>Resultados completos deste exercício · todas as variantes</a><a class="open-input-lab" href="../../visualizador/index.html?exemplo=arquivo_proton_shared&amp;aba=trajetoria">Abrir no laboratório com tudo carregado</a></div></div>
+
+
+<pre><code class="language-text"># H5O2+ a 300 K: 2 ps, sem solvente, parede ou forca de transferencia.
+! MD XTB2 PAL8
+%maxcore 256
+%md
+  Timestep 0.25_fs
+  Thermostat CSVR 300_K Timecon 100_fs
+  Dump Position Stride 1 Filename &quot;z01_dinamica-traj.xyz&quot;
+  Randomize 93201
+  Initvel 300_K
+  Run 8000
+end
+* xyzfile 1 1 h5o2_otimizado.xyz
+</code></pre>
+<h3 id="alternativa-com-as-coordenadas-dentro-do-input">Alternativa com as coordenadas dentro do input</h3>
+<p>Para copiar tudo em um único arquivo, salve a versão abaixo como <strong><code>proton_shared.inp</code></strong>. As condições e a geometria são as mesmas; o prefixo de saída muda para <code>proton_shared</code>. Se continuar esta execução, ajuste o nome em <code>Restart</code> para <code>proton_shared.mdrestart</code>. O pacote de continuação fornecido usa o checkpoint da referência <code>z01_dinamica</code>.</p>
 <!-- input-source: inputs/proton_shared.inp -->
+<div class="input-resources" data-input="exercicios/10-proton-compartilhado/inputs/proton_shared.inp"><p><strong>proton_shared.inp</strong> · Dinâmica executada; resultados disponíveis.</p><div class="input-downloads"><a href="inputs/proton_shared.inp" download>Baixar input completo</a><a href="estruturas/h5o2_otimizado.xyz" download>Baixar estrutura · h5o2_otimizado.xyz</a><a href="aula-proton_shared.zip" download>Pacote para executar</a><a href="resultado-proton_shared.zip" download>Resultados completos desta etapa</a><a href="resultados-completos.zip" download>Resultados completos deste exercício · todas as variantes</a><a class="open-input-lab" href="../../visualizador/index.html?exemplo=arquivo_proton_shared&amp;aba=trajetoria">Abrir no laboratório com tudo carregado</a></div></div>
+
 
 <pre><code class="language-text"># H5O2+ a 300 K: 2 ps, sem solvente, parede ou forca de transferencia.
 ! MD XTB2 PAL8
@@ -37,22 +79,48 @@ end
   H           1.67157541643680      0.62531098355134     -0.49860819247712
 *
 </code></pre>
-<h2 id="2-execute-ou-use-a-referencia">2. Execute ou use a referência</h2>
+<h2 id="3-continuacao-de-2-ate-10-ps">3. Continuação: de 2 até 10 ps</h2>
+<p>Salve o input abaixo como <strong><code>z02_02000_10000fs.inp</code></strong>. Mantenha junto dele o <a href="resultados/proton_shared_10ps/etapas/z01_dinamica.mdrestart" download="z01_dinamica.mdrestart">checkpoint aos 2 ps</a> e a <a href="resultados/proton_shared_10ps/etapas/h5o2_restart_2ps.xyz" download="h5o2_restart_2ps.xyz">geometria aos 2 ps</a>, ou extraia o <a href="aula-proton_restart_10ps.zip">pacote de continuação</a>. O XYZ sozinho não substitui o checkpoint. Esta etapa acrescenta 8 ps e preserva posições e velocidades; não use <code>Initvel</code>.</p>
+<!-- input-source: resultados/proton_shared_10ps/etapas/z02_02000_10000fs.inp -->
+<div class="input-resources" data-input="exercicios/10-proton-compartilhado/resultados/proton_shared_10ps/etapas/z02_02000_10000fs.inp"><p><strong>z02_02000_10000fs.inp</strong> · Continuação executada; o laboratório abre a sequência completa, incluindo o trecho anterior.</p><div class="input-downloads"><a href="resultados/proton_shared_10ps/etapas/z02_02000_10000fs.inp" download>Baixar input completo</a><a href="resultados/proton_shared_10ps/etapas/h5o2_restart_2ps.xyz" download>Baixar estrutura · h5o2_restart_2ps.xyz</a><a href="resultados/proton_shared_10ps/etapas/z01_dinamica.mdrestart" download>Auxiliar obrigatório · z01_dinamica.mdrestart</a><a href="resultado-proton_shared_10ps.zip" download>Resultados completos desta etapa</a><a href="resultados-completos.zip" download>Resultados completos deste exercício · todas as variantes</a><a class="open-input-lab" href="../../visualizador/index.html?exemplo=arquivo_proton_shared_10ps&amp;aba=trajetoria">Abrir no laboratório com tudo carregado</a></div></div>
+
+
+<pre><code class="language-text"># H5O2+: continue the retained 2 ps state for 8 ps, reaching 10 ps.
+# Same Hamiltonian, integration step, thermostat settings and explicit seed.
+# Positions and velocities come from the checkpoint; do not initialize velocities.
+! MD XTB2 PAL8
+%maxcore 256
+%md
+  Timestep 0.25_fs
+  Thermostat CSVR 300_K Timecon 100_fs
+  Dump Position Stride 1 Filename &quot;z02_02000_10000fs-traj.xyz&quot;
+  Randomize 93201
+  Restart &quot;z01_dinamica.mdrestart&quot;
+  Run 32000
+end
+* xyzfile 1 1 h5o2_restart_2ps.xyz
+</code></pre>
+<h2 id="4-executar-e-abrir-os-resultados">4. Executar e abrir os resultados</h2>
 <p><strong>Ubuntu / WSL2:</strong></p>
 <p>Entre na <strong>pasta extraída do exercício</strong>, onde estão o input e seus arquivos auxiliares. Com a <a href="https://github.com/HenriqueCSJ/AIMD-6WPPQG-UERJ/blob/main/tutoriais/01-wsl2-ubuntu-orca.md">instalação concluída</a>, execute:</p>
-<pre><code class="language-bash">orca proton_shared.inp &gt; proton_shared.out &amp;
+<pre><code class="language-bash">orca z00_otimizar.inp &gt; z00_otimizar.out
+orca z01_dinamica.inp &gt; z01_dinamica.out
+orca z02_02000_10000fs.inp &gt; z02_02000_10000fs.out
 </code></pre>
-<p>Espere o cálculo encerrar antes de iniciar outro. Os resultados ficam nessa mesma pasta; veja <a href="../index.html#como-executar">como acompanhar a execução</a>.</p>
+<p>Execute <strong>uma linha por vez</strong>, aguardando o cálculo terminar. Depois da otimização, salve a geometria otimizada <code>z00_otimizar.xyz</code> como <code>h5o2_otimizado.xyz</code>, ou use a estrutura otimizada fornecida. Antes da terceira linha, deixe o checkpoint e <code>h5o2_restart_2ps.xyz</code> na pasta, como explicado na etapa 3. Os resultados ficam nessa mesma pasta; veja <a href="../index.html#como-executar">como acompanhar a execução</a>.</p>
+<p>Se escolheu a alternativa com coordenadas dentro do input, execute <code>orca proton_shared.inp &gt; proton_shared.out</code> no lugar da segunda linha e use seu checkpoint <code>proton_shared.mdrestart</code> no <code>Restart</code> da terceira etapa.</p>
 <details>
 <summary>Windows nativo</summary>
 <p>Abra o <strong>Prompt de Comando (<code>cmd</code>) na pasta extraída</strong>, com ORCA e MS-MPI já <a href="https://github.com/HenriqueCSJ/AIMD-6WPPQG-UERJ/blob/main/tutoriais/02-windows-orca-msmpi.md">configurados no Path</a>:</p>
-<pre><code class="language-bat">orca proton_shared.inp &gt; proton_shared.out
+<pre><code class="language-bat">orca z00_otimizar.inp &gt; z00_otimizar.out
+orca z01_dinamica.inp &gt; z01_dinamica.out
+orca z02_02000_10000fs.inp &gt; z02_02000_10000fs.out
 </code></pre>
 <p>Espere o prompt voltar antes de iniciar outro cálculo. Os arquivos de resultado ficam nessa mesma pasta.</p>
 </details>
 <p>Execute um cálculo por vez. A referência completou <strong>2 ps em 123,847 s</strong>; a otimização anterior levou 2,375 s. São tempos observados em ORCA 6.1.1/xTB 6.7.1, WSL2, Intel Core Ultra 9 185H, PAL8 solicitado, e podem mudar em outro computador. Se a espera comprometer o bloco, passe aos dados prontos.</p>
 <p><a href="../../visualizador/index.html?exemplo=proton_shared&amp;aba=trajetoria">Observar 10 ps no aplicativo</a> · <a href="resultado-proton_shared_10ps.zip">Baixar os 10 ps completos</a> · <a href="../../visualizador/index.html?exemplo=proton_shared_short&amp;aba=trajetoria">Referência original de 2 ps</a> · <a href="resultado-proton_shared.zip">Baixar os 2 ps originais</a></p>
-<h2 id="3-meca-e-interprete">3. Meça e interprete</h2>
+<h2 id="5-meca-e-interprete">5. Meça e interprete</h2>
 <ol>
 <li>Em <strong>Trajetória</strong>, clique em <strong>Destacar próton H 2</strong>. Ele fica magenta e maior; o restante fica em cinza. O destaque acompanha o mesmo H durante a animação. Em <strong>Destacar átomos/moléculas</strong>, você pode mudar a cor, o tamanho e destacar também O 0 e O 1. Observe o H compartilhado sem usar a velocidade da animação como escala de tempo físico.</li>
 <li>Em <strong>Geometria</strong>, acompanhe <strong>O 0–H 2</strong> e <strong>O 1–H 2</strong>. Defina δ = r(O 0–H 2) − r(O 1–H 2). δ negativo indica H 2 mais perto de O 0; positivo, mais perto de O 1.</li>
@@ -92,8 +160,10 @@ end
 </li>
 <li><a href="resultados/proton_shared/proton_shared.inp" download="proton_shared.inp">Input original da referência</a> · <a href="resultados/proton_shared/execucao.json">Registro de execução</a>.</li>
 </ul>
-<p><strong>Input completo · <code>proton_shared.inp</code> — copie e salve com esse nome.</strong></p>
+<p><strong>Input original executado da referência de 2 ps:</strong> o prefixo de Dump é <code>z01_dinamica</code>; preserve esse nome ao reproduzir os arquivos originais.</p>
 <!-- input-source: resultados/proton_shared/proton_shared.inp -->
+<div class="input-resources" data-input="exercicios/10-proton-compartilhado/resultados/proton_shared/proton_shared.inp"><p><strong>proton_shared.inp</strong> · Dinâmica executada; resultados disponíveis.</p><div class="input-downloads"><a href="resultados/proton_shared/proton_shared.inp" download>Baixar input completo</a><a href="estruturas/h5o2_otimizado.xyz" download>Baixar estrutura · h5o2_otimizado.xyz</a><a href="resultado-proton_shared.zip" download>Resultados completos desta etapa</a><a href="resultados-completos.zip" download>Resultados completos deste exercício · todas as variantes</a><a class="open-input-lab" href="../../visualizador/index.html?exemplo=arquivo_proton_shared&amp;aba=trajetoria">Abrir no laboratório com tudo carregado</a></div></div>
+
 
 <pre><code class="language-text"># H5O2+ a 300 K: 2 ps, sem solvente, parede ou forca de transferencia.
 ! MD XTB2 PAL8
@@ -107,67 +177,8 @@ end
   Run 8000
 end
 * xyzfile 1 1 h5o2_otimizado.xyz
-</code></pre>
-<ul>
-<li><a href="inputs/z00_otimizar.inp" download="z00_otimizar.inp">Baixar input ORCA</a> · <a href="estruturas/h5o2_inicial.xyz" download="h5o2_inicial.xyz">Baixar geometria inicial (.xyz)</a> (opcional para executar; as coordenadas já estão no input) · <a href="resultados/otimizacao/z00_otimizar.out">Saída da otimização</a>.</li>
-</ul>
-<p><strong>Input completo · <code>z00_otimizar.inp</code> — copie e salve com esse nome.</strong></p>
-<!-- input-source: inputs/z00_otimizar.inp -->
-
-<pre><code class="language-text"># Dimero protonado isolado; relaxar antes da dinamica.
-! XTB2 Opt TightOpt PAL8
-%maxcore 256
-%geom MaxIter 200 end
-* xyz 1 1
-O -1.225000  0.000000  0.000000
-O  1.225000  0.000000  0.000000
-H  0.080000  0.015000 -0.008000
-H -1.810000  0.765000  0.010000
-H -1.825000 -0.758000 -0.020000
-H  1.820000  0.015000  0.763000
-H  1.813000 -0.010000 -0.770000
-*
 </code></pre>
 <ul>
 <li><a href="https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html">Manual ORCA 6.1: dinâmica molecular, timestep e termostatos</a>.</li>
 </ul>
-<p><strong>Entrega da dupla:</strong> anote um cruzamento com retorno e explique como a conclusão muda ao exigir persistência.</p>
-<h2 id="inputs-das-variantes-e-preparacoes">Inputs das variantes e preparações</h2>
-<ul>
-<li><strong>z01_dinamica — etapa após a otimização; usa a geometria otimizada:</strong> <a href="inputs/z01_dinamica.inp" download="z01_dinamica.inp">Baixar input ORCA</a> · <a href="estruturas/h5o2_otimizado.xyz" download="h5o2_otimizado.xyz">Baixar geometria inicial (.xyz)</a> (obrigatório; manter na mesma pasta do input).</li>
-</ul>
-<p><strong>Input completo · <code>z01_dinamica.inp</code> — copie e salve com esse nome.</strong></p>
-<!-- input-source: inputs/z01_dinamica.inp -->
-
-<pre><code class="language-text"># H5O2+ a 300 K: 2 ps, sem solvente, parede ou forca de transferencia.
-! MD XTB2 PAL8
-%maxcore 256
-%md
-  Timestep 0.25_fs
-  Thermostat CSVR 300_K Timecon 100_fs
-  Dump Position Stride 1 Filename &quot;z01_dinamica-traj.xyz&quot;
-  Randomize 93201
-  Initvel 300_K
-  Run 8000
-end
-* xyzfile 1 1 h5o2_otimizado.xyz
-</code></pre>
-<p><strong>Continuação de 2 até 10 ps:</strong> <a href="resultados/proton_shared_10ps/etapas/z02_02000_10000fs.inp" download="z02_02000_10000fs.inp">Baixar input ORCA</a> · <a href="resultados/proton_shared_10ps/etapas/h5o2_restart_2ps.xyz" download="h5o2_restart_2ps.xyz">Baixar geometria inicial (.xyz)</a> (obrigatório; manter na mesma pasta do input) · <a href="resultados/proton_shared_10ps/etapas/z01_dinamica.mdrestart" download="z01_dinamica.mdrestart">Baixar checkpoint obrigatório</a> (fornece o estado de continuação; manter junto do input). O XYZ isolado não substitui o checkpoint.</p>
-<p><strong>Input completo · <code>z02_02000_10000fs.inp</code> — copie e salve com esse nome.</strong></p>
-<!-- input-source: resultados/proton_shared_10ps/etapas/z02_02000_10000fs.inp -->
-
-<pre><code class="language-text"># H5O2+: continue the retained 2 ps state for 8 ps, reaching 10 ps.
-# Same Hamiltonian, integration step, thermostat settings and explicit seed.
-# Positions and velocities come from the checkpoint; do not initialize velocities.
-! MD XTB2 PAL8
-%maxcore 256
-%md
-  Timestep 0.25_fs
-  Thermostat CSVR 300_K Timecon 100_fs
-  Dump Position Stride 1 Filename &quot;z02_02000_10000fs-traj.xyz&quot;
-  Randomize 93201
-  Restart &quot;z01_dinamica.mdrestart&quot;
-  Run 32000
-end
-* xyzfile 1 1 h5o2_restart_2ps.xyz
-</code></pre></article><nav class="route-nav route-fim" aria-label="Navegação do percurso — fim"><div class="route-status">Etapa 9 de 9 · Bloco 05<progress class="course-progress" value="9" max="9" aria-label="Etapa 9 de 9"></progress></div><div class="route-controls"><a class="route-prev" rel="prev" href="../14-zn-en-pressao/index.html"><small>Anterior</small><span>← Zn–en sem assistência: 1 / 1000 / 4000 bar</span></a><a class="route-next" href="../index.html"><small>Percurso concluído</small><span>Voltar ao mapa →</span></a></div><a class="route-map" href="../index.html">Mapa completo do percurso</a></nav></main></div><footer>Henrique de Castro Silva Junior e Virginia Camila Rufino Ferreira · ORCA 6.1.1 · Materiais e dados locais; links externos levam à documentação oficial.</footer></body></html>
+<p><strong>Entrega da dupla:</strong> anote um cruzamento com retorno e explique como a conclusão muda ao exigir persistência.</p></article><nav class="route-nav route-fim" aria-label="Navegação do percurso — fim"><div class="route-status">Etapa 9 de 9 · Bloco 05<progress class="course-progress" value="9" max="9" aria-label="Etapa 9 de 9"></progress></div><div class="route-controls"><a class="route-prev" rel="prev" href="../14-zn-en-pressao/index.html"><small>Anterior</small><span>← Zn–en sem assistência: 1 / 1000 / 4000 bar</span></a><a class="route-next" href="../index.html"><small>Percurso concluído</small><span>Voltar ao mapa →</span></a></div><a class="route-map" href="../index.html">Mapa completo do percurso</a></nav></main></div><footer>Henrique de Castro Silva Junior e Virginia Camila Rufino Ferreira · ORCA 6.1.1 · Materiais e dados locais; links externos levam à documentação oficial.</footer></body></html>

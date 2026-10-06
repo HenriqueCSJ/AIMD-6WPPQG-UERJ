@@ -113,7 +113,7 @@ for(const [key,label,lesson,basename=key] of specs){
 const isolatedRelative='exercicios/6-complexo-solvator/estruturas/zn2_isolado.xyz';
 const isolated=R.parseXYZ(fs.readFileSync(path.join(root,isolatedRelative),'utf8'),'zn2_isolado.xyz');
 if(isolated.elements.length!==1||isolated.elements[0]!=='Zn'||isolated.frames.length!==1)throw new Error('Expected exactly one static Zn atom in the new starting structure.');
-runs.zn2_isolado={key:'zn2_isolado',label:'04a · Zn²⁺ isolado · estrutura inicial · 1 átomo',reference:true,xyz:isolated,files:[{name:'zn2_isolado.xyz',path:isolatedRelative,kind:'xyz'}],warnings:['Somente a estrutura inicial do íon. A montagem SOLVATOR de 20 águas ainda não foi executada neste conjunto de referências.'],metadata:{charge:2,multiplicity:1}};
+runs.zn2_isolado={key:'zn2_isolado',label:'04a · Zn²⁺ isolado · estrutura inicial · 1 átomo',reference:true,xyz:isolated,files:[{name:'zn2_isolado.xyz',path:isolatedRelative,kind:'xyz'}],warnings:['Somente a estrutura inicial do íon. A montagem SOLVATOR e a preparação radial estão disponíveis como estruturas separadas neste exemplo.'],metadata:{charge:2,multiplicity:1}};
 const preparedRelative='exercicios/6-complexo-solvator/estruturas/zn_20h2o_inicial.xyz';
 if(fs.existsSync(path.join(root,preparedRelative))){
  const prepared=R.parseXYZ(fs.readFileSync(path.join(root,preparedRelative),'utf8'),'zn_20h2o_inicial.xyz');
@@ -147,9 +147,43 @@ if(runs.zn_ion_20h2o_solvator){
  presets.zn_solvation={runs:['zn2_isolado','zn_ion_20h2o_solvator',...(runs.zn_20h2o_inicial?['zn_20h2o_inicial']:[])],tab:'trajectory',loadMessage:'Zn²⁺ isolado, montagem SOLVATOR bruta e preparação radial declarada carregados como estruturas separadas. Não há trajetória de MD nem série de energia neste exemplo. Alterne o campo Simulação para conferir cada geometria.'};
 }
 if(newHydrationKeys.every(key=>runs[key]))presets.zn_hydration={runs:newHydrationKeys,tab:'trajectory'};
+// Every exercise input has its own contextual launch, including retained
+// diagnostics and static preparation stages. No calculation is synthesized.
+const resources=JSON.parse(fs.readFileSync(path.join(root,'exercicios/arquivos-exercicios.json'),'utf8'));
+for(const spec of resources.newRuns){
+ const key=spec.runkey,run={key,label:spec.label||key.replaceAll('_',' '),reference:true,files:[],warnings:[]};
+ for(const [field,slot] of [['out','out'],['energy_csv','energy'],['xyz','xyz'],['colvars','colvars']]){
+  const rel=spec[field];if(!rel)continue;
+  const parsed=R.parseFile(fs.readFileSync(path.join(root,rel),'utf8'),path.basename(rel));
+  if(parsed.kind!==slot)throw new Error(`${key}: expected ${slot}, got ${parsed.kind}`);
+  if(parsed.frames)parsed.frames.forEach(frame=>delete frame.comment);
+  run[slot]=parsed;run.files.push({name:path.basename(rel),path:rel,kind:slot});
+ }
+ if(spec.normal!==undefined&&run.out?.metadata.normal!==spec.normal)throw new Error(`${key}: termination mismatch`);
+ if(spec.frames!==undefined&&run.xyz?.frames.length!==spec.frames)throw new Error(`${key}: frame mismatch`);
+ if(spec.type==='static_structure'&&run.xyz?.frames.length!==1)throw new Error(`${key}: expected a single static geometry`);
+ if(spec.state==='partial_interrupted_md'){run.label+=' · PARCIAL, até 9864 fs';run.warnings.push('Execução interrompida. O nome 10000fs descreve o alvo; a trajetória retida termina em 9864 fs. A sequência de formação do quelato usa somente até 7083 fs deste arquivo.');}
+ if(spec.state==='failed_scc_zero_md_steps')run.warnings.push('Falha SCC antes da dinâmica: zero passos MD. Esta é somente a estrutura inicial, acompanhada do output da falha.');
+ if(key==='encontro_real_R1_inicial'){run.metadata={staticSourceTime:true};run.warnings.push('Geometria extraída da referência anterior aos 7083 fs. Esse é o tempo da referência de origem; os controles preparados não têm tempo simulado.');}
+ if(spec.type==='static_structure'&&run.out?.rows?.length)throw new Error(`${key}: unexpected MD data in static reference`);
+ const issue=R.validateEnergySources(run.energy,run.out);if(issue)throw new Error(`${key}: ${issue}`);
+ runs[key]=run;
+}
+Object.assign(presets,resources.presets);
+for(const [key,preset] of Object.entries(resources.presets))for(const runkey of preset.runs)if(!runs[runkey])throw new Error(`${key}: missing reference ${runkey}`);
+for(const [input,item] of Object.entries(resources.inputs)){
+ const preset=presets[item.preset];if(!preset)throw new Error(`Missing input preset: ${input}`);
+ for(const runkey of preset.runs){
+  const run=runs[runkey];
+  for(const rel of [input,...item.structures,...item.dependencies])if(!run.files.some(file=>file.path===rel)){
+   if(!fs.existsSync(path.join(root,rel)))throw new Error(`Missing input file: ${rel}`);
+   run.files.push({name:path.basename(rel),path:rel,kind:'input-dependency'});
+  }
+ }
+}
 // Ordinary scripts, rather than fetch(), preserve direct file:// use offline.
 // The small manifest is loaded at startup; calculations are loaded on demand.
-const version='20261006-znpressure1',sources={},folder=path.join(root,'visualizador/examples');
+const version='20261006-inputs4',sources={},folder=path.join(root,'visualizador/examples');
 fs.mkdirSync(folder,{recursive:true});let totalBytes=0;
 for(const [key,run] of Object.entries(runs)){
  const filename=`${key}.js`,full=path.join(folder,filename);

@@ -1,0 +1,5 @@
+# Dimero protonado isolado; relaxar antes da dinamica.
+! XTB2 Opt TightOpt PAL8
+%maxcore 256
+%geom MaxIter 200 end
+* xyzfile 1 1 h5o2_inicial.xyz

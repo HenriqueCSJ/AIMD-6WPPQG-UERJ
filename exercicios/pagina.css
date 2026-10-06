@@ -41,3 +41,9 @@
 @media(max-width:480px){main{padding:24px 16px}.brand{padding:18px 16px}.brand small{font-size:12px}.route-controls{grid-template-columns:1fr}.route-next{text-align:left}.route-controls a{min-height:58px}.course-nav .links{grid-template-columns:1fr}.course-map>summary small{display:block;margin-left:17px}.section-nav{font-size:13px}.complement-steps{display:block}.complement-steps>span,.complement-steps a{display:block}.complement-steps a{margin-top:6px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 @media print{.route-nav,.section-nav,.complement-steps{display:none}.lesson-content h2{padding-top:0}}
+.input-resources{border:1px solid #ccdce4;border-left:4px solid #22617b;border-radius:8px;padding:12px 16px;margin:18px 0 8px;background:#f4f9fb;overflow-wrap:anywhere}
+.input-resources p{margin:0 0 10px;font-size:.9rem}
+.input-downloads{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center}
+.input-downloads a{font-size:.88rem;line-height:1.45}
+.input-downloads .open-input-lab{background:#19556e;color:#fff;padding:7px 11px;border-radius:6px;text-decoration:none}
+.input-downloads a:focus-visible{outline:3px solid #b86715;outline-offset:3px}

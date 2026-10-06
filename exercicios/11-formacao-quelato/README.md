@@ -1,6 +1,6 @@
 # 04c · en: primeiro N assistido, segundo N livre
 
-[← Percurso](../README.md) · [Aplicativo de análise](../../visualizador/index.html)
+[← Percurso](../README.md) · [Aplicativo de análise](../../visualizador/index.html?exemplo=chelation&aba=trajetoria)
 
 **Núcleo da aula · 20 min compartilhados entre 04c e 04d após o intervalo · interpretar resultados prontos · 97 átomos**
 

@@ -2,6 +2,8 @@
 from pathlib import Path
 import html
 import re
+import json
+import os
 import markdown
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -11,6 +13,39 @@ OPTIONAL = [('13-cell-pressao', 'Cell: parede, pressão e volume'), ('2-solvente
 LESSONS = COURSE + OPTIONAL
 BADGES = ['01', '02a', '02b', '03', '04a', '04b', '04c', '04d', '05'] + ['C'] + ['↗'] * (len(OPTIONAL) - 1)
 CELL_STEPS = [('parede-e-rigidez', 'C1 · Parede e rigidez'), ('pressao-e-volume', 'C2 · Pressão e volume'), ('fixar-ou-remover', 'C3 · Fixar ou remover')]
+
+
+def input_resources(body, folder):
+    """Put each input's own downloads and preloaded laboratory beside its copy block."""
+    registry = ROOT / 'exercicios/arquivos-exercicios.json'
+    if not registry.exists():
+        return body
+    assets = json.loads(registry.read_text(encoding='utf-8'))['inputs']
+    def resource_card(match):
+        relative = match.group(1)
+        key = (folder / relative).resolve().relative_to(ROOT).as_posix()
+        if key not in assets:
+            raise ValueError(f'Input without exercise resources: {key}')
+        item = assets[key]
+        def link(path, label, download=True):
+            href = os.path.relpath(ROOT / path, folder).replace('\\', '/')
+            attr = ' download' if download else ''
+            return f'<a href="{html.escape(href, quote=True)}"{attr}>{html.escape(label)}</a>'
+        links = [link(key, 'Baixar input completo')]
+        for structure in item['structures']:
+            links.append(link(structure, 'Baixar estrutura · ' + Path(structure).name))
+        for dependency in item.get('dependencies', []):
+            links.append(link(dependency, 'Auxiliar obrigatório · ' + Path(dependency).name))
+        if item.get('executionPackage'):
+            links.append(link(item['executionPackage'], 'Pacote para executar'))
+        if item.get('casePackage'):
+            links.append(link(item['casePackage'], 'Resultados completos desta etapa'))
+        links.append(link(item['resultsPackage'], 'Resultados completos deste exercício · todas as variantes'))
+        lab = os.path.relpath(ROOT / 'visualizador/index.html', folder).replace('\\', '/')
+        links.append(f'<a class="open-input-lab" href="{lab}?exemplo={html.escape(item["preset"], quote=True)}&amp;aba=trajetoria">{html.escape(item.get("labLabel", "Abrir no laboratório com tudo carregado"))}</a>')
+        status = html.escape(item['status'])
+        return match.group(0) + f'\n<div class="input-resources" data-input="{html.escape(key, quote=True)}"><p><strong>{html.escape(Path(key).name)}</strong> · {status}</p><div class="input-downloads">' + ''.join(links) + '</div></div>\n'
+    return re.sub(r'<!-- input-source: (.*?) -->', resource_card, body)
 
 
 def course_controls(index, prefix, filename, location):
@@ -89,7 +124,7 @@ def build_page(folder, title, source, index, filename='index.html'):
         resolved = (folder / href).resolve()
         if href.endswith('README.md') and (resolved.parent == EX or resolved.parent.name in dict(LESSONS)):
             href = href[:-len('README.md')] + 'index.html'
-        elif href.endswith('.md') and resolved.parent.name in dict(LESSONS) and resolved.stem in ('apoio', 'historico', 'historico-apoio', 'hidratacao'):
+        elif href.endswith('.md') and resolved.parent.name in dict(LESSONS) and resolved.stem in ('apoio', 'historico', 'historico-apoio', 'hidratacao', 'verificacao-dump'):
             href = href[:-3] + '.html'
         elif href.endswith('roteiro-4h.md') and resolved.parent == EX:
             href = href[:-len('roteiro-4h.md')] + 'roteiro-4h.html'
@@ -101,6 +136,7 @@ def build_page(folder, title, source, index, filename='index.html'):
         return 'href="' + href + tail + '"' + download
 
     body = re.sub(r'href="([^"]+)"', local_link, body)
+    body = input_resources(body, folder)
     if '<div class="toc">' not in body:
         # Handwritten stable anchors take precedence over the heading slug.
         stable_anchors = {heading: anchor for anchor, heading in re.findall(r'<a\b[^>]*\bid="([^"]+)"[^>]*>\s*</a>\s*(?:</p>\s*)?<h2\b[^>]*\bid="([^"]+)"', body)}
@@ -116,7 +152,7 @@ def build_page(folder, title, source, index, filename='index.html'):
     elif slug == '1-agua-dft' and filename == 'index.html':
         body = add_section_return(body, 'alem-das-posicoes', '<nav class="complement-steps" aria-label="Retorno do complemento Dump"><span>Complemento opcional · Dump</span><a href="#conteudo">↑ Voltar à etapa da água e à sequência da aula</a></nav>')
     return f'''<!doctype html>
-<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{html.escape(title)} · AIMD / ORCA</title><link rel="stylesheet" href="{prefix}pagina.css?v=20261006-course3"><script defer src="{prefix}pagina.js?v=20261006-course3"></script></head>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{html.escape(title)} · AIMD / ORCA</title><link rel="stylesheet" href="{prefix}pagina.css?v=20261006-inputs4"><script defer src="{prefix}pagina.js?v=20261006-inputs4"></script></head>
 <body><a class="skip" href="#conteudo">Ir para o conteúdo</a><header class="brand"><a href="{prefix}index.html"><strong>AIMD com ORCA</strong><small>6º Workshop PPGQ–UERJ · 7 de outubro de 2026</small></a><div class="logos"><img src="{repo_prefix}assets/uerj-logo.png" alt="UERJ"><img src="{repo_prefix}assets/ufrrj-logo-compacto.png" alt="UFRRJ"></div></header><div class="layout"><nav class="course-nav" aria-label="Mapa dos exercícios"><details class="course-map" open><summary>Mapa dos exercícios <small>{len(COURSE)} etapas + complementos opcionais</small></summary>{nav}</details></nav><main id="conteudo">{course_controls(index, prefix, filename, 'topo')}<article class="lesson-content">{body}</article>{course_controls(index, prefix, filename, 'fim')}</main></div><footer>Henrique de Castro Silva Junior e Virginia Camila Rufino Ferreira · ORCA 6.1.1 · Materiais e dados locais; links externos levam à documentação oficial.</footer></body></html>'''
 
 
@@ -132,7 +168,7 @@ def main():
         support = EX / slug / 'apoio.md'
         if support.exists():
             render(support.parent, f'Apoio · {title}', support.read_text(encoding='utf-8'), n, 'apoio.html')
-        for historical_name in ('historico', 'historico-apoio'):
+        for historical_name in ('historico', 'historico-apoio', 'verificacao-dump'):
             historical = EX / slug / f'{historical_name}.md'
             if historical.exists():
                 render(historical.parent, f'Histórico · {title}', historical.read_text(encoding='utf-8'), n, f'{historical_name}.html')

@@ -1,6 +1,6 @@
 # 05 · H₅O₂⁺: onde está o próton?
 
-[← Percurso](../README.md) · [Aplicativo de análise](../../visualizador/index.html)
+[← Percurso](../README.md) · [Laboratório com os 10 ps carregados](../../visualizador/index.html?exemplo=proton_shared&aba=trajetoria)
 
 **Núcleo da aula · 20 min · executar ou abrir o resultado pronto · 7 átomos**
 
@@ -12,11 +12,54 @@ No dímero neutro da abertura, as águas mudam a orientação da ligação H e p
 
 O input curto abaixo permite executar os primeiros **2 ps** durante a aula. A referência longa preserva esses mesmos 2 ps e acrescenta **8 ps por restart**, sem reinicializar posições ou velocidades.
 
-## 1. Prepare
+## 1. Otimização: preparar o H₅O₂⁺
 
-[Pacote para executar](aula-proton_shared.zip) · [Baixar input ORCA](inputs/proton_shared.inp) · [Baixar geometria inicial (.xyz)](estruturas/h5o2_otimizado.xyz) (opcional para executar; as coordenadas já estão no input)
+Comece com os sete átomos da geometria inicial e relaxe a estrutura. Salve o input abaixo como **`z00_otimizar.inp`**. Esta etapa é uma otimização de geometria; não produz uma dinâmica molecular.
 
-Extraia o pacote numa pasta nova. Os índices do aplicativo começam em **zero**: **O 0, O 1 e H 2** compõem a unidade O–H–O; H 3–6 são os demais hidrogênios. A carga total é +1 e a multiplicidade é 1.
+[Estrutura inicial](estruturas/h5o2_inicial.xyz) · [Estrutura otimizada](estruturas/h5o2_otimizado.xyz) · [Resultado da otimização](resultados/otimizacao/z00_otimizar.out).
+
+<!-- input-source: inputs/z00_otimizar.inp -->
+```text
+# Dimero protonado isolado; relaxar antes da dinamica.
+! XTB2 Opt TightOpt PAL8
+%maxcore 256
+%geom MaxIter 200 end
+* xyz 1 1
+O -1.225000  0.000000  0.000000
+O  1.225000  0.000000  0.000000
+H  0.080000  0.015000 -0.008000
+H -1.810000  0.765000  0.010000
+H -1.825000 -0.758000 -0.020000
+H  1.820000  0.015000  0.763000
+H  1.813000 -0.010000 -0.770000
+*
+```
+
+## 2. Dinâmica: primeiros 2 ps a 300 K
+
+Use a estrutura otimizada. Salve este input como **`z01_dinamica.inp`** e a geometria como **`h5o2_otimizado.xyz`**, na mesma pasta. O checkpoint produzido, **`z01_dinamica.mdrestart`**, será usado na próxima etapa. São 8000 passos de 0,25 fs, sem parede nem força de transferência.
+
+Os índices do laboratório começam em zero: **O 0, O 1 e H 2** formam a unidade O–H–O; H 3–6 são os outros hidrogênios. A carga total é +1 e a multiplicidade é 1.
+
+<!-- input-source: inputs/z01_dinamica.inp -->
+```text
+# H5O2+ a 300 K: 2 ps, sem solvente, parede ou forca de transferencia.
+! MD XTB2 PAL8
+%maxcore 256
+%md
+  Timestep 0.25_fs
+  Thermostat CSVR 300_K Timecon 100_fs
+  Dump Position Stride 1 Filename "z01_dinamica-traj.xyz"
+  Randomize 93201
+  Initvel 300_K
+  Run 8000
+end
+* xyzfile 1 1 h5o2_otimizado.xyz
+```
+
+### Alternativa com as coordenadas dentro do input
+
+Para copiar tudo em um único arquivo, salve a versão abaixo como **`proton_shared.inp`**. As condições e a geometria são as mesmas; o prefixo de saída muda para `proton_shared`. Se continuar esta execução, ajuste o nome em `Restart` para `proton_shared.mdrestart`. O pacote de continuação fornecido usa o checkpoint da referência `z01_dinamica`.
 
 <!-- input-source: inputs/proton_shared.inp -->
 ```text
@@ -44,24 +87,52 @@ end
 *
 ```
 
-## 2. Execute ou use a referência
+## 3. Continuação: de 2 até 10 ps
+
+Salve o input abaixo como **`z02_02000_10000fs.inp`**. Mantenha junto dele o [checkpoint aos 2 ps](resultados/proton_shared_10ps/etapas/z01_dinamica.mdrestart) e a [geometria aos 2 ps](resultados/proton_shared_10ps/etapas/h5o2_restart_2ps.xyz), ou extraia o [pacote de continuação](aula-proton_restart_10ps.zip). O XYZ sozinho não substitui o checkpoint. Esta etapa acrescenta 8 ps e preserva posições e velocidades; não use `Initvel`.
+
+<!-- input-source: resultados/proton_shared_10ps/etapas/z02_02000_10000fs.inp -->
+```text
+# H5O2+: continue the retained 2 ps state for 8 ps, reaching 10 ps.
+# Same Hamiltonian, integration step, thermostat settings and explicit seed.
+# Positions and velocities come from the checkpoint; do not initialize velocities.
+! MD XTB2 PAL8
+%maxcore 256
+%md
+  Timestep 0.25_fs
+  Thermostat CSVR 300_K Timecon 100_fs
+  Dump Position Stride 1 Filename "z02_02000_10000fs-traj.xyz"
+  Randomize 93201
+  Restart "z01_dinamica.mdrestart"
+  Run 32000
+end
+* xyzfile 1 1 h5o2_restart_2ps.xyz
+```
+
+## 4. Executar e abrir os resultados
 
 **Ubuntu / WSL2:**
 
 Entre na **pasta extraída do exercício**, onde estão o input e seus arquivos auxiliares. Com a [instalação concluída](../../tutoriais/01-wsl2-ubuntu-orca.md), execute:
 
 ```bash
-orca proton_shared.inp > proton_shared.out &
+orca z00_otimizar.inp > z00_otimizar.out
+orca z01_dinamica.inp > z01_dinamica.out
+orca z02_02000_10000fs.inp > z02_02000_10000fs.out
 ```
 
-Espere o cálculo encerrar antes de iniciar outro. Os resultados ficam nessa mesma pasta; veja [como acompanhar a execução](../README.md#como-executar).
+Execute **uma linha por vez**, aguardando o cálculo terminar. Depois da otimização, salve a geometria otimizada `z00_otimizar.xyz` como `h5o2_otimizado.xyz`, ou use a estrutura otimizada fornecida. Antes da terceira linha, deixe o checkpoint e `h5o2_restart_2ps.xyz` na pasta, como explicado na etapa 3. Os resultados ficam nessa mesma pasta; veja [como acompanhar a execução](../README.md#como-executar).
+
+Se escolheu a alternativa com coordenadas dentro do input, execute `orca proton_shared.inp > proton_shared.out` no lugar da segunda linha e use seu checkpoint `proton_shared.mdrestart` no `Restart` da terceira etapa.
 
 <details markdown="1"><summary>Windows nativo</summary>
 
 Abra o **Prompt de Comando (`cmd`) na pasta extraída**, com ORCA e MS-MPI já [configurados no Path](../../tutoriais/02-windows-orca-msmpi.md):
 
 ```bat
-orca proton_shared.inp > proton_shared.out
+orca z00_otimizar.inp > z00_otimizar.out
+orca z01_dinamica.inp > z01_dinamica.out
+orca z02_02000_10000fs.inp > z02_02000_10000fs.out
 ```
 
 Espere o prompt voltar antes de iniciar outro cálculo. Os arquivos de resultado ficam nessa mesma pasta.
@@ -72,7 +143,7 @@ Execute um cálculo por vez. A referência completou **2 ps em 123,847 s**; a ot
 
 [Observar 10 ps no aplicativo](../../visualizador/index.html?exemplo=proton_shared&aba=trajetoria) · [Baixar os 10 ps completos](resultado-proton_shared_10ps.zip) · [Referência original de 2 ps](../../visualizador/index.html?exemplo=proton_shared_short&aba=trajetoria) · [Baixar os 2 ps originais](resultado-proton_shared.zip)
 
-## 3. Meça e interprete
+## 5. Meça e interprete
 
 1. Em **Trajetória**, clique em **Destacar próton H 2**. Ele fica magenta e maior; o restante fica em cinza. O destaque acompanha o mesmo H durante a animação. Em **Destacar átomos/moléculas**, você pode mudar a cor, o tamanho e destacar também O 0 e O 1. Observe o H compartilhado sem usar a velocidade da animação como escala de tempo físico.
 2. Em **Geometria**, acompanhe **O 0–H 2** e **O 1–H 2**. Defina δ = r(O 0–H 2) − r(O 1–H 2). δ negativo indica H 2 mais perto de O 0; positivo, mais perto de O 1.
@@ -127,7 +198,7 @@ A referência longa do aplicativo contém todos os **40001 quadros**, espaçados
 - [Saída ORCA](resultados/proton_shared/proton_shared.out) · [Energias](resultados/proton_shared/proton_shared-md-ener.csv) · [Trajetória completa](resultados/proton_shared/proton_shared-traj.xyz).
 - [Input original da referência](resultados/proton_shared/proton_shared.inp) · [Registro de execução](resultados/proton_shared/execucao.json).
 
-**Input completo · `proton_shared.inp` — copie e salve com esse nome.**
+**Input original executado da referência de 2 ps:** o prefixo de Dump é `z01_dinamica`; preserve esse nome ao reproduzir os arquivos originais.
 
 <!-- input-source: resultados/proton_shared/proton_shared.inp -->
 ```text
@@ -145,72 +216,7 @@ end
 * xyzfile 1 1 h5o2_otimizado.xyz
 ```
 
-- [Baixar input ORCA](inputs/z00_otimizar.inp) · [Baixar geometria inicial (.xyz)](estruturas/h5o2_inicial.xyz) (opcional para executar; as coordenadas já estão no input) · [Saída da otimização](resultados/otimizacao/z00_otimizar.out).
-
-**Input completo · `z00_otimizar.inp` — copie e salve com esse nome.**
-
-<!-- input-source: inputs/z00_otimizar.inp -->
-```text
-# Dimero protonado isolado; relaxar antes da dinamica.
-! XTB2 Opt TightOpt PAL8
-%maxcore 256
-%geom MaxIter 200 end
-* xyz 1 1
-O -1.225000  0.000000  0.000000
-O  1.225000  0.000000  0.000000
-H  0.080000  0.015000 -0.008000
-H -1.810000  0.765000  0.010000
-H -1.825000 -0.758000 -0.020000
-H  1.820000  0.015000  0.763000
-H  1.813000 -0.010000 -0.770000
-*
-```
 
 - [Manual ORCA 6.1: dinâmica molecular, timestep e termostatos](https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html).
 
 **Entrega da dupla:** anote um cruzamento com retorno e explique como a conclusão muda ao exigir persistência.
-
-## Inputs das variantes e preparações
-
-- **z01_dinamica — etapa após a otimização; usa a geometria otimizada:** [Baixar input ORCA](inputs/z01_dinamica.inp) · [Baixar geometria inicial (.xyz)](estruturas/h5o2_otimizado.xyz) (obrigatório; manter na mesma pasta do input).
-
-**Input completo · `z01_dinamica.inp` — copie e salve com esse nome.**
-
-<!-- input-source: inputs/z01_dinamica.inp -->
-```text
-# H5O2+ a 300 K: 2 ps, sem solvente, parede ou forca de transferencia.
-! MD XTB2 PAL8
-%maxcore 256
-%md
-  Timestep 0.25_fs
-  Thermostat CSVR 300_K Timecon 100_fs
-  Dump Position Stride 1 Filename "z01_dinamica-traj.xyz"
-  Randomize 93201
-  Initvel 300_K
-  Run 8000
-end
-* xyzfile 1 1 h5o2_otimizado.xyz
-```
-
-
-**Continuação de 2 até 10 ps:** [Baixar input ORCA](resultados/proton_shared_10ps/etapas/z02_02000_10000fs.inp) · [Baixar geometria inicial (.xyz)](resultados/proton_shared_10ps/etapas/h5o2_restart_2ps.xyz) (obrigatório; manter na mesma pasta do input) · [Baixar checkpoint obrigatório](resultados/proton_shared_10ps/etapas/z01_dinamica.mdrestart) (fornece o estado de continuação; manter junto do input). O XYZ isolado não substitui o checkpoint.
-
-**Input completo · `z02_02000_10000fs.inp` — copie e salve com esse nome.**
-
-<!-- input-source: resultados/proton_shared_10ps/etapas/z02_02000_10000fs.inp -->
-```text
-# H5O2+: continue the retained 2 ps state for 8 ps, reaching 10 ps.
-# Same Hamiltonian, integration step, thermostat settings and explicit seed.
-# Positions and velocities come from the checkpoint; do not initialize velocities.
-! MD XTB2 PAL8
-%maxcore 256
-%md
-  Timestep 0.25_fs
-  Thermostat CSVR 300_K Timecon 100_fs
-  Dump Position Stride 1 Filename "z02_02000_10000fs-traj.xyz"
-  Randomize 93201
-  Restart "z01_dinamica.mdrestart"
-  Run 32000
-end
-* xyzfile 1 1 h5o2_restart_2ps.xyz
-```

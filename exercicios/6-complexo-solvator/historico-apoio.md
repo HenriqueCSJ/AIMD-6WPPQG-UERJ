@@ -2,7 +2,7 @@
 
 # Apoio · Construir o ambiente com SOLVATOR
 
-[← Voltar à atividade](README.md) · [Abrir o aplicativo](../../visualizador/index.html)
+[← Voltar à atividade](README.md) · [Abrir o aplicativo](../../visualizador/index.html?exemplo=solvator&aba=trajetoria)
 
 A montagem com SOLVATOR acrescenta águas ao redor de um complexo preparado. Consulte aqui a otimização do soluto, o relaxamento do agregado e as estruturas que alimentam a dinâmica; montagem e trajetória respondem a perguntas diferentes.
 
@@ -40,7 +40,7 @@ Tempo de execução: **64.41 s**, com PAL8.
 
 Estes cálculos já foram feitos pelos ministrantes. Não são novas execuções obrigatórias na aula. A otimização fornece uma geometria convergida no critério escolhido; sem análise vibracional, não afirmamos que ela seja um mínimo confirmado por frequências.
 
-<details markdown="1"><summary>Input e resultados: preparar_complexo</summary>
+<details markdown="1" open><summary>Input e resultados: preparar_complexo</summary>
 
 [Baixar input ORCA](inputs/preparar_complexo.inp) · [Baixar geometria inicial (.xyz)](estruturas/zn_en_inicial.xyz) (obrigatório; manter na mesma pasta do input)
 
@@ -68,7 +68,7 @@ Tempo de execução: **3.89 s**, com PAL8. O critério de convergência da otimi
 
 </details>
 
-<details markdown="1"><summary>Input e resultados: relaxar_solvato</summary>
+<details markdown="1" open><summary>Input e resultados: relaxar_solvato</summary>
 
 [Baixar input ORCA](inputs/relaxar_solvato.inp) · [Baixar geometria inicial (.xyz)](estruturas/zn_solvator.xyz) (obrigatório; manter na mesma pasta do input)
 

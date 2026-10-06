@@ -1,0 +1,20 @@
+! MD XTB2 PAL8
+%maxcore 256
+%md
+ Timestep 0.5_fs
+ Randomize 42
+ Initvel 300_K
+ Thermostat CSVR 300_K Timecon 100_fs
+ Cell Sphere 0, 0, 0, 3_A Spring 10 Elastic 5_fs, 0.001 Pressure 1000
+ Dump Position Stride 1 Filename "probe_properties_simple-traj.xyz"
+ Dump Velocity Stride 1 Filename "probe_properties_simple-vel.xyz"
+ Dump Force Stride 1 Filename "probe_properties_simple-force.xyz"
+ Dump Properties
+ Run 4
+ Screendump
+end
+* xyz 0 1
+O -0.00000000000561 0.00000000000000 -0.07350969363937
+H 0.00000000000281 0.76333729916205 0.51075484681968
+H 0.00000000000281 -0.76333729916205 0.51075484681968
+*

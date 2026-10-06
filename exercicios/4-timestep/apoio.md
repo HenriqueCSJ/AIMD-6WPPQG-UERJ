@@ -1,6 +1,6 @@
 # Apoio · Testar um passo grande demais
 
-[← Voltar à atividade](README.md) · [Abrir o aplicativo](../../visualizador/index.html)
+[← Voltar à atividade](README.md) · [Abrir o aplicativo](../../visualizador/index.html?exemplo=timestep&aba=trajetoria)
 
 Compare os controles de 0,25 e 2 fs pela mesma duração física, 500 fs. A energia revela erros de integração mesmo quando o programa chega ao fim; o caso de 2,5 fs da atividade principal permite acompanhar a degradação até a falha.
 
@@ -8,7 +8,7 @@ Compare os controles de 0,25 e 2 fs pela mesma duração física, 500 fs. A ener
 
 O passo precisa resolver os movimentos mais rápidos, especialmente ligações envolvendo H. **Oscilação limitada e deriva sistemática são diferentes.** Um único valor final próximo do inicial pode esconder oscilações grandes; examine a série inteira. O CSV arredonda as energias, de modo que diferenças na última casa decimal exigem cuidado. Não usar um termostato para esconder a instabilidade.
 
-Abra o [Laboratório de trajetórias](../../visualizador/index.html) e carregue o `*-md-ener.csv`, o `.out` e o `*-traj.xyz` deste cálculo. O aplicativo prepara os gráficos de energia/temperatura e a animação. Na aba **Geometria**, escolha dois átomos; a medida é calculada do XYZ. O CSV original usa fs, Hartree e K; a conversão de unidades fica explícita na tela.
+Abra o [Laboratório de trajetórias](../../visualizador/index.html?exemplo=timestep&aba=trajetoria) e carregue o `*-md-ener.csv`, o `.out` e o `*-traj.xyz` deste cálculo. O aplicativo prepara os gráficos de energia/temperatura e a animação. Na aba **Geometria**, escolha dois átomos; a medida é calculada do XYZ. O CSV original usa fs, Hartree e K; a conversão de unidades fica explícita na tela.
 
 **Controle reutilizado:** [Baixar input ORCA](../3-xtb2-etanol/inputs/etanol_nve.inp) · [Baixar geometria inicial (.xyz)](../3-xtb2-etanol/estruturas/etanol.xyz) (opcional para executar; as coordenadas já estão no input), [CSV NVE](../3-xtb2-etanol/resultados/etanol_nve/etanol_nve-md-ener.csv) e [trajetória NVE](../3-xtb2-etanol/resultados/etanol_nve/etanol_nve-traj.xyz). A geometria inicial é idêntica à deste exercício.
 

@@ -1,6 +1,6 @@
 # 04b · Hidratação sem en e rigidez da parede
 
-[← Percurso](../README.md) · [Aplicativo de análise](../../visualizador/index.html)
+[← Percurso](../README.md) · [Aplicativo de análise](../../visualizador/index.html?exemplo=zn_hydration&aba=trajetoria)
 
 **Zn²⁺ + 20 águas · 61 átomos · carga +2 · singlete · sem en**
 
@@ -155,7 +155,7 @@ Espere o prompt voltar antes de iniciar outro cálculo.
 
 ## 3. Observe a hidratação e a atuação da parede
 
-[Abrir 04b no laboratório](../../visualizador/index.html?exemplo=zn_hydration&aba=trajetoria) · [Carregar meus arquivos](../../visualizador/index.html)
+[Abrir 04b no laboratório](../../visualizador/index.html?exemplo=zn_hydration&aba=trajetoria) · [Carregar meus arquivos](../../visualizador/index.html?exemplo=zn_hydration&aba=trajetoria)
 
 Carregue juntos **`.out`**, **`-md-ener.csv`** e **`-traj.xyz`** de cada cálculo. Use as caixas para escolher até quatro simulações e o campo **Simulação** para alternar a trajetória.
 

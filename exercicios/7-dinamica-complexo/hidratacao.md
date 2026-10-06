@@ -25,7 +25,7 @@ Essa é uma montagem deliberadamente fora do equilíbrio. As águas já interage
 
 **O que se observa nesta referência:** o primeiro O cruza 2,6 Å em 36,5 fs. Aos 100 fs, os O 10, 13, 19, 22, 25 e 28 formam a primeira camada geométrica. A evolução dura **250 fs = 0,25 ps = 2,5 × 10⁻¹³ s**. Não use esses tempos como constantes cinéticas de hidratação em solução: a configuração inicial foi construída e o aglomerado é pequeno.
 
-<details markdown="1"><summary>Input completo e comentado · executar em cerca de 40 s na máquina de referência</summary>
+<details markdown="1" open><summary>Input completo e comentado · executar em cerca de 40 s na máquina de referência</summary>
 
 [Baixar input ORCA](inputs/controle_dt025_31A.inp) · [Baixar geometria inicial (.xyz)](estruturas/zn_aguas_en_31A.xyz) (obrigatório; manter na mesma pasta do input)
 
@@ -75,7 +75,7 @@ O caso longo começa da mesma geometria e usa Δt = 0,25 fs. O banho permanece a
 
 Ative também **Ligações H**. Distinga aproximação à camada de águas, contatos com o solvente e coordenação direta ao metal. A ausência de quelação em uma trajetória curta não demonstra que o complexo seja desfavorável: encontro, orientação e substituição têm de ser amostrados.
 
-<details markdown="1"><summary>Input de 5 ps · duas etapas no mesmo cálculo</summary>
+<details markdown="1" open><summary>Input de 5 ps · duas etapas no mesmo cálculo</summary>
 
 [Baixar input ORCA](inputs/hidratacao_associacao_31A.inp) · [Baixar geometria inicial (.xyz)](estruturas/zn_aguas_en_31A.xyz) (obrigatório; manter na mesma pasta do input)
 

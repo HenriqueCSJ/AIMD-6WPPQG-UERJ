@@ -1,6 +1,6 @@
 # 02b · A instabilidade aparece antes da explosão
 
-[← Percurso](../README.md) · [Laboratório de trajetórias](../../visualizador/index.html)
+[← Percurso](../README.md) · [Laboratório de trajetórias](../../visualizador/index.html?exemplo=timestep&aba=trajetoria)
 
 **Parte do bloco 02 (35 min com o controle NVE) · etanol · XTB2 · NVE**
 

@@ -1,14 +1,14 @@
 <!doctype html>
-<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Histórico · Zn²⁺: hidratação e paredes · AIMD / ORCA</title><link rel="stylesheet" href="../pagina.css?v=20261006-course3"><script defer src="../pagina.js?v=20261006-course3"></script></head>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Histórico · Zn²⁺: hidratação e paredes · AIMD / ORCA</title><link rel="stylesheet" href="../pagina.css?v=20261006-inputs4"><script defer src="../pagina.js?v=20261006-inputs4"></script></head>
 <body><a class="skip" href="#conteudo">Ir para o conteúdo</a><header class="brand"><a href="../index.html"><strong>AIMD com ORCA</strong><small>6º Workshop PPGQ–UERJ · 7 de outubro de 2026</small></a><div class="logos"><img src="../../assets/uerj-logo.png" alt="UERJ"><img src="../../assets/ufrrj-logo-compacto.png" alt="UFRRJ"></div></header><div class="layout"><nav class="course-nav" aria-label="Mapa dos exercícios"><details class="course-map" open><summary>Mapa dos exercícios <small>9 etapas + complementos opcionais</small></summary><a class="home" href="../index.html">Visão geral do percurso</a><a class="parameter-guide" href="../../guia-md/index.html" target="_blank" rel="noopener" aria-label="Guia de parâmetros %md (abre em outra aba)">Guia de parâmetros %md ↗</a><h3 class="nav-group">Durante a aula · siga nesta ordem</h3><ol class="links"><li><a href="../1-agua-dft/index.html"><span class="num">01</span><span>Água: molécula e dímero</span></a></li><li><a href="../3-xtb2-etanol/index.html"><span class="num">02a</span><span>Etanol: controle</span></a></li><li><a href="../4-timestep/index.html"><span class="num">02b</span><span>Timestep e correção</span></a></li><li><a href="../5-termostato/index.html"><span class="num">03</span><span>Aquecer e resfriar</span></a></li><li><a href="../6-complexo-solvator/index.html"><span class="num">04a</span><span>Zn²⁺ + 20 águas: SOLVATOR</span></a></li><li><a href="../7-dinamica-complexo/index.html"><span class="num">04b</span><span>Zn²⁺: hidratação e paredes</span></a></li><li><a href="../11-formacao-quelato/index.html"><span class="num">04c</span><span>en: primeiro N assistido, segundo N livre</span></a></li><li><a href="../14-zn-en-pressao/index.html"><span class="num">04d</span><span>Zn–en sem assistência: 1 / 1000 / 4000 bar</span></a></li><li><a href="../10-proton-compartilhado/index.html"><span class="num">05</span><span>Um próton entre duas águas</span></a></li></ol><h3 class="nav-group">Complementos opcionais e referências</h3><p class="nav-note">A sequência da aula segue diretamente entre as 9 etapas acima.</p><ol class="links"><li><a href="../13-cell-pressao/index.html"><span class="num">C</span><span>Cell: parede, pressão e volume</span></a></li><li><a href="../2-solvente-implicito/index.html"><span class="num">↗</span><span>DFT e solvente contínuo</span></a></li><li><a href="../12-gota-protonada/index.html"><span class="num">↗</span><span>Gota protonada: 300–600 K</span></a></li><li><a href="../8-agua-no-fulereno/index.html"><span class="num">↗</span><span>Água dentro de C₆₀</span></a></li><li><a href="../9-aluminio-amonia/index.html"><span class="num">↗</span><span>Al³⁺/amônia: referência</span></a></li></ol></details></nav><main id="conteudo"><nav class="route-nav route-topo" aria-label="Navegação do percurso — topo"><div class="route-status">Apoio à atividade · Zn²⁺: hidratação e paredes</div><div class="route-controls"><a class="route-prev" href="index.html">← Voltar à atividade</a><a class="route-next" href="../index.html">Mapa do percurso</a></div><a class="route-map" href="../index.html">Mapa completo do percurso</a></nav><article class="lesson-content"><blockquote>
 <p><strong>Apoio histórico do complexo pré-formado (43 átomos).</strong> Os números e índices abaixo pertencem exclusivamente a esse sistema. <a href="index.html">Voltar à atividade atual</a>.</p>
 </blockquote>
-<h1 id="apoio-acompanhar-o-complexo-e-o-confinamento">Apoio · Acompanhar o complexo e o confinamento</h1><nav class="section-nav" aria-label="Seções desta página"><strong>Nesta página</strong><ul><li><a href="#entenda-as-escolhas">Entenda as escolhas</a></li><li><a href="#resultados-de-referencia">Resultados de referência</a></li><li><a href="#preparacao-termica-fornecida">Preparação térmica fornecida</a></li><li><a href="#para-discutir">Para discutir</a></li><li><a href="#manual-do-orca">Manual do ORCA</a></li></ul></nav>
-<p><a href="index.html">← Voltar à atividade</a> · <a href="../../visualizador/index.html">Abrir o aplicativo</a></p>
+<h1 id="apoio-acompanhar-o-complexo-e-o-confinamento">Apoio · Acompanhar o complexo e o confinamento</h1><nav class="section-nav" aria-label="Seções desta página"><strong>Nesta página</strong><ul><li><a href="#entenda-as-escolhas">Entenda as escolhas</a></li><li><a href="#resultados-de-referencia">Resultados de referência</a></li><li><a href="#preparacao-termica-fornecida">Preparação térmica fornecida</a></li><li><a href="#para-discutir">Para discutir</a></li><li><a href="#manual-do-orca">Manual do ORCA</a></li><li><a href="#preparacao-termica-original-100-fs-com-12-colvars">Preparação térmica original, 100 fs, com 12 Colvars</a></li><li><a href="#controle-curto-original-com-parede-e-12-colvars">Controle curto original com parede e 12 Colvars</a></li><li><a href="#controle-curto-original-sem-parede-e-12-colvars">Controle curto original sem parede e 12 Colvars</a></li></ul></nav>
+<p><a href="index.html">← Voltar à atividade</a> · <a href="../../visualizador/index.html?exemplo=complex&amp;aba=trajetoria">Abrir o aplicativo</a></p>
 <p>Estes controles de 0,5 ps mostram como ler o relógio de um restart e medir coordenação e afastamento. A referência principal de 2 ps também muda a força da parede: <code>Spring 10.0</code> nos controles curtos e <code>Spring 50.0</code> no caso longo, ambos com raio de 6 Å. Portanto, diferenças entre essas referências não isolam o efeito da duração. Para avaliar somente a janela de observação, compare os primeiros 500 fs com os 2 ps completos da mesma trajetória longa (relógio de 100 a 600 fs versus 100 a 2100 fs).</p>
 <h2 id="entenda-as-escolhas">Entenda as escolhas</h2>
 <p>A contagem de átomos no ORCA começa em <strong>zero</strong>. Aqui Zn é o átomo 0; os N do ligante são 1 e 4. As primeiras águas têm O em 13, 16, 19 e 22; confira a lista completa no arquivo de índices. A parede de MD é uma força repulsiva suave fora da região definida por <code>Walls</code> (a grafia <code>Cell</code> também aparece nos inputs dessas referências), não uma caixa periódica. Se nenhum átomo atingir a fronteira, não haverá evidência de retenção pelo confinamento.</p>
-<p>Abra o <a href="../../visualizador/index.html">Laboratório de trajetórias</a> e carregue o <code>*-md-ener.csv</code>, o <code>.out</code> e o <code>*-traj.xyz</code> deste cálculo. O aplicativo prepara os gráficos de energia/temperatura e a animação. Na aba <strong>Geometria</strong>, escolha dois átomos; a medida é calculada do XYZ. O CSV original usa fs, Hartree e K; a conversão de unidades fica explícita na tela.</p>
+<p>Abra o <a href="../../visualizador/index.html?exemplo=complex&amp;aba=trajetoria">Laboratório de trajetórias</a> e carregue o <code>*-md-ener.csv</code>, o <code>.out</code> e o <code>*-traj.xyz</code> deste cálculo. O aplicativo prepara os gráficos de energia/temperatura e a animação. Na aba <strong>Geometria</strong>, escolha dois átomos; a medida é calculada do XYZ. O CSV original usa fs, Hartree e K; a conversão de unidades fica explícita na tela.</p>
 <p><a href="estruturas/indices-atomos.txt">Índices dos átomos</a> · <a href="../6-complexo-solvator/resultados/relaxar_solvato/relaxar_solvato.xyz" download="relaxar_solvato.xyz">Geometria relaxada antes da preparação térmica</a>.</p>
 <p><strong>Relógio da simulação:</strong> a preparação fornecida cobre 0–100 fs. <code>Restart</code> conserva esse relógio: os novos 1.000 passos vão de <strong>100 a 600 fs</strong>, adicionando <strong>500 fs = 0,5 ps = 5 × 10⁻¹³ s</strong>. O CSV contém 1.001 registros, incluindo o estado de reinício; o XYZ desta etapa tem 1.000 quadros, de 100,5 a 600 fs. Compare arquivos pelo tempo, não pelo número da linha.</p>
 <p><strong>Arquivos de distâncias:</strong> os CSVs de Colvars abaixo pertencem às referências prontas. Os inputs didáticos curtos de preparação e dos controles com/sem parede não incluem essas medições; neles, use a aba <strong>Geometria</strong> para medir diretamente no XYZ. Para gerar também os CSVs, use o input original da referência (<a href="resultados/preparacao_termica/preparacao_termica.inp" download="preparacao_termica.inp">preparação</a>, <a href="resultados/zn_parede/zn_parede.inp" download="zn_parede.inp">com parede</a>, <a href="resultados/zn_sem_parede/zn_sem_parede.inp" download="zn_sem_parede.inp">sem parede</a>), mantendo os arquivos auxiliares indicados para cada execução na mesma pasta.</p>
@@ -45,10 +45,12 @@
 <h2 id="preparacao-termica-fornecida">Preparação térmica fornecida</h2>
 <p>Uma trajetória de <strong>100 fs = 0,1 ps = 10⁻¹³ s</strong> prepara o estado inicial comum. Não é uma execução adicional obrigatória nem uma demonstração de equilíbrio convergido.</p>
 <p><a href="inputs/preparacao_termica.inp" download="preparacao_termica.inp">Baixar input ORCA</a> · <a href="estruturas/zn_solvato.xyz" download="zn_solvato.xyz">Baixar geometria inicial (.xyz)</a> (obrigatório; manter na mesma pasta do input) · <a href="estruturas/preparacao_termica.mdrestart" download="preparacao_termica.mdrestart">Baixar reinício usado nos dois controles</a></p>
-<details>
+<details open>
 <summary>Ver input comentado da preparação</summary>
 <p><a href="resultados/preparacao_termica/preparacao_termica.inp" download="preparacao_termica.inp">Input original usado na referência</a>.</p>
 <!-- input-source: inputs/preparacao_termica.inp -->
+<div class="input-resources" data-input="exercicios/7-dinamica-complexo/inputs/preparacao_termica.inp"><p><strong>preparacao_termica.inp</strong> · Dinâmica executada; resultados disponíveis.</p><div class="input-downloads"><a href="inputs/preparacao_termica.inp" download>Baixar input completo</a><a href="estruturas/zn_solvato.xyz" download>Baixar estrutura · zn_solvato.xyz</a><a href="resultados-completos.zip" download>Resultados completos deste exercício · todas as variantes</a><a class="open-input-lab" href="../../visualizador/index.html?exemplo=arquivo_preparacao_termica&amp;aba=trajetoria">Abrir no laboratório com tudo carregado</a></div></div>
+
 <pre><code class="language-text"># Apoio: prepara o estado comum para os dois controles.
 ! MD XTB2 ALPB(water) PAL8
 %maxcore 256
@@ -101,4 +103,205 @@ end
 <li><a href="https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html#restart">Restart</a></li>
 <li><a href="https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html#thermostat">Termostatos</a></li>
 </ul>
-<p><strong>Antes de avançar:</strong> registre o input usado, a duração física, uma observação e uma limitação da interpretação.</p></article><nav class="route-nav route-fim" aria-label="Navegação do percurso — fim"><div class="route-status">Apoio à atividade · Zn²⁺: hidratação e paredes</div><div class="route-controls"><a class="route-prev" href="index.html">← Voltar à atividade</a><a class="route-next" href="../index.html">Mapa do percurso</a></div><a class="route-map" href="../index.html">Mapa completo do percurso</a></nav></main></div><footer>Henrique de Castro Silva Junior e Virginia Camila Rufino Ferreira · ORCA 6.1.1 · Materiais e dados locais; links externos levam à documentação oficial.</footer></body></html>
+<p><strong>Antes de avançar:</strong> registre o input usado, a duração física, uma observação e uma limitação da interpretação.</p>
+<h2 id="preparacao-termica-original-100-fs-com-12-colvars">Preparação térmica original, 100 fs, com 12 Colvars</h2>
+<!-- input-source: resultados/preparacao_termica/preparacao_termica.inp -->
+<div class="input-resources" data-input="exercicios/7-dinamica-complexo/resultados/preparacao_termica/preparacao_termica.inp"><p><strong>preparacao_termica.inp</strong> · Dinâmica executada; resultados disponíveis.</p><div class="input-downloads"><a href="resultados/preparacao_termica/preparacao_termica.inp" download>Baixar input completo</a><a href="resultados/preparacao_termica/zn_solvato.xyz" download>Baixar estrutura · zn_solvato.xyz</a><a href="resultados-completos.zip" download>Resultados completos deste exercício · todas as variantes</a><a class="open-input-lab" href="../../visualizador/index.html?exemplo=arquivo_preparacao_termica&amp;aba=trajetoria">Abrir no laboratório com tudo carregado</a></div></div>
+
+
+<pre><code class="language-text"># Minicurso AIMD / ORCA 6.1.1 - preparacao_termica
+# Estas linhas de comentario explicam as escolhas e nao alteram o calculo.
+# Execute um caso por vez; mantenha o arquivo XYZ na pasta de execucao.
+
+# Integra o movimento dos nucleos. PAL8 solicita oito recursos. XTB2 chama
+# GFN2-xTB externo; PAL8 tambem define suas threads. ALPB(water) representa o
+# ambiente continuo.
+! MD XTB2 ALPB(water) PAL8
+
+# Memoria em MB por processo. 256 x 8 = 2048 MB de orcamento, alem de memoria
+# adicional.
+%maxcore 256
+
+# Parametros da dinamica: as unidades sao explicitas em cada linha.
+%md
+  # Passo de integracao em femtossegundos. 1 fs = 1e-15 s.
+  Timestep 0.5_fs
+  # Semente fixa para repetir a preparacao aleatoria no mesmo ambiente.
+  Randomize 42
+  # Inicializa velocidades na temperatura indicada; nao substitui um
+  # termostato.
+  Initvel 300_K
+  # Banho CSVR a 300 K; Timecon 100 fs regula o acoplamento. A temperatura
+  # pode flutuar.
+  Thermostat CSVR 300_K Timecon 100_fs
+  # Parede harmonica esferica; centro e raio em angstrom. Spring em kJ mol-1
+  # A-2; nao e caixa periodica.
+  Cell Sphere 0, 0, 0, 6.0_A Spring 10.0
+  # Distancia Zn(0)-N(1), sem impor restricao. Os indices comecam em zero.
+  Manage_Colvar Define 1 Distance Atom 0 Atom 1
+  # Distancia Zn(0)-N(4), sem impor restricao. Os indices comecam em zero.
+  Manage_Colvar Define 2 Distance Atom 0 Atom 4
+  # Distancia Zn(0)-O(13), sem impor restricao. Os indices comecam em zero.
+  Manage_Colvar Define 3 Distance Atom 0 Atom 13
+  # Distancia Zn(0)-O(16), sem impor restricao. Os indices comecam em zero.
+  Manage_Colvar Define 4 Distance Atom 0 Atom 16
+  # Distancia Zn(0)-O(19), sem impor restricao. Os indices comecam em zero.
+  Manage_Colvar Define 5 Distance Atom 0 Atom 19
+  # Distancia Zn(0)-O(22), sem impor restricao. Os indices comecam em zero.
+  Manage_Colvar Define 6 Distance Atom 0 Atom 22
+  # Distancia Zn(0)-O(25), sem impor restricao. Os indices comecam em zero.
+  Manage_Colvar Define 7 Distance Atom 0 Atom 25
+  # Distancia Zn(0)-O(28), sem impor restricao. Os indices comecam em zero.
+  Manage_Colvar Define 8 Distance Atom 0 Atom 28
+  # Distancia Zn(0)-O(31), sem impor restricao. Os indices comecam em zero.
+  Manage_Colvar Define 9 Distance Atom 0 Atom 31
+  # Distancia Zn(0)-O(34), sem impor restricao. Os indices comecam em zero.
+  Manage_Colvar Define 10 Distance Atom 0 Atom 34
+  # Distancia Zn(0)-O(37), sem impor restricao. Os indices comecam em zero.
+  Manage_Colvar Define 11 Distance Atom 0 Atom 37
+  # Distancia Zn(0)-O(40), sem impor restricao. Os indices comecam em zero.
+  Manage_Colvar Define 12 Distance Atom 0 Atom 40
+  # Grava um quadro XYZ por passo. O nome identifica esta trajetoria.
+  Dump Position Stride 1 Filename &quot;preparacao_termica-traj.xyz&quot;
+  # Numero de passos desta etapa. Duracao fisica = numero de passos x
+  # timestep.
+  Run 200
+end
+
+# Le o XYZ: carga total 2, multiplicidade 1. O nome do arquivo deve coincidir
+# exatamente.
+* xyzfile 2 1 zn_solvato.xyz
+</code></pre>
+<h2 id="controle-curto-original-com-parede-e-12-colvars">Controle curto original com parede e 12 Colvars</h2>
+<!-- input-source: resultados/zn_parede/zn_parede.inp -->
+<div class="input-resources" data-input="exercicios/7-dinamica-complexo/resultados/zn_parede/zn_parede.inp"><p><strong>zn_parede.inp</strong> · Dinâmica executada; resultados disponíveis.</p><div class="input-downloads"><a href="resultados/zn_parede/zn_parede.inp" download>Baixar input completo</a><a href="resultados/zn_parede/zn_solvato.xyz" download>Baixar estrutura · zn_solvato.xyz</a><a href="estruturas/preparacao_termica.mdrestart" download>Auxiliar obrigatório · preparacao_termica.mdrestart</a><a href="resultados-completos.zip" download>Resultados completos deste exercício · todas as variantes</a><a class="open-input-lab" href="../../visualizador/index.html?exemplo=arquivo_zn_parede&amp;aba=trajetoria">Abrir no laboratório com tudo carregado</a></div></div>
+
+
+<pre><code class="language-text"># Minicurso AIMD / ORCA 6.1.1 - zn_parede
+# Estas linhas de comentario explicam as escolhas e nao alteram o calculo.
+# Execute um caso por vez; mantenha o arquivo XYZ na pasta de execucao.
+
+# Integra o movimento dos nucleos. PAL8 solicita oito recursos. XTB2 chama
+# GFN2-xTB externo; PAL8 tambem define suas threads. ALPB(water) representa o
+# ambiente continuo.
+! MD XTB2 ALPB(water) PAL8
+
+# Memoria em MB por processo. 256 x 8 = 2048 MB de orcamento, alem de memoria
+# adicional.
+%maxcore 256
+
+# Parametros da dinamica: as unidades sao explicitas em cada linha.
+%md
+  # Passo de integracao em femtossegundos. 1 fs = 1e-15 s.
+  Timestep 0.5_fs
+  # Semente fixa para repetir a preparacao aleatoria no mesmo ambiente.
+  Randomize 42
+  # Banho CSVR a 300 K; Timecon 100 fs regula o acoplamento. A temperatura
+  # pode flutuar.
+  Thermostat CSVR 300_K Timecon 100_fs
+  # Parede harmonica esferica; centro e raio em angstrom. Spring em kJ mol-1
+  # A-2; nao e caixa periodica.
+  Cell Sphere 0, 0, 0, 6.0_A Spring 10.0
+  # Distancia Zn(0)-N(1), sem impor restricao. Os indices comecam em zero.
+  Manage_Colvar Define 1 Distance Atom 0 Atom 1
+  # Distancia Zn(0)-N(4), sem impor restricao. Os indices comecam em zero.
+  Manage_Colvar Define 2 Distance Atom 0 Atom 4
+  # Distancia Zn(0)-O(13), sem impor restricao. Os indices comecam em zero.
+  Manage_Colvar Define 3 Distance Atom 0 Atom 13
+  # Distancia Zn(0)-O(16), sem impor restricao. Os indices comecam em zero.
+  Manage_Colvar Define 4 Distance Atom 0 Atom 16
+  # Distancia Zn(0)-O(19), sem impor restricao. Os indices comecam em zero.
+  Manage_Colvar Define 5 Distance Atom 0 Atom 19
+  # Distancia Zn(0)-O(22), sem impor restricao. Os indices comecam em zero.
+  Manage_Colvar Define 6 Distance Atom 0 Atom 22
+  # Distancia Zn(0)-O(25), sem impor restricao. Os indices comecam em zero.
+  Manage_Colvar Define 7 Distance Atom 0 Atom 25
+  # Distancia Zn(0)-O(28), sem impor restricao. Os indices comecam em zero.
+  Manage_Colvar Define 8 Distance Atom 0 Atom 28
+  # Distancia Zn(0)-O(31), sem impor restricao. Os indices comecam em zero.
+  Manage_Colvar Define 9 Distance Atom 0 Atom 31
+  # Distancia Zn(0)-O(34), sem impor restricao. Os indices comecam em zero.
+  Manage_Colvar Define 10 Distance Atom 0 Atom 34
+  # Distancia Zn(0)-O(37), sem impor restricao. Os indices comecam em zero.
+  Manage_Colvar Define 11 Distance Atom 0 Atom 37
+  # Distancia Zn(0)-O(40), sem impor restricao. Os indices comecam em zero.
+  Manage_Colvar Define 12 Distance Atom 0 Atom 40
+  # Le posicoes e velocidades da preparacao fornecida. Copie tambem o
+  # .mdrestart para esta pasta.
+  Restart &quot;preparacao_termica.mdrestart&quot;
+  # Grava um quadro XYZ por passo. O nome identifica esta trajetoria.
+  Dump Position Stride 1 Filename &quot;zn_parede-traj.xyz&quot;
+  # Numero de passos desta etapa. Duracao fisica = numero de passos x
+  # timestep.
+  Run 1000
+end
+
+# Le o XYZ: carga total 2, multiplicidade 1. O nome do arquivo deve coincidir
+# exatamente.
+* xyzfile 2 1 zn_solvato.xyz
+</code></pre>
+<h2 id="controle-curto-original-sem-parede-e-12-colvars">Controle curto original sem parede e 12 Colvars</h2>
+<!-- input-source: resultados/zn_sem_parede/zn_sem_parede.inp -->
+<div class="input-resources" data-input="exercicios/7-dinamica-complexo/resultados/zn_sem_parede/zn_sem_parede.inp"><p><strong>zn_sem_parede.inp</strong> · Dinâmica executada; resultados disponíveis.</p><div class="input-downloads"><a href="resultados/zn_sem_parede/zn_sem_parede.inp" download>Baixar input completo</a><a href="resultados/zn_sem_parede/zn_solvato.xyz" download>Baixar estrutura · zn_solvato.xyz</a><a href="estruturas/preparacao_termica.mdrestart" download>Auxiliar obrigatório · preparacao_termica.mdrestart</a><a href="resultados-completos.zip" download>Resultados completos deste exercício · todas as variantes</a><a class="open-input-lab" href="../../visualizador/index.html?exemplo=arquivo_zn_sem_parede&amp;aba=trajetoria">Abrir no laboratório com tudo carregado</a></div></div>
+
+
+<pre><code class="language-text"># Minicurso AIMD / ORCA 6.1.1 - zn_sem_parede
+# Estas linhas de comentario explicam as escolhas e nao alteram o calculo.
+# Execute um caso por vez; mantenha o arquivo XYZ na pasta de execucao.
+
+# Integra o movimento dos nucleos. PAL8 solicita oito recursos. XTB2 chama
+# GFN2-xTB externo; PAL8 tambem define suas threads. ALPB(water) representa o
+# ambiente continuo.
+! MD XTB2 ALPB(water) PAL8
+
+# Memoria em MB por processo. 256 x 8 = 2048 MB de orcamento, alem de memoria
+# adicional.
+%maxcore 256
+
+# Parametros da dinamica: as unidades sao explicitas em cada linha.
+%md
+  # Passo de integracao em femtossegundos. 1 fs = 1e-15 s.
+  Timestep 0.5_fs
+  # Semente fixa para repetir a preparacao aleatoria no mesmo ambiente.
+  Randomize 42
+  # Banho CSVR a 300 K; Timecon 100 fs regula o acoplamento. A temperatura
+  # pode flutuar.
+  Thermostat CSVR 300_K Timecon 100_fs
+  # Distancia Zn(0)-N(1), sem impor restricao. Os indices comecam em zero.
+  Manage_Colvar Define 1 Distance Atom 0 Atom 1
+  # Distancia Zn(0)-N(4), sem impor restricao. Os indices comecam em zero.
+  Manage_Colvar Define 2 Distance Atom 0 Atom 4
+  # Distancia Zn(0)-O(13), sem impor restricao. Os indices comecam em zero.
+  Manage_Colvar Define 3 Distance Atom 0 Atom 13
+  # Distancia Zn(0)-O(16), sem impor restricao. Os indices comecam em zero.
+  Manage_Colvar Define 4 Distance Atom 0 Atom 16
+  # Distancia Zn(0)-O(19), sem impor restricao. Os indices comecam em zero.
+  Manage_Colvar Define 5 Distance Atom 0 Atom 19
+  # Distancia Zn(0)-O(22), sem impor restricao. Os indices comecam em zero.
+  Manage_Colvar Define 6 Distance Atom 0 Atom 22
+  # Distancia Zn(0)-O(25), sem impor restricao. Os indices comecam em zero.
+  Manage_Colvar Define 7 Distance Atom 0 Atom 25
+  # Distancia Zn(0)-O(28), sem impor restricao. Os indices comecam em zero.
+  Manage_Colvar Define 8 Distance Atom 0 Atom 28
+  # Distancia Zn(0)-O(31), sem impor restricao. Os indices comecam em zero.
+  Manage_Colvar Define 9 Distance Atom 0 Atom 31
+  # Distancia Zn(0)-O(34), sem impor restricao. Os indices comecam em zero.
+  Manage_Colvar Define 10 Distance Atom 0 Atom 34
+  # Distancia Zn(0)-O(37), sem impor restricao. Os indices comecam em zero.
+  Manage_Colvar Define 11 Distance Atom 0 Atom 37
+  # Distancia Zn(0)-O(40), sem impor restricao. Os indices comecam em zero.
+  Manage_Colvar Define 12 Distance Atom 0 Atom 40
+  # Le posicoes e velocidades da preparacao fornecida. Copie tambem o
+  # .mdrestart para esta pasta.
+  Restart &quot;preparacao_termica.mdrestart&quot;
+  # Grava um quadro XYZ por passo. O nome identifica esta trajetoria.
+  Dump Position Stride 1 Filename &quot;zn_sem_parede-traj.xyz&quot;
+  # Numero de passos desta etapa. Duracao fisica = numero de passos x
+  # timestep.
+  Run 1000
+end
+
+# Le o XYZ: carga total 2, multiplicidade 1. O nome do arquivo deve coincidir
+# exatamente.
+* xyzfile 2 1 zn_solvato.xyz
+</code></pre></article><nav class="route-nav route-fim" aria-label="Navegação do percurso — fim"><div class="route-status">Apoio à atividade · Zn²⁺: hidratação e paredes</div><div class="route-controls"><a class="route-prev" href="index.html">← Voltar à atividade</a><a class="route-next" href="../index.html">Mapa do percurso</a></div><a class="route-map" href="../index.html">Mapa completo do percurso</a></nav></main></div><footer>Henrique de Castro Silva Junior e Virginia Camila Rufino Ferreira · ORCA 6.1.1 · Materiais e dados locais; links externos levam à documentação oficial.</footer></body></html>

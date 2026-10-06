@@ -48,6 +48,7 @@ Thumbs.db
 
 # Resultados didaticos completos para baixar no site
 !exercicios/*/resultado-*.zip
+!exercicios/*/resultados-completos.zip
 
 # Capitulos do caderno de estudo para tablet
 !materiais/capitulos-aimd-tablet.zip

@@ -1,0 +1,201 @@
+{
+  "case": "p04_observar",
+  "normal_termination": true,
+  "checkpoint_step": 10000.0,
+  "checkpoint_time_fs": 2500.0,
+  "energy_rows": 8001,
+  "energy_first_fs": 500.0,
+  "energy_last_fs": 2500.0,
+  "frames": 4000,
+  "trajectory_first_fs": 500.5,
+  "trajectory_last_fs": 2500.0,
+  "temperature_range_K": [
+    232.32,
+    386.83
+  ],
+  "temperature_mean_K": 301.85570803649546,
+  "temperature_windows": [
+    {
+      "start_fs": 500,
+      "end_fs": 600,
+      "mean_K": 320.20669999999996,
+      "min_K": 282.46,
+      "max_K": 358.43
+    },
+    {
+      "start_fs": 600,
+      "end_fs": 700,
+      "mean_K": 343.33480000000003,
+      "min_K": 293.31,
+      "max_K": 386.83
+    },
+    {
+      "start_fs": 700,
+      "end_fs": 800,
+      "mean_K": 326.67460000000005,
+      "min_K": 273.79,
+      "max_K": 376.19
+    },
+    {
+      "start_fs": 800,
+      "end_fs": 900,
+      "mean_K": 305.93665,
+      "min_K": 267.52,
+      "max_K": 371.33
+    },
+    {
+      "start_fs": 900,
+      "end_fs": 1000,
+      "mean_K": 303.62237500000003,
+      "min_K": 269.42,
+      "max_K": 345.65
+    },
+    {
+      "start_fs": 1000,
+      "end_fs": 1100,
+      "mean_K": 292.81239999999997,
+      "min_K": 265.4,
+      "max_K": 325.27
+    },
+    {
+      "start_fs": 1100,
+      "end_fs": 1200,
+      "mean_K": 296.678675,
+      "min_K": 253.06,
+      "max_K": 333.59
+    },
+    {
+      "start_fs": 1200,
+      "end_fs": 1300,
+      "mean_K": 290.791175,
+      "min_K": 254.3,
+      "max_K": 334.19
+    },
+    {
+      "start_fs": 1300,
+      "end_fs": 1400,
+      "mean_K": 303.9703,
+      "min_K": 272.35,
+      "max_K": 341.38
+    },
+    {
+      "start_fs": 1400,
+      "end_fs": 1500,
+      "mean_K": 292.3521,
+      "min_K": 248.71,
+      "max_K": 329.89
+    },
+    {
+      "start_fs": 1500,
+      "end_fs": 1600,
+      "mean_K": 296.0314,
+      "min_K": 251.64,
+      "max_K": 348.73
+    },
+    {
+      "start_fs": 1600,
+      "end_fs": 1700,
+      "mean_K": 289.886575,
+      "min_K": 246.96,
+      "max_K": 314.84
+    },
+    {
+      "start_fs": 1700,
+      "end_fs": 1800,
+      "mean_K": 293.40935,
+      "min_K": 253.58,
+      "max_K": 351.72
+    },
+    {
+      "start_fs": 1800,
+      "end_fs": 1900,
+      "mean_K": 295.962375,
+      "min_K": 255.71,
+      "max_K": 343.0
+    },
+    {
+      "start_fs": 1900,
+      "end_fs": 2000,
+      "mean_K": 290.55852500000003,
+      "min_K": 252.8,
+      "max_K": 318.17
+    },
+    {
+      "start_fs": 2000,
+      "end_fs": 2100,
+      "mean_K": 291.847325,
+      "min_K": 261.25,
+      "max_K": 331.55
+    },
+    {
+      "start_fs": 2100,
+      "end_fs": 2200,
+      "mean_K": 273.881675,
+      "min_K": 232.32,
+      "max_K": 309.42
+    },
+    {
+      "start_fs": 2200,
+      "end_fs": 2300,
+      "mean_K": 293.43095,
+      "min_K": 250.94,
+      "max_K": 352.94
+    },
+    {
+      "start_fs": 2300,
+      "end_fs": 2400,
+      "mean_K": 323.16875,
+      "min_K": 283.12,
+      "max_K": 377.05
+    },
+    {
+      "start_fs": 2400,
+      "end_fs": 2500,
+      "mean_K": 312.41990000000004,
+      "min_K": 263.94,
+      "max_K": 371.19
+    }
+  ],
+  "conserved_span_kJ_mol": 1.5122877923279434,
+  "conserved_last_minus_first_reported_kJ_mol": -1.021319359716218,
+  "conserved_slope_kJ_mol_ps": -0.5350645381461971,
+  "Etot_span_kJ_mol": 177.00330919483233,
+  "Etot_last_minus_initial_kJ_mol": 119.4313531002356,
+  "wall_radius_A": 8.5,
+  "max_fixed_origin_radius_A": 9.56318543730482,
+  "frames_touching_or_beyond_wall": 3893,
+  "max_O_centroid_displacement_from_origin_A": 1.1397353755392798,
+  "max_nearest_OH_A": 1.1592403464252952,
+  "min_OO_A": 2.3305778317569152,
+  "min_HH_A": 1.309846209898948,
+  "shared_frames": 0,
+  "non_simple_frames": 0,
+  "nearest_O_H_crossings": 0,
+  "persistent_segments_by_threshold_fs": {
+    "20": [
+      {
+        "O": 0,
+        "start_fs": 500.5,
+        "end_fs": 2500.0,
+        "span_fs": 1999.5
+      }
+    ],
+    "50": [
+      {
+        "O": 0,
+        "start_fs": 500.5,
+        "end_fs": 2500.0,
+        "span_fs": 1999.5
+      }
+    ],
+    "100": [
+      {
+        "O": 0,
+        "start_fs": 500.5,
+        "end_fs": 2500.0,
+        "span_fs": 1999.5
+      }
+    ]
+  },
+  "limits": "NVT mechanical energy need not be constant. Inspect conserved quantity. Geometric contacts and residence thresholds do not alone establish transport or equilibrium."
+}

@@ -1,6 +1,6 @@
 # 02a · Etanol: o controle antes da correção
 
-[← Percurso](../README.md) · [Laboratório de trajetórias](../../visualizador/index.html)
+[← Percurso](../README.md) · [Laboratório de trajetórias](../../visualizador/index.html?exemplo=ethanol&aba=trajetoria)
 
 **Parte do bloco 02 (35 min com timestep e correção) · etanol · XTB2 · controle da aula: 0,5 ps · referência ampliada: 5 ps**
 

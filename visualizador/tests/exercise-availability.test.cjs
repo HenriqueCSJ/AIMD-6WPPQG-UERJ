@@ -4,7 +4,15 @@ const R=require('../orca-parser.js'),root=path.resolve(__dirname,'../..');
 const read=p=>fs.readFileSync(path.join(root,p),'utf8');
 const context={window:{}};vm.runInNewContext(read('visualizador/examples.js'),context);
 const store=context.window.AIMD_EXAMPLES;
-const bundle=key=>{vm.runInNewContext(read(`visualizador/examples/${key}.js`),context);return JSON.parse(JSON.stringify(store.runs[key]));};
+const cachedBundles=new Map();
+const bundle=key=>{
+ if(!cachedBundles.has(key)){
+  vm.runInNewContext(read(`visualizador/examples/${key}.js`),context);
+  cachedBundles.set(key,JSON.parse(JSON.stringify(store.runs[key])));
+  delete store.runs[key];
+ }
+ return cachedBundles.get(key);
+};
 const normalized=text=>text.replace(/\r\n/g,'\n').trim();
 
 test('exercise links resolve retained data while the main menu stays focused',()=>{
@@ -12,7 +20,8 @@ test('exercise links resolve retained data while the main menu stays focused',()
  const options=[...select.matchAll(/<option value="([^"]+)"/g)].map(m=>m[1]);
  assert.equal(new Set(options).size,options.length,'No duplicate menu choices');
  const directOnly=['water_nve','water_csvr','solvator','complex','complex_short','solvator_two','water_short','ethanol_short','proton_shared_short','chelation_previous'];
- assert.deepEqual([...options,...directOnly].sort(),Object.keys(store.presets).sort());
+ const inputPresets=Object.keys(JSON.parse(read('exercicios/arquivos-exercicios.json')).presets);
+ assert.deepEqual([...options,...directOnly,...inputPresets].sort(),Object.keys(store.presets).sort());
  const main=select.match(/<optgroup label="Durante a aula · cinco blocos">([\s\S]*?)<\/optgroup>/)[1];
  assert.deepEqual([...main.matchAll(/<option value="([^"]+)"/g)].map(m=>m[1]),['water_single','water_thermostat','water','ethanol','timestep','thermostat','zn_solvation','zn_hydration','chelation','zn_pressure','proton_shared']);
  assert.equal((select.match(/<optgroup /g)||[]).length,2);

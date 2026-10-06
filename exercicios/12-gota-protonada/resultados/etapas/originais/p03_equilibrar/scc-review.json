@@ -1,0 +1,8 @@
+{
+  "expected_evaluations": 2001,
+  "converged_evaluations": 2001,
+  "finished_xTB_runs": 2001,
+  "failure_lines": [],
+  "retained_log": "p03_equilibrar.scf.log",
+  "all_pass": true
+}

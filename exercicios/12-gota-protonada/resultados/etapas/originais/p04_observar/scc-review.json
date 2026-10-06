@@ -1,0 +1,8 @@
+{
+  "expected_evaluations": 8001,
+  "converged_evaluations": 8001,
+  "finished_xTB_runs": 8001,
+  "failure_lines": [],
+  "retained_log": "p04_observar.scf.log",
+  "all_pass": true
+}

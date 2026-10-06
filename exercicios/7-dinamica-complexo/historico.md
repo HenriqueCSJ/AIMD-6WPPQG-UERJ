@@ -2,7 +2,7 @@
 
 # 04b · Manter as águas perto do complexo
 
-[← Percurso](../README.md) · [Aplicativo de análise](../../visualizador/index.html)
+[← Percurso](../README.md) · [Aplicativo de análise](../../visualizador/index.html?exemplo=complex&aba=trajetoria)
 
 **Parte do bloco Zn–en (45 min com SOLVATOR) · Zn²⁺–etilenodiamina + águas · 43 átomos**
 
@@ -69,7 +69,7 @@ O pacote inclui o reinício. **Raio 6 Å**, centro fixo na origem e `Spring 50.0
 
 ## 3. Veja a água que se afasta
 
-[Abrir a comparação 3D](../../visualizador/index.html?exemplo=complex&aba=trajetoria) · [Carregar meus arquivos](../../visualizador/index.html)
+[Abrir a comparação 3D](../../visualizador/index.html?exemplo=complex&aba=trajetoria) · [Carregar meus arquivos](../../visualizador/index.html?exemplo=complex&aba=trajetoria)
 
 1. Reproduza a referência **sem parede** até o fim. Uma água da camada externa se afasta.
 2. Troque para **com parede**. O contorno mostra onde começa a repulsão.
@@ -85,7 +85,7 @@ Nesta execução, a distância final Zn 0–O 25 foi **9.13 Å sem parede** e **
 
 **O ganho:** conservar uma região finita de solvente explícito ao redor do sistema durante a demonstração. **O custo:** forças artificiais nas bordas alteram o movimento; raio pequeno ou parede muito rígida podem distorcer a estrutura e exigir timestep menor. Aqui a perda de uma água significa afastamento no modelo de aglomerado, não uma taxa de evaporação de solução macroscópica.
 
-<details markdown="1"><summary>Executar também o controle sem parede</summary>
+<details markdown="1" open><summary>Executar também o controle sem parede</summary>
 
 [Pacote para executar](aula-zn_sem_parede_longo.zip) · [Baixar input ORCA](inputs/zn_sem_parede_longo.inp) · [Baixar geometria inicial (.xyz)](estruturas/zn_solvato.xyz) (obrigatório; manter na mesma pasta do input) · [Baixar checkpoint obrigatório](estruturas/preparacao_termica.mdrestart) (fornece o estado de continuação; manter junto do input)
 
@@ -162,3 +162,53 @@ Para uma janela mais curta, compare os controles de 0,5 ps no [apoio](historico-
 ## Aprofundar Cell sem perder o percurso
 
 **[Complemento C1 → C2 → C3](../13-cell-pressao/README.md):** rigidez da parede, resposta à pressão e continuação com parede fixa ou removida. **Para seguir a aula, avance diretamente para [04c · formação do quelato](../11-formacao-quelato/README.md).**
+
+## Histórico: com parede Spring 10, mais 0,5 ps
+
+<!-- input-source: inputs/zn_parede.inp -->
+```text
+# Complexo com XTB2/ALPB; PAL8 = 8 threads do xTB.
+! MD XTB2 ALPB(water) PAL8
+%maxcore 256
+
+%md
+  Timestep 0.5_fs
+  Randomize 42
+  # Banho a 300 K; acoplamento em 100 fs.
+  Thermostat CSVR 300_K Timecon 100_fs
+  # Parede suave: centro (0,0,0), raio 6 A.
+  Walls Sphere 0, 0, 0, 6.0_A Spring 10.0
+  # Retoma posicoes, velocidades e relogio fornecidos.
+  Restart "preparacao_termica.mdrestart"
+  Dump Position Stride 1 Filename "zn_parede-traj.xyz"
+  # Novo trecho: 1000 x 0.5 fs = 500 fs (5e-13 s).
+  Run 1000
+end
+
+# Carga 2, multiplicidade 1; XYZ na mesma pasta.
+* xyzfile 2 1 zn_solvato.xyz
+```
+
+## Histórico: sem parede, mais 0,5 ps
+
+<!-- input-source: inputs/zn_sem_parede.inp -->
+```text
+# Controle: mesmo estado inicial, agora sem parede.
+! MD XTB2 ALPB(water) PAL8
+%maxcore 256
+
+%md
+  Timestep 0.5_fs
+  Randomize 42
+  # Banho a 300 K; acoplamento em 100 fs.
+  Thermostat CSVR 300_K Timecon 100_fs
+  # Retoma posicoes, velocidades e relogio fornecidos.
+  Restart "preparacao_termica.mdrestart"
+  Dump Position Stride 1 Filename "zn_sem_parede-traj.xyz"
+  # Novo trecho: 1000 x 0.5 fs = 500 fs (5e-13 s).
+  Run 1000
+end
+
+# Carga 2, multiplicidade 1; XYZ na mesma pasta.
+* xyzfile 2 1 zn_solvato.xyz
+```

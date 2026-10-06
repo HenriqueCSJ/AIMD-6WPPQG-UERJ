@@ -1,6 +1,6 @@
 # Opcional · O papel do solvente contínuo
 
-[← Percurso](../README.md) · [Laboratório de trajetórias](../../visualizador/index.html)
+[← Percurso](../README.md) · [Laboratório de trajetórias](../../visualizador/index.html?exemplo=solvent&aba=trajetoria)
 
 **10 min · análise de resultados fornecidos · DFT / CPCM(water)**
 

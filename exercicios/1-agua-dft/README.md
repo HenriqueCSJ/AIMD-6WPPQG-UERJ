@@ -1,6 +1,6 @@
 # 01 · Água: da molécula à ligação H
 
-[← Percurso](../README.md) · [Laboratório de trajetórias](../../visualizador/index.html)
+[← Percurso](../README.md) · [Laboratório de trajetórias](../../visualizador/index.html?exemplo=water&aba=trajetoria)
 
 **25 min · 01a: água isolada → 01b: dímero · observe a referência DFT e execute com XTB2**
 
@@ -195,7 +195,7 @@ Execute `orca agua_dump.inp > agua_dump.out` em uma pasta nova, no cmd do Window
 
 O laboratório não interpreta XYZ de velocidades/forças como geometria. Abra esses arquivos como texto para esta atividade. A verificação com as 201 amostras reproduziu K com diferença máxima de 0,0014 kJ/mol, compatível com o arredondamento do CSV.
 
-**Outras saídas:** `Dump EnGrad` salva energia e gradiente; `Dump GBW` guarda estados eletrônicos individuais, cuja utilidade depende do método. A versão instalada também aceita **`Dump Properties`**: um teste BLYP-D3BJ/def2-SVP gerou dipolos em `.prop.log` a cada passo. Essa opção não produziu o log no teste XTB2 e não deve ser prometida para qualquer método. [Teste DFT e log de propriedades](verificacao-dump/README.md).
+**Outras saídas:** `Dump EnGrad` salva energia e gradiente; `Dump GBW` guarda estados eletrônicos individuais, cuja utilidade depende do método. A versão instalada também aceita **`Dump Properties`**: um teste BLYP-D3BJ/def2-SVP gerou dipolos em `.prop.log` a cada passo. Essa opção não produziu o log no teste XTB2 e não deve ser prometida para qualquer método. [Teste DFT e log de propriedades](verificacao-dump.md).
 
 Dipolo, cargas e polarizabilidade não são nomes intercambiáveis com `Position` no comando. Para propriedades eletrônicas, é necessário configurar uma rota compatível; um arquivo de velocidades sozinho não fornece intensidades IV/Raman. [Manual ORCA, Dump](https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html#dump).
 
@@ -412,4 +412,14 @@ H  -0.7586020000  0.0000000000  0.5042840000
   Run 6000
 end
 * xyzfile 0 1 water_restart.xyz
+```
+
+## Preparação do dímero: otimização B97-3c
+
+<!-- input-source: resultados/preparar_dimero_b97/preparar_dimero_b97.inp -->
+```text
+# Preparacao fornecida: relaxar o par doador-aceptor com DFT.
+! B97-3c TightSCF Opt PAL8
+%maxcore 256
+* xyzfile 0 1 dimero_assimetrico.xyz
 ```

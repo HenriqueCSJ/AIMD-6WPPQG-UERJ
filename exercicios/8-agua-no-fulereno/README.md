@@ -1,6 +1,6 @@
 # Opcional · Água dentro de C₆₀
 
-[← Percurso](../README.md) · [Aplicativo de análise](../../visualizador/index.html)
+[← Percurso](../README.md) · [Aplicativo de análise](../../visualizador/index.html?exemplo=fullerene&aba=trajetoria)
 
 **Extensão opcional · 10–15 min com referência pronta · 63 átomos**
 

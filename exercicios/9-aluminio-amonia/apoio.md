@@ -15,3 +15,25 @@ O gap inicial foi aproximadamente 0,128 eV; as ocupações HOMO/LUMO, 1,844/0,15
 O controle com 0,5 fs repete os mesmos 2 ps, semente e modelo. As duas trajetórias mostram a mesma transferência com recrossamentos iniciais e separação dos produtos. Não são réplicas estatísticas independentes, e os tempos de evento não representam constantes cinéticas.
 
 Neste agregado isolado, os produtos podem se afastar livremente. Acrescentar ALPB ou parede mudaria as condições químicas; para estudar apenas a convergência SCC, mantenha o modelo e ajuste o controle eletrônico descrito acima. Os outputs e medidas estão nos links da atividade.
+
+## Diagnóstico: falha SCC antes da MD, 0 fs
+
+<!-- input-source: apoio/falha-scc/al_agua_nh3_xtb2.inp -->
+```text
+# Caso fornecido: Al3+ + 6 aguas + NH3, agora com XTB2.
+! MD XTB2 PAL8
+%maxcore 256
+%md
+  # Semente fixa para reproduzir as velocidades iniciais.
+  Randomize 42
+  Initvel 300_K
+  # Preserva o passo e o banho do exemplo; conferir a sensibilidade ao passo.
+  Timestep 1.0_fs
+  Thermostat Berendsen 300_K Timecon 20.0_fs
+  Dump Position Stride 1 Filename "al_agua_nh3_xtb2-traj.xyz"
+  # 2000 x 1 fs = 2 ps = 2e-12 s.
+  Run 2000
+end
+# Carga total +3 e multiplicidade 1; geometria original sem pre-otimizacao.
+* xyzfile 3 1 al_agua_nh3.xyz
+```

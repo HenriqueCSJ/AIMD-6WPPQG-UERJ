@@ -1,6 +1,6 @@
 # Apoio · Ativar o solvente com uma palavra
 
-[← Voltar à atividade](README.md) · [Abrir o aplicativo](../../visualizador/index.html)
+[← Voltar à atividade](README.md) · [Abrir o aplicativo](../../visualizador/index.html?exemplo=solvent_single&aba=trajetoria)
 
 A água isolada oferece uma comparação simples do campo de reação: as mesmas três posições iniciais evoluem no vácuo ou com CPCM. Use os resultados abaixo para distinguir a alteração das forças da adição de moléculas explícitas.
 
@@ -8,7 +8,7 @@ A água isolada oferece uma comparação simples do campo de reação: as mesmas
 
 O solvente é representado como um meio contínuo que modifica a energia e as forças. **CPCM não é termostato e não é parede de confinamento.** Não esperamos uma diferença visual necessariamente grande em apenas 20 fs. A diferença entre energias instantâneas dos dois cálculos não é uma energia livre de solvatação.
 
-Abra o [Laboratório de trajetórias](../../visualizador/index.html) e carregue o `*-md-ener.csv`, o `.out` e o `*-traj.xyz` deste cálculo. O aplicativo prepara os gráficos de energia/temperatura e a animação. Na aba **Geometria**, escolha dois átomos; a medida é calculada do XYZ. O CSV original usa fs, Hartree e K; a conversão de unidades fica explícita na tela.
+Abra o [Laboratório de trajetórias](../../visualizador/index.html?exemplo=solvent_single&aba=trajetoria) e carregue o `*-md-ener.csv`, o `.out` e o `*-traj.xyz` deste cálculo. O aplicativo prepara os gráficos de energia/temperatura e a animação. Na aba **Geometria**, escolha dois átomos; a medida é calculada do XYZ. O CSV original usa fs, Hartree e K; a conversão de unidades fica explícita na tela.
 
 **Controle sem CPCM:** [CSV do exercício 1](../1-agua-dft/resultados/agua_dft/agua_dft-md-ener.csv).
 

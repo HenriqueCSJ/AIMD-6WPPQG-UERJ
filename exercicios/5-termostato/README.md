@@ -1,6 +1,6 @@
 # 03 · Aquecer, explorar, resfriar — no mesmo input
 
-[← Percurso](../README.md) · [Laboratório de trajetórias](../../visualizador/index.html)
+[← Percurso](../README.md) · [Laboratório de trajetórias](../../visualizador/index.html?exemplo=thermostat&aba=trajetoria)
 
 **25 min · etanol · XTB2 · 5 ps = 5 × 10⁻¹² s**
 

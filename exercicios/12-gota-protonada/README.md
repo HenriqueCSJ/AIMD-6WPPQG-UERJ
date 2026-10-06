@@ -1,6 +1,6 @@
 # Opcional · Gota protonada: temperatura, retornos e amostragem
 
-[← Percurso](../README.md) · [Aplicativo de análise](../../visualizador/index.html)
+[← Percurso](../README.md) · [Aplicativo de análise](../../visualizador/index.html?exemplo=proton_droplet&aba=trajetoria)
 
 **Extensão opcional após a aula · dados prontos · 97 átomos**
 

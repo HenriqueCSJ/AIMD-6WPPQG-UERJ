@@ -1,6 +1,6 @@
 # Apoio · Permitir troca de energia com um banho
 
-[← Voltar à atividade](README.md) · [Abrir o aplicativo](../../visualizador/index.html)
+[← Voltar à atividade](README.md) · [Abrir o aplicativo](../../visualizador/index.html?exemplo=thermostat_compare&aba=trajetoria)
 
 Antes das rampas de aquecimento e resfriamento, isole o efeito do banho: compare etanol NVE e CSVR a 300 K, ambos por 0,5 ps. Essa comparação retoma a pergunta da água com uma molécula que também possui rotação interna.
 
@@ -8,7 +8,7 @@ Antes das rampas de aquecimento e resfriamento, isole o efeito do banho: compare
 
 `Initvel 300_K` prepara a condição inicial. O termostato permite troca de energia com um banho a 300 K; portanto, **K + U não precisa ser constante em NVT**. A temperatura instantânea deve flutuar. O acoplamento de 100 fs = 0,1 ps = 10⁻¹³ s define a escala de atuação do banho, não a duração total da trajetória. Esta pequena molécula e este intervalo curto não demonstram amostragem canônica convergida.
 
-Abra o [Laboratório de trajetórias](../../visualizador/index.html) e carregue o `*-md-ener.csv`, o `.out` e o `*-traj.xyz` deste cálculo. O aplicativo prepara os gráficos de energia/temperatura e a animação. Na aba **Geometria**, escolha dois átomos; a medida é calculada do XYZ. O CSV original usa fs, Hartree e K; a conversão de unidades fica explícita na tela.
+Abra o [Laboratório de trajetórias](../../visualizador/index.html?exemplo=thermostat_compare&aba=trajetoria) e carregue o `*-md-ener.csv`, o `.out` e o `*-traj.xyz` deste cálculo. O aplicativo prepara os gráficos de energia/temperatura e a animação. Na aba **Geometria**, escolha dois átomos; a medida é calculada do XYZ. O CSV original usa fs, Hartree e K; a conversão de unidades fica explícita na tela.
 
 **Controle reutilizado:** [Baixar input ORCA](../3-xtb2-etanol/inputs/etanol_nve.inp) · [Baixar geometria inicial (.xyz)](../3-xtb2-etanol/estruturas/etanol.xyz) (opcional para executar; as coordenadas já estão no input), [CSV NVE](../3-xtb2-etanol/resultados/etanol_nve/etanol_nve-md-ener.csv) e [trajetória NVE](../3-xtb2-etanol/resultados/etanol_nve/etanol_nve-traj.xyz). A geometria inicial é idêntica à deste exercício.
 

@@ -1,0 +1,18 @@
+# Comparacao didatica: mesma gota e checkpoint do controle a 300 K.
+! MD XTB2 ALPB(water) PAL8
+%maxcore 256
+%md
+  Timestep 0.25_fs
+  Walls Sphere 0, 0, 0, 8.5_A Spring 10
+  Dump Position Stride 2 Filename "t500_gota-traj.xyz"
+  Randomize 93102
+  Restart "p03_equilibrar.mdrestart"
+
+  # Subir o alvo de 300 para 500 K ao longo de 0.5 ps.
+  Thermostat CSVR 300_K Timecon 100_fs Ramp 500_K
+  Run 2000
+
+  # A rampa terminou: os proximos 1.5 ps mantem o alvo em 500 K.
+  Run 6000
+end
+* xyzfile 1 1 gota_equilibrar.xyz

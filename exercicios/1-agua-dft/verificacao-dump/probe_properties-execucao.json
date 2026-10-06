@@ -1,0 +1,9 @@
+{
+  "case": "probe_properties",
+  "seconds": 1.369,
+  "returncode": 0,
+  "normal": false,
+  "timed_out": false,
+  "runtime": "/home/henrique/aimd-workshop/cell-20261006/probe_properties",
+  "source": "/mnt/c/Users/henri/OneDrive/Academic/Events/6WPPGQ-UERJ/cell-20261006/probe_properties.inp"
+}

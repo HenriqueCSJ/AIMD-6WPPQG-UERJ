@@ -40,13 +40,13 @@
   }
   function updateExerciseReturn(){
     const run=state.tab==='trajectory'?currentTrajectory():state.tab==='distance'?currentDistance():visible()[0];
-    const route=run?.reference?exerciseReturns[run.exercisePreset]:null,link=$('exercise-return');
+    const route=run?.reference?(exerciseReturns[run.exercisePreset]||window.AIMD_EXAMPLES?.presets[run.exercisePreset]?.returnRoute):null,link=$('exercise-return');
     link.setAttribute('href',route?.href||'../exercicios/index.html');
     link.textContent=route?`← Voltar a ${route.label}`:'← Voltar ao percurso';
     updateZnStages(state.znPreparationPreset||(run?.reference?run.exercisePreset:null));
   }
   const sequenceClock=run=>metadata(run).clockMode==='sequence_elapsed';
-  const clockLabel=run=>sequenceClock(run)?'Tempo da sequência':'Tempo físico';
+  const clockLabel=run=>metadata(run).staticSourceTime?'Tempo da referência de origem':sequenceClock(run)?'Tempo da sequência':'Tempo físico';
   const clockNote=run=>sequenceClock(run)?(metadata(run).clockNote||'Tempo acumulado das etapas; o relógio de cada arquivo original é preservado. A sequência não representa continuidade das velocidades.') : '';
   const sourceClock=frame=>Number.isFinite(frame?.sourceTime)?`Relógio original: ${num(frame.sourceTime,8)} fs${frame.sourceStage?` · ${frame.sourceStage}`:''}`:'';
   const ensemble=run=>metadata(run).dynamicCell?'unknown':run.ensembleOverride||metadata(run).ensemble||'unknown';
@@ -291,7 +291,7 @@
       document.querySelectorAll('[name="energy-series"]').forEach(c=>c.checked=config.runs.length>1?c.value==='total':true);
       $('energy-mode').value='delta';$('time-unit').value='fs';resetEnergyRange();state.tab=preferredTab||(references.some(run=>run.xyz)?'trajectory':'energy');renderAll(references[0].id);
       const staticOnly=references.every(run=>run.xyz?.frames.length===1&&!energy(run)?.rows.length);
-      message(config.loadMessage||(staticOnly?'Estruturas de referência carregadas. SOLVATOR mostra geometrias antes e depois da solvatação; este exemplo não contém uma dinâmica, energias ao longo do tempo ou animação. Escolha a estrutura no campo Simulação.':'Referência da aula carregada. Explore a trajetória e compare suas medidas.'),true);
+      message(config.loadMessage||(staticOnly?'Estruturas de referência carregadas separadamente. Este exemplo não contém uma dinâmica nem animação ao longo do tempo. Escolha a geometria no campo Simulação.':'Referência da aula carregada. Explore a trajetória e compare suas medidas.'),true);
       $(state.tab==='trajectory'?'tab-trajectory':'workspace').scrollIntoView({block:'start',behavior:'smooth'});
     }catch(error){
       if(request!==state.exampleRequest)return;

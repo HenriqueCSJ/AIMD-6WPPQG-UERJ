@@ -1,0 +1,2748 @@
+{
+  "schemaVersion": 1,
+  "inputs": {
+    "exercicios/1-agua-dft/inputs/agua_dft.inp": {
+      "structures": [
+        "exercicios/1-agua-dft/estruturas/agua.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_agua_dft",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/1-agua-dft/resultados-completos.zip",
+      "case": "agua_dft",
+      "executionPackage": "exercicios/1-agua-dft/aula-agua_dft.zip"
+    },
+    "exercicios/1-agua-dft/inputs/agua_dump.inp": {
+      "structures": [
+        "exercicios/1-agua-dft/estruturas/agua.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_agua_dump",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/1-agua-dft/resultados-completos.zip",
+      "case": "agua_dump",
+      "executionPackage": "exercicios/1-agua-dft/aula-agua_dump.zip"
+    },
+    "exercicios/1-agua-dft/inputs/agua_xtb2_csvr.inp": {
+      "structures": [
+        "exercicios/1-agua-dft/estruturas/agua.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_agua_xtb2_csvr",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/1-agua-dft/resultados-completos.zip",
+      "case": "agua_xtb2_csvr",
+      "executionPackage": "exercicios/1-agua-dft/aula-agua_xtb2_csvr.zip"
+    },
+    "exercicios/1-agua-dft/inputs/agua_xtb2_nve.inp": {
+      "structures": [
+        "exercicios/1-agua-dft/estruturas/agua.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_agua_xtb2_nve",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/1-agua-dft/resultados-completos.zip",
+      "case": "agua_xtb2_nve",
+      "executionPackage": "exercicios/1-agua-dft/aula-agua_xtb2_nve.zip"
+    },
+    "exercicios/1-agua-dft/inputs/dimero_b97.inp": {
+      "structures": [
+        "exercicios/1-agua-dft/estruturas/dimero_b97.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_dimero_b97",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/1-agua-dft/resultados-completos.zip",
+      "case": "dimero_b97",
+      "executionPackage": "exercicios/1-agua-dft/aula-dimero_b97.zip"
+    },
+    "exercicios/1-agua-dft/inputs/dimero_xtb2_2ps.inp": {
+      "structures": [
+        "exercicios/1-agua-dft/estruturas/dimero_b97.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_dimero_xtb2_2ps",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/1-agua-dft/resultados-completos.zip",
+      "case": "dimero_xtb2_2ps",
+      "executionPackage": "exercicios/1-agua-dft/aula-dimero_xtb2_2ps.zip"
+    },
+    "exercicios/1-agua-dft/inputs/preparar_agua.inp": {
+      "structures": [
+        "exercicios/1-agua-dft/estruturas/agua_inicial.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_preparar_agua",
+      "state": "complete_optimization_static_pair",
+      "status": "Otimização executada; estruturas inicial e final, sem dinâmica.",
+      "resultsPackage": "exercicios/1-agua-dft/resultados-completos.zip",
+      "case": "preparar_agua",
+      "labLabel": "Abrir estruturas inicial e otimizada no laboratório"
+    },
+    "exercicios/1-agua-dft/resultados/agua_dft/agua_dft.inp": {
+      "structures": [
+        "exercicios/1-agua-dft/resultados/agua_dft/agua.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_agua_dft",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/1-agua-dft/resultados-completos.zip",
+      "case": "agua_dft"
+    },
+    "exercicios/1-agua-dft/resultados/agua_dump/agua_dump.inp": {
+      "structures": [
+        "exercicios/1-agua-dft/estruturas/agua.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_agua_dump",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/1-agua-dft/resultados-completos.zip",
+      "case": "agua_dump"
+    },
+    "exercicios/1-agua-dft/resultados/agua_xtb2_csvr/agua_xtb2_csvr.inp": {
+      "structures": [
+        "exercicios/1-agua-dft/estruturas/agua.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_agua_xtb2_csvr",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/1-agua-dft/resultados-completos.zip",
+      "case": "agua_xtb2_csvr"
+    },
+    "exercicios/1-agua-dft/resultados/agua_xtb2_nve/agua_xtb2_nve.inp": {
+      "structures": [
+        "exercicios/1-agua-dft/estruturas/agua.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_agua_xtb2_nve",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/1-agua-dft/resultados-completos.zip",
+      "case": "agua_xtb2_nve"
+    },
+    "exercicios/1-agua-dft/resultados/dimero_b97/dimero_b97.inp": {
+      "structures": [
+        "exercicios/1-agua-dft/resultados/dimero_b97/dimero_b97.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_dimero_b97",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/1-agua-dft/resultados-completos.zip",
+      "case": "dimero_b97"
+    },
+    "exercicios/1-agua-dft/resultados/dimero_xtb2_2ps/dimero_xtb2_2ps.inp": {
+      "structures": [
+        "exercicios/1-agua-dft/resultados/dimero_xtb2_2ps/dimero_b97.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_dimero_xtb2_2ps",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/1-agua-dft/resultados-completos.zip",
+      "case": "dimero_xtb2_2ps"
+    },
+    "exercicios/1-agua-dft/resultados/dimero_xtb2_5ps/etapas/dimero_xtb2_2ps.inp": {
+      "structures": [
+        "exercicios/1-agua-dft/resultados/dimero_xtb2_5ps/etapas/dimero_b97.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_dimero_xtb2_2ps",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/1-agua-dft/resultados-completos.zip",
+      "case": "dimero_xtb2_2ps"
+    },
+    "exercicios/1-agua-dft/resultados/dimero_xtb2_5ps/etapas/water_02000_05000fs.inp": {
+      "structures": [
+        "exercicios/1-agua-dft/resultados/dimero_xtb2_5ps/etapas/water_restart.xyz"
+      ],
+      "dependencies": [
+        "exercicios/1-agua-dft/resultados/dimero_xtb2_5ps/etapas/dimero_xtb2_2ps.mdrestart"
+      ],
+      "preset": "arquivo_dimero_xtb2_5ps",
+      "state": "complete_restart_with_combined_reference",
+      "status": "Continuação executada; o laboratório abre a sequência completa, incluindo o trecho anterior.",
+      "resultsPackage": "exercicios/1-agua-dft/resultados-completos.zip",
+      "case": "water_02000_05000fs"
+    },
+    "exercicios/1-agua-dft/resultados/preparar_agua/preparar_agua.inp": {
+      "structures": [
+        "exercicios/1-agua-dft/resultados/preparar_agua/agua_inicial.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_preparar_agua",
+      "state": "complete_optimization_static_pair",
+      "status": "Otimização executada; estruturas inicial e final, sem dinâmica.",
+      "resultsPackage": "exercicios/1-agua-dft/resultados-completos.zip",
+      "case": "preparar_agua",
+      "labLabel": "Abrir estruturas inicial e otimizada no laboratório"
+    },
+    "exercicios/1-agua-dft/resultados/preparar_dimero_b97/preparar_dimero_b97.inp": {
+      "structures": [
+        "exercicios/1-agua-dft/resultados/preparar_dimero_b97/dimero_assimetrico.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_preparar_dimero_b97",
+      "state": "complete_optimization_static_pair",
+      "status": "Otimização executada; estruturas inicial e final, sem dinâmica.",
+      "resultsPackage": "exercicios/1-agua-dft/resultados-completos.zip",
+      "case": "preparar_dimero_b97",
+      "labLabel": "Abrir estruturas inicial e otimizada no laboratório"
+    },
+    "exercicios/1-agua-dft/verificacao-dump/probe_properties.inp": {
+      "structures": [
+        "exercicios/1-agua-dft/estruturas/probe_properties_inicial_input.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_probe_properties",
+      "state": "failed_diagnostic_before_md",
+      "status": "Diagnóstico falhou antes da dinâmica: 0 fs. Estrutura inicial e saída da falha preservadas.",
+      "resultsPackage": "exercicios/1-agua-dft/resultados-completos.zip",
+      "case": "probe_properties"
+    },
+    "exercicios/1-agua-dft/verificacao-dump/probe_properties_dft.inp": {
+      "structures": [
+        "exercicios/1-agua-dft/estruturas/probe_properties_dft_inicial_input.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_probe_properties_dft",
+      "state": "complete_diagnostic_md",
+      "status": "Diagnóstico executado: 4 passos de 0,5 fs, até 2 fs. Posições e energias disponíveis.",
+      "resultsPackage": "exercicios/1-agua-dft/resultados-completos.zip",
+      "case": "probe_properties_dft"
+    },
+    "exercicios/1-agua-dft/verificacao-dump/probe_properties_simple.inp": {
+      "structures": [
+        "exercicios/1-agua-dft/estruturas/probe_properties_simple_inicial_input.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_probe_properties_simple",
+      "state": "complete_diagnostic_md",
+      "status": "Diagnóstico XTB2 executado: 4 passos até 2 fs, sem produção de log de propriedades.",
+      "resultsPackage": "exercicios/1-agua-dft/resultados-completos.zip",
+      "case": "probe_properties_simple"
+    },
+    "exercicios/10-proton-compartilhado/inputs/proton_shared.inp": {
+      "structures": [
+        "exercicios/10-proton-compartilhado/estruturas/h5o2_otimizado.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_proton_shared",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/10-proton-compartilhado/resultados-completos.zip",
+      "case": "proton_shared",
+      "executionPackage": "exercicios/10-proton-compartilhado/aula-proton_shared.zip",
+      "casePackage": "exercicios/10-proton-compartilhado/resultado-proton_shared.zip"
+    },
+    "exercicios/10-proton-compartilhado/inputs/z00_otimizar.inp": {
+      "structures": [
+        "exercicios/10-proton-compartilhado/estruturas/h5o2_inicial.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_z00_otimizar",
+      "state": "complete_optimization_static_pair",
+      "status": "Otimização executada; estruturas inicial e final, sem dinâmica.",
+      "resultsPackage": "exercicios/10-proton-compartilhado/resultados-completos.zip",
+      "case": "z00_otimizar",
+      "labLabel": "Abrir estruturas inicial e otimizada no laboratório",
+      "casePackage": "exercicios/10-proton-compartilhado/resultado-z00_otimizar.zip"
+    },
+    "exercicios/10-proton-compartilhado/inputs/z01_dinamica.inp": {
+      "structures": [
+        "exercicios/10-proton-compartilhado/estruturas/h5o2_otimizado.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_proton_shared",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/10-proton-compartilhado/resultados-completos.zip",
+      "case": "z01_dinamica",
+      "casePackage": "exercicios/10-proton-compartilhado/resultado-proton_shared.zip"
+    },
+    "exercicios/10-proton-compartilhado/resultados/otimizacao/z00_otimizar.inp": {
+      "structures": [
+        "exercicios/10-proton-compartilhado/resultados/otimizacao/h5o2_inicial.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_z00_otimizar",
+      "state": "complete_optimization_static_pair",
+      "status": "Otimização executada; estruturas inicial e final, sem dinâmica.",
+      "resultsPackage": "exercicios/10-proton-compartilhado/resultados-completos.zip",
+      "case": "z00_otimizar",
+      "labLabel": "Abrir estruturas inicial e otimizada no laboratório",
+      "casePackage": "exercicios/10-proton-compartilhado/resultado-z00_otimizar.zip"
+    },
+    "exercicios/10-proton-compartilhado/resultados/proton_shared/proton_shared.inp": {
+      "structures": [
+        "exercicios/10-proton-compartilhado/estruturas/h5o2_otimizado.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_proton_shared",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/10-proton-compartilhado/resultados-completos.zip",
+      "case": "proton_shared",
+      "casePackage": "exercicios/10-proton-compartilhado/resultado-proton_shared.zip"
+    },
+    "exercicios/10-proton-compartilhado/resultados/proton_shared_10ps/etapas/z01_dinamica.inp": {
+      "structures": [
+        "exercicios/10-proton-compartilhado/resultados/proton_shared_10ps/etapas/h5o2_otimizado.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_proton_shared",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/10-proton-compartilhado/resultados-completos.zip",
+      "case": "z01_dinamica",
+      "casePackage": "exercicios/10-proton-compartilhado/resultado-proton_shared.zip"
+    },
+    "exercicios/10-proton-compartilhado/resultados/proton_shared_10ps/etapas/z02_02000_10000fs.inp": {
+      "structures": [
+        "exercicios/10-proton-compartilhado/resultados/proton_shared_10ps/etapas/h5o2_restart_2ps.xyz"
+      ],
+      "dependencies": [
+        "exercicios/10-proton-compartilhado/resultados/proton_shared_10ps/etapas/z01_dinamica.mdrestart"
+      ],
+      "preset": "arquivo_proton_shared_10ps",
+      "state": "complete_restart_with_combined_reference",
+      "status": "Continuação executada; o laboratório abre a sequência completa, incluindo o trecho anterior.",
+      "resultsPackage": "exercicios/10-proton-compartilhado/resultados-completos.zip",
+      "case": "z02_02000_10000fs",
+      "casePackage": "exercicios/10-proton-compartilhado/resultado-proton_shared_10ps.zip"
+    },
+    "exercicios/11-formacao-quelato/inputs/en_assistida_com_parede.inp": {
+      "structures": [
+        "exercicios/11-formacao-quelato/estruturas/encontro_real_R1.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_en_assistida_com_parede",
+      "state": "prepared_not_executed",
+      "status": "Input preparado, ainda não executado. Sem resultados próprios; o laboratório abre somente a estrutura inicial. A geometria foi extraída da referência anterior aos 7083 fs; esse tempo pertence à origem, não a este controle.",
+      "resultsPackage": "exercicios/11-formacao-quelato/resultados-completos.zip",
+      "case": "en_assistida_com_parede",
+      "executionPackage": "exercicios/11-formacao-quelato/aula-en_assistida_com_parede.zip",
+      "labLabel": "Abrir a estrutura inicial no laboratório · ainda sem resultados"
+    },
+    "exercicios/11-formacao-quelato/inputs/en_assistida_sem_parede.inp": {
+      "structures": [
+        "exercicios/11-formacao-quelato/estruturas/encontro_real_R1.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_en_assistida_sem_parede",
+      "state": "prepared_not_executed",
+      "status": "Input preparado, ainda não executado. Sem resultados próprios; o laboratório abre somente a estrutura inicial. A geometria foi extraída da referência anterior aos 7083 fs; esse tempo pertence à origem, não a este controle.",
+      "resultsPackage": "exercicios/11-formacao-quelato/resultados-completos.zip",
+      "case": "en_assistida_sem_parede",
+      "executionPackage": "exercicios/11-formacao-quelato/aula-en_assistida_sem_parede.zip",
+      "labLabel": "Abrir a estrutura inicial no laboratório · ainda sem resultados"
+    },
+    "exercicios/11-formacao-quelato/inputs/en_livre_com_parede.inp": {
+      "structures": [
+        "exercicios/11-formacao-quelato/estruturas/encontro_real_R1.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_en_livre_com_parede",
+      "state": "prepared_not_executed",
+      "status": "Input preparado, ainda não executado. Sem resultados próprios; o laboratório abre somente a estrutura inicial. A geometria foi extraída da referência anterior aos 7083 fs; esse tempo pertence à origem, não a este controle.",
+      "resultsPackage": "exercicios/11-formacao-quelato/resultados-completos.zip",
+      "case": "en_livre_com_parede",
+      "executionPackage": "exercicios/11-formacao-quelato/aula-en_livre_com_parede.zip",
+      "labLabel": "Abrir a estrutura inicial no laboratório · ainda sem resultados"
+    },
+    "exercicios/11-formacao-quelato/inputs/en_livre_sem_parede.inp": {
+      "structures": [
+        "exercicios/11-formacao-quelato/estruturas/encontro_real_R1.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_en_livre_sem_parede",
+      "state": "prepared_not_executed",
+      "status": "Input preparado, ainda não executado. Sem resultados próprios; o laboratório abre somente a estrutura inicial. A geometria foi extraída da referência anterior aos 7083 fs; esse tempo pertence à origem, não a este controle.",
+      "resultsPackage": "exercicios/11-formacao-quelato/resultados-completos.zip",
+      "case": "en_livre_sem_parede",
+      "executionPackage": "exercicios/11-formacao-quelato/aula-en_livre_sem_parede.zip",
+      "labLabel": "Abrir a estrutura inicial no laboratório · ainda sem resultados"
+    },
+    "exercicios/11-formacao-quelato/inputs/m01a_N_sem_vies_agua.inp": {
+      "structures": [
+        "exercicios/11-formacao-quelato/estruturas/encontro_real_R1.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_m01a_N_sem_vies_agua",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/11-formacao-quelato/resultados-completos.zip",
+      "case": "m01a_N_sem_vies_agua"
+    },
+    "exercicios/11-formacao-quelato/inputs/m02_livre_apos_N1.inp": {
+      "structures": [
+        "exercicios/11-formacao-quelato/estruturas/encontro_real_R1.xyz"
+      ],
+      "dependencies": [
+        "exercicios/11-formacao-quelato/inputs/m01a_N_sem_vies_agua.mdrestart"
+      ],
+      "preset": "arquivo_m02_livre_apos_N1",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/11-formacao-quelato/resultados-completos.zip",
+      "case": "m02_livre_apos_N1"
+    },
+    "exercicios/11-formacao-quelato/resultados/chelation_continuous/etapas/m01a_N_sem_vies_agua/m01a_N_sem_vies_agua.inp": {
+      "structures": [
+        "exercicios/11-formacao-quelato/estruturas/encontro_real_R1.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_m01a_N_sem_vies_agua",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/11-formacao-quelato/resultados-completos.zip",
+      "case": "m01a_N_sem_vies_agua"
+    },
+    "exercicios/11-formacao-quelato/resultados/chelation_continuous/etapas/m02_livre_apos_N1/m02_livre_apos_N1.inp": {
+      "structures": [
+        "exercicios/11-formacao-quelato/estruturas/encontro_real_R1.xyz"
+      ],
+      "dependencies": [
+        "exercicios/11-formacao-quelato/inputs/m01a_N_sem_vies_agua.mdrestart"
+      ],
+      "preset": "arquivo_m02_livre_apos_N1",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/11-formacao-quelato/resultados-completos.zip",
+      "case": "m02_livre_apos_N1"
+    },
+    "exercicios/11-formacao-quelato/resultados/chelation_continuous/etapas/r9_rep1_00500_05000fs/r9_rep1_00500_05000fs.inp": {
+      "structures": [
+        "exercicios/11-formacao-quelato/estruturas/zn_20h2o_3en_r9.xyz"
+      ],
+      "dependencies": [
+        "exercicios/11-formacao-quelato/resultados/chelation_continuous/etapas/r9_rep1_piloto_0500fs/r9_rep1_piloto_0500fs.mdrestart"
+      ],
+      "preset": "arquivo_r9_rep1_00500_05000fs",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/11-formacao-quelato/resultados-completos.zip",
+      "case": "r9_rep1_00500_05000fs"
+    },
+    "exercicios/11-formacao-quelato/resultados/chelation_continuous/etapas/r9_rep1_05000_10000fs/r9_rep1_05000_10000fs.inp": {
+      "structures": [
+        "exercicios/11-formacao-quelato/estruturas/zn_20h2o_3en_r9.xyz"
+      ],
+      "dependencies": [
+        "exercicios/11-formacao-quelato/resultados/chelation_continuous/etapas/r9_rep1_00500_05000fs/r9_rep1_00500_05000fs.mdrestart"
+      ],
+      "preset": "arquivo_r9_rep1_05000_10000fs",
+      "state": "partial_interrupted_md",
+      "status": "Execução interrompida: trajetória até 9864 fs; não completou 10000 fs.",
+      "resultsPackage": "exercicios/11-formacao-quelato/resultados-completos.zip",
+      "case": "r9_rep1_05000_10000fs"
+    },
+    "exercicios/11-formacao-quelato/resultados/chelation_continuous/etapas/r9_rep1_piloto_0500fs/r9_rep1_piloto_0500fs.inp": {
+      "structures": [
+        "exercicios/11-formacao-quelato/estruturas/zn_20h2o_3en_r9.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_r9_rep1_piloto_0500fs",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/11-formacao-quelato/resultados-completos.zip",
+      "case": "r9_rep1_piloto_0500fs"
+    },
+    "exercicios/11-formacao-quelato/resultados/etapas/m01a_N_sem_vies_agua.inp": {
+      "structures": [
+        "exercicios/11-formacao-quelato/estruturas/encontro_real_R1.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_m01a_N_sem_vies_agua",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/11-formacao-quelato/resultados-completos.zip",
+      "case": "m01a_N_sem_vies_agua"
+    },
+    "exercicios/11-formacao-quelato/resultados/etapas/m02_livre_apos_N1.inp": {
+      "structures": [
+        "exercicios/11-formacao-quelato/estruturas/encontro_real_R1.xyz"
+      ],
+      "dependencies": [
+        "exercicios/11-formacao-quelato/inputs/m01a_N_sem_vies_agua.mdrestart"
+      ],
+      "preset": "arquivo_m02_livre_apos_N1",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/11-formacao-quelato/resultados-completos.zip",
+      "case": "m02_livre_apos_N1"
+    },
+    "exercicios/12-gota-protonada/inputs/h01_aquecer.inp": {
+      "structures": [
+        "exercicios/12-gota-protonada/estruturas/gota_equilibrar.xyz"
+      ],
+      "dependencies": [
+        "exercicios/12-gota-protonada/inputs/p03_equilibrar.mdrestart"
+      ],
+      "preset": "arquivo_proton_droplet_400k",
+      "state": "complete_stage_with_combined_reference",
+      "status": "Etapa executada; o laboratório abre o ramo completo de 2500 fs, incluindo os 500 fs comuns.",
+      "resultsPackage": "exercicios/12-gota-protonada/resultados-completos.zip",
+      "case": "h01_aquecer"
+    },
+    "exercicios/12-gota-protonada/inputs/p03_equilibrar.inp": {
+      "structures": [
+        "exercicios/12-gota-protonada/estruturas/gota_equilibrar.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_proton_droplet_300k",
+      "state": "complete_stage_with_combined_reference",
+      "status": "Etapa executada; o laboratório abre o ramo completo de 2500 fs, incluindo os 500 fs comuns.",
+      "resultsPackage": "exercicios/12-gota-protonada/resultados-completos.zip",
+      "case": "p03_equilibrar"
+    },
+    "exercicios/12-gota-protonada/inputs/p04_observar.inp": {
+      "structures": [
+        "exercicios/12-gota-protonada/estruturas/gota_equilibrar.xyz"
+      ],
+      "dependencies": [
+        "exercicios/12-gota-protonada/inputs/p03_equilibrar.mdrestart"
+      ],
+      "preset": "arquivo_proton_droplet_300k",
+      "state": "complete_stage_with_combined_reference",
+      "status": "Etapa executada; o laboratório abre o ramo completo de 2500 fs, incluindo os 500 fs comuns.",
+      "resultsPackage": "exercicios/12-gota-protonada/resultados-completos.zip",
+      "case": "p04_observar"
+    },
+    "exercicios/12-gota-protonada/inputs/t500_gota.inp": {
+      "structures": [
+        "exercicios/12-gota-protonada/estruturas/gota_equilibrar.xyz"
+      ],
+      "dependencies": [
+        "exercicios/12-gota-protonada/inputs/p03_equilibrar.mdrestart"
+      ],
+      "preset": "arquivo_proton_droplet_500k",
+      "state": "complete_stage_with_combined_reference",
+      "status": "Etapa executada; o laboratório abre o ramo completo de 2500 fs, incluindo os 500 fs comuns.",
+      "resultsPackage": "exercicios/12-gota-protonada/resultados-completos.zip",
+      "case": "t500_gota"
+    },
+    "exercicios/12-gota-protonada/inputs/t600_gota.inp": {
+      "structures": [
+        "exercicios/12-gota-protonada/estruturas/gota_equilibrar.xyz"
+      ],
+      "dependencies": [
+        "exercicios/12-gota-protonada/inputs/p03_equilibrar.mdrestart"
+      ],
+      "preset": "arquivo_proton_droplet_600k",
+      "state": "complete_stage_with_combined_reference",
+      "status": "Etapa executada; o laboratório abre o ramo completo de 2500 fs, incluindo os 500 fs comuns.",
+      "resultsPackage": "exercicios/12-gota-protonada/resultados-completos.zip",
+      "case": "t600_gota"
+    },
+    "exercicios/12-gota-protonada/resultados/etapas/h01_aquecer.inp": {
+      "structures": [
+        "exercicios/12-gota-protonada/estruturas/gota_equilibrar.xyz"
+      ],
+      "dependencies": [
+        "exercicios/12-gota-protonada/inputs/p03_equilibrar.mdrestart"
+      ],
+      "preset": "arquivo_proton_droplet_400k",
+      "state": "complete_stage_with_combined_reference",
+      "status": "Etapa executada; o laboratório abre o ramo completo de 2500 fs, incluindo os 500 fs comuns.",
+      "resultsPackage": "exercicios/12-gota-protonada/resultados-completos.zip",
+      "case": "h01_aquecer"
+    },
+    "exercicios/12-gota-protonada/resultados/etapas/originais/h01_aquecer/h01_aquecer.inp": {
+      "structures": [
+        "exercicios/12-gota-protonada/resultados/etapas/originais/h01_aquecer/gota_equilibrar.xyz"
+      ],
+      "dependencies": [
+        "exercicios/12-gota-protonada/resultados/etapas/originais/h01_aquecer/p03_equilibrar.mdrestart"
+      ],
+      "preset": "arquivo_proton_droplet_400k",
+      "state": "complete_stage_with_combined_reference",
+      "status": "Etapa executada; o laboratório abre o ramo completo de 2500 fs, incluindo os 500 fs comuns.",
+      "resultsPackage": "exercicios/12-gota-protonada/resultados-completos.zip",
+      "case": "h01_aquecer"
+    },
+    "exercicios/12-gota-protonada/resultados/etapas/originais/p03_equilibrar/p03_equilibrar.inp": {
+      "structures": [
+        "exercicios/12-gota-protonada/resultados/etapas/originais/p03_equilibrar/gota_equilibrar.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_proton_droplet_300k",
+      "state": "complete_stage_with_combined_reference",
+      "status": "Etapa executada; o laboratório abre o ramo completo de 2500 fs, incluindo os 500 fs comuns.",
+      "resultsPackage": "exercicios/12-gota-protonada/resultados-completos.zip",
+      "case": "p03_equilibrar"
+    },
+    "exercicios/12-gota-protonada/resultados/etapas/originais/p04_observar/p04_observar.inp": {
+      "structures": [
+        "exercicios/12-gota-protonada/resultados/etapas/originais/p04_observar/gota_equilibrar.xyz"
+      ],
+      "dependencies": [
+        "exercicios/12-gota-protonada/resultados/etapas/originais/p04_observar/p03_equilibrar.mdrestart"
+      ],
+      "preset": "arquivo_proton_droplet_300k",
+      "state": "complete_stage_with_combined_reference",
+      "status": "Etapa executada; o laboratório abre o ramo completo de 2500 fs, incluindo os 500 fs comuns.",
+      "resultsPackage": "exercicios/12-gota-protonada/resultados-completos.zip",
+      "case": "p04_observar"
+    },
+    "exercicios/12-gota-protonada/resultados/etapas/originais/t500_gota/t500_gota.inp": {
+      "structures": [
+        "exercicios/12-gota-protonada/resultados/etapas/originais/t500_gota/gota_equilibrar.xyz"
+      ],
+      "dependencies": [
+        "exercicios/12-gota-protonada/resultados/etapas/originais/t500_gota/p03_equilibrar.mdrestart"
+      ],
+      "preset": "arquivo_proton_droplet_500k",
+      "state": "complete_stage_with_combined_reference",
+      "status": "Etapa executada; o laboratório abre o ramo completo de 2500 fs, incluindo os 500 fs comuns.",
+      "resultsPackage": "exercicios/12-gota-protonada/resultados-completos.zip",
+      "case": "t500_gota"
+    },
+    "exercicios/12-gota-protonada/resultados/etapas/originais/t600_gota/t600_gota.inp": {
+      "structures": [
+        "exercicios/12-gota-protonada/resultados/etapas/originais/t600_gota/gota_equilibrar.xyz"
+      ],
+      "dependencies": [
+        "exercicios/12-gota-protonada/resultados/etapas/originais/t600_gota/p03_equilibrar.mdrestart"
+      ],
+      "preset": "arquivo_proton_droplet_600k",
+      "state": "complete_stage_with_combined_reference",
+      "status": "Etapa executada; o laboratório abre o ramo completo de 2500 fs, incluindo os 500 fs comuns.",
+      "resultsPackage": "exercicios/12-gota-protonada/resultados-completos.zip",
+      "case": "t600_gota"
+    },
+    "exercicios/12-gota-protonada/resultados/etapas/p04_observar.inp": {
+      "structures": [
+        "exercicios/12-gota-protonada/estruturas/gota_equilibrar.xyz"
+      ],
+      "dependencies": [
+        "exercicios/12-gota-protonada/inputs/p03_equilibrar.mdrestart"
+      ],
+      "preset": "arquivo_proton_droplet_300k",
+      "state": "complete_stage_with_combined_reference",
+      "status": "Etapa executada; o laboratório abre o ramo completo de 2500 fs, incluindo os 500 fs comuns.",
+      "resultsPackage": "exercicios/12-gota-protonada/resultados-completos.zip",
+      "case": "p04_observar"
+    },
+    "exercicios/12-gota-protonada/resultados/etapas/t500_gota.inp": {
+      "structures": [
+        "exercicios/12-gota-protonada/estruturas/gota_equilibrar.xyz"
+      ],
+      "dependencies": [
+        "exercicios/12-gota-protonada/inputs/p03_equilibrar.mdrestart"
+      ],
+      "preset": "arquivo_proton_droplet_500k",
+      "state": "complete_stage_with_combined_reference",
+      "status": "Etapa executada; o laboratório abre o ramo completo de 2500 fs, incluindo os 500 fs comuns.",
+      "resultsPackage": "exercicios/12-gota-protonada/resultados-completos.zip",
+      "case": "t500_gota"
+    },
+    "exercicios/12-gota-protonada/resultados/etapas/t600_gota.inp": {
+      "structures": [
+        "exercicios/12-gota-protonada/estruturas/gota_equilibrar.xyz"
+      ],
+      "dependencies": [
+        "exercicios/12-gota-protonada/inputs/p03_equilibrar.mdrestart"
+      ],
+      "preset": "arquivo_proton_droplet_600k",
+      "state": "complete_stage_with_combined_reference",
+      "status": "Etapa executada; o laboratório abre o ramo completo de 2500 fs, incluindo os 500 fs comuns.",
+      "resultsPackage": "exercicios/12-gota-protonada/resultados-completos.zip",
+      "case": "t600_gota"
+    },
+    "exercicios/13-cell-pressao/inputs/zn_cell_1000bar.inp": {
+      "structures": [
+        "exercicios/13-cell-pressao/estruturas/zn_solvato.xyz"
+      ],
+      "dependencies": [
+        "exercicios/13-cell-pressao/estruturas/preparacao_termica.mdrestart"
+      ],
+      "preset": "arquivo_zn_cell_1000bar",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/13-cell-pressao/resultados-completos.zip",
+      "case": "zn_cell_1000bar",
+      "executionPackage": "exercicios/13-cell-pressao/aula-zn_cell_1000bar.zip"
+    },
+    "exercicios/13-cell-pressao/inputs/zn_cell_1bar.inp": {
+      "structures": [
+        "exercicios/13-cell-pressao/estruturas/zn_solvato.xyz"
+      ],
+      "dependencies": [
+        "exercicios/13-cell-pressao/estruturas/preparacao_termica.mdrestart"
+      ],
+      "preset": "arquivo_zn_cell_1bar",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/13-cell-pressao/resultados-completos.zip",
+      "case": "zn_cell_1bar",
+      "executionPackage": "exercicios/13-cell-pressao/aula-zn_cell_1bar.zip"
+    },
+    "exercicios/13-cell-pressao/inputs/zn_cell_fixed.inp": {
+      "structures": [
+        "exercicios/13-cell-pressao/estruturas/zn_comprimido.xyz"
+      ],
+      "dependencies": [
+        "exercicios/13-cell-pressao/estruturas/comprimido.mdrestart"
+      ],
+      "preset": "arquivo_zn_cell_fixed",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/13-cell-pressao/resultados-completos.zip",
+      "case": "zn_cell_fixed",
+      "executionPackage": "exercicios/13-cell-pressao/aula-zn_cell_fixed.zip"
+    },
+    "exercicios/13-cell-pressao/inputs/zn_cell_none.inp": {
+      "structures": [
+        "exercicios/13-cell-pressao/estruturas/zn_comprimido.xyz"
+      ],
+      "dependencies": [
+        "exercicios/13-cell-pressao/estruturas/comprimido.mdrestart"
+      ],
+      "preset": "arquivo_zn_cell_none",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/13-cell-pressao/resultados-completos.zip",
+      "case": "zn_cell_none",
+      "executionPackage": "exercicios/13-cell-pressao/aula-zn_cell_none.zip"
+    },
+    "exercicios/13-cell-pressao/inputs/zn_cell_spring10.inp": {
+      "structures": [
+        "exercicios/13-cell-pressao/estruturas/zn_solvato.xyz"
+      ],
+      "dependencies": [
+        "exercicios/13-cell-pressao/estruturas/preparacao_termica.mdrestart"
+      ],
+      "preset": "arquivo_zn_cell_spring10",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/13-cell-pressao/resultados-completos.zip",
+      "case": "zn_cell_spring10",
+      "executionPackage": "exercicios/13-cell-pressao/aula-zn_cell_spring10.zip"
+    },
+    "exercicios/13-cell-pressao/inputs/zn_cell_spring50.inp": {
+      "structures": [
+        "exercicios/13-cell-pressao/estruturas/zn_solvato.xyz"
+      ],
+      "dependencies": [
+        "exercicios/13-cell-pressao/estruturas/preparacao_termica.mdrestart"
+      ],
+      "preset": "arquivo_zn_cell_spring50",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/13-cell-pressao/resultados-completos.zip",
+      "case": "zn_cell_spring50",
+      "executionPackage": "exercicios/13-cell-pressao/aula-zn_cell_spring50.zip"
+    },
+    "exercicios/13-cell-pressao/resultados/zn_cell_1000bar/zn_cell_1000bar.inp": {
+      "structures": [
+        "exercicios/13-cell-pressao/resultados/zn_cell_1000bar/zn_solvato.xyz"
+      ],
+      "dependencies": [
+        "exercicios/13-cell-pressao/resultados/zn_cell_1000bar/preparacao_termica.mdrestart"
+      ],
+      "preset": "arquivo_zn_cell_1000bar",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/13-cell-pressao/resultados-completos.zip",
+      "case": "zn_cell_1000bar"
+    },
+    "exercicios/13-cell-pressao/resultados/zn_cell_1bar/zn_cell_1bar.inp": {
+      "structures": [
+        "exercicios/13-cell-pressao/resultados/zn_cell_1bar/zn_solvato.xyz"
+      ],
+      "dependencies": [
+        "exercicios/13-cell-pressao/resultados/zn_cell_1bar/preparacao_termica.mdrestart"
+      ],
+      "preset": "arquivo_zn_cell_1bar",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/13-cell-pressao/resultados-completos.zip",
+      "case": "zn_cell_1bar"
+    },
+    "exercicios/13-cell-pressao/resultados/zn_cell_fixed/zn_cell_fixed.inp": {
+      "structures": [
+        "exercicios/13-cell-pressao/resultados/zn_cell_fixed/zn_comprimido.xyz"
+      ],
+      "dependencies": [
+        "exercicios/13-cell-pressao/resultados/zn_cell_fixed/comprimido.mdrestart"
+      ],
+      "preset": "arquivo_zn_cell_fixed",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/13-cell-pressao/resultados-completos.zip",
+      "case": "zn_cell_fixed"
+    },
+    "exercicios/13-cell-pressao/resultados/zn_cell_none/zn_cell_none.inp": {
+      "structures": [
+        "exercicios/13-cell-pressao/resultados/zn_cell_none/zn_comprimido.xyz"
+      ],
+      "dependencies": [
+        "exercicios/13-cell-pressao/resultados/zn_cell_none/comprimido.mdrestart"
+      ],
+      "preset": "arquivo_zn_cell_none",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/13-cell-pressao/resultados-completos.zip",
+      "case": "zn_cell_none"
+    },
+    "exercicios/13-cell-pressao/resultados/zn_cell_spring10/zn_cell_spring10.inp": {
+      "structures": [
+        "exercicios/13-cell-pressao/resultados/zn_cell_spring10/zn_solvato.xyz"
+      ],
+      "dependencies": [
+        "exercicios/13-cell-pressao/resultados/zn_cell_spring10/preparacao_termica.mdrestart"
+      ],
+      "preset": "arquivo_zn_cell_spring10",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/13-cell-pressao/resultados-completos.zip",
+      "case": "zn_cell_spring10"
+    },
+    "exercicios/13-cell-pressao/resultados/zn_cell_spring50/zn_cell_spring50.inp": {
+      "structures": [
+        "exercicios/13-cell-pressao/resultados/zn_cell_spring50/zn_solvato.xyz"
+      ],
+      "dependencies": [
+        "exercicios/13-cell-pressao/resultados/zn_cell_spring50/preparacao_termica.mdrestart"
+      ],
+      "preset": "arquivo_zn_cell_spring50",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/13-cell-pressao/resultados-completos.zip",
+      "case": "zn_cell_spring50"
+    },
+    "exercicios/14-zn-en-pressao/resultados/zn_en_1000bar_5ps/zn_en_1000bar_5ps.inp": {
+      "structures": [
+        "exercicios/14-zn-en-pressao/resultados/zn_en_1000bar_5ps/zn_20h2o_3en_r9.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_zn_en_1000bar",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/14-zn-en-pressao/resultados-completos.zip",
+      "case": "zn_en_1000bar_5ps"
+    },
+    "exercicios/14-zn-en-pressao/resultados/zn_en_1bar_5ps/zn_en_1bar_5ps.inp": {
+      "structures": [
+        "exercicios/14-zn-en-pressao/resultados/zn_en_1bar_5ps/zn_20h2o_3en_r9.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_zn_en_1bar",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/14-zn-en-pressao/resultados-completos.zip",
+      "case": "zn_en_1bar_5ps"
+    },
+    "exercicios/14-zn-en-pressao/resultados/zn_en_4000bar_5ps/zn_en_4000bar_5ps.inp": {
+      "structures": [
+        "exercicios/14-zn-en-pressao/resultados/zn_en_4000bar_5ps/zn_20h2o_3en_r9.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_zn_en_4000bar",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/14-zn-en-pressao/resultados-completos.zip",
+      "case": "zn_en_4000bar_5ps"
+    },
+    "exercicios/14-zn-en-pressao/zn_en_1000bar_5ps.inp": {
+      "structures": [
+        "exercicios/14-zn-en-pressao/zn_20h2o_3en_r9.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_zn_en_1000bar",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/14-zn-en-pressao/resultados-completos.zip",
+      "case": "zn_en_1000bar_5ps"
+    },
+    "exercicios/14-zn-en-pressao/zn_en_1bar_5ps.inp": {
+      "structures": [
+        "exercicios/14-zn-en-pressao/zn_20h2o_3en_r9.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_zn_en_1bar",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/14-zn-en-pressao/resultados-completos.zip",
+      "case": "zn_en_1bar_5ps"
+    },
+    "exercicios/14-zn-en-pressao/zn_en_4000bar_5ps.inp": {
+      "structures": [
+        "exercicios/14-zn-en-pressao/zn_20h2o_3en_r9.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_zn_en_4000bar",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/14-zn-en-pressao/resultados-completos.zip",
+      "case": "zn_en_4000bar_5ps"
+    },
+    "exercicios/2-solvente-implicito/inputs/agua_cpcm.inp": {
+      "structures": [
+        "exercicios/2-solvente-implicito/estruturas/agua.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_agua_cpcm",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/2-solvente-implicito/resultados-completos.zip",
+      "case": "agua_cpcm",
+      "executionPackage": "exercicios/2-solvente-implicito/aula-agua_cpcm.zip"
+    },
+    "exercicios/2-solvente-implicito/inputs/dimero_b97_cpcm.inp": {
+      "structures": [
+        "exercicios/2-solvente-implicito/estruturas/dimero_b97.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_dimero_b97_cpcm",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/2-solvente-implicito/resultados-completos.zip",
+      "case": "dimero_b97_cpcm",
+      "executionPackage": "exercicios/2-solvente-implicito/aula-dimero_b97_cpcm.zip"
+    },
+    "exercicios/2-solvente-implicito/resultados/agua_cpcm/agua_cpcm.inp": {
+      "structures": [
+        "exercicios/2-solvente-implicito/resultados/agua_cpcm/agua.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_agua_cpcm",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/2-solvente-implicito/resultados-completos.zip",
+      "case": "agua_cpcm"
+    },
+    "exercicios/2-solvente-implicito/resultados/dimero_b97_cpcm/dimero_b97_cpcm.inp": {
+      "structures": [
+        "exercicios/2-solvente-implicito/resultados/dimero_b97_cpcm/dimero_b97.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_dimero_b97_cpcm",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/2-solvente-implicito/resultados-completos.zip",
+      "case": "dimero_b97_cpcm"
+    },
+    "exercicios/3-xtb2-etanol/inputs/etanol_nve.inp": {
+      "structures": [
+        "exercicios/3-xtb2-etanol/estruturas/etanol.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_etanol_nve",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/3-xtb2-etanol/resultados-completos.zip",
+      "case": "etanol_nve",
+      "executionPackage": "exercicios/3-xtb2-etanol/aula-etanol_nve.zip"
+    },
+    "exercicios/3-xtb2-etanol/inputs/preparar_etanol.inp": {
+      "structures": [
+        "exercicios/3-xtb2-etanol/estruturas/etanol_inicial.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_preparar_etanol",
+      "state": "complete_optimization_static_pair",
+      "status": "Otimização executada; estruturas inicial e final, sem dinâmica.",
+      "resultsPackage": "exercicios/3-xtb2-etanol/resultados-completos.zip",
+      "case": "preparar_etanol",
+      "labLabel": "Abrir estruturas inicial e otimizada no laboratório"
+    },
+    "exercicios/3-xtb2-etanol/resultados/etanol_nve/etanol_nve.inp": {
+      "structures": [
+        "exercicios/3-xtb2-etanol/resultados/etanol_nve/etanol.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_etanol_nve",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/3-xtb2-etanol/resultados-completos.zip",
+      "case": "etanol_nve"
+    },
+    "exercicios/3-xtb2-etanol/resultados/etanol_nve_5ps/etapas/etanol_nve.inp": {
+      "structures": [
+        "exercicios/3-xtb2-etanol/resultados/etanol_nve_5ps/etapas/etanol.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_etanol_nve",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/3-xtb2-etanol/resultados-completos.zip",
+      "case": "etanol_nve"
+    },
+    "exercicios/3-xtb2-etanol/resultados/etanol_nve_5ps/etapas/ethanol_00500_05000fs.inp": {
+      "structures": [
+        "exercicios/3-xtb2-etanol/resultados/etanol_nve_5ps/etapas/ethanol_restart.xyz"
+      ],
+      "dependencies": [
+        "exercicios/3-xtb2-etanol/resultados/etanol_nve_5ps/etapas/etanol_nve.mdrestart"
+      ],
+      "preset": "arquivo_etanol_nve_5ps",
+      "state": "complete_restart_with_combined_reference",
+      "status": "Continuação executada; o laboratório abre a sequência completa, incluindo o trecho anterior.",
+      "resultsPackage": "exercicios/3-xtb2-etanol/resultados-completos.zip",
+      "case": "ethanol_00500_05000fs"
+    },
+    "exercicios/3-xtb2-etanol/resultados/preparar_etanol/preparar_etanol.inp": {
+      "structures": [
+        "exercicios/3-xtb2-etanol/resultados/preparar_etanol/etanol_inicial.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_preparar_etanol",
+      "state": "complete_optimization_static_pair",
+      "status": "Otimização executada; estruturas inicial e final, sem dinâmica.",
+      "resultsPackage": "exercicios/3-xtb2-etanol/resultados-completos.zip",
+      "case": "preparar_etanol",
+      "labLabel": "Abrir estruturas inicial e otimizada no laboratório"
+    },
+    "exercicios/4-timestep/inputs/etanol_corrigido.inp": {
+      "structures": [
+        "exercicios/4-timestep/estruturas/etanol.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_etanol_corrigido",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/4-timestep/resultados-completos.zip",
+      "case": "etanol_corrigido",
+      "executionPackage": "exercicios/4-timestep/aula-etanol_corrigido.zip"
+    },
+    "exercicios/4-timestep/inputs/etanol_dt025.inp": {
+      "structures": [
+        "exercicios/4-timestep/estruturas/etanol.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_etanol_dt025",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/4-timestep/resultados-completos.zip",
+      "case": "etanol_dt025",
+      "executionPackage": "exercicios/4-timestep/aula-etanol_dt025.zip"
+    },
+    "exercicios/4-timestep/inputs/etanol_dt200.inp": {
+      "structures": [
+        "exercicios/4-timestep/estruturas/etanol.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_etanol_dt200",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/4-timestep/resultados-completos.zip",
+      "case": "etanol_dt200",
+      "executionPackage": "exercicios/4-timestep/aula-etanol_dt200.zip"
+    },
+    "exercicios/4-timestep/inputs/etanol_dt500.inp": {
+      "structures": [
+        "exercicios/4-timestep/estruturas/etanol.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_etanol_dt500",
+      "state": "failed_partial_md",
+      "status": "Execução falhou; somente o trecho produzido está disponível.",
+      "resultsPackage": "exercicios/4-timestep/resultados-completos.zip",
+      "case": "etanol_dt500",
+      "executionPackage": "exercicios/4-timestep/aula-etanol_dt500.zip"
+    },
+    "exercicios/4-timestep/inputs/etanol_instavel.inp": {
+      "structures": [
+        "exercicios/4-timestep/estruturas/etanol.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_etanol_instavel",
+      "state": "failed_partial_md",
+      "status": "Execução falhou; somente o trecho produzido está disponível.",
+      "resultsPackage": "exercicios/4-timestep/resultados-completos.zip",
+      "case": "etanol_instavel",
+      "executionPackage": "exercicios/4-timestep/aula-etanol_instavel.zip"
+    },
+    "exercicios/4-timestep/resultados/etanol_corrigido/etanol_corrigido.inp": {
+      "structures": [
+        "exercicios/4-timestep/resultados/etanol_corrigido/etanol.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_etanol_corrigido",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/4-timestep/resultados-completos.zip",
+      "case": "etanol_corrigido"
+    },
+    "exercicios/4-timestep/resultados/etanol_dt025/etanol_dt025.inp": {
+      "structures": [
+        "exercicios/4-timestep/resultados/etanol_dt025/etanol.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_etanol_dt025",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/4-timestep/resultados-completos.zip",
+      "case": "etanol_dt025"
+    },
+    "exercicios/4-timestep/resultados/etanol_dt200/etanol_dt200.inp": {
+      "structures": [
+        "exercicios/4-timestep/resultados/etanol_dt200/etanol.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_etanol_dt200",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/4-timestep/resultados-completos.zip",
+      "case": "etanol_dt200"
+    },
+    "exercicios/4-timestep/resultados/etanol_dt500/etanol_dt500.inp": {
+      "structures": [
+        "exercicios/4-timestep/resultados/etanol_dt500/etanol.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_etanol_dt500",
+      "state": "failed_partial_md",
+      "status": "Execução falhou; somente o trecho produzido está disponível.",
+      "resultsPackage": "exercicios/4-timestep/resultados-completos.zip",
+      "case": "etanol_dt500"
+    },
+    "exercicios/4-timestep/resultados/etanol_instavel/etanol_instavel.inp": {
+      "structures": [
+        "exercicios/4-timestep/resultados/etanol_instavel/etanol.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_etanol_instavel",
+      "state": "failed_partial_md",
+      "status": "Execução falhou; somente o trecho produzido está disponível.",
+      "resultsPackage": "exercicios/4-timestep/resultados-completos.zip",
+      "case": "etanol_instavel"
+    },
+    "exercicios/5-termostato/inputs/etanol_csvr.inp": {
+      "structures": [
+        "exercicios/5-termostato/estruturas/etanol.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_etanol_csvr",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/5-termostato/resultados-completos.zip",
+      "case": "etanol_csvr",
+      "executionPackage": "exercicios/5-termostato/aula-etanol_csvr.zip"
+    },
+    "exercicios/5-termostato/inputs/etanol_etapas.inp": {
+      "structures": [
+        "exercicios/5-termostato/estruturas/etanol.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_etanol_etapas",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/5-termostato/resultados-completos.zip",
+      "case": "etanol_etapas",
+      "executionPackage": "exercicios/5-termostato/aula-etanol_etapas.zip"
+    },
+    "exercicios/5-termostato/resultados/etanol_csvr/etanol_csvr.inp": {
+      "structures": [
+        "exercicios/5-termostato/resultados/etanol_csvr/etanol.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_etanol_csvr",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/5-termostato/resultados-completos.zip",
+      "case": "etanol_csvr"
+    },
+    "exercicios/5-termostato/resultados/etanol_etapas/etanol_etapas.inp": {
+      "structures": [
+        "exercicios/5-termostato/resultados/etanol_etapas/etanol.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_etanol_etapas",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/5-termostato/resultados-completos.zip",
+      "case": "etanol_etapas"
+    },
+    "exercicios/6-complexo-solvator/inputs/preparar_complexo.inp": {
+      "structures": [
+        "exercicios/6-complexo-solvator/estruturas/zn_en_inicial.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_preparar_complexo",
+      "state": "complete_optimization_static_pair",
+      "status": "Otimização executada; estruturas inicial e final, sem dinâmica.",
+      "resultsPackage": "exercicios/6-complexo-solvator/resultados-completos.zip",
+      "case": "preparar_complexo",
+      "labLabel": "Abrir estruturas inicial e otimizada no laboratório"
+    },
+    "exercicios/6-complexo-solvator/inputs/relaxar_solvato.inp": {
+      "structures": [
+        "exercicios/6-complexo-solvator/estruturas/zn_solvator.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_relaxar_solvato",
+      "state": "complete_optimization_static_pair",
+      "status": "Otimização executada; estruturas inicial e final, sem dinâmica.",
+      "resultsPackage": "exercicios/6-complexo-solvator/resultados-completos.zip",
+      "case": "relaxar_solvato",
+      "labLabel": "Abrir estruturas inicial e otimizada no laboratório"
+    },
+    "exercicios/6-complexo-solvator/inputs/zn_ion_20h2o_solvator.inp": {
+      "structures": [
+        "exercicios/6-complexo-solvator/estruturas/zn2_isolado.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_zn_ion_20h2o_solvator",
+      "state": "complete_static_solvator",
+      "status": "Montagem SOLVATOR executada; estruturas estáticas, sem dinâmica.",
+      "resultsPackage": "exercicios/6-complexo-solvator/resultados-completos.zip",
+      "case": "zn_ion_20h2o_solvator",
+      "executionPackage": "exercicios/6-complexo-solvator/aula-zn_ion_20h2o_solvator.zip"
+    },
+    "exercicios/6-complexo-solvator/inputs/zn_solvator.inp": {
+      "structures": [
+        "exercicios/6-complexo-solvator/estruturas/zn_en.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_zn_solvator",
+      "state": "complete_static_solvator",
+      "status": "Montagem SOLVATOR executada; estruturas estáticas, sem dinâmica.",
+      "resultsPackage": "exercicios/6-complexo-solvator/resultados-completos.zip",
+      "case": "zn_solvator",
+      "executionPackage": "exercicios/6-complexo-solvator/aula-zn_solvator.zip"
+    },
+    "exercicios/6-complexo-solvator/inputs/zn_solvator_2aguas.inp": {
+      "structures": [
+        "exercicios/6-complexo-solvator/estruturas/zn_en.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_zn_solvator_2aguas",
+      "state": "complete_static_solvator",
+      "status": "Montagem SOLVATOR executada; estruturas estáticas, sem dinâmica.",
+      "resultsPackage": "exercicios/6-complexo-solvator/resultados-completos.zip",
+      "case": "zn_solvator_2aguas",
+      "executionPackage": "exercicios/6-complexo-solvator/aula-zn_solvator_2aguas.zip"
+    },
+    "exercicios/6-complexo-solvator/resultados/preparar_complexo/preparar_complexo.inp": {
+      "structures": [
+        "exercicios/6-complexo-solvator/resultados/preparar_complexo/zn_en_inicial.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_preparar_complexo",
+      "state": "complete_optimization_static_pair",
+      "status": "Otimização executada; estruturas inicial e final, sem dinâmica.",
+      "resultsPackage": "exercicios/6-complexo-solvator/resultados-completos.zip",
+      "case": "preparar_complexo",
+      "labLabel": "Abrir estruturas inicial e otimizada no laboratório"
+    },
+    "exercicios/6-complexo-solvator/resultados/relaxar_solvato/relaxar_solvato.inp": {
+      "structures": [
+        "exercicios/6-complexo-solvator/resultados/relaxar_solvato/zn_solvator.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_relaxar_solvato",
+      "state": "complete_optimization_static_pair",
+      "status": "Otimização executada; estruturas inicial e final, sem dinâmica.",
+      "resultsPackage": "exercicios/6-complexo-solvator/resultados-completos.zip",
+      "case": "relaxar_solvato",
+      "labLabel": "Abrir estruturas inicial e otimizada no laboratório"
+    },
+    "exercicios/6-complexo-solvator/resultados/zn_ion_20h2o_solvator/zn_ion_20h2o_solvator.inp": {
+      "structures": [
+        "exercicios/6-complexo-solvator/estruturas/zn2_isolado.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_zn_ion_20h2o_solvator",
+      "state": "complete_static_solvator",
+      "status": "Montagem SOLVATOR executada; estruturas estáticas, sem dinâmica.",
+      "resultsPackage": "exercicios/6-complexo-solvator/resultados-completos.zip",
+      "case": "zn_ion_20h2o_solvator"
+    },
+    "exercicios/6-complexo-solvator/resultados/zn_solvator/zn_solvator.inp": {
+      "structures": [
+        "exercicios/6-complexo-solvator/resultados/zn_solvator/zn_en.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_zn_solvator",
+      "state": "complete_static_solvator",
+      "status": "Montagem SOLVATOR executada; estruturas estáticas, sem dinâmica.",
+      "resultsPackage": "exercicios/6-complexo-solvator/resultados-completos.zip",
+      "case": "zn_solvator"
+    },
+    "exercicios/6-complexo-solvator/resultados/zn_solvator_2aguas/zn_solvator_2aguas.inp": {
+      "structures": [
+        "exercicios/6-complexo-solvator/resultados/zn_solvator_2aguas/zn_en.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_zn_solvator_2aguas",
+      "state": "complete_static_solvator",
+      "status": "Montagem SOLVATOR executada; estruturas estáticas, sem dinâmica.",
+      "resultsPackage": "exercicios/6-complexo-solvator/resultados-completos.zip",
+      "case": "zn_solvator_2aguas"
+    },
+    "exercicios/7-dinamica-complexo/inputs/controle_dt025_31A.inp": {
+      "structures": [
+        "exercicios/7-dinamica-complexo/estruturas/zn_aguas_en_31A.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_controle_dt025_31A",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/7-dinamica-complexo/resultados-completos.zip",
+      "case": "controle_dt025_31A",
+      "executionPackage": "exercicios/7-dinamica-complexo/aula-controle_dt025_31A.zip"
+    },
+    "exercicios/7-dinamica-complexo/inputs/hidratacao_associacao_31A.inp": {
+      "structures": [
+        "exercicios/7-dinamica-complexo/estruturas/zn_aguas_en_31A.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_hidratacao_associacao_31A",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/7-dinamica-complexo/resultados-completos.zip",
+      "case": "hidratacao_associacao_31A",
+      "executionPackage": "exercicios/7-dinamica-complexo/aula-hidratacao_associacao_31A.zip"
+    },
+    "exercicios/7-dinamica-complexo/inputs/preparacao_termica.inp": {
+      "structures": [
+        "exercicios/7-dinamica-complexo/estruturas/zn_solvato.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_preparacao_termica",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/7-dinamica-complexo/resultados-completos.zip",
+      "case": "preparacao_termica"
+    },
+    "exercicios/7-dinamica-complexo/inputs/zn_h2o_sem_parede.inp": {
+      "structures": [
+        "exercicios/7-dinamica-complexo/estruturas/zn_20h2o_inicial.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_zn_h2o_sem_parede",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/7-dinamica-complexo/resultados-completos.zip",
+      "case": "zn_h2o_sem_parede",
+      "executionPackage": "exercicios/7-dinamica-complexo/aula-zn_h2o_sem_parede.zip"
+    },
+    "exercicios/7-dinamica-complexo/inputs/zn_h2o_spring10.inp": {
+      "structures": [
+        "exercicios/7-dinamica-complexo/estruturas/zn_20h2o_inicial.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_zn_h2o_spring10",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/7-dinamica-complexo/resultados-completos.zip",
+      "case": "zn_h2o_spring10",
+      "executionPackage": "exercicios/7-dinamica-complexo/aula-zn_h2o_spring10.zip"
+    },
+    "exercicios/7-dinamica-complexo/inputs/zn_h2o_spring200.inp": {
+      "structures": [
+        "exercicios/7-dinamica-complexo/estruturas/zn_20h2o_inicial.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_zn_h2o_spring200",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/7-dinamica-complexo/resultados-completos.zip",
+      "case": "zn_h2o_spring200",
+      "executionPackage": "exercicios/7-dinamica-complexo/aula-zn_h2o_spring200.zip"
+    },
+    "exercicios/7-dinamica-complexo/inputs/zn_h2o_spring50.inp": {
+      "structures": [
+        "exercicios/7-dinamica-complexo/estruturas/zn_20h2o_inicial.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_zn_h2o_spring50",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/7-dinamica-complexo/resultados-completos.zip",
+      "case": "zn_h2o_spring50",
+      "executionPackage": "exercicios/7-dinamica-complexo/aula-zn_h2o_spring50.zip"
+    },
+    "exercicios/7-dinamica-complexo/inputs/zn_parede.inp": {
+      "structures": [
+        "exercicios/7-dinamica-complexo/estruturas/zn_solvato.xyz"
+      ],
+      "dependencies": [
+        "exercicios/7-dinamica-complexo/estruturas/preparacao_termica.mdrestart"
+      ],
+      "preset": "arquivo_zn_parede",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/7-dinamica-complexo/resultados-completos.zip",
+      "case": "zn_parede",
+      "executionPackage": "exercicios/7-dinamica-complexo/aula-zn_parede.zip"
+    },
+    "exercicios/7-dinamica-complexo/inputs/zn_parede_longo.inp": {
+      "structures": [
+        "exercicios/7-dinamica-complexo/estruturas/zn_solvato.xyz"
+      ],
+      "dependencies": [
+        "exercicios/7-dinamica-complexo/estruturas/preparacao_termica.mdrestart"
+      ],
+      "preset": "arquivo_zn_parede_longo",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/7-dinamica-complexo/resultados-completos.zip",
+      "case": "zn_parede_longo",
+      "executionPackage": "exercicios/7-dinamica-complexo/aula-zn_parede_longo.zip"
+    },
+    "exercicios/7-dinamica-complexo/inputs/zn_sem_parede.inp": {
+      "structures": [
+        "exercicios/7-dinamica-complexo/estruturas/zn_solvato.xyz"
+      ],
+      "dependencies": [
+        "exercicios/7-dinamica-complexo/estruturas/preparacao_termica.mdrestart"
+      ],
+      "preset": "arquivo_zn_sem_parede",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/7-dinamica-complexo/resultados-completos.zip",
+      "case": "zn_sem_parede",
+      "executionPackage": "exercicios/7-dinamica-complexo/aula-zn_sem_parede.zip"
+    },
+    "exercicios/7-dinamica-complexo/inputs/zn_sem_parede_longo.inp": {
+      "structures": [
+        "exercicios/7-dinamica-complexo/estruturas/zn_solvato.xyz"
+      ],
+      "dependencies": [
+        "exercicios/7-dinamica-complexo/estruturas/preparacao_termica.mdrestart"
+      ],
+      "preset": "arquivo_zn_sem_parede_longo",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/7-dinamica-complexo/resultados-completos.zip",
+      "case": "zn_sem_parede_longo",
+      "executionPackage": "exercicios/7-dinamica-complexo/aula-zn_sem_parede_longo.zip"
+    },
+    "exercicios/7-dinamica-complexo/resultados/controle_dt025_31A/controle_dt025_31A.inp": {
+      "structures": [
+        "exercicios/7-dinamica-complexo/resultados/controle_dt025_31A/zn_aguas_en_31A.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_controle_dt025_31A",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/7-dinamica-complexo/resultados-completos.zip",
+      "case": "controle_dt025_31A"
+    },
+    "exercicios/7-dinamica-complexo/resultados/hidratacao_associacao_31A/hidratacao_associacao_31A.inp": {
+      "structures": [
+        "exercicios/7-dinamica-complexo/resultados/hidratacao_associacao_31A/zn_aguas_en_31A.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_hidratacao_associacao_31A",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/7-dinamica-complexo/resultados-completos.zip",
+      "case": "hidratacao_associacao_31A"
+    },
+    "exercicios/7-dinamica-complexo/resultados/preparacao_termica/preparacao_termica.inp": {
+      "structures": [
+        "exercicios/7-dinamica-complexo/resultados/preparacao_termica/zn_solvato.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_preparacao_termica",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/7-dinamica-complexo/resultados-completos.zip",
+      "case": "preparacao_termica"
+    },
+    "exercicios/7-dinamica-complexo/resultados/zn_h2o_sem_parede/zn_h2o_sem_parede.inp": {
+      "structures": [
+        "exercicios/7-dinamica-complexo/resultados/zn_h2o_sem_parede/zn_20h2o_inicial.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_zn_h2o_sem_parede",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/7-dinamica-complexo/resultados-completos.zip",
+      "case": "zn_h2o_sem_parede"
+    },
+    "exercicios/7-dinamica-complexo/resultados/zn_h2o_spring10/zn_h2o_spring10.inp": {
+      "structures": [
+        "exercicios/7-dinamica-complexo/resultados/zn_h2o_spring10/zn_20h2o_inicial.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_zn_h2o_spring10",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/7-dinamica-complexo/resultados-completos.zip",
+      "case": "zn_h2o_spring10"
+    },
+    "exercicios/7-dinamica-complexo/resultados/zn_h2o_spring200/zn_h2o_spring200.inp": {
+      "structures": [
+        "exercicios/7-dinamica-complexo/resultados/zn_h2o_spring200/zn_20h2o_inicial.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_zn_h2o_spring200",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/7-dinamica-complexo/resultados-completos.zip",
+      "case": "zn_h2o_spring200"
+    },
+    "exercicios/7-dinamica-complexo/resultados/zn_h2o_spring50/zn_h2o_spring50.inp": {
+      "structures": [
+        "exercicios/7-dinamica-complexo/resultados/zn_h2o_spring50/zn_20h2o_inicial.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_zn_h2o_spring50",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/7-dinamica-complexo/resultados-completos.zip",
+      "case": "zn_h2o_spring50"
+    },
+    "exercicios/7-dinamica-complexo/resultados/zn_parede/zn_parede.inp": {
+      "structures": [
+        "exercicios/7-dinamica-complexo/resultados/zn_parede/zn_solvato.xyz"
+      ],
+      "dependencies": [
+        "exercicios/7-dinamica-complexo/estruturas/preparacao_termica.mdrestart"
+      ],
+      "preset": "arquivo_zn_parede",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/7-dinamica-complexo/resultados-completos.zip",
+      "case": "zn_parede"
+    },
+    "exercicios/7-dinamica-complexo/resultados/zn_parede_longo/zn_parede_longo.inp": {
+      "structures": [
+        "exercicios/7-dinamica-complexo/resultados/zn_parede_longo/zn_solvato.xyz"
+      ],
+      "dependencies": [
+        "exercicios/7-dinamica-complexo/estruturas/preparacao_termica.mdrestart"
+      ],
+      "preset": "arquivo_zn_parede_longo",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/7-dinamica-complexo/resultados-completos.zip",
+      "case": "zn_parede_longo"
+    },
+    "exercicios/7-dinamica-complexo/resultados/zn_sem_parede/zn_sem_parede.inp": {
+      "structures": [
+        "exercicios/7-dinamica-complexo/resultados/zn_sem_parede/zn_solvato.xyz"
+      ],
+      "dependencies": [
+        "exercicios/7-dinamica-complexo/estruturas/preparacao_termica.mdrestart"
+      ],
+      "preset": "arquivo_zn_sem_parede",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/7-dinamica-complexo/resultados-completos.zip",
+      "case": "zn_sem_parede"
+    },
+    "exercicios/7-dinamica-complexo/resultados/zn_sem_parede_longo/zn_sem_parede_longo.inp": {
+      "structures": [
+        "exercicios/7-dinamica-complexo/resultados/zn_sem_parede_longo/zn_solvato.xyz"
+      ],
+      "dependencies": [
+        "exercicios/7-dinamica-complexo/estruturas/preparacao_termica.mdrestart"
+      ],
+      "preset": "arquivo_zn_sem_parede_longo",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/7-dinamica-complexo/resultados-completos.zip",
+      "case": "zn_sem_parede_longo"
+    },
+    "exercicios/8-agua-no-fulereno/inputs/agua_c60.inp": {
+      "structures": [
+        "exercicios/8-agua-no-fulereno/estruturas/agua_c60.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_agua_c60",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/8-agua-no-fulereno/resultados-completos.zip",
+      "case": "agua_c60",
+      "executionPackage": "exercicios/8-agua-no-fulereno/aula-agua_c60.zip"
+    },
+    "exercicios/8-agua-no-fulereno/inputs/preparar_agua_c60.inp": {
+      "structures": [
+        "exercicios/8-agua-no-fulereno/estruturas/agua_c60_inicial.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_preparar_agua_c60",
+      "state": "complete_optimization_static_pair",
+      "status": "Otimização executada; estruturas inicial e final, sem dinâmica.",
+      "resultsPackage": "exercicios/8-agua-no-fulereno/resultados-completos.zip",
+      "case": "preparar_agua_c60",
+      "executionPackage": "exercicios/8-agua-no-fulereno/aula-preparar_agua_c60.zip",
+      "labLabel": "Abrir estruturas inicial e otimizada no laboratório"
+    },
+    "exercicios/8-agua-no-fulereno/resultados/agua_c60/agua_c60.inp": {
+      "structures": [
+        "exercicios/8-agua-no-fulereno/resultados/agua_c60/agua_c60.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_agua_c60",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/8-agua-no-fulereno/resultados-completos.zip",
+      "case": "agua_c60"
+    },
+    "exercicios/8-agua-no-fulereno/resultados/preparar_agua_c60/preparar_agua_c60.inp": {
+      "structures": [
+        "exercicios/8-agua-no-fulereno/resultados/preparar_agua_c60/agua_c60_inicial.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_preparar_agua_c60",
+      "state": "complete_optimization_static_pair",
+      "status": "Otimização executada; estruturas inicial e final, sem dinâmica.",
+      "resultsPackage": "exercicios/8-agua-no-fulereno/resultados-completos.zip",
+      "case": "preparar_agua_c60",
+      "labLabel": "Abrir estruturas inicial e otimizada no laboratório"
+    },
+    "exercicios/9-aluminio-amonia/apoio/falha-scc/al_agua_nh3_xtb2.inp": {
+      "structures": [
+        "exercicios/9-aluminio-amonia/estruturas/al_agua_nh3.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_al_agua_nh3_xtb2",
+      "state": "failed_scc_zero_md_steps",
+      "status": "Falha SCC antes da dinâmica: 0 fs. Estrutura inicial e saída preservadas.",
+      "resultsPackage": "exercicios/9-aluminio-amonia/resultados-completos.zip",
+      "case": "al_agua_nh3_xtb2",
+      "labLabel": "Abrir estrutura e saída da falha · 0 fs"
+    },
+    "exercicios/9-aluminio-amonia/inputs/al_agua_nh3_dt05.inp": {
+      "structures": [
+        "exercicios/9-aluminio-amonia/estruturas/al_agua_nh3.xyz"
+      ],
+      "dependencies": [
+        "exercicios/9-aluminio-amonia/inputs/scc.inp"
+      ],
+      "preset": "arquivo_al_agua_nh3_dt05",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/9-aluminio-amonia/resultados-completos.zip",
+      "case": "al_agua_nh3_dt05",
+      "executionPackage": "exercicios/9-aluminio-amonia/aula-al_agua_nh3_dt05.zip"
+    },
+    "exercicios/9-aluminio-amonia/inputs/al_agua_nh3_scc.inp": {
+      "structures": [
+        "exercicios/9-aluminio-amonia/estruturas/al_agua_nh3.xyz"
+      ],
+      "dependencies": [
+        "exercicios/9-aluminio-amonia/inputs/scc.inp"
+      ],
+      "preset": "arquivo_al_agua_nh3_scc",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/9-aluminio-amonia/resultados-completos.zip",
+      "case": "al_agua_nh3_scc",
+      "executionPackage": "exercicios/9-aluminio-amonia/aula-al_agua_nh3_scc.zip"
+    },
+    "exercicios/9-aluminio-amonia/inputs/scc.inp": {
+      "structures": [
+        "exercicios/9-aluminio-amonia/estruturas/al_agua_nh3.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_scc",
+      "state": "auxiliary_xtb_control",
+      "status": "Auxiliar do xTB, usado nos dois controles Al. Não é um cálculo ORCA independente.",
+      "resultsPackage": "exercicios/9-aluminio-amonia/resultados-completos.zip",
+      "case": "scc",
+      "labLabel": "Abrir os dois controles que usam este auxiliar"
+    },
+    "exercicios/9-aluminio-amonia/resultados/al_agua_nh3_dt05/al_agua_nh3_dt05.inp": {
+      "structures": [
+        "exercicios/9-aluminio-amonia/resultados/al_agua_nh3_dt05/al_agua_nh3.xyz"
+      ],
+      "dependencies": [
+        "exercicios/9-aluminio-amonia/resultados/al_agua_nh3_dt05/scc.inp"
+      ],
+      "preset": "arquivo_al_agua_nh3_dt05",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/9-aluminio-amonia/resultados-completos.zip",
+      "case": "al_agua_nh3_dt05"
+    },
+    "exercicios/9-aluminio-amonia/resultados/al_agua_nh3_dt05/scc.inp": {
+      "structures": [
+        "exercicios/9-aluminio-amonia/estruturas/al_agua_nh3.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_scc",
+      "state": "auxiliary_xtb_control",
+      "status": "Auxiliar do xTB, usado nos dois controles Al. Não é um cálculo ORCA independente.",
+      "resultsPackage": "exercicios/9-aluminio-amonia/resultados-completos.zip",
+      "case": "scc",
+      "labLabel": "Abrir os dois controles que usam este auxiliar"
+    },
+    "exercicios/9-aluminio-amonia/resultados/al_agua_nh3_scc/al_agua_nh3_scc.inp": {
+      "structures": [
+        "exercicios/9-aluminio-amonia/resultados/al_agua_nh3_scc/al_agua_nh3.xyz"
+      ],
+      "dependencies": [
+        "exercicios/9-aluminio-amonia/resultados/al_agua_nh3_scc/scc.inp"
+      ],
+      "preset": "arquivo_al_agua_nh3_scc",
+      "state": "complete_md",
+      "status": "Dinâmica executada; resultados disponíveis.",
+      "resultsPackage": "exercicios/9-aluminio-amonia/resultados-completos.zip",
+      "case": "al_agua_nh3_scc"
+    },
+    "exercicios/9-aluminio-amonia/resultados/al_agua_nh3_scc/scc.inp": {
+      "structures": [
+        "exercicios/9-aluminio-amonia/estruturas/al_agua_nh3.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_scc",
+      "state": "auxiliary_xtb_control",
+      "status": "Auxiliar do xTB, usado nos dois controles Al. Não é um cálculo ORCA independente.",
+      "resultsPackage": "exercicios/9-aluminio-amonia/resultados-completos.zip",
+      "case": "scc",
+      "labLabel": "Abrir os dois controles que usam este auxiliar"
+    }
+  },
+  "newRuns": [
+    {
+      "runkey": "agua_dump",
+      "type": "md",
+      "state": "complete_md",
+      "xyz": "exercicios/1-agua-dft/resultados/agua_dump/agua_dump-traj.xyz",
+      "out": "exercicios/1-agua-dft/resultados/agua_dump/agua_dump.out",
+      "energy_csv": "exercicios/1-agua-dft/resultados/agua_dump/agua_dump-md-ener.csv",
+      "colvars": null,
+      "normal": true,
+      "frames": 201,
+      "energy_rows": 201
+    },
+    {
+      "runkey": "preparar_agua_inicial",
+      "type": "static_structure",
+      "state": "initial_structure",
+      "label": "preparar_agua · estrutura inicial",
+      "xyz": "exercicios/1-agua-dft/resultados/preparar_agua/agua_inicial.xyz",
+      "out": null,
+      "energy_csv": null
+    },
+    {
+      "runkey": "preparar_agua",
+      "type": "static_structure",
+      "state": "complete_optimization",
+      "label": "preparar_agua · estrutura otimizada",
+      "xyz": "exercicios/1-agua-dft/resultados/preparar_agua/preparar_agua.xyz",
+      "out": "exercicios/1-agua-dft/resultados/preparar_agua/preparar_agua.out",
+      "energy_csv": null
+    },
+    {
+      "runkey": "preparar_dimero_b97_inicial",
+      "type": "static_structure",
+      "state": "initial_structure",
+      "label": "preparar_dimero_b97 · estrutura inicial",
+      "xyz": "exercicios/1-agua-dft/resultados/preparar_dimero_b97/dimero_assimetrico.xyz",
+      "out": null,
+      "energy_csv": null
+    },
+    {
+      "runkey": "preparar_dimero_b97",
+      "type": "static_structure",
+      "state": "complete_optimization",
+      "label": "preparar_dimero_b97 · estrutura otimizada",
+      "xyz": "exercicios/1-agua-dft/resultados/preparar_dimero_b97/preparar_dimero_b97.xyz",
+      "out": "exercicios/1-agua-dft/resultados/preparar_dimero_b97/preparar_dimero_b97.out",
+      "energy_csv": null
+    },
+    {
+      "runkey": "probe_properties_dft",
+      "type": "md",
+      "state": "complete_md",
+      "label": "Dump Properties · diagnóstico de 4 passos · 2 fs",
+      "xyz": "exercicios/1-agua-dft/verificacao-dump/probe_properties_dft-traj.xyz",
+      "out": "exercicios/1-agua-dft/verificacao-dump/probe_properties_dft.out",
+      "energy_csv": "exercicios/1-agua-dft/verificacao-dump/probe_properties_dft-md-ener.csv",
+      "normal": true,
+      "energy_rows": 5
+    },
+    {
+      "runkey": "z00_otimizar_inicial",
+      "type": "static_structure",
+      "state": "initial_structure",
+      "label": "H5O2+ · antes da otimizacao",
+      "xyz": "exercicios/10-proton-compartilhado/estruturas/h5o2_inicial.xyz",
+      "out": null,
+      "energy_csv": null
+    },
+    {
+      "runkey": "z00_otimizar",
+      "type": "static_structure",
+      "state": "complete_optimization",
+      "label": "H5O2+ · apos otimizacao",
+      "xyz": "exercicios/10-proton-compartilhado/estruturas/h5o2_otimizado.xyz",
+      "out": "exercicios/10-proton-compartilhado/resultados/otimizacao/z00_otimizar.out",
+      "energy_csv": null
+    },
+    {
+      "runkey": "encontro_real_R1_inicial",
+      "type": "static_structure",
+      "state": "initial_structure",
+      "label": "Encontro retido · somente estrutura inicial",
+      "xyz": "exercicios/11-formacao-quelato/estruturas/encontro_real_R1.xyz",
+      "out": null,
+      "energy_csv": null
+    },
+    {
+      "runkey": "m01a_N_sem_vies_agua",
+      "type": "md",
+      "state": "complete_md",
+      "xyz": "exercicios/11-formacao-quelato/resultados/chelation_continuous/etapas/m01a_N_sem_vies_agua/m01a_N_sem_vies_agua-traj.xyz",
+      "out": "exercicios/11-formacao-quelato/resultados/chelation_continuous/etapas/m01a_N_sem_vies_agua/m01a_N_sem_vies_agua.out",
+      "energy_csv": "exercicios/11-formacao-quelato/resultados/chelation_continuous/etapas/m01a_N_sem_vies_agua/m01a_N_sem_vies_agua-md-ener.csv",
+      "colvars": "exercicios/11-formacao-quelato/resultados/chelation_continuous/etapas/m01a_N_sem_vies_agua/m01a_N_sem_vies_agua-colvars.csv",
+      "normal": true,
+      "frames": 1001,
+      "energy_rows": 4001
+    },
+    {
+      "runkey": "m02_livre_apos_N1",
+      "type": "md",
+      "state": "complete_md",
+      "xyz": "exercicios/11-formacao-quelato/resultados/chelation_continuous/etapas/m02_livre_apos_N1/m02_livre_apos_N1-traj.xyz",
+      "out": "exercicios/11-formacao-quelato/resultados/chelation_continuous/etapas/m02_livre_apos_N1/m02_livre_apos_N1.out",
+      "energy_csv": "exercicios/11-formacao-quelato/resultados/chelation_continuous/etapas/m02_livre_apos_N1/m02_livre_apos_N1-md-ener.csv",
+      "colvars": "exercicios/11-formacao-quelato/resultados/chelation_continuous/etapas/m02_livre_apos_N1/m02_livre_apos_N1-colvars.csv",
+      "normal": true,
+      "frames": 2000,
+      "energy_rows": 8001
+    },
+    {
+      "runkey": "r9_rep1_00500_05000fs",
+      "type": "md",
+      "state": "complete_md",
+      "xyz": "exercicios/11-formacao-quelato/resultados/chelation_continuous/etapas/r9_rep1_00500_05000fs/r9_rep1_00500_05000fs-traj.xyz",
+      "out": "exercicios/11-formacao-quelato/resultados/chelation_continuous/etapas/r9_rep1_00500_05000fs/r9_rep1_00500_05000fs.out",
+      "energy_csv": "exercicios/11-formacao-quelato/resultados/chelation_continuous/etapas/r9_rep1_00500_05000fs/r9_rep1_00500_05000fs-md-ener.csv",
+      "colvars": null,
+      "normal": true,
+      "frames": 4500,
+      "energy_rows": 18001
+    },
+    {
+      "runkey": "r9_rep1_05000_10000fs",
+      "type": "md",
+      "state": "partial_interrupted_md",
+      "xyz": "exercicios/11-formacao-quelato/resultados/chelation_continuous/etapas/r9_rep1_05000_10000fs/r9_rep1_05000_10000fs-traj.xyz",
+      "out": "exercicios/11-formacao-quelato/resultados/chelation_continuous/etapas/r9_rep1_05000_10000fs/r9_rep1_05000_10000fs.out",
+      "energy_csv": "exercicios/11-formacao-quelato/resultados/chelation_continuous/etapas/r9_rep1_05000_10000fs/r9_rep1_05000_10000fs-md-ener.csv",
+      "colvars": null,
+      "normal": false,
+      "frames": 4864,
+      "energy_rows": 19458
+    },
+    {
+      "runkey": "r9_rep1_piloto_0500fs",
+      "type": "md",
+      "state": "complete_md",
+      "xyz": "exercicios/11-formacao-quelato/resultados/chelation_continuous/etapas/r9_rep1_piloto_0500fs/r9_rep1_piloto_0500fs-traj.xyz",
+      "out": "exercicios/11-formacao-quelato/resultados/chelation_continuous/etapas/r9_rep1_piloto_0500fs/r9_rep1_piloto_0500fs.out",
+      "energy_csv": "exercicios/11-formacao-quelato/resultados/chelation_continuous/etapas/r9_rep1_piloto_0500fs/r9_rep1_piloto_0500fs-md-ener.csv",
+      "colvars": null,
+      "normal": true,
+      "frames": 1001,
+      "energy_rows": 2001
+    },
+    {
+      "runkey": "preparar_etanol_inicial",
+      "type": "static_structure",
+      "state": "initial_structure",
+      "label": "preparar_etanol · estrutura inicial",
+      "xyz": "exercicios/3-xtb2-etanol/resultados/preparar_etanol/etanol_inicial.xyz",
+      "out": null,
+      "energy_csv": null
+    },
+    {
+      "runkey": "preparar_etanol",
+      "type": "static_structure",
+      "state": "complete_optimization",
+      "label": "preparar_etanol · estrutura otimizada",
+      "xyz": "exercicios/3-xtb2-etanol/resultados/preparar_etanol/preparar_etanol.xyz",
+      "out": "exercicios/3-xtb2-etanol/resultados/preparar_etanol/preparar_etanol.out",
+      "energy_csv": null
+    },
+    {
+      "runkey": "preparar_complexo_inicial",
+      "type": "static_structure",
+      "state": "initial_structure",
+      "label": "preparar_complexo · estrutura inicial",
+      "xyz": "exercicios/6-complexo-solvator/resultados/preparar_complexo/zn_en_inicial.xyz",
+      "out": null,
+      "energy_csv": null
+    },
+    {
+      "runkey": "relaxar_solvato_inicial",
+      "type": "static_structure",
+      "state": "initial_structure",
+      "label": "relaxar_solvato · estrutura inicial",
+      "xyz": "exercicios/6-complexo-solvator/resultados/relaxar_solvato/zn_solvator.xyz",
+      "out": null,
+      "energy_csv": null
+    },
+    {
+      "runkey": "relaxar_solvato",
+      "type": "static_structure",
+      "state": "complete_optimization",
+      "label": "relaxar_solvato · estrutura otimizada",
+      "xyz": "exercicios/6-complexo-solvator/resultados/relaxar_solvato/relaxar_solvato.xyz",
+      "out": "exercicios/6-complexo-solvator/resultados/relaxar_solvato/relaxar_solvato.out",
+      "energy_csv": null
+    },
+    {
+      "runkey": "preparacao_termica",
+      "type": "md",
+      "state": "complete_md",
+      "xyz": "exercicios/7-dinamica-complexo/resultados/preparacao_termica/preparacao_termica-traj.xyz",
+      "out": "exercicios/7-dinamica-complexo/resultados/preparacao_termica/preparacao_termica.out",
+      "energy_csv": "exercicios/7-dinamica-complexo/resultados/preparacao_termica/preparacao_termica-md-ener.csv",
+      "colvars": "exercicios/7-dinamica-complexo/resultados/preparacao_termica/preparacao_termica-colvars.csv",
+      "normal": true,
+      "frames": 201,
+      "energy_rows": 201
+    },
+    {
+      "runkey": "preparar_agua_c60_inicial",
+      "type": "static_structure",
+      "state": "initial_structure",
+      "label": "preparar_agua_c60 · estrutura inicial",
+      "xyz": "exercicios/8-agua-no-fulereno/resultados/preparar_agua_c60/agua_c60_inicial.xyz",
+      "out": null,
+      "energy_csv": null
+    },
+    {
+      "runkey": "preparar_agua_c60",
+      "type": "static_structure",
+      "state": "complete_optimization",
+      "label": "preparar_agua_c60 · estrutura otimizada",
+      "xyz": "exercicios/8-agua-no-fulereno/resultados/preparar_agua_c60/preparar_agua_c60.xyz",
+      "out": "exercicios/8-agua-no-fulereno/resultados/preparar_agua_c60/preparar_agua_c60.out",
+      "energy_csv": null
+    },
+    {
+      "runkey": "al_agua_nh3_xtb2",
+      "type": "static_structure",
+      "state": "failed_scc_zero_md_steps",
+      "label": "Al3+ · tentativa SCC falhou · 0 fs",
+      "xyz": "exercicios/9-aluminio-amonia/estruturas/al_agua_nh3.xyz",
+      "out": "exercicios/9-aluminio-amonia/apoio/falha-scc/al_agua_nh3_xtb2.out",
+      "energy_csv": null
+    },
+    {
+      "runkey": "probe_properties_simple",
+      "type": "md",
+      "state": "complete_diagnostic_md",
+      "label": "Dump Properties · controle XTB2 · 2 fs, sem prop.log",
+      "xyz": "exercicios/1-agua-dft/verificacao-dump/probe_properties_simple-traj.xyz",
+      "out": "exercicios/1-agua-dft/verificacao-dump/probe_properties_simple.out",
+      "energy_csv": "exercicios/1-agua-dft/verificacao-dump/probe_properties_simple-md-ener.csv",
+      "normal": true
+    },
+    {
+      "runkey": "probe_properties",
+      "type": "static_structure",
+      "state": "failed_diagnostic_before_md",
+      "label": "Dump Properties · falha antes da MD · 0 fs",
+      "xyz": "exercicios/1-agua-dft/estruturas/probe_properties_inicial_input.xyz",
+      "out": "exercicios/1-agua-dft/verificacao-dump/probe_properties.out",
+      "energy_csv": null,
+      "normal": false
+    }
+  ],
+  "presets": {
+    "arquivo_agua_dft": {
+      "runs": [
+        "agua_dft"
+      ],
+      "tab": "trajectory",
+      "returnRoute": {
+        "href": "../exercicios/1-agua-dft/index.html",
+        "label": "01 · Água: da molécula à ligação H"
+      },
+      "loadMessage": "Dinâmica executada; resultados disponíveis."
+    },
+    "arquivo_agua_dump": {
+      "runs": [
+        "agua_dump"
+      ],
+      "tab": "trajectory",
+      "returnRoute": {
+        "href": "../exercicios/1-agua-dft/index.html",
+        "label": "01 · Água: da molécula à ligação H"
+      },
+      "loadMessage": "Dinâmica executada; resultados disponíveis."
+    },
+    "arquivo_agua_xtb2_csvr": {
+      "runs": [
+        "agua_xtb2_csvr"
+      ],
+      "tab": "trajectory",
+      "returnRoute": {
+        "href": "../exercicios/1-agua-dft/index.html",
+        "label": "01 · Água: da molécula à ligação H"
+      },
+      "loadMessage": "Dinâmica executada; resultados disponíveis."
+    },
+    "arquivo_agua_xtb2_nve": {
+      "runs": [
+        "agua_xtb2_nve"
+      ],
+      "tab": "trajectory",
+      "returnRoute": {
+        "href": "../exercicios/1-agua-dft/index.html",
+        "label": "01 · Água: da molécula à ligação H"
+      },
+      "loadMessage": "Dinâmica executada; resultados disponíveis."
+    },
+    "arquivo_dimero_b97": {
+      "runs": [
+        "dimero_b97"
+      ],
+      "tab": "trajectory",
+      "returnRoute": {
+        "href": "../exercicios/1-agua-dft/index.html",
+        "label": "01 · Água: da molécula à ligação H"
+      },
+      "loadMessage": "Dinâmica executada; resultados disponíveis."
+    },
+    "arquivo_dimero_xtb2_2ps": {
+      "runs": [
+        "dimero_xtb2_2ps"
+      ],
+      "tab": "trajectory",
+      "returnRoute": {
+        "href": "../exercicios/1-agua-dft/index.html",
+        "label": "01 · Água: da molécula à ligação H"
+      },
+      "loadMessage": "Dinâmica executada; resultados disponíveis."
+    },
+    "arquivo_preparar_agua": {
+      "runs": [
+        "preparar_agua_inicial",
+        "preparar_agua"
+      ],
+      "tab": "trajectory",
+      "returnRoute": {
+        "href": "../exercicios/1-agua-dft/index.html",
+        "label": "01 · Água: da molécula à ligação H"
+      },
+      "loadMessage": "Otimização executada; estruturas inicial e final, sem dinâmica. Escolha a geometria no campo Simulação."
+    },
+    "arquivo_dimero_xtb2_5ps": {
+      "runs": [
+        "dimero_xtb2_5ps"
+      ],
+      "tab": "trajectory",
+      "returnRoute": {
+        "href": "../exercicios/1-agua-dft/index.html",
+        "label": "01 · Água: da molécula à ligação H"
+      },
+      "loadMessage": "Continuação executada; o laboratório abre a sequência completa, incluindo o trecho anterior."
+    },
+    "arquivo_preparar_dimero_b97": {
+      "runs": [
+        "preparar_dimero_b97_inicial",
+        "preparar_dimero_b97"
+      ],
+      "tab": "trajectory",
+      "returnRoute": {
+        "href": "../exercicios/1-agua-dft/index.html",
+        "label": "01 · Água: da molécula à ligação H"
+      },
+      "loadMessage": "Otimização executada; estruturas inicial e final, sem dinâmica. Escolha a geometria no campo Simulação."
+    },
+    "arquivo_probe_properties_dft": {
+      "runs": [
+        "probe_properties_dft"
+      ],
+      "tab": "trajectory",
+      "returnRoute": {
+        "href": "../exercicios/1-agua-dft/verificacao-dump.html",
+        "label": "Verificação de Dump no ORCA 6.1.1"
+      },
+      "loadMessage": "Diagnóstico executado: 4 passos de 0,5 fs, até 2 fs. Posições e energias disponíveis."
+    },
+    "arquivo_proton_shared": {
+      "runs": [
+        "proton_shared"
+      ],
+      "tab": "trajectory",
+      "returnRoute": {
+        "href": "../exercicios/10-proton-compartilhado/index.html",
+        "label": "05 · H₅O₂⁺: onde está o próton?"
+      },
+      "loadMessage": "Dinâmica executada; resultados disponíveis."
+    },
+    "arquivo_z00_otimizar": {
+      "runs": [
+        "z00_otimizar_inicial",
+        "z00_otimizar"
+      ],
+      "tab": "trajectory",
+      "returnRoute": {
+        "href": "../exercicios/10-proton-compartilhado/index.html",
+        "label": "05 · H₅O₂⁺: onde está o próton?"
+      },
+      "loadMessage": "H₅O₂⁺: estruturas inicial e otimizada carregadas separadamente. Escolha a geometria no campo Simulação. Esta etapa não é uma dinâmica."
+    },
+    "arquivo_proton_shared_10ps": {
+      "runs": [
+        "proton_shared_10ps"
+      ],
+      "tab": "trajectory",
+      "returnRoute": {
+        "href": "../exercicios/10-proton-compartilhado/index.html",
+        "label": "05 · H₅O₂⁺: onde está o próton?"
+      },
+      "loadMessage": "Continuação executada; o laboratório abre a sequência completa, incluindo o trecho anterior."
+    },
+    "arquivo_en_assistida_com_parede": {
+      "runs": [
+        "encontro_real_R1_inicial"
+      ],
+      "tab": "trajectory",
+      "returnRoute": {
+        "href": "../exercicios/11-formacao-quelato/index.html",
+        "label": "04c · en: primeiro N assistido, segundo N livre"
+      },
+      "loadMessage": "Input preparado, ainda não executado. Sem resultados próprios; o laboratório abre somente a estrutura inicial. A geometria foi extraída da referência anterior aos 7083 fs; esse tempo pertence à origem, não a este controle."
+    },
+    "arquivo_en_assistida_sem_parede": {
+      "runs": [
+        "encontro_real_R1_inicial"
+      ],
+      "tab": "trajectory",
+      "returnRoute": {
+        "href": "../exercicios/11-formacao-quelato/index.html",
+        "label": "04c · en: primeiro N assistido, segundo N livre"
+      },
+      "loadMessage": "Input preparado, ainda não executado. Sem resultados próprios; o laboratório abre somente a estrutura inicial. A geometria foi extraída da referência anterior aos 7083 fs; esse tempo pertence à origem, não a este controle."
+    },
+    "arquivo_en_livre_com_parede": {
+      "runs": [
+        "encontro_real_R1_inicial"
+      ],
+      "tab": "trajectory",
+      "returnRoute": {
+        "href": "../exercicios/11-formacao-quelato/index.html",
+        "label": "04c · en: primeiro N assistido, segundo N livre"
+      },
+      "loadMessage": "Input preparado, ainda não executado. Sem resultados próprios; o laboratório abre somente a estrutura inicial. A geometria foi extraída da referência anterior aos 7083 fs; esse tempo pertence à origem, não a este controle."
+    },
+    "arquivo_en_livre_sem_parede": {
+      "runs": [
+        "encontro_real_R1_inicial"
+      ],
+      "tab": "trajectory",
+      "returnRoute": {
+        "href": "../exercicios/11-formacao-quelato/index.html",
+        "label": "04c · en: primeiro N assistido, segundo N livre"
+      },
+      "loadMessage": "Input preparado, ainda não executado. Sem resultados próprios; o laboratório abre somente a estrutura inicial. A geometria foi extraída da referência anterior aos 7083 fs; esse tempo pertence à origem, não a este controle."
+    },
+    "arquivo_m01a_N_sem_vies_agua": {
+      "runs": [
+        "m01a_N_sem_vies_agua"
+      ],
+      "tab": "trajectory",
+      "returnRoute": {
+        "href": "../exercicios/11-formacao-quelato/index.html",
+        "label": "04c · en: primeiro N assistido, segundo N livre"
+      },
+      "loadMessage": "Dinâmica executada; resultados disponíveis."
+    },
+    "arquivo_m02_livre_apos_N1": {
+      "runs": [
+        "m02_livre_apos_N1"
+      ],
+      "tab": "trajectory",
+      "returnRoute": {
+        "href": "../exercicios/11-formacao-quelato/index.html",
+        "label": "04c · en: primeiro N assistido, segundo N livre"
+      },
+      "loadMessage": "Dinâmica executada; resultados disponíveis."
+    },
+    "arquivo_r9_rep1_00500_05000fs": {
+      "runs": [
+        "r9_rep1_00500_05000fs"
+      ],
+      "tab": "trajectory",
+      "returnRoute": {
+        "href": "../exercicios/11-formacao-quelato/index.html",
+        "label": "04c · en: primeiro N assistido, segundo N livre"
+      },
+      "loadMessage": "Dinâmica executada; resultados disponíveis."
+    },
+    "arquivo_r9_rep1_05000_10000fs": {
+      "runs": [
+        "r9_rep1_05000_10000fs"
+      ],
+      "tab": "trajectory",
+      "returnRoute": {
+        "href": "../exercicios/11-formacao-quelato/index.html",
+        "label": "04c · en: primeiro N assistido, segundo N livre"
+      },
+      "loadMessage": "Execução interrompida: trajetória até 9864 fs; não completou 10000 fs."
+    },
+    "arquivo_r9_rep1_piloto_0500fs": {
+      "runs": [
+        "r9_rep1_piloto_0500fs"
+      ],
+      "tab": "trajectory",
+      "returnRoute": {
+        "href": "../exercicios/11-formacao-quelato/index.html",
+        "label": "04c · en: primeiro N assistido, segundo N livre"
+      },
+      "loadMessage": "Dinâmica executada; resultados disponíveis."
+    },
+    "arquivo_proton_droplet_400k": {
+      "runs": [
+        "proton_droplet_400k"
+      ],
+      "tab": "trajectory",
+      "returnRoute": {
+        "href": "../exercicios/12-gota-protonada/index.html",
+        "label": "Opcional · Gota protonada: temperatura, retornos e amostragem"
+      },
+      "loadMessage": "Etapa executada; o laboratório abre o ramo completo de 2500 fs, incluindo os 500 fs comuns."
+    },
+    "arquivo_proton_droplet_300k": {
+      "runs": [
+        "proton_droplet_300k"
+      ],
+      "tab": "trajectory",
+      "returnRoute": {
+        "href": "../exercicios/12-gota-protonada/index.html",
+        "label": "Opcional · Gota protonada: temperatura, retornos e amostragem"
+      },
+      "loadMessage": "Etapa executada; o laboratório abre o ramo completo de 2500 fs, incluindo os 500 fs comuns."
+    },
+    "arquivo_proton_droplet_500k": {
+      "runs": [
+        "proton_droplet_500k"
+      ],
+      "tab": "trajectory",
+      "returnRoute": {
+        "href": "../exercicios/12-gota-protonada/index.html",
+        "label": "Opcional · Gota protonada: temperatura, retornos e amostragem"
+      },
+      "loadMessage": "Etapa executada; o laboratório abre o ramo completo de 2500 fs, incluindo os 500 fs comuns."
+    },
+    "arquivo_proton_droplet_600k": {
+      "runs": [
+        "proton_droplet_600k"
+      ],
+      "tab": "trajectory",
+      "returnRoute": {
+        "href": "../exercicios/12-gota-protonada/index.html",
+        "label": "Opcional · Gota protonada: temperatura, retornos e amostragem"
+      },
+      "loadMessage": "Etapa executada; o laboratório abre o ramo completo de 2500 fs, incluindo os 500 fs comuns."
+    },
+    "arquivo_zn_cell_1000bar": {
+      "runs": [
+        "zn_cell_1000bar"
+      ],
+      "tab": "trajectory",
+      "returnRoute": {
+        "href": "../exercicios/13-cell-pressao/index.html",
+        "label": "C · Celas de simulação e pressão"
+      },
+      "loadMessage": "Dinâmica executada; resultados disponíveis."
+    },
+    "arquivo_zn_cell_1bar": {
+      "runs": [
+        "zn_cell_1bar"
+      ],
+      "tab": "trajectory",
+      "returnRoute": {
+        "href": "../exercicios/13-cell-pressao/index.html",
+        "label": "C · Celas de simulação e pressão"
+      },
+      "loadMessage": "Dinâmica executada; resultados disponíveis."
+    },
+    "arquivo_zn_cell_fixed": {
+      "runs": [
+        "zn_cell_fixed"
+      ],
+      "tab": "trajectory",
+      "returnRoute": {
+        "href": "../exercicios/13-cell-pressao/index.html",
+        "label": "C · Celas de simulação e pressão"
+      },
+      "loadMessage": "Dinâmica executada; resultados disponíveis."
+    },
+    "arquivo_zn_cell_none": {
+      "runs": [
+        "zn_cell_none"
+      ],
+      "tab": "trajectory",
+      "returnRoute": {
+        "href": "../exercicios/13-cell-pressao/index.html",
+        "label": "C · Celas de simulação e pressão"
+      },
+      "loadMessage": "Dinâmica executada; resultados disponíveis."
+    },
+    "arquivo_zn_cell_spring10": {
+      "runs": [
+        "zn_cell_spring10"
+      ],
+      "tab": "trajectory",
+      "returnRoute": {
+        "href": "../exercicios/13-cell-pressao/index.html",
+        "label": "C · Celas de simulação e pressão"
+      },
+      "loadMessage": "Dinâmica executada; resultados disponíveis."
+    },
+    "arquivo_zn_cell_spring50": {
+      "runs": [
+        "zn_cell_spring50"
+      ],
+      "tab": "trajectory",
+      "returnRoute": {
+        "href": "../exercicios/13-cell-pressao/index.html",
+        "label": "C · Celas de simulação e pressão"
+      },
+      "loadMessage": "Dinâmica executada; resultados disponíveis."
+    },
+    "arquivo_zn_en_1000bar": {
+      "runs": [
+        "zn_en_1000bar"
+      ],
+      "tab": "trajectory",
+      "returnRoute": {
+        "href": "../exercicios/14-zn-en-pressao/index.html",
+        "label": "04d · en sem assistência: 1, 1000 e 4000 bar"
+      },
+      "loadMessage": "Dinâmica executada; resultados disponíveis."
+    },
+    "arquivo_zn_en_1bar": {
+      "runs": [
+        "zn_en_1bar"
+      ],
+      "tab": "trajectory",
+      "returnRoute": {
+        "href": "../exercicios/14-zn-en-pressao/index.html",
+        "label": "04d · en sem assistência: 1, 1000 e 4000 bar"
+      },
+      "loadMessage": "Dinâmica executada; resultados disponíveis."
+    },
+    "arquivo_zn_en_4000bar": {
+      "runs": [
+        "zn_en_4000bar"
+      ],
+      "tab": "trajectory",
+      "returnRoute": {
+        "href": "../exercicios/14-zn-en-pressao/index.html",
+        "label": "04d · en sem assistência: 1, 1000 e 4000 bar"
+      },
+      "loadMessage": "Dinâmica executada; resultados disponíveis."
+    },
+    "arquivo_agua_cpcm": {
+      "runs": [
+        "agua_cpcm"
+      ],
+      "tab": "trajectory",
+      "returnRoute": {
+        "href": "../exercicios/2-solvente-implicito/index.html",
+        "label": "Opcional · O papel do solvente contínuo"
+      },
+      "loadMessage": "Dinâmica executada; resultados disponíveis."
+    },
+    "arquivo_dimero_b97_cpcm": {
+      "runs": [
+        "dimero_b97_cpcm"
+      ],
+      "tab": "trajectory",
+      "returnRoute": {
+        "href": "../exercicios/2-solvente-implicito/index.html",
+        "label": "Opcional · O papel do solvente contínuo"
+      },
+      "loadMessage": "Dinâmica executada; resultados disponíveis."
+    },
+    "arquivo_etanol_nve": {
+      "runs": [
+        "etanol_nve"
+      ],
+      "tab": "trajectory",
+      "returnRoute": {
+        "href": "../exercicios/3-xtb2-etanol/index.html",
+        "label": "02a · Etanol: o controle antes da correção"
+      },
+      "loadMessage": "Dinâmica executada; resultados disponíveis."
+    },
+    "arquivo_preparar_etanol": {
+      "runs": [
+        "preparar_etanol_inicial",
+        "preparar_etanol"
+      ],
+      "tab": "trajectory",
+      "returnRoute": {
+        "href": "../exercicios/3-xtb2-etanol/index.html",
+        "label": "02a · Etanol: o controle antes da correção"
+      },
+      "loadMessage": "Otimização executada; estruturas inicial e final, sem dinâmica. Escolha a geometria no campo Simulação."
+    },
+    "arquivo_etanol_nve_5ps": {
+      "runs": [
+        "etanol_nve_5ps"
+      ],
+      "tab": "trajectory",
+      "returnRoute": {
+        "href": "../exercicios/3-xtb2-etanol/index.html",
+        "label": "02a · Etanol: o controle antes da correção"
+      },
+      "loadMessage": "Continuação executada; o laboratório abre a sequência completa, incluindo o trecho anterior."
+    },
+    "arquivo_etanol_corrigido": {
+      "runs": [
+        "etanol_corrigido"
+      ],
+      "tab": "trajectory",
+      "returnRoute": {
+        "href": "../exercicios/4-timestep/index.html",
+        "label": "02b · A instabilidade aparece antes da explosão"
+      },
+      "loadMessage": "Dinâmica executada; resultados disponíveis."
+    },
+    "arquivo_etanol_dt025": {
+      "runs": [
+        "etanol_dt025"
+      ],
+      "tab": "trajectory",
+      "returnRoute": {
+        "href": "../exercicios/4-timestep/index.html",
+        "label": "02b · A instabilidade aparece antes da explosão"
+      },
+      "loadMessage": "Dinâmica executada; resultados disponíveis."
+    },
+    "arquivo_etanol_dt200": {
+      "runs": [
+        "etanol_dt200"
+      ],
+      "tab": "trajectory",
+      "returnRoute": {
+        "href": "../exercicios/4-timestep/index.html",
+        "label": "02b · A instabilidade aparece antes da explosão"
+      },
+      "loadMessage": "Dinâmica executada; resultados disponíveis."
+    },
+    "arquivo_etanol_dt500": {
+      "runs": [
+        "etanol_dt500"
+      ],
+      "tab": "trajectory",
+      "returnRoute": {
+        "href": "../exercicios/4-timestep/index.html",
+        "label": "02b · A instabilidade aparece antes da explosão"
+      },
+      "loadMessage": "Execução falhou; somente o trecho produzido está disponível."
+    },
+    "arquivo_etanol_instavel": {
+      "runs": [
+        "etanol_instavel"
+      ],
+      "tab": "trajectory",
+      "returnRoute": {
+        "href": "../exercicios/4-timestep/index.html",
+        "label": "02b · A instabilidade aparece antes da explosão"
+      },
+      "loadMessage": "Execução falhou; somente o trecho produzido está disponível."
+    },
+    "arquivo_etanol_csvr": {
+      "runs": [
+        "etanol_csvr"
+      ],
+      "tab": "trajectory",
+      "returnRoute": {
+        "href": "../exercicios/5-termostato/index.html",
+        "label": "03 · Aquecer, explorar, resfriar — no mesmo input"
+      },
+      "loadMessage": "Dinâmica executada; resultados disponíveis."
+    },
+    "arquivo_etanol_etapas": {
+      "runs": [
+        "etanol_etapas"
+      ],
+      "tab": "trajectory",
+      "returnRoute": {
+        "href": "../exercicios/5-termostato/index.html",
+        "label": "03 · Aquecer, explorar, resfriar — no mesmo input"
+      },
+      "loadMessage": "Dinâmica executada; resultados disponíveis."
+    },
+    "arquivo_preparar_complexo": {
+      "runs": [
+        "preparar_complexo_inicial",
+        "preparar_complexo"
+      ],
+      "tab": "trajectory",
+      "returnRoute": {
+        "href": "../exercicios/6-complexo-solvator/historico-apoio.html",
+        "label": "Apoio · Construir o ambiente com SOLVATOR"
+      },
+      "loadMessage": "Otimização executada; estruturas inicial e final, sem dinâmica. Escolha a geometria no campo Simulação."
+    },
+    "arquivo_relaxar_solvato": {
+      "runs": [
+        "relaxar_solvato_inicial",
+        "relaxar_solvato"
+      ],
+      "tab": "trajectory",
+      "returnRoute": {
+        "href": "../exercicios/6-complexo-solvator/historico-apoio.html",
+        "label": "Apoio · Construir o ambiente com SOLVATOR"
+      },
+      "loadMessage": "Otimização executada; estruturas inicial e final, sem dinâmica. Escolha a geometria no campo Simulação."
+    },
+    "arquivo_zn_ion_20h2o_solvator": {
+      "runs": [
+        "zn_ion_20h2o_solvator"
+      ],
+      "tab": "trajectory",
+      "returnRoute": {
+        "href": "../exercicios/6-complexo-solvator/index.html",
+        "label": "04a · Zn²⁺ isolado + 20 águas com SOLVATOR"
+      },
+      "loadMessage": "Montagem SOLVATOR executada; estruturas estáticas, sem dinâmica."
+    },
+    "arquivo_zn_solvator": {
+      "runs": [
+        "zn_solvator"
+      ],
+      "tab": "trajectory",
+      "returnRoute": {
+        "href": "../exercicios/6-complexo-solvator/historico.html",
+        "label": "04a · Construir o ambiente com SOLVATOR"
+      },
+      "loadMessage": "Montagem SOLVATOR executada; estruturas estáticas, sem dinâmica."
+    },
+    "arquivo_zn_solvator_2aguas": {
+      "runs": [
+        "zn_solvator_2aguas"
+      ],
+      "tab": "trajectory",
+      "returnRoute": {
+        "href": "../exercicios/6-complexo-solvator/historico.html",
+        "label": "04a · Construir o ambiente com SOLVATOR"
+      },
+      "loadMessage": "Montagem SOLVATOR executada; estruturas estáticas, sem dinâmica."
+    },
+    "arquivo_controle_dt025_31A": {
+      "runs": [
+        "controle_dt025_31A"
+      ],
+      "tab": "trajectory",
+      "returnRoute": {
+        "href": "../exercicios/7-dinamica-complexo/hidratacao.html",
+        "label": "Ver a camada de águas se formar"
+      },
+      "loadMessage": "Dinâmica executada; resultados disponíveis."
+    },
+    "arquivo_hidratacao_associacao_31A": {
+      "runs": [
+        "hidratacao_associacao_31A"
+      ],
+      "tab": "trajectory",
+      "returnRoute": {
+        "href": "../exercicios/7-dinamica-complexo/hidratacao.html",
+        "label": "Ver a camada de águas se formar"
+      },
+      "loadMessage": "Dinâmica executada; resultados disponíveis."
+    },
+    "arquivo_preparacao_termica": {
+      "runs": [
+        "preparacao_termica"
+      ],
+      "tab": "trajectory",
+      "returnRoute": {
+        "href": "../exercicios/7-dinamica-complexo/historico-apoio.html",
+        "label": "Apoio · Acompanhar o complexo e o confinamento"
+      },
+      "loadMessage": "Dinâmica executada; resultados disponíveis."
+    },
+    "arquivo_zn_h2o_sem_parede": {
+      "runs": [
+        "zn_h2o_sem_parede"
+      ],
+      "tab": "trajectory",
+      "returnRoute": {
+        "href": "../exercicios/7-dinamica-complexo/index.html",
+        "label": "04b · Hidratação sem en e rigidez da parede"
+      },
+      "loadMessage": "Dinâmica executada; resultados disponíveis."
+    },
+    "arquivo_zn_h2o_spring10": {
+      "runs": [
+        "zn_h2o_spring10"
+      ],
+      "tab": "trajectory",
+      "returnRoute": {
+        "href": "../exercicios/7-dinamica-complexo/index.html",
+        "label": "04b · Hidratação sem en e rigidez da parede"
+      },
+      "loadMessage": "Dinâmica executada; resultados disponíveis."
+    },
+    "arquivo_zn_h2o_spring200": {
+      "runs": [
+        "zn_h2o_spring200"
+      ],
+      "tab": "trajectory",
+      "returnRoute": {
+        "href": "../exercicios/7-dinamica-complexo/index.html",
+        "label": "04b · Hidratação sem en e rigidez da parede"
+      },
+      "loadMessage": "Dinâmica executada; resultados disponíveis."
+    },
+    "arquivo_zn_h2o_spring50": {
+      "runs": [
+        "zn_h2o_spring50"
+      ],
+      "tab": "trajectory",
+      "returnRoute": {
+        "href": "../exercicios/7-dinamica-complexo/index.html",
+        "label": "04b · Hidratação sem en e rigidez da parede"
+      },
+      "loadMessage": "Dinâmica executada; resultados disponíveis."
+    },
+    "arquivo_zn_parede": {
+      "runs": [
+        "zn_parede"
+      ],
+      "tab": "trajectory",
+      "returnRoute": {
+        "href": "../exercicios/7-dinamica-complexo/historico-apoio.html",
+        "label": "Apoio · Acompanhar o complexo e o confinamento"
+      },
+      "loadMessage": "Dinâmica executada; resultados disponíveis."
+    },
+    "arquivo_zn_parede_longo": {
+      "runs": [
+        "zn_parede_longo"
+      ],
+      "tab": "trajectory",
+      "returnRoute": {
+        "href": "../exercicios/7-dinamica-complexo/historico.html",
+        "label": "04b · Manter as águas perto do complexo"
+      },
+      "loadMessage": "Dinâmica executada; resultados disponíveis."
+    },
+    "arquivo_zn_sem_parede": {
+      "runs": [
+        "zn_sem_parede"
+      ],
+      "tab": "trajectory",
+      "returnRoute": {
+        "href": "../exercicios/7-dinamica-complexo/historico-apoio.html",
+        "label": "Apoio · Acompanhar o complexo e o confinamento"
+      },
+      "loadMessage": "Dinâmica executada; resultados disponíveis."
+    },
+    "arquivo_zn_sem_parede_longo": {
+      "runs": [
+        "zn_sem_parede_longo"
+      ],
+      "tab": "trajectory",
+      "returnRoute": {
+        "href": "../exercicios/7-dinamica-complexo/historico.html",
+        "label": "04b · Manter as águas perto do complexo"
+      },
+      "loadMessage": "Dinâmica executada; resultados disponíveis."
+    },
+    "arquivo_agua_c60": {
+      "runs": [
+        "agua_c60"
+      ],
+      "tab": "trajectory",
+      "returnRoute": {
+        "href": "../exercicios/8-agua-no-fulereno/index.html",
+        "label": "Opcional · Água dentro de C₆₀"
+      },
+      "loadMessage": "Dinâmica executada; resultados disponíveis."
+    },
+    "arquivo_preparar_agua_c60": {
+      "runs": [
+        "preparar_agua_c60_inicial",
+        "preparar_agua_c60"
+      ],
+      "tab": "trajectory",
+      "returnRoute": {
+        "href": "../exercicios/8-agua-no-fulereno/index.html",
+        "label": "Opcional · Água dentro de C₆₀"
+      },
+      "loadMessage": "Otimização executada; estruturas inicial e final, sem dinâmica. Escolha a geometria no campo Simulação."
+    },
+    "arquivo_al_agua_nh3_xtb2": {
+      "runs": [
+        "al_agua_nh3_xtb2"
+      ],
+      "tab": "trajectory",
+      "returnRoute": {
+        "href": "../exercicios/9-aluminio-amonia/apoio.html",
+        "label": "Apoio · a geometria precisa de um ajuste SCC"
+      },
+      "loadMessage": "Falha SCC antes da dinâmica: 0 fs. Estrutura inicial e saída preservadas."
+    },
+    "arquivo_al_agua_nh3_dt05": {
+      "runs": [
+        "al_agua_nh3_dt05"
+      ],
+      "tab": "trajectory",
+      "returnRoute": {
+        "href": "../exercicios/9-aluminio-amonia/index.html",
+        "label": "Referência opcional · Al³⁺, água e amônia"
+      },
+      "loadMessage": "Dinâmica executada; resultados disponíveis."
+    },
+    "arquivo_al_agua_nh3_scc": {
+      "runs": [
+        "al_agua_nh3_scc"
+      ],
+      "tab": "trajectory",
+      "returnRoute": {
+        "href": "../exercicios/9-aluminio-amonia/index.html",
+        "label": "Referência opcional · Al³⁺, água e amônia"
+      },
+      "loadMessage": "Dinâmica executada; resultados disponíveis."
+    },
+    "arquivo_scc": {
+      "runs": [
+        "al_agua_nh3_dt05",
+        "al_agua_nh3_scc"
+      ],
+      "tab": "trajectory",
+      "returnRoute": {
+        "href": "../exercicios/9-aluminio-amonia/index.html",
+        "label": "Referência opcional · Al³⁺, água e amônia"
+      },
+      "loadMessage": "Auxiliar do xTB, usado nos dois controles Al. Não é um cálculo ORCA independente."
+    },
+    "arquivo_probe_properties_simple": {
+      "runs": [
+        "probe_properties_simple"
+      ],
+      "tab": "trajectory",
+      "returnRoute": {
+        "href": "../exercicios/1-agua-dft/verificacao-dump.html",
+        "label": "Verificação de Dump no ORCA 6.1.1"
+      },
+      "loadMessage": "Diagnóstico XTB2 executado: 4 passos até 2 fs, sem produção de log de propriedades."
+    },
+    "arquivo_probe_properties": {
+      "runs": [
+        "probe_properties"
+      ],
+      "tab": "trajectory",
+      "returnRoute": {
+        "href": "../exercicios/1-agua-dft/verificacao-dump.html",
+        "label": "Verificação de Dump no ORCA 6.1.1"
+      },
+      "loadMessage": "Diagnóstico falhou antes da dinâmica: 0 fs. Estrutura inicial e saída da falha preservadas."
+    }
+  }
+}

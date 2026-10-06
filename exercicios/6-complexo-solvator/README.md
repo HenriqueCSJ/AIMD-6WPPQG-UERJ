@@ -1,6 +1,6 @@
 # 04a · Zn²⁺ isolado + 20 águas com SOLVATOR
 
-[← Percurso](../README.md) · [Aplicativo de análise](../../visualizador/index.html)
+[← Percurso](../README.md) · [Aplicativo de análise](../../visualizador/index.html?exemplo=zn_solvation&aba=trajetoria)
 
 **Bloco Zn²⁺ → águas → en · carga +2 · singlete · sem en nesta etapa**
 
@@ -63,7 +63,7 @@ Espere o prompt voltar antes de iniciar outro cálculo.
 
 ## 3. Confira a estrutura gerada
 
-[Abrir 04a no laboratório](../../visualizador/index.html?exemplo=zn_solvation&aba=trajetoria) · [Carregar meus arquivos](../../visualizador/index.html)
+[Abrir 04a no laboratório](../../visualizador/index.html?exemplo=zn_solvation&aba=trajetoria) · [Carregar meus arquivos](../../visualizador/index.html?exemplo=zn_solvation&aba=trajetoria)
 
 **A nova montagem de 20 águas está disponível como referência estática.** No laboratório, alterne entre o Zn isolado, a montagem SOLVATOR bruta e a preparação radial para 04b. Para seus próprios arquivos, execute a montagem e carregue a saída `.out` e **`zn_ion_20h2o_solvator.solvator.xyz`**. Confira o término no `.out` antes de usar a geometria.
 
