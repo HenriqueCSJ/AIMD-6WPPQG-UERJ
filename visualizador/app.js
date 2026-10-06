@@ -714,5 +714,17 @@
   $('help-button').addEventListener('click',()=>$('help-dialog').showModal());for(const id of ['close-help','help-done'])$(id).addEventListener('click',()=>$('help-dialog').close());
   let resizeTimer;window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(()=>{if(state.tab==='energy'&&state.runs.length)renderEnergy();else if(state.tab==='distance'&&state.runs.length)renderDistances();if(state.tab==='trajectory')resizeTrajectory();else state.viewer?.resize();},150);});
   document.addEventListener('visibilitychange',()=>{if(document.hidden)stop();});
-  const query=new URLSearchParams(location.search),requested=query.get('exemplo')||'water_single',requestedTab=new Map([['energias','energy'],['trajetoria','trajectory'],['distancias','distance'],['geometria','distance']]).get(query.get('aba'));if(requestedTab)state.tab=requestedTab;if(requested&&window.AIMD_EXAMPLES?.presets[requested]){$('example-select').value=requested;loadExample(requested,requestedTab);}
+  const query=new URLSearchParams(location.search),requested=query.get('exemplo')||'water_single',requestedTab=new Map([['energias','energy'],['trajetoria','trajectory'],['distancias','distance'],['geometria','distance']]).get(query.get('aba'));
+  if(requestedTab)state.tab=requestedTab;
+  if(requested&&window.AIMD_EXAMPLES?.presets[requested]){
+    const select=$('example-select');
+    // A linked variant keeps a valid selection without becoming a permanent menu entry.
+    if(!Array.from(select.options).some(option=>option.value===requested)){
+      const option=document.createElement('option');option.value=requested;option.hidden=true;
+      const preset=window.AIMD_EXAMPLES.presets[requested];
+      option.textContent=preset.runs?.map(key=>window.AIMD_EXAMPLES.sources?.[key]?.label||key).join(' × ')||requested;
+      select.append(option);
+    }
+    select.value=requested;loadExample(requested,requestedTab);
+  }
 })();

@@ -35,7 +35,8 @@ test('menu presets and retained direct links resolve all runs and original downl
   const {store,loader}=bundledLoader();
   const selector=read('index.html').match(/<select id="example-select">([\s\S]*?)<\/select>/)[1];
   const exposed=[...selector.matchAll(/<option value="([^"]+)"/g)].map(match=>match[1]);
-  assert.deepEqual(Object.keys(store.presets).sort(),exposed.sort());
+  const directLinks=['water_nve','water_csvr','solvator_two','proton_shared_short','water_short','ethanol_short','chelation_previous'];
+  assert.deepEqual(Object.keys(store.presets).sort(),[...exposed,...directLinks].sort());
   assert.deepEqual(Array.from(store.presets.chelation.runs),['chelation_continuous']);
   assert.deepEqual(Array.from(store.presets.chelation_previous.runs),['chelation']);
   assert.ok(store.sources.chelation_continuous);

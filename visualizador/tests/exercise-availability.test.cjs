@@ -1,4 +1,4 @@
-/* Exercise links must reach retained datasets and visible menu choices. */
+/* Exercise links must reach retained datasets without duplicating the course menu. */
 const test=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),vm=require('node:vm');
 const R=require('../orca-parser.js'),root=path.resolve(__dirname,'../..');
 const read=p=>fs.readFileSync(path.join(root,p),'utf8');
@@ -7,11 +7,16 @@ const store=context.window.AIMD_EXAMPLES;
 const bundle=key=>{vm.runInNewContext(read(`visualizador/examples/${key}.js`),context);return JSON.parse(JSON.stringify(store.runs[key]));};
 const normalized=text=>text.replace(/\r\n/g,'\n').trim();
 
-test('every advertised exercise preset is offered in the menu and has retained source files',()=>{
+test('exercise links resolve retained data while the main menu stays focused',()=>{
  const html=read('visualizador/index.html'),select=html.match(/<select id="example-select">([\s\S]*?)<\/select>/)[1];
  const options=[...select.matchAll(/<option value="([^"]+)"/g)].map(m=>m[1]);
  assert.equal(new Set(options).size,options.length,'No duplicate menu choices');
- assert.deepEqual([...options].sort(),Object.keys(store.presets).sort(),'All presets remain discoverable without a special URL');
+ const directOnly=['water_nve','water_csvr','solvator_two','water_short','ethanol_short','proton_shared_short','chelation_previous'];
+ assert.deepEqual([...options,...directOnly].sort(),Object.keys(store.presets).sort());
+ const main=select.match(/<optgroup label="Durante a aula · cinco blocos">([\s\S]*?)<\/optgroup>/)[1];
+ assert.deepEqual([...main.matchAll(/<option value="([^"]+)"/g)].map(m=>m[1]),['water_single','water_thermostat','water','ethanol','timestep','thermostat','solvator','complex','chelation','proton_shared']);
+ assert.equal((select.match(/<optgroup /g)||[]).length,2);
+ for(const key of directOnly)assert.ok(!options.includes(key),key+' is linked from its exercise, not duplicated in the menu');
  for(const [name,preset] of Object.entries(store.presets))for(const key of preset.runs){
   assert.ok(store.sources[key],`${name}: missing manifest source ${key}`);
   const run=bundle(key);assert.ok(run.xyz?.frames.length,`${name}: no geometry`);
@@ -23,7 +28,7 @@ test('every advertised exercise preset is offered in the menu and has retained s
    for(const match of read(relative).matchAll(/\]\(([^)]+)\)/g)){
     const target=match[1];if(/^(https?:|mailto:|#)/.test(target))continue;
     const [file]=target.split(/[?#]/);assert.ok(fs.existsSync(path.resolve(root,'exercicios',entry.name,file)),`${relative}: ${target}`);
-    const preset=target.match(/[?&]exemplo=([^&#]+)/)?.[1];if(preset)assert.ok(options.includes(preset),`${relative}: hidden/missing ${preset}`);
+    const preset=target.match(/[?&]exemplo=([^&#]+)/)?.[1];if(preset)assert.ok(store.presets[preset],`${relative}: missing ${preset}`);
    }
   }
  }

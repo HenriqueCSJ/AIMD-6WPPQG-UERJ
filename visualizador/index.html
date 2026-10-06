@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="app.css?v=20261001-temperature1">
   <script defer src="orca-parser.js?v=20261004-large-files1"></script><script defer src="charts.js?v=20261001-sequence1"></script><script defer src="geometry.js?v=20261001-performance1"></script>
   <script defer src="highlight-selection.js?v=20261001-temperature1"></script>
-  <script defer src="vendor/3Dmol-min.js?v=20261001-performance1"></script><script defer src="examples.js?v=20261005-exercise-parity"></script><script defer src="example-loader.js?v=20260929-loading1"></script><script defer src="app.js?v=20261004-large-files1"></script>
+  <script defer src="vendor/3Dmol-min.js?v=20261001-performance1"></script><script defer src="examples.js?v=20261005-exercise-parity"></script><script defer src="example-loader.js?v=20260929-loading1"></script><script defer src="app.js?v=20261005-compact-menu"></script>
 </head>
 <body>
 <a class="skip" href="#main">Ir para o conteúdo</a>
@@ -37,23 +37,15 @@
       <select id="example-select">
         <optgroup label="Durante a aula · cinco blocos">
           <option value="water_single" selected>01a · Água isolada: movimento e energia · 20 fs</option>
-          <option value="water_thermostat">01a · Água: sem × com termostato · 500 fs</option>
-          <option value="water_nve">01a · Água: sem termostato (NVE) · 500 fs</option>
-          <option value="water_csvr">01a · Água: com termostato CSVR · 500 fs</option>
-          <option value="water_short">01b · Dímero de água: input da aula · 2 ps</option>
-          <option value="ethanol_short">02a · Etanol: input da aula · NVE · 0,5 ps</option>
+          <option value="water_thermostat">01a · Água: NVE × CSVR · 500 fs</option>
+          <option value="water">01b · Dímero de água: ligação H · 5 ps</option>
+          <option value="ethanol">02a · Etanol: NVE · 5 ps</option>
           <option value="timestep">02b · Timestep: instabilidade e correção</option>
           <option value="thermostat">03 · Etanol: aquecer e resfriar</option>
-          <option value="solvator">04a · Zn–en: SOLVATOR com 6 águas adicionadas</option>
-          <option value="solvator_two">04a · Zn–en: SOLVATOR com 2 águas adicionadas</option>
+          <option value="solvator">04a · Zn–en: construir com SOLVATOR</option>
           <option value="complex">04b · Zn–en: efeito da parede</option>
           <option value="chelation">04c · Zn–en: hidratação e quelação</option>
-          <option value="proton_shared_short">05 · H₅O₂⁺: input da aula · 2 ps</option>
-        </optgroup>
-        <optgroup label="Continuações das trajetórias da aula">
-          <option value="water">01b · Dímero de água: referência ampliada · 5 ps</option>
-          <option value="ethanol">02a · Etanol: referência ampliada · NVE · 5 ps</option>
-          <option value="proton_shared">05 · H₅O₂⁺: referência ampliada · 10 ps</option>
+          <option value="proton_shared">05 · H₅O₂⁺: um próton entre duas águas · 10 ps</option>
         </optgroup>
         <optgroup label="Opcionais e referências">
           <option value="solvent">DFT · Dímero no vácuo × CPCM</option>
@@ -68,7 +60,6 @@
           <option value="timestep_abrupt">Timestep · Falha abrupta com 5 fs</option>
           <option value="thermostat_compare">Etanol · NVE × termostato</option>
           <option value="complex_short">Parede · Referência curta</option>
-          <option value="chelation_previous">Zn–en · Aproximação assistida e quelação · referência de 3 ps</option>
           <option value="water_dft">DFT · Dímero já calculado</option>
           <option value="solvent_single">DFT · Água isolada: vácuo × CPCM</option>
           <option value="aluminum">Al³⁺/amônia · Referência com ajuste SCC</option>

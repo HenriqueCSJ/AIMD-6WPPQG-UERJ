@@ -107,13 +107,22 @@ test('the main example action defaults to trajectory while explicit tabs remain 
   }
 });
 
-test('retained reference deep links open trajectories and stay discoverable in the menu',async()=>{
-  for(const key of ['proton_shared_short','water_short','ethanol_short','chelation_previous']){
+test('linked variants keep valid reopen buttons without permanent menu entries',async()=>{
+  for(const key of ['water_nve','water_csvr','solvator_two','proton_shared_short','water_short','ethanol_short','chelation_previous']){
     const ui=session({search:`?exemplo=${key}&aba=trajetoria`,inspectState:true,presets:{[key]:true}});
-    assert.match(ui.html,new RegExp(`<option\\b[^>]*value="${key}"`));
+    assert.doesNotMatch(ui.html,new RegExp(`<option\\b[^>]*value="${key}"`));
     assert.equal(ui.requests.length,1);assert.equal(ui.requests[0].key,key);
     const load=ui.requests[0].promise;ui.requests[0].resolve(preset(key));await load;await new Promise(setImmediate);
     assert.equal(ui.state.tab,'trajectory');assert.equal(ui.nodes['trajectory-run'].options.length,1);
+    assert.equal(ui.nodes['example-select'].value,key);
+    const linked=ui.nodes['example-select'].options.find(option=>option.value===key);
+    assert.equal(linked.hidden,true);
+    assert.ok(linked.textContent);
+    const reopen=ui.nodes['example-energy-button'].fire('click');
+    assert.equal(ui.requests[1].key,key);
+    ui.requests[1].resolve(preset(key));await reopen;
+    assert.equal(ui.state.tab,'energy');
+
   }
 });
 

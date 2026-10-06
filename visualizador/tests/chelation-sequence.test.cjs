@@ -28,13 +28,13 @@ test('the 97-atom preview and complete energy series retain source clocks, coord
  assert.ok(!run.out,'No synthetic whole-sequence output is created');
 });
 
-test('velocity-reset boundary preserves both energies and selects the following real geometry; menu distinguishes the current and previous references',()=>{
+test('velocity-reset boundary preserves both energies and selects the following real geometry; menu keeps the main reference and the previous direct link',()=>{
  const {store,course}=prepared(),run=store.runs.chelation_continuous,boundary=7083;
  const energies=run.energy.rows.filter(row=>row.time===boundary);assert.equal(energies.length,2);assert.deepEqual(energies.map(row=>row.temperature),[284.9,300]);
  assert.notEqual(energies[0].segment,energies[1].segment);assert.ok(Math.abs(energies[1].total-energies[0].total-.006958)<1e-10);assert.equal(energies[0].potential,energies[1].potential);
  const frame=run.xyz.frames.find(frame=>frame.time===boundary);assert.ok(frame);assert.equal(frame.sourceKey,course.sequenceSources.find(source=>source.velocityReset).key);assert.equal(frame.sourceTime,0);
  for(const stage of course.metadata.stages){assert.ok(run.xyz.frames.some(frame=>frame.time===stage.startFs),`Stage start ${stage.startFs}`);assert.ok(run.xyz.frames.some(frame=>frame.time===stage.endFs),`Stage end ${stage.endFs}`);}
  assert.deepEqual(store.presets.chelation.runs,['chelation_continuous']);assert.deepEqual(store.presets.chelation_previous.runs,['chelation']);assert.equal(store.runs.chelation.xyz.elements.length,97);
- const html=read('visualizador/index.html');assert.equal((html.match(/<option value="chelation">/g)||[]).length,1);assert.match(html,/<option value="chelation_previous">/);assert.match(html,/Zn–en: hidratação e quelação/);
- assert.equal(store.version,'20261005-exercise-parity');assert.match(html,/examples\.js\?v=20261005-exercise-parity/);assert.match(html,/app\.js\?v=20261004-large-files1/);assert.match(html,/charts\.js\?v=20261001-sequence1/);
+ const html=read('visualizador/index.html');assert.equal((html.match(/<option value="chelation">/g)||[]).length,1);assert.doesNotMatch(html,/<option value="chelation_previous">/);assert.match(html,/Zn–en: hidratação e quelação/);
+ assert.equal(store.version,'20261005-exercise-parity');assert.match(html,/examples\.js\?v=20261005-exercise-parity/);assert.match(html,/app\.js\?v=20261005-compact-menu/);assert.match(html,/charts\.js\?v=20261001-sequence1/);
 });

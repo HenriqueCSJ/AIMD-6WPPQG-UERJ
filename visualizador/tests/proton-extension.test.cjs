@@ -69,7 +69,7 @@ test('main and short proton presets remain distinct and the manifest and browser
  assert.match(examples.sources.proton_shared_10ps.src,/\?v=20261005-exercise-parity$/);
  const html=read('visualizador/index.html');
  assert.match(html,/<option value="proton_shared">[^<]*10 ps<\/option>/);
- assert.match(html,/<option\b[^>]*value="proton_shared_short"/);
- assert.match(html,/examples\.js\?v=20261005-exercise-parity/);assert.match(html,/app\.js\?v=20261004-large-files1/);
+ assert.doesNotMatch(html,/<option\b[^>]*value="proton_shared_short"/);
+ assert.match(html,/examples\.js\?v=20261005-exercise-parity/);assert.match(html,/app\.js\?v=20261005-compact-menu/);
  assert.match(html,/geometry\.js\?v=20261001-performance1/);assert.match(html,/vendor\/3Dmol-min\.js\?v=20261001-performance1/);
 });
