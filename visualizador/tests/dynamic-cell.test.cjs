@@ -111,7 +111,7 @@ test('six real Cell references reproduce retained trajectories, pressure and fin
     if(final){const expected=/bar$/.test(key)?run.out.metadata.finalWallInfo.sphere.radius:key==='zn_cell_fixed'?4.985:6;assert.ok(Math.abs(final.sphere.radius-expected)<.002,key);}
     if(/bar$/.test(key))assert.equal(run.out.metadata.ensemble,'unknown');
   }
-  assert.deepEqual(JSON.parse(JSON.stringify(context.window.AIMD_EXAMPLES.presets.cell_pressure.runs)),['zn_cell_1bar','zn_cell_1000bar']);
+  assert.deepEqual(JSON.parse(JSON.stringify(context.window.AIMD_EXAMPLES.presets.cell_pressure.runs)),['zn_cell_1000bar','zn_cell_1bar']);
 });
 
 test('real water velocity and force dumps preserve units and agree with independent energy and gradient outputs',()=>{

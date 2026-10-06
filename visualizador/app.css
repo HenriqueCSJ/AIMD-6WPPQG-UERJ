@@ -22,6 +22,9 @@
 .timeline-control input{width:100%;min-width:0;min-height:32px;cursor:pointer}
 .timeline-control output{min-width:150px;flex-shrink:0}
 .playback-note{padding:5px 22px 0;margin:0}
+.playback .playback-repeat{display:inline-flex;align-items:center;gap:7px;min-height:41px;white-space:nowrap;font-size:13px}
+.playback .playback-repeat input{flex:none;width:18px;min-width:18px;height:18px;margin:0}
+.cell-change{margin:8px 16px 4px;color:var(--ink);font-weight:700;font-size:15px;line-height:1.5;font-variant-numeric:tabular-nums}
 #molecule{touch-action:none;cursor:grab}
 #molecule:active{cursor:grabbing}
 @media(max-width:600px){.playback{gap:12px}.transport-buttons{width:100%}.playback-setting{flex:1}.playback-setting select,.playback #frame-number{width:100%}.timeline-control{flex-wrap:wrap;gap:2px}.timeline-control output{width:100%;text-align:left}.playback-note{padding:5px 15px 0}}

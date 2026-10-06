@@ -21,7 +21,7 @@ Use **Próximo** no topo ou no fim de cada atividade. O indicador **Etapa X de 8
 
 Cinco blocos conectam movimento, integração, controle térmico, coordenação e transferência de H. Comece pelas medidas da água isolada em uma trajetória DFT pronta. As execuções propostas usam **XTB2**, e os resultados fornecidos permitem continuar a interpretação enquanto um cálculo local termina.
 
-**Mais tempo para observar:** o laboratório oferece referências de **5 ps** para o dímero neutro e o etanol NVE e de **10 ps** para H₅O₂⁺. As versões curtas e seus inputs continuam disponíveis para a execução durante a aula. A reprodução começa em **60 segundos por ciclo**, com duração e velocidade ajustáveis.
+**Mais tempo para observar:** o laboratório oferece referências de **5 ps** para o dímero neutro e o etanol NVE e de **10 ps** para H₅O₂⁺. As versões curtas e seus inputs continuam disponíveis para a execução durante a aula. A reprodução começa em **78 segundos por ciclo (+30%)**, com duração e velocidade ajustáveis. Ao final, a animação pausa para observar o resultado; marque **Repetir** se quiser um novo ciclo automático.
 
 ### 01 · Água: da molécula à ligação H
 

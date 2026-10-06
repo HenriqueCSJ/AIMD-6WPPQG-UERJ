@@ -38,7 +38,7 @@ class Element{
 function session({inspectState=false,search='?exemplo=__test_no_auto__',presets={water:true},molecularViewer=null}={}){
   const html=fs.readFileSync(path.join(viewer,'index.html'),'utf8'),nodes={};
   for(const match of html.matchAll(/<([\w-]+)\b[^>]*\bid="([^"]+)"[^>]*>/g))nodes[match[2]]=new Element(match[1]);
-  for(const [id,value] of Object.entries({'energy-mode':'delta','energy-unit':'kj','time-unit':'fs','distance-source':'xyz','geometry-type':'distance','highlight-kind':'atom','highlight-color':'#e6007e','highlight-size':'1.6','highlight-atom':'0','playback-duration':'60','playback-speed':'1'}))nodes[id].value=value;
+  for(const [id,value] of Object.entries({'energy-mode':'delta','energy-unit':'kj','time-unit':'fs','distance-source':'xyz','geometry-type':'distance','highlight-kind':'atom','highlight-color':'#e6007e','highlight-size':'1.6','highlight-atom':'0','playback-duration':'78','playback-speed':'1'}))nodes[id].value=value;
   nodes['distance-source'].append(...['xyz','colvars'].map(value=>Object.assign(new Element('option'),{value})));
   const checkboxes=['total','potential','kinetic'].map(value=>Object.assign(new Element('input'),{value,checked:true}));
   for(const key of ['kinetic','potential','total'])nodes['trajectory-show-'+key].checked=true;
@@ -446,12 +446,15 @@ test('missing temperature leaves the energy chart usable without inventing zero 
   assert.ok(ui.nodes['trajectory-energy-chart'].chart.series[0].points.every(point=>Number.isFinite(point.y)));
 });
 
-async function playbackSession(stages,{stride=1}={}){
+async function playbackSession(stages,{stride=1,defaults=false}={}){
   const ui=session({inspectState:true}),load=ui.choose('movement',true);
   const frames=Array.from({length:1000},(_,i)=>({time:i*.25,step:i,coords:[[0,0,0],[0,0,1+i*.0001]]}));
   const data=preset('movement',{frames:frames.filter((frame,i)=>i%stride===0||i===frames.length-1)});if(stages)data.runs[0].metadata={stages};
   if(stride>1)Object.assign(data.runs[0].xyz,{previewStride:stride,originalFrameCount:frames.length});
-  ui.requests[0].resolve(data);await load;return ui;
+  ui.requests[0].resolve(data);await load;
+  // Legacy loop/range checks explicitly select their original 60 s repeating mode.
+  if(!defaults){ui.nodes['playback-duration'].value='60';ui.nodes['playback-repeat'].checked=true;ui.nodes['playback-duration'].fire('change');}
+  return ui;
 }
 
 test('stage playback defaults to full, loops only retained interval frames and preserves the physical clock',async()=>{
@@ -505,14 +508,17 @@ test('invalid or unsampled stages are omitted and a different run restores full 
   assert.equal(ui.nodes['playback-interval'].value,'full');assert.equal(ui.nodes['playback-interval-field'].hidden,true);assert.equal(ui.state.playing,false);
 });
 
-test('default playback takes sixty seconds per cycle and preserves original frame times',async()=>{
-  const ui=await playbackSession(),before=ui.state.runs[0].xyz.frames.map(frame=>frame.time);
-  assert.match(ui.html,/<option value="60" selected>60 s<\/option>/);
+test('default playback takes 78 seconds, stops at the final frame and preserves original frame times',async()=>{
+  const ui=await playbackSession(undefined,{defaults:true}),before=ui.state.runs[0].xyz.frames.map(frame=>frame.time);
+  assert.match(ui.html,/<option value="78" selected>78 s<\/option>/);
   assert.equal(ui.nodes['playback-duration'].disabled,false);
-  assert.match(ui.playbackNote.textContent,/60 s de reprodução/);
+  assert.match(ui.playbackNote.textContent,/78 s de reprodução/);
+  assert.equal(ui.nodes['playback-repeat'].checked,false);
   ui.nodes['play-button'].fire('click');ui.animationTick(1000);
-  ui.animationTick(16000);assert.equal(ui.state.frame,250);
-  ui.animationTick(61000);assert.equal(ui.state.frame,0);
+  ui.animationTick(20500);assert.equal(ui.state.frame,250);
+  ui.animationTick(79000);assert.equal(ui.state.frame,999);assert.equal(ui.state.playing,false);
+  ui.animationTick(99999);assert.equal(ui.state.frame,999);
+  ui.nodes['play-button'].fire('click');assert.equal(ui.state.frame,0);assert.equal(ui.state.playing,true);
   assert.deepEqual(ui.state.runs[0].xyz.frames.map(frame=>frame.time),before);
 });
 
@@ -524,6 +530,34 @@ test('chosen duration is divided by the speed multiplier in both playback and it
   ui.nodes['play-button'].fire('click');ui.animationTick(0);
   ui.animationTick(7500);assert.equal(ui.state.frame,500);
   ui.animationTick(15000);assert.equal(ui.state.frame,0);
+});
+
+test('one-pass playback from the middle uses the remaining time and clamps a delayed tick to the endpoint',async()=>{
+  const ui=await playbackSession(undefined,{defaults:true});
+  ui.nodes['frame-slider'].value='500';ui.nodes['frame-slider'].fire('input');
+  ui.nodes['play-button'].fire('click');ui.animationTick(1000);
+  ui.animationTick(20500);assert.equal(ui.state.frame,750);assert.equal(ui.state.playing,true);
+  ui.animationTick(50000);assert.equal(ui.state.frame,999);assert.equal(ui.state.playing,false);
+});
+
+test('one-pass stage playback ends at its real last frame and replay restarts that same stage',async()=>{
+  const ui=await playbackSession([{startFs:50,endFs:99.75,label:'Trecho'}],{defaults:true});
+  ui.nodes['playback-interval'].value='stage-0';ui.nodes['playback-interval'].fire('change');
+  ui.nodes['play-button'].fire('click');ui.animationTick(0);ui.animationTick(78000);
+  assert.equal(ui.state.frame,399);assert.equal(ui.state.playing,false);
+  assert.equal(ui.state.runs[0].xyz.frames[ui.state.frame].time,99.75);
+  ui.nodes['play-button'].fire('click');assert.equal(ui.state.frame,200);
+});
+
+test('turning repeat off after multiple cycles preserves the visible frame and stops at the end',async()=>{
+  const ui=await playbackSession(undefined,{defaults:true});
+  ui.nodes['playback-repeat'].checked=true;ui.nodes['playback-repeat'].fire('change');
+  ui.nodes['play-button'].fire('click');ui.animationTick(0);ui.animationTick(175500);
+  assert.equal(ui.state.frame,250);assert.equal(ui.state.playing,true);
+  ui.nodes['playback-repeat'].checked=false;ui.nodes['playback-repeat'].fire('change');
+  assert.equal(ui.state.frame,250);assert.equal(ui.state.playback.startFrame,250);
+  ui.animationTick(180000);ui.animationTick(238500);
+  assert.equal(ui.state.frame,999);assert.equal(ui.state.playing,false);
 });
 
 test('changing duration or speed during playback retains phase and current frame',async()=>{
@@ -578,7 +612,7 @@ test('stage playback and manual seeking retain matching physical energy and temp
   run.metadata={stages:[{startFs:.5,endFs:1.25,label:'Trecho'}]};
   ui.trajectoryHooks.renderTrajectoryChart(run);ui.nodes['playback-duration'].fire('change');
   ui.nodes['playback-interval'].value='stage-0';ui.nodes['playback-interval'].fire('change');
-  ui.nodes['play-button'].fire('click');ui.animationTick(0);ui.animationTick(30000);
+  ui.nodes['play-button'].fire('click');ui.animationTick(0);ui.animationTick(39000);
   assert.equal(ui.state.frame,4);assert.equal(ui.nodes['trajectory-energy-chart'].chartCursor,1);assert.equal(ui.nodes['trajectory-temperature-chart'].chartCursor,1);
   assert.match(ui.nodes['trajectory-energy-status'].textContent,/1 fs/);assert.match(ui.nodes['trajectory-temperature-status'].textContent,/300 K/);
   assert.equal(ui.liveAtoms()[0].x,run.xyz.frames[4].coords[0][0]);
@@ -926,13 +960,18 @@ ORCA TERMINATED NORMALLY`);
  for(const curve of curves)for(const point of curve.points)assert.ok(Math.abs(Math.hypot(point.x,point.y,point.z)-radius)<1e-12);
  assert.match(ui.nodes['cell-status'].textContent,/Raio reconstruído da densidade/);
  assert.match(ui.nodes['cell-status'].textContent,/478.5 bar.*alvo 1000 bar/);
+ assert.equal(ui.nodes['cell-change'].hidden,false);
+ const changeText=ui.nodes['cell-change'].textContent;
+ assert.match(changeText,/volume ≈ -[\d.,]+% em relação ao início/);
+ assert.ok(Math.abs(Number(changeText.match(/volume ≈ (-[\d.,]+)%/)[1].replace(',','.'))+8.88736)<.02);
  assert.match(ui.nodes['molecule-legend'].innerHTML,/reconstruído/);
  ui.nodes['frame-slider'].value='2';ui.nodes['frame-slider'].fire('input');
  assert.equal(curves.length,0);assert.equal(fits,1);assert.match(ui.nodes['cell-status'].textContent,/sem estado correspondente/);
+ assert.equal(ui.nodes['cell-change'].hidden,true);assert.equal(ui.nodes['cell-change'].textContent,'');
  assert.doesNotMatch(ui.nodes['molecule-legend'].innerHTML,/raio/);
  ui.nodes['frame-slider'].value='3';ui.nodes['frame-slider'].fire('input');
  assert.equal(curves.length,3);assert.equal(fits,1);
- ui.nodes['clear-button'].fire('click');assert.equal(curves.length,0);assert.equal(ui.nodes['cell-status'].hidden,true);
+ ui.nodes['clear-button'].fire('click');assert.equal(curves.length,0);assert.equal(ui.nodes['cell-status'].hidden,true);assert.equal(ui.nodes['cell-change'].hidden,true);
 });
 
 test('every built-in preset returns to an existing exercise page and any named section exists',async()=>{

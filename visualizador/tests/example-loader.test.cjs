@@ -56,9 +56,9 @@ test('menu presets and retained direct links resolve all runs and original downl
   assert.deepEqual(Object.keys(store.runs).sort(),Object.keys(store.sources).sort());
   for(const key of ['zn_parede_longo','zn_sem_parede_longo']){
     assert.equal(store.runs[key].xyz.elements.length,43);
-    assert.equal(store.runs[key].xyz.frames.length,1001);
+    assert.equal(store.runs[key].xyz.frames.length,4000);
     assert.equal(store.runs[key].energy.rows.length,4001);
-    assert.equal(store.runs[key].xyz.originalFrameCount,4000);
+    assert.equal(store.runs[key].xyz.previewStride,undefined);
   }
   assert.equal(store.runs.zn_solvator.xyz.frames.length,1);
   assert.equal(store.runs.preparar_complexo.xyz.frames.length,1);

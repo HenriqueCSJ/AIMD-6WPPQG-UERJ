@@ -76,7 +76,7 @@
   }
   function playbackDuration(){
     const seconds=Number($('playback-duration').value);
-    return ([8,15,30,60,120].includes(seconds)?seconds:60)*1000;
+    return ([8,15,30,60,78,120].includes(seconds)?seconds:78)*1000;
   }
   function playbackSpeed(){return Math.max(.05,Number($('playback-speed').value)||1);}
   function playbackRange(){return state.playbackRanges?.find(range=>range.key===$('playback-interval').value)||state.playbackRanges?.[0];}
@@ -104,9 +104,10 @@
   function renderPlaybackControls(run=currentTrajectory()){
     renderPlaybackIntervals(run);
     const frames=run?.xyz?.frames||[],staticOnly=frames.length<2,note=document.querySelector('.playback-note'),range=playbackRange();
-    for(const id of ['play-button','playback-duration','playback-speed'])$(id).disabled=staticOnly;
+    for(const id of ['play-button','playback-duration','playback-speed','playback-repeat'])$(id).disabled=staticOnly;
     note.textContent=staticOnly?(frames.length?'Estrutura estática: um único quadro.':'Carregue uma trajetória para reproduzir o movimento.'):`Um ciclo completo leva ${(playbackDuration()/1000/playbackSpeed()).toLocaleString('pt-BR',{maximumFractionDigits:1})} s de reprodução. O tempo físico abaixo vem do XYZ. Use as setas para examinar cada quadro.`;
-    if(range?.key!=='full'&&!staticOnly)note.textContent+=` Repetindo: ${range.label}. As setas, o número do quadro e os gráficos permitem examinar a trajetória completa.`;
+    if(!staticOnly)note.textContent+=$('playback-repeat').checked?' Repetição ativada: o fim retorna ao início.':' Ao final, a reprodução pausa no último quadro para observar o resultado.';
+    if(range?.key!=='full'&&!staticOnly)note.textContent+=` Trecho: ${range.label}. As setas, o número do quadro e os gráficos permitem examinar a trajetória completa.`;
     if(sequenceClock(run))note.textContent=note.textContent.replace('O tempo físico abaixo vem do XYZ.','O tempo abaixo é acumulado na sequência.');
     if(run?.xyz?.previewStride)note.textContent+=` Prévia: 1 a cada ${run.xyz.previewStride} quadros originais, mais o último${sequenceClock(run)?' e as fronteiras das etapas':''}. Os XYZ originais preservam todos os quadros.`;
   }
@@ -154,6 +155,10 @@
   function mergeIssue(target,source){
     if(['xyz','out','energy','colvars'].some(slot=>target[slot]&&source[slot]&&!A.sameData(target[slot],source[slot])))return 'Os arquivos deste tipo contêm dados diferentes.';
     return A.validateRun(combinedData(target,source));
+  }
+  function changePlaybackRepeat(){
+    // Rebase at the visible frame, including after earlier repeated cycles.
+    state.playback.startFrame=state.frame;state.playback.phase=0;state.playback.lastTimestamp=null;renderPlaybackControls();
   }
   function combineUploadedRuns(target,source){
     if(target===source||target.reference||source.reference)return false;
@@ -461,6 +466,7 @@
     clearAtomLabels();clearContactShapes();state.viewer?.removeAllModels();state.viewer?.removeAllShapes();state.viewer?.render();
     state.model=null;state.viewRun=null;state.renderAtoms=null;state.renderFrame=null;state.styleKey=null;state.frameGeometry=null;state.wallSphere=null;state.wallKey=null;state.wallShapes=[];state.cellCurrent=null;state.cellIndex=null;
     $('cell-status').hidden=true;$('cell-status').textContent='';
+    $('cell-change').hidden=true;$('cell-change').textContent='';
     state.playbackRanges=[];state.playbackRangeRun=null;
     state.trajectoryChart=null;state.trajectoryTemperatureChart=null;state.energyIndex=null;state.temperatureIndex=null;state.frameIndex=null;
   }
@@ -509,13 +515,18 @@
     state.wallShapes=[];if(!sphere)return;
     for(let plane=0;plane<3;plane++){
       const points=[];for(let i=0;i<=72;i++){const t=2*Math.PI*i/72,p=[0,0,0];p[(plane+1)%3]=sphere.radius*Math.cos(t);p[(plane+2)%3]=sphere.radius*Math.sin(t);points.push({x:p[0]+sphere.center.x,y:p[1]+sphere.center.y,z:p[2]+sphere.center.z});}
-      const shape=state.viewer.addCurve({points,radius:.035,color:'#2b797c',opacity:.85,smooth:0});if(shape)state.wallShapes.push(shape);
+      // 3Dmol treats smooth:0 as its default 10, multiplying this already
+      // sampled circle's mesh tenfold. One preserves the 72 arc segments.
+      const shape=state.viewer.addCurve({points,radius:.035,color:'#2b797c',opacity:.85,smooth:1});if(shape)state.wallShapes.push(shape);
     }
   }
   function updateCell(run,frame){
     const cell=A.cellState(run,frame,state.cellIndex),sphere=cell?.sphere||null,key=JSON.stringify(sphere);
     if(state.wallKey!==key){drawWall(sphere);state.wallKey=key;}
     state.cellCurrent=cell;
+    const change=$('cell-change'),initialRadius=metadata(run).initialWallInfo?.sphere?.radius;
+    change.hidden=!(metadata(run).dynamicCell&&sphere&&initialRadius>0);change.textContent='';
+    if(!change.hidden){const delta=100*((sphere.radius/initialRadius)**3-1);change.textContent=`Raio ≈ ${num(initialRadius)} → ${num(sphere.radius)} Å · volume ≈ ${delta>0?'+':''}${num(delta,3)}% em relação ao início`;}
     const status=$('cell-status');status.hidden=!metadata(run).wall&&!cell;
     if(cell?.status==='unsupported')status.textContent='Cela: programa com mudanças de parede sem estado resolvido por quadro. Parede não desenhada.';
     else if(metadata(run).dynamicCell){
@@ -762,14 +773,17 @@
     if(state.playing){stop();return;}
     const run=currentTrajectory();if(!run?.xyz)return;
     const range=playbackRange()||{start:0,end:run.xyz.frames.length-1},frameCount=range.end-range.start+1;if(frameCount<2)return;
-    if(state.frame<range.start||state.frame>range.end){state.frame=range.start;drawFrame();}
+    if(state.frame<range.start||state.frame>range.end||(!$('playback-repeat').checked&&state.frame===range.end)){state.frame=range.start;drawFrame();}
     state.playing=true;state.playback={runId:run.id,startFrame:state.frame,baseDuration:playbackDuration(),phase:0,lastTimestamp:null};$('play-button').textContent='Ⅱ Pausar';
     const tick=timestamp=>{
       if(!state.playing||state.playback.runId!==run.id)return;
       if(state.playback.lastTimestamp===null){state.playback.lastTimestamp=timestamp;state.timer=requestAnimationFrame(tick);return;}
       const elapsed=Math.max(0,timestamp-state.playback.lastTimestamp);state.playback.lastTimestamp=timestamp;const speed=playbackSpeed();
-      state.playback.phase=(state.playback.phase+elapsed/state.playback.baseDuration*speed)%1;
-      const next=range.start+(state.playback.startFrame-range.start+Math.floor(state.playback.phase*frameCount))%frameCount;
+      state.playback.phase+=elapsed/state.playback.baseDuration*speed;
+      const position=state.playback.startFrame-range.start+Math.floor(state.playback.phase*frameCount);
+      if(!$('playback-repeat').checked&&position>=frameCount){state.frame=range.end;drawFrame();stop();return;}
+      state.playback.phase%=1;
+      const next=range.start+position%frameCount;
       if(next!==state.frame){state.frame=next;drawFrame();}
       state.timer=requestAnimationFrame(tick);
     };
@@ -875,6 +889,7 @@
   document.addEventListener('keydown',expandedKeys);
   $('frame-slider').addEventListener('input',()=>seekFrame(Number($('frame-slider').value)));$('play-button').addEventListener('click',play);
   for(const id of ['playback-duration','playback-speed'])$(id).addEventListener('change',updatePlaybackSettings);
+  $('playback-repeat').addEventListener('change',changePlaybackRepeat);
   $('playback-interval').addEventListener('change',changePlaybackInterval);
   $('previous-frame').addEventListener('click',()=>seekFrame(state.frame-1));$('next-frame').addEventListener('click',()=>seekFrame(state.frame+1));
   $('frame-number').addEventListener('change',()=>seekFrame($('frame-number').valueAsNumber-1));$('frame-number').addEventListener('keydown',event=>{if(event.key==='Enter'){event.preventDefault();seekFrame($('frame-number').valueAsNumber-1);}});

@@ -4,10 +4,10 @@
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="Leia resultados de dinâmica molecular do ORCA: energias, temperatura, trajetórias e medidas geométricas. Tudo no seu navegador.">
   <title>Laboratório de trajetórias · AIMD com ORCA</title>
-  <link rel="stylesheet" href="app.css?v=20261006-cell-review1">
+  <link rel="stylesheet" href="app.css?v=20261006-playback2">
   <script defer src="orca-parser.js?v=20261006-cell"></script><script defer src="charts.js?v=20261006-upload-zoom1"></script><script defer src="run-association.js?v=20261006-cell"></script><script defer src="geometry.js?v=20261001-performance1"></script>
   <script defer src="highlight-selection.js?v=20261001-temperature1"></script>
-  <script defer src="vendor/3Dmol-min.js?v=20261001-performance1"></script><script defer src="examples.js?v=20261006-cell"></script><script defer src="example-loader.js?v=20260929-loading1"></script><script defer src="app.js?v=20261006-cell-review1"></script>
+  <script defer src="vendor/3Dmol-min.js?v=20261001-performance1"></script><script defer src="examples.js?v=20261006-playback2"></script><script defer src="example-loader.js?v=20260929-loading1"></script><script defer src="app.js?v=20261006-playback2"></script>
 </head>
 <body>
 <a class="skip" href="#main">Ir para o conteúdo</a>
@@ -152,6 +152,7 @@
           <div id="molecule" tabindex="0" aria-label="Estrutura molecular interativa. Modo Girar: arraste para girar e use a roda para ampliar." aria-describedby="molecule-keyboard-help" role="application"></div>
           <p id="molecule-keyboard-help" class="sr-only">No modo Mover, use as setas para reposicionar a molécula. Shift com uma seta move mais longe. Tab avança aos controles. Escape fecha a área ampliada.</p>
           <div class="molecule-legend" id="molecule-legend"></div>
+          <p id="cell-change" class="cell-change" hidden></p>
           <p id="cell-status" class="small muted" role="status" hidden></p>
           <div class="playback">
             <div class="transport-buttons" role="group" aria-label="Reprodução da trajetória">
@@ -159,9 +160,10 @@
               <button type="button" class="button primary" id="play-button">▶ Reproduzir</button>
               <button type="button" class="button" id="next-frame" aria-label="Próximo quadro" title="Próximo quadro">→</button>
             </div>
-            <label class="playback-setting" id="playback-interval-field" hidden>Trecho para repetir<select id="playback-interval"><option value="full">Trajetória completa</option></select></label>
-            <label class="playback-setting">Duração a 1×<select id="playback-duration"><option value="8">8 s</option><option value="15">15 s</option><option value="30">30 s</option><option value="60" selected>60 s</option><option value="120">120 s</option></select></label>
+            <label class="playback-setting" id="playback-interval-field" hidden>Trecho para observar<select id="playback-interval"><option value="full">Trajetória completa</option></select></label>
+            <label class="playback-setting">Duração a 1×<select id="playback-duration"><option value="8">8 s</option><option value="15">15 s</option><option value="30">30 s</option><option value="60">60 s</option><option value="78" selected>78 s</option><option value="120">120 s</option></select></label>
             <label class="playback-setting">Velocidade<select id="playback-speed"><option value="0.25">0,25×</option><option value="0.5">0,5×</option><option value="1" selected>1×</option><option value="2">2×</option><option value="4">4×</option></select></label>
+            <label class="playback-repeat"><input id="playback-repeat" type="checkbox"> Repetir</label>
             <label class="playback-setting">Ir ao quadro<input id="frame-number" type="number" min="1" max="1" step="1" value="1" inputmode="numeric"></label>
             <div class="timeline-control"><label class="sr-only" for="frame-slider">Quadro da trajetória</label><input id="frame-slider" type="range" min="0" max="0" value="0"><output id="frame-time"></output></div>
           </div>

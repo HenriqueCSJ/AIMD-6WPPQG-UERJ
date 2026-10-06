@@ -36,5 +36,5 @@ test('velocity-reset boundary preserves both energies and selects the following 
  for(const stage of course.metadata.stages){assert.ok(run.xyz.frames.some(frame=>frame.time===stage.startFs),`Stage start ${stage.startFs}`);assert.ok(run.xyz.frames.some(frame=>frame.time===stage.endFs),`Stage end ${stage.endFs}`);}
  assert.deepEqual(store.presets.chelation.runs,['chelation_continuous']);assert.deepEqual(store.presets.chelation_previous.runs,['chelation']);assert.equal(store.runs.chelation.xyz.elements.length,97);
  const html=read('visualizador/index.html');assert.equal((html.match(/<option value="chelation">/g)||[]).length,1);assert.doesNotMatch(html,/<option value="chelation_previous">/);assert.match(html,/Zn–en: hidratação e quelação/);
- assert.equal(store.version,'20261006-cell');assert.match(html,/examples\.js\?v=20261006-cell/);assert.match(html,/app\.js\?v=20261006-cell-review1/);assert.match(html,/charts\.js\?v=20261006-upload-zoom1/);
+ assert.equal(store.version,'20261006-playback2');assert.match(html,/examples\.js\?v=20261006-playback2/);assert.match(html,/app\.js\?v=20261006-playback2/);assert.match(html,/charts\.js\?v=20261006-upload-zoom1/);
 });

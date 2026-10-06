@@ -64,10 +64,12 @@ for(const [key,label,lesson] of specs){
   // Comments remain in the original linked XYZ, not duplicated in every bundled frame.
   if(parsed.frames){
    parsed.frames.forEach(f=>delete f.comment);
-   // Keep bundled examples small. Original XYZ downloads retain every frame.
+   // Keep motion-critical wall comparisons complete. Thinning their frames
+   // makes the contraction and water response visibly step between samples.
    // Keep the small ethanol molecule complete so geometric extrema and the
    // fast O-H vibration are not aliased by the teaching reference preview.
-   const stride=['proton_shared_10ps','proton_shared','dimero_xtb2_5ps','etanol_nve_5ps','etanol_etapas','dimero_xtb2_2ps','al_agua_nh3_dt05','al_agua_nh3_scc'].includes(key)?1:Math.ceil(parsed.frames.length/1001);
+   const completeWall=key.startsWith('zn_cell_')||/^zn_(?:sem_)?parede(?:_longo)?$/.test(key);
+   const stride=completeWall||['proton_shared_10ps','proton_shared','dimero_xtb2_5ps','etanol_nve_5ps','etanol_etapas','dimero_xtb2_2ps','al_agua_nh3_dt05','al_agua_nh3_scc'].includes(key)?1:Math.ceil(parsed.frames.length/1001);
    if(stride>1){const all=parsed.frames;parsed.previewStride=stride;parsed.originalFrameCount=all.length;parsed.frames=all.filter((f,i)=>i%stride===0||i===all.length-1);parsed.warnings.push(`Prévia da referência: 1 a cada ${stride} quadros, mais o último. Baixe/carregue o XYZ original para examinar todos. Tempos e coordenadas preservados, sem interpolação.`);}
   }
   run[slot]=parsed;run.files.push({name:file,path:rel,kind:parsed.kind});
@@ -87,7 +89,7 @@ for(const [key,label,lesson] of specs){
 }
 const presets={
  cell_rigidity:{runs:['zn_cell_spring10','zn_cell_spring50'],tab:'trajectory'},
- cell_pressure:{runs:['zn_cell_1bar','zn_cell_1000bar'],tab:'trajectory'},
+ cell_pressure:{runs:['zn_cell_1000bar','zn_cell_1bar'],tab:'trajectory'},
  cell_release:{runs:['zn_cell_fixed','zn_cell_none'],tab:'trajectory'},
  proton_shared:{runs:['proton_shared_10ps'],tab:'trajectory'},
  proton_shared_short:{runs:['proton_shared'],tab:'trajectory'},
@@ -107,7 +109,7 @@ const presets={
 };
 // Ordinary scripts, rather than fetch(), preserve direct file:// use offline.
 // The small manifest is loaded at startup; calculations are loaded on demand.
-const version='20261006-cell',sources={},folder=path.join(root,'visualizador/examples');
+const version='20261006-playback2',sources={},folder=path.join(root,'visualizador/examples');
 fs.mkdirSync(folder,{recursive:true});let totalBytes=0;
 for(const [key,run] of Object.entries(runs)){
  const filename=`${key}.js`,full=path.join(folder,filename);
