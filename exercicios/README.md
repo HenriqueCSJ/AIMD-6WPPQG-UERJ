@@ -11,6 +11,12 @@ Use **Próximo** no topo ou no fim de cada atividade. O indicador **Etapa X de 8
 
 **[Começar na etapa 1 de 8](1-agua-dft/README.md)** · [Roteiro com horários](roteiro-4h.md)
 
+## Caderno para ler no tablet
+
+**[Abrir o caderno completo em PDF](../materiais/caderno-aimd-orca-tablet.pdf)** · [Baixar os dez capítulos separados (ZIP)](../materiais/capitulos-aimd-tablet.zip)
+
+84 páginas em formato A5, com explicações, interpretações, 24 figuras e respostas comentadas. O mapa de leitura relaciona os dez capítulos às oito etapas da aula. Cell tem um capítulo próprio com C1 → C2 → C3; o dump é um único complemento no capítulo da água. Sumário e marcadores são clicáveis. Versão de estudo atualizada em **6 de outubro de 2026**.
+
 ## Durante a aula
 
 Cinco blocos conectam movimento, integração, controle térmico, coordenação e transferência de H. Comece pelas medidas da água isolada em uma trajetória DFT pronta. As execuções propostas usam **XTB2**, e os resultados fornecidos permitem continuar a interpretação enquanto um cálculo local termina.
