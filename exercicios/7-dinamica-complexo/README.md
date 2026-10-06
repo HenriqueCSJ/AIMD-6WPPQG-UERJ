@@ -8,7 +8,9 @@
 
 ## 1. Preserve a mesma condição inicial
 
-Comece pela montagem de Zn²⁺ + 20 águas de **[04a](../6-complexo-solvator/README.md)**. Neste bloco não há en nem quelato pré-formado. Conte os átomos e confira os índices antes de comparar.
+Depois de construir e inspecionar a montagem de Zn²⁺ + 20 águas em **[04a](../6-complexo-solvator/README.md)**, use aqui a geometria de referência já fornecida. Neste bloco não há en nem quelato pré-formado. Conte os átomos e confira os índices antes de comparar.
+
+**Copie o [XYZ completo abaixo](#geometria-copiar-e-colar-ou-baixar), salve como `zn_20h2o_inicial.xyz` e coloque-o na mesma pasta do input escolhido. Execute somente ORCA.** O download é opcional; não há ajuste das águas a fazer antes da execução.
 
 **Os quatro controles de 1 ps estão disponíveis como trajetórias de referência.** A geometria comum foi preparada a partir da saída verificada do novo SOLVATOR. Não use a antiga estrutura de 43 átomos no lugar dela.
 

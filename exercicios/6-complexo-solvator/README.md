@@ -70,35 +70,23 @@ Espere o prompt voltar antes de iniciar outro cálculo.
 1. Verifique **61 átomos**, sendo um Zn, 20 O e 40 H; não deve haver N.
 2. Meça as distâncias Zn–O e observe quais águas ficam mais próximas.
 3. Ative **Coordenação** e **Ligações H**. Os traços são critérios geométricos; a estrutura XYZ não contém ordens de ligação.
-4. Preserve a geometria **bruta** gerada pelo SOLVATOR; a geometria de partida de 04b será uma preparação didática declarada, não uma cópia idêntica dessa saída.
+4. Preserve a geometria **bruta** gerada pelo SOLVATOR. Em 04b, use o XYZ de partida já fornecido na página para comparar com as quatro trajetórias de referência.
 
 **SOLVATOR fornece uma estrutura candidata de solvatação.** A montagem não é uma trajetória de dinâmica molecular, não demonstra equilíbrio e não mede uma constante de formação. Não chame o histórico de construção de filme de hidratação.
 
-## 4. Distinga a montagem bruta da preparação para hidratar
+## 4. Continue com a geometria fornecida para 04b
+
+**A execução da aula usa somente ORCA.** Em [04b](../7-dinamica-complexo/README.md#geometria-copiar-e-colar-ou-baixar), copie o XYZ completo e salve-o como **`zn_20h2o_inicial.xyz`**, na mesma pasta do input de MD. Você também pode baixar esse arquivo, se preferir. Ele já está pronto: não há etapa de ajuste das águas a executar.
+
+### Origem da geometria de referência
 
 SOLVATOR pode colocar águas próximas já na montagem. Na referência nova conferida, **três O já estão abaixo de 2,6 Å do Zn**. Isso impede chamar todo contato inicial de coordenação formada pela dinâmica.
 
-Para observar as águas se aproximarem em 04b, usamos uma **preparação didática explícita**: cada água é transladada rigidamente **0,8 Å para fora**, na direção radial Zn→O. O e seus dois H recebem a mesma translação; a geometria interna da água é preservada. O Zn permanece na origem. Essa preparação remove os contatos iniciais abaixo do corte de 2,6 Å e não é uma otimização nem um resultado de MD.
+O XYZ fornecido para 04b foi preparado previamente: cada água foi transladada rigidamente **0,8 Å para fora**, na direção radial Zn→O. O e seus dois H receberam a mesma translação; a geometria interna da água foi preservada e o Zn permaneceu na origem. Isso explica por que as trajetórias de referência começam sem contatos abaixo de 2,6 Å. **É a origem do arquivo pronto, não uma tarefa da aula.** Esse arquivo não é a saída bruta do SOLVATOR, uma otimização ou um resultado de MD.
 
-[Baixar o pacote de resultados da montagem](resultado-zn_ion_20h2o_solvator.zip) · [Baixar a montagem bruta](resultados/zn_ion_20h2o_solvator/zn_ion_20h2o_solvator.solvator.xyz) · [Saída SOLVATOR](resultados/zn_ion_20h2o_solvator/zn_ion_20h2o_solvator.out) · [Baixar a preparação radial](estruturas/zn_20h2o_inicial.xyz)
+[Baixar o pacote de resultados da montagem](resultado-zn_ion_20h2o_solvator.zip) · [Baixar a montagem bruta](resultados/zn_ion_20h2o_solvator/zn_ion_20h2o_solvator.solvator.xyz) · [Saída SOLVATOR](resultados/zn_ion_20h2o_solvator/zn_ion_20h2o_solvator.out) · [Baixar o XYZ pronto de 04b](estruturas/zn_20h2o_inicial.xyz)
 
 Conserve os dois arquivos separados: a montagem bruta `.solvator.xyz` e a preparação **`zn_20h2o_inicial.xyz`** de 04b. Se você refizer SOLVATOR, não presuma que sua montagem será idêntica; confira os contatos e use a geometria comum fornecida para reproduzir a comparação pronta.
-
-<details markdown="1"><summary>Opcional: reproduzir a preparação com Python 3</summary>
-
-Para reproduzir a translação sobre a sua saída SOLVATOR, baixe **[preparar_aguas.py](preparar_aguas.py)** (também incluído no pacote da montagem). Requer somente Python 3, sem bibliotecas adicionais. O aluno pode usar diretamente a estrutura preparada fornecida e seguir a aula sem Python.
-
-Na pasta do script e do XYZ bruto, execute:
-
-```text
-python preparar_aguas.py zn_ion_20h2o_solvator.solvator.xyz
-```
-
-No Ubuntu, use `python3` se esse for o comando da instalação. O script escreve **`zn_20h2o_inicial.xyz`**, preservando o arquivo bruto. Ele verifica 61 átomos na ordem Zn seguida de vinte grupos O–H–H, coordenadas finitas e águas intactas. Centraliza o Zn na origem e desloca **O e seus dois H juntos**, 0,8 Å para fora na direção Zn→O, mantendo a geometria interna.
-
-O script rejeita uma montagem que ainda tenha O a **2,6 Å ou menos** do Zn, ou qualquer átomo a **6,5 Å ou mais** do centro. Também recusa sobrescrever um destino existente. Como sua montagem SOLVATOR pode diferir da referência, uma recusa pede usar a estrutura fornecida para a comparação da aula; não significa que a saída bruta foi alterada. O script não executa ORCA, otimização nem dinâmica.
-
-</details>
 
 ## Antes de avançar
 
