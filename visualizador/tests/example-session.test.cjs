@@ -974,3 +974,26 @@ test('the contextual return follows the displayed preset through races, failures
  assert.equal(ui.nodes['exercise-return'].getAttribute('href'),'../exercicios/index.html');
  ui.nodes['clear-button'].fire('click');assert.equal(ui.nodes['exercise-return'].getAttribute('href'),'../exercicios/index.html');
 });
+test('real elastic reference keeps the shipped 3Dmol sparse shape registry bounded with contacts enabled',async()=>{
+ const bundle=fs.readFileSync(path.join(viewer,'vendor/3Dmol-min.js'),'utf8');
+ const sandbox={window:{navigator:{userAgent:'node'}},document:{querySelector:()=>null,readyState:'complete'},TextEncoder,TextDecoder,console,module:{exports:{}}};sandbox.exports=sandbox.module.exports;
+ vm.runInNewContext(bundle.replace(',__webpack_require__(185);',';'),sandbox);
+ const proto=sandbox.module.exports.GLViewer.prototype;
+ let atoms=[],fits=0;
+ const model={addAtoms(values){atoms=values;},selectedAtoms(){return atoms;},setStyle(){},setClickable(){}};
+ const renderer={shapes:[],modelGroup:{},setProjection(){},getView(){return [0,0,0,0,0,0,1,0];},setView(){},rotate(){},zoomTo(){fits++;},zoom(){},render(){},resize(){},removeAllModels(){},removeModel(){},addModel(){return model;},removeShape:proto.removeShape,removeAllShapes:proto.removeAllShapes,
+  addShape(){const shape={shapePosition:this.shapes.length,removegl(){},addDashedCylinders(){},finalize(){}};this.shapes.push(shape);return shape;},addCurve(){return this.addShape();}};
+ const ui=session({inspectState:true,molecularViewer:renderer,presets:{cell_pressure:true}});
+ for(const name of ['time-fs','time-ps','time-s','temperature','kinetic','potential','total','atoms'])ui.nodes['frame-'+name]=new Element();
+ ui.nodes['hydrogen-bonds'].checked=true;ui.nodes['coordination-contacts'].checked=true;ui.nodes['coordination-cutoff'].value='2.6';
+ const context={window:{}};for(const file of ['examples.js','examples/zn_cell_1000bar.js'])vm.runInNewContext(fs.readFileSync(path.join(viewer,file),'utf8'),context);
+ const run=context.window.AIMD_EXAMPLES.runs.zn_cell_1000bar,load=ui.choose('cell_pressure',true);
+ ui.requests[0].resolve({config:{runs:[run.key]},runs:[run]});await load;
+ for(let frame=1;frame<run.xyz.frames.length;frame++){
+  ui.nodes['frame-slider'].value=String(frame);ui.nodes['frame-slider'].fire('input');
+  assert.ok(renderer.shapes.length<=5,`Frame ${frame}: old sparse slots must not accumulate`);
+  assert.equal(ui.state.wallShapes.length,3);assert.ok(ui.state.contactShapes.length>0);
+ }
+ assert.equal(fits,1,'Changing the wall does not reset the camera');
+ ui.nodes['clear-button'].fire('click');assert.equal(renderer.shapes.length,0);
+});

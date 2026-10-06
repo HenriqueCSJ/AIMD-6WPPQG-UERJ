@@ -158,3 +158,8 @@ html{scroll-padding-top:64px}
 @media(max-width:800px){.trajectory-expanded .expanded-guide-shortcut{top:-14px;margin:-14px -14px 14px;padding:6px 14px}}
 @media(max-width:700px){.guide-shortcut{padding:6px 18px}.guide-shortcut span{display:none}}
 @media print{.guide-shortcut,.expanded-guide-shortcut{display:none}}
+/* Keep the exercise return usable at tablet and phone widths. */
+.topbar{height:auto;min-height:86px;padding-top:14px;padding-bottom:14px;flex-wrap:wrap}
+.topbar nav{flex-wrap:wrap;gap:10px 20px}
+.topbar nav a{line-height:1.4;overflow-wrap:anywhere}
+@media(max-width:600px){.topbar nav{width:100%;justify-content:space-between;gap:8px 14px}.topbar nav>a{display:inline-flex;align-items:center;min-height:44px}#exercise-return{flex:1 1 100%;font-weight:650}.topbar .text-button{min-height:44px}}

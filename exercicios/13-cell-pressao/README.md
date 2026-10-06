@@ -116,7 +116,9 @@ Esta é uma amostra finita com parede artificial e solvente implícito ALPB. A d
 
 **Pergunta:** congelar o tamanho da parede é o mesmo que retirá-la? Os dois ramos partem do **mesmo checkpoint comprimido em 1100 fs**, obtido no exemplo de 1000 bar, e avançam por 500 fs até 1600 fs. Posições e velocidades iniciais são iguais.
 
-No ramo fixo, a esfera é redeclarada com **4,985 Å**, o raio final arredondado reportado pelo ORCA, e `Cell Fixed` mantém esse tamanho. Esse é o raio escolhido para o novo ramo, não um reinício exato da geometria interna da cela elástica. No outro ramo, `Cell None` remove a parede. O checkpoint molecular não substitui a declaração da cela.
+No ramo fixo, a esfera é redeclarada com **4,985 Å**, o raio final arredondado reportado pelo ORCA. **Uma nova `Cell Sphere` já é fixa por padrão**: neste input, `Cell Fixed` é redundante, e a saída avisa que o comando foi ignorado porque a parede não era elástica. O confinamento fixo vem da declaração da esfera. Esse é o raio escolhido para o novo ramo, não um reinício exato da geometria interna da cela elástica. No outro ramo, `Cell None` remove a parede. O checkpoint molecular não substitui a declaração da cela.
+
+`Cell Fixed` tem efeito ao desligar a elasticidade de uma parede que já estava elástica no mesmo input, por exemplo entre dois comandos `Run`. Esse outro protocolo não é o caso executado aqui; o visualizador atual não anima mudanças de parede entre múltiplos `Run`.
 
 **[Abrir C3 no laboratório](../../visualizador/index.html?exemplo=cell_release&aba=trajetoria)**
 

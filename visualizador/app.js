@@ -500,10 +500,12 @@
     legend.innerHTML=elements.join('');
   }
   function drawWall(sphere){
-    // Wall shapes have independent ownership; contacts and the chosen camera
-    // remain intact when a density change contracts or expands the sphere.
-    if(typeof state.viewer.removeShape==='function'){for(const shape of state.wallShapes||[])state.viewer.removeShape(shape);}
-    else{clearContactShapes();state.viewer.removeAllShapes();}
+    // Remove the contact tail before wall shapes: 3Dmol deletes sparse slots
+    // and only trims empty trailing entries. Rebuilding the wall first would
+    // strand old slots on every frame. Contacts are rebuilt later in drawFrame,
+    // before its single render, while the camera remains unchanged.
+    if(typeof state.viewer.removeShape==='function'){clearContactShapes();for(const shape of state.wallShapes||[])state.viewer.removeShape(shape);}
+    else{state.contactShapes=[];state.contactKey=null;state.viewer.removeAllShapes();}
     state.wallShapes=[];if(!sphere)return;
     for(let plane=0;plane<3;plane++){
       const points=[];for(let i=0;i<=72;i++){const t=2*Math.PI*i/72,p=[0,0,0];p[(plane+1)%3]=sphere.radius*Math.cos(t);p[(plane+2)%3]=sphere.radius*Math.sin(t);points.push({x:p[0]+sphere.center.x,y:p[1]+sphere.center.y,z:p[2]+sphere.center.z});}
