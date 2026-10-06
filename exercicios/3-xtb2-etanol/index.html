@@ -77,9 +77,82 @@ end
 <li><strong>NVE ampliado, 5 ps:</strong> <a href="resultados/etanol_nve_5ps/etanol_nve_5ps-traj.xyz" download="etanol_nve_5ps-traj.xyz">trajetória completa</a> · <a href="resultados/etanol_nve_5ps/etanol_nve_5ps-md-ener.csv">energias</a> · <a href="resultados/etanol_nve_5ps/curso.json">etapas e limites</a> · <a href="resultados/etanol_nve_5ps/verificacao.json">verificação</a> · <a href="resultado-etanol_nve_5ps.zip">pacote completo de resultados</a> · <a href="aula-etanol_restart_5ps.zip">input e checkpoint para continuar de 0,5 até 5 ps</a>. As saídas das duas execuções estão separadas por etapa no pacote.</li>
 <li><strong>etanol_nve:</strong> <a href="resultados/etanol_nve/etanol_nve.out">saída</a> · <a href="resultados/etanol_nve/etanol_nve.inp" download="etanol_nve.inp">input usado</a> · <a href="resultados/etanol_nve/etanol_nve-md-ener.csv">energias</a> · <a href="resultados/etanol_nve/etanol_nve-traj.xyz" download="etanol_nve-traj.xyz">trajetória</a> · <a href="resultados/etanol_nve/execucao.json">tempo de execução</a>.</li>
 </ul>
+<p><strong>Input completo · <code>etanol_nve.inp</code> — copie e salve com esse nome.</strong></p>
+<!-- input-source: resultados/etanol_nve/etanol_nve.inp -->
+
+<pre><code class="language-text"># Minicurso AIMD / ORCA 6.1.1 - etanol_nve
+# Estas linhas de comentario explicam as escolhas e nao alteram o calculo.
+# Execute um caso por vez; mantenha o arquivo XYZ na pasta de execucao.
+
+# Integra o movimento dos nucleos. PAL8 solicita oito recursos. XTB2 chama
+# GFN2-xTB externo; PAL8 tambem define suas threads.
+! MD XTB2 PAL8
+
+# Memoria em MB por processo. 256 x 8 = 2048 MB de orcamento, alem de memoria
+# adicional.
+%maxcore 256
+
+# Parametros da dinamica: as unidades sao explicitas em cada linha.
+%md
+  # Passo de integracao em femtossegundos. 1 fs = 1e-15 s.
+  Timestep 0.5_fs
+  # Semente fixa para repetir a preparacao aleatoria no mesmo ambiente.
+  Randomize 42
+  # Inicializa velocidades na temperatura indicada; nao substitui um
+  # termostato.
+  Initvel 300_K
+  # Sem troca de energia com banho: controle NVE para examinar a integracao.
+  Thermostat None
+  # Grava um quadro XYZ por passo. O nome identifica esta trajetoria.
+  Dump Position Stride 1 Filename &quot;etanol_nve-traj.xyz&quot;
+  # Numero de passos desta etapa. Duracao fisica = numero de passos x
+  # timestep.
+  Run 1000
+end
+
+# Le o XYZ: carga total 0, multiplicidade 1. O nome do arquivo deve coincidir
+# exatamente.
+* xyzfile 0 1 etanol.xyz
+</code></pre>
 <p><a href="https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html">Manual ORCA: dinâmica molecular</a>.</p>
 <h2 id="inputs-das-variantes-e-preparacoes">Inputs das variantes e preparações</h2>
 <ul>
 <li><strong>preparar_etanol:</strong> <a href="inputs/preparar_etanol.inp" download="preparar_etanol.inp">Baixar input ORCA</a> · <a href="estruturas/etanol_inicial.xyz" download="etanol_inicial.xyz">Baixar geometria inicial (.xyz)</a> (opcional para executar; as coordenadas já estão no input).</li>
 </ul>
-<p><strong>Continuação de 0,5 até 5 ps:</strong> <a href="resultados/etanol_nve_5ps/etapas/ethanol_00500_05000fs.inp" download="ethanol_00500_05000fs.inp">Baixar input ORCA</a> · <a href="resultados/etanol_nve_5ps/etapas/ethanol_restart.xyz" download="ethanol_restart.xyz">Baixar geometria inicial (.xyz)</a> (obrigatório; manter na mesma pasta do input) · <a href="resultados/etanol_nve_5ps/etapas/etanol_nve.mdrestart" download="etanol_nve.mdrestart">Baixar checkpoint obrigatório</a> (fornece o estado de continuação; manter junto do input). O XYZ isolado não substitui o checkpoint.</p></article><nav class="route-nav route-fim" aria-label="Navegação do percurso — fim"><div class="route-status">Etapa 2 de 9 · Bloco 02a<progress class="course-progress" value="2" max="9" aria-label="Etapa 2 de 9"></progress></div><div class="route-controls"><a class="route-prev" rel="prev" href="../1-agua-dft/index.html"><small>Anterior</small><span>← Água: molécula e dímero</span></a><a class="route-next" rel="next" href="../4-timestep/index.html"><small>Próximo</small><span>Timestep e correção →</span></a></div><a class="route-map" href="../index.html">Mapa completo do percurso</a></nav></main></div><footer>Henrique de Castro Silva Junior e Virginia Camila Rufino Ferreira · ORCA 6.1.1 · Materiais e dados locais; links externos levam à documentação oficial.</footer></body></html>
+<p><strong>Input completo · <code>preparar_etanol.inp</code> — copie e salve com esse nome.</strong></p>
+<!-- input-source: inputs/preparar_etanol.inp -->
+
+<pre><code class="language-text"># Apoio: otimiza o etanol com GFN2-xTB.
+! XTB2 Opt TightOpt PAL8
+%maxcore 256
+
+# Carga 0, multiplicidade 1; coordenadas abaixo; XYZ separado opcional.
+* xyz 0 1
+C  -0.8883105789  0.1670031805 -0.0273158886
+C   0.4657530425 -0.5115589698 -0.0367953327
+O   1.4310747879  0.3229162225  0.5866699934
+H  -0.8487409911  1.1174800549 -0.5695241286
+H  -1.6471213402 -0.4704427172 -0.4896365992
+H  -1.1963971221  0.3978445473  0.9977232020
+H   0.7919970008 -0.7224282495 -1.0597258424
+H   0.4246036544 -1.4558617236  0.5137906469
+H   1.4671415467  1.1550476549  0.0848139491
+*
+</code></pre>
+<p><strong>Continuação de 0,5 até 5 ps:</strong> <a href="resultados/etanol_nve_5ps/etapas/ethanol_00500_05000fs.inp" download="ethanol_00500_05000fs.inp">Baixar input ORCA</a> · <a href="resultados/etanol_nve_5ps/etapas/ethanol_restart.xyz" download="ethanol_restart.xyz">Baixar geometria inicial (.xyz)</a> (obrigatório; manter na mesma pasta do input) · <a href="resultados/etanol_nve_5ps/etapas/etanol_nve.mdrestart" download="etanol_nve.mdrestart">Baixar checkpoint obrigatório</a> (fornece o estado de continuação; manter junto do input). O XYZ isolado não substitui o checkpoint.</p>
+<p><strong>Input completo · <code>ethanol_00500_05000fs.inp</code> — copie e salve com esse nome.</strong></p>
+<!-- input-source: resultados/etanol_nve_5ps/etapas/ethanol_00500_05000fs.inp -->
+
+<pre><code class="language-text"># Finite NVE continuation; positions and velocities retained from checkpoint.
+! MD XTB2 PAL8
+%maxcore 256
+%md
+  Timestep 0.5_fs
+  Thermostat None
+  Randomize 42
+  Dump Position Stride 1 Filename &quot;ethanol_00500_05000fs-traj.xyz&quot;
+  Restart &quot;etanol_nve.mdrestart&quot;
+  Run 9000
+end
+* xyzfile 0 1 ethanol_restart.xyz
+</code></pre></article><nav class="route-nav route-fim" aria-label="Navegação do percurso — fim"><div class="route-status">Etapa 2 de 9 · Bloco 02a<progress class="course-progress" value="2" max="9" aria-label="Etapa 2 de 9"></progress></div><div class="route-controls"><a class="route-prev" rel="prev" href="../1-agua-dft/index.html"><small>Anterior</small><span>← Água: molécula e dímero</span></a><a class="route-next" rel="next" href="../4-timestep/index.html"><small>Próximo</small><span>Timestep e correção →</span></a></div><a class="route-map" href="../index.html">Mapa completo do percurso</a></nav></main></div><footer>Henrique de Castro Silva Junior e Virginia Camila Rufino Ferreira · ORCA 6.1.1 · Materiais e dados locais; links externos levam à documentação oficial.</footer></body></html>

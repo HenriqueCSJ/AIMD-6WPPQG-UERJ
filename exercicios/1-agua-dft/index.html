@@ -12,6 +12,31 @@
 </blockquote>
 <h3 id="comece-pelo-movimento-de-tres-atomos">Comece pelo movimento de três átomos</h3>
 <p><a href="../../visualizador/index.html?exemplo=water_single&amp;aba=trajetoria">Abrir água isolada em 3D</a> · <a href="aula-agua_dft.zip">Pacote da referência DFT</a> · <a href="inputs/agua_dft.inp" download="agua_dft.inp">Input DFT</a> · <a href="estruturas/agua.xyz" download="agua.xyz">Geometria inicial (.xyz)</a> (opcional para executar; as coordenadas já estão no input)</p>
+<p><strong>Input completo · <code>agua_dft.inp</code> — copie e salve com esse nome.</strong></p>
+<!-- input-source: inputs/agua_dft.inp -->
+
+<pre><code class="language-text"># Agua com DFT, sem banho termico (NVE); PAL8 = 8 processos.
+! MD BLYP def2-SVP TightSCF PAL8
+%maxcore 256
+
+%md
+  Timestep 0.5_fs
+  Randomize 42
+  # Velocidades iniciais; nao mantem a temperatura fixa.
+  Initvel 300_K
+  Thermostat None
+  Dump Position Stride 1 Filename &quot;agua_dft-traj.xyz&quot;
+  # 40 x 0.5 fs = 20 fs (2e-14 s).
+  Run 40
+end
+
+# Carga 0, multiplicidade 1; coordenadas abaixo; XYZ separado opcional.
+* xyz 0 1
+  O          -0.00000000000561      0.00000000000000     -0.07350969363937
+  H           0.76032823354949      0.00000000000000      0.54103884681985
+  H          -0.76032823354388      0.00000000000000      0.54103884681952
+*
+</code></pre>
 <p>A referência BLYP/def2-SVP mostra <strong>20 fs em 41 quadros</strong>, com timestep de 0,5 fs e sem termostato. Abra os resultados fornecidos; não é preciso repetir DFT durante a aula. A geometria inicial foi otimizada nesse mesmo nível. Em dinâmica, cada passo responde às forças: ele não é uma nova otimização da molécula.</p>
 <ol>
 <li>Em <strong>Geometria</strong>, meça <strong>O 0–H 1</strong>, <strong>O 0–H 2</strong> e o ângulo <strong>1–0–2</strong>. Avance os quadros e identifique uma mudança de comprimento ou ângulo; girar a câmera não altera essas medidas.</li>
@@ -92,7 +117,7 @@ end
 <h2 id="complemento-opcional-alem-das-posicoes-com-dump">Complemento opcional · Além das posições com Dump</h2><nav class="complement-steps" aria-label="Retorno do complemento Dump"><span>Complemento opcional · Dump</span><a href="#conteudo">↑ Voltar à etapa da água e à sequência da aula</a></nav>
 <p><strong>Um único exemplo extra, usando a água isolada.</strong> Salve posições, velocidades e forças nos mesmos instantes e veja que um filme de coordenadas não contém toda a informação da dinâmica. Esta variante NVE usa 100 fs, sem parede, com o mesmo estado inicial da água XTB2 acima; a execução de referência levou 4,1 s.</p>
 <p><a href="aula-agua_dump.zip">Pacote para executar</a> · <a href="inputs/agua_dump.inp" download="agua_dump.inp">Input</a> · <a href="resultado-agua_dump.zip">Resultados completos</a></p>
-<details>
+<details open>
 <summary>Abrir o input completo e as perguntas</summary>
 <!-- input-source: inputs/agua_dump.inp -->
 <pre><code class="language-text"># Agua isolada: comparar ausencia e presenca de banho termico.
@@ -190,10 +215,34 @@ end
 <p>Na análise dos 2 ps originais, o critério operacional foi H···O &lt; 2,4 Å e O–H···O &gt; 130°. O visualizador usa critérios fixos diferentes: H···O ≤ 2,5 Å, O···O ≤ 3,5 Å e O–H···O ≥ 150°. Por isso, o instante em que o traço aparece pode diferir desta análise. A amplitude de Etotal nesse trecho foi <strong>0,194 kJ/mol</strong>; examine a curva inteira, não apenas a diferença entre início e fim. Em NVE, a temperatura instantânea deste sistema de seis átomos pode variar bastante. A referência ampliada identifica o restart em 2000 fs e mantém os valores físicos originais de energia e temperatura.</p>
 <p>O tempo medido de <strong>56,5 s</strong> não é garantia para outros computadores. Se ultrapassar <strong>2 min durante a aula</strong>, abra a referência e continue a análise.</p>
 </details>
-<details>
+<details open>
 <summary>Comparação DFT já calculada</summary>
 <p>Não execute DFT durante a aula. A referência curta B97-3c simulou <strong>60 fs</strong> em <strong>275,5 s</strong> nesta máquina; ela permite comparar a geometria e o custo com XTB2. Compare apenas a janela comum de 0–60 fs. XTB2 usa uma aproximação diferente para a energia eletrônica; trajetórias mais longas não demonstram maior precisão.</p>
 <p><a href="../../visualizador/index.html?exemplo=water_dft&amp;aba=trajetoria">Abrir DFT em 3D</a> · <a href="inputs/dimero_b97.inp" download="dimero_b97.inp">Baixar input ORCA</a> · <a href="estruturas/dimero_b97.xyz" download="dimero_b97.xyz">Baixar geometria inicial (.xyz)</a> (opcional para executar; as coordenadas já estão no input) · <a href="aula-dimero_b97.zip">Pacote DFT, para estudo posterior</a>.</p>
+<p><strong>Input completo · <code>dimero_b97.inp</code> — copie e salve com esse nome.</strong></p>
+<!-- input-source: inputs/dimero_b97.inp -->
+<pre><code class="language-text"># Exemplo didatico; oito processos solicitados.
+! MD B97-3c TightSCF PAL8
+%maxcore 256
+
+%md
+  Randomize 42
+  Initvel 300_K
+  Dump Position Stride 1 Filename &quot;dimero_b97-traj.xyz&quot;
+  Timestep 0.5_fs
+  Thermostat None
+  # 60 fs: observar vibracao e geometria da ligacao H.
+  Run 120
+end
+* xyz 0 1
+  O          -0.07963526387957     -0.01964165075209     -0.00000000264085
+  H           0.88823357664041      0.04103734930643      0.00000002901791
+  H          -0.37106168405382      0.89703962065287     -0.00000002440793
+  O           2.88291572564215      0.11999069039073     -0.00000000005029
+  H           3.28977384105638      0.54578697932583      0.76197145433409
+  H           3.28977380459444      0.54578701107623     -0.76197145625293
+*
+</code></pre>
 </details>
 <details>
 <summary>Como continuar o dímero de 2 até 5 ps</summary>
@@ -204,6 +253,26 @@ end
 <ul>
 <li><strong>XTB2, referência ampliada de 5 ps:</strong> <a href="resultados/dimero_xtb2_5ps/dimero_xtb2_5ps-traj.xyz" download="dimero_xtb2_5ps-traj.xyz">trajetória completa</a> · <a href="resultados/dimero_xtb2_5ps/dimero_xtb2_5ps-md-ener.csv">energias</a> · <a href="resultados/dimero_xtb2_5ps/curso.json">etapas e limites</a> · <a href="resultados/dimero_xtb2_5ps/verificacao.json">verificação</a> · <a href="resultado-dimero_xtb2_5ps.zip">pacote completo de resultados</a> · <a href="aula-dimero_restart_5ps.zip">input e checkpoint para continuar de 2 até 5 ps</a>. As saídas das duas execuções estão separadas por etapa no pacote.</li>
 <li><strong>XTB2, 2 ps:</strong> <a href="resultados/dimero_xtb2_2ps/dimero_xtb2_2ps.out">saída</a> · <a href="resultados/dimero_xtb2_2ps/dimero_xtb2_2ps.inp" download="dimero_xtb2_2ps.inp">input usado</a> · <a href="resultados/dimero_xtb2_2ps/dimero_xtb2_2ps-md-ener.csv">energias</a> · <a href="resultados/dimero_xtb2_2ps/dimero_xtb2_2ps-traj.xyz" download="dimero_xtb2_2ps-traj.xyz">trajetória completa</a> · <a href="resultados/dimero_xtb2_2ps/execucao.json">tempo de execução</a>.</li>
+</ul>
+<p><strong>Input completo · <code>dimero_xtb2_2ps.inp</code> — copie e salve com esse nome.</strong></p>
+<!-- input-source: resultados/dimero_xtb2_2ps/dimero_xtb2_2ps.inp -->
+
+<pre><code class="language-text"># Duas aguas: 2 ps = 2e-12 s, sem banho termico nem parede.
+! MD XTB2 PAL8
+%maxcore 256
+
+%md
+  Randomize 42
+  Initvel 300_K
+  Timestep 0.5_fs
+  Thermostat None
+  Dump Position Stride 1 Filename &quot;dimero_xtb2_2ps-traj.xyz&quot;
+  # Geometria inicial compartilhada com a demonstracao DFT.
+  Run 4000
+end
+* xyzfile 0 1 dimero_b97.xyz
+</code></pre>
+<ul>
 <li><strong>DFT, comparação pronta de 60 fs:</strong> <a href="resultados/dimero_b97/dimero_b97.out">saída</a> · <a href="resultados/dimero_b97/dimero_b97-md-ener.csv">energias</a> · <a href="resultados/dimero_b97/dimero_b97-traj.xyz" download="dimero_b97-traj.xyz">trajetória</a>.</li>
 </ul>
 <p><a href="https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html">Manual ORCA: dinâmica molecular</a>.</p>
@@ -214,4 +283,34 @@ end
 <li><strong>agua_dft:</strong> <a href="inputs/agua_dft.inp" download="agua_dft.inp">Baixar input ORCA</a> · <a href="estruturas/agua.xyz" download="agua.xyz">Baixar geometria inicial (.xyz)</a> (opcional para executar; as coordenadas já estão no input).</li>
 <li><strong>preparar_agua:</strong> <a href="inputs/preparar_agua.inp" download="preparar_agua.inp">Baixar input ORCA</a> · <a href="estruturas/agua_inicial.xyz" download="agua_inicial.xyz">Baixar geometria inicial (.xyz)</a> (opcional para executar; as coordenadas já estão no input).</li>
 </ul>
-<p><strong>Continuação de 2 até 5 ps:</strong> <a href="resultados/dimero_xtb2_5ps/etapas/water_02000_05000fs.inp" download="water_02000_05000fs.inp">Baixar input ORCA</a> · <a href="resultados/dimero_xtb2_5ps/etapas/water_restart.xyz" download="water_restart.xyz">Baixar geometria inicial (.xyz)</a> (obrigatório; manter na mesma pasta do input) · <a href="resultados/dimero_xtb2_5ps/etapas/dimero_xtb2_2ps.mdrestart" download="dimero_xtb2_2ps.mdrestart">Baixar checkpoint obrigatório</a> (fornece o estado de continuação; manter junto do input). O XYZ isolado não substitui o checkpoint.</p></article><nav class="route-nav route-fim" aria-label="Navegação do percurso — fim"><div class="route-status">Etapa 1 de 9 · Bloco 01<progress class="course-progress" value="1" max="9" aria-label="Etapa 1 de 9"></progress></div><div class="route-controls"><a class="route-prev" rel="prev" href="../index.html"><small>Anterior</small><span>← Mapa do percurso</span></a><a class="route-next" rel="next" href="../3-xtb2-etanol/index.html"><small>Próximo</small><span>Etanol: controle →</span></a></div><a class="route-map" href="../index.html">Mapa completo do percurso</a></nav></main></div><footer>Henrique de Castro Silva Junior e Virginia Camila Rufino Ferreira · ORCA 6.1.1 · Materiais e dados locais; links externos levam à documentação oficial.</footer></body></html>
+<p><strong>Input completo · <code>preparar_agua.inp</code> — copie e salve com esse nome.</strong></p>
+<!-- input-source: inputs/preparar_agua.inp -->
+
+<pre><code class="language-text"># Apoio: otimiza a agua no nivel DFT usado na dinamica.
+! BLYP def2-SVP TightSCF Opt PAL8
+%maxcore 256
+
+# Carga 0, multiplicidade 1; coordenadas abaixo; XYZ separado opcional.
+* xyz 0 1
+O   0.0000000000  0.0000000000  0.0000000000
+H   0.7586020000  0.0000000000  0.5042840000
+H  -0.7586020000  0.0000000000  0.5042840000
+*
+</code></pre>
+<p><strong>Continuação de 2 até 5 ps:</strong> <a href="resultados/dimero_xtb2_5ps/etapas/water_02000_05000fs.inp" download="water_02000_05000fs.inp">Baixar input ORCA</a> · <a href="resultados/dimero_xtb2_5ps/etapas/water_restart.xyz" download="water_restart.xyz">Baixar geometria inicial (.xyz)</a> (obrigatório; manter na mesma pasta do input) · <a href="resultados/dimero_xtb2_5ps/etapas/dimero_xtb2_2ps.mdrestart" download="dimero_xtb2_2ps.mdrestart">Baixar checkpoint obrigatório</a> (fornece o estado de continuação; manter junto do input). O XYZ isolado não substitui o checkpoint.</p>
+<p><strong>Input completo · <code>water_02000_05000fs.inp</code> — copie e salve com esse nome.</strong></p>
+<!-- input-source: resultados/dimero_xtb2_5ps/etapas/water_02000_05000fs.inp -->
+
+<pre><code class="language-text"># Finite NVE continuation; positions and velocities retained from checkpoint.
+! MD XTB2 PAL8
+%maxcore 256
+%md
+  Timestep 0.5_fs
+  Thermostat None
+  Randomize 42
+  Dump Position Stride 1 Filename &quot;water_02000_05000fs-traj.xyz&quot;
+  Restart &quot;dimero_xtb2_2ps.mdrestart&quot;
+  Run 6000
+end
+* xyzfile 0 1 water_restart.xyz
+</code></pre></article><nav class="route-nav route-fim" aria-label="Navegação do percurso — fim"><div class="route-status">Etapa 1 de 9 · Bloco 01<progress class="course-progress" value="1" max="9" aria-label="Etapa 1 de 9"></progress></div><div class="route-controls"><a class="route-prev" rel="prev" href="../index.html"><small>Anterior</small><span>← Mapa do percurso</span></a><a class="route-next" rel="next" href="../3-xtb2-etanol/index.html"><small>Próximo</small><span>Etanol: controle →</span></a></div><a class="route-map" href="../index.html">Mapa completo do percurso</a></nav></main></div><footer>Henrique de Castro Silva Junior e Virginia Camila Rufino Ferreira · ORCA 6.1.1 · Materiais e dados locais; links externos levam à documentação oficial.</footer></body></html>

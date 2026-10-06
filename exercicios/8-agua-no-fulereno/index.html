@@ -57,12 +57,43 @@ end
 <p>Esta trajetória curta não descreve a entrada da água através de uma gaiola intacta, o processo de síntese ou a estabilidade de longo prazo. Os núcleos seguem dinâmica clássica; o teste não reproduz os níveis de um rotor quântico, efeitos de ponto zero ou conversão de isômeros de spin da água.</p>
 <h2 id="arquivos-e-preparacao">Arquivos e preparação</h2>
 <ul>
-<li>
-<p><strong>agua_c60:</strong> <a href="resultados/agua_c60/agua_c60.inp" download="agua_c60.inp">input usado</a> · <a href="resultados/agua_c60/agua_c60.out">saída</a> · <a href="resultados/agua_c60/agua_c60-md-ener.csv">energias</a> · <a href="resultados/agua_c60/agua_c60-traj.xyz" download="agua_c60-traj.xyz">trajetória</a>.</p>
-</li>
-<li>
-<p><a href="inputs/preparar_agua_c60.inp" download="preparar_agua_c60.inp">Baixar input ORCA</a> · <a href="estruturas/agua_c60_inicial.xyz" download="agua_c60_inicial.xyz">Baixar geometria inicial (.xyz)</a> (obrigatório; manter na mesma pasta do input) · <a href="resultados/preparar_agua_c60/preparar_agua_c60.out">saída da otimização</a>.</p>
-</li>
+<li><strong>agua_c60:</strong> <a href="resultados/agua_c60/agua_c60.inp" download="agua_c60.inp">input usado</a> · <a href="resultados/agua_c60/agua_c60.out">saída</a> · <a href="resultados/agua_c60/agua_c60-md-ener.csv">energias</a> · <a href="resultados/agua_c60/agua_c60-traj.xyz" download="agua_c60-traj.xyz">trajetória</a>.</li>
+</ul>
+<p><strong>Input completo · <code>agua_c60.inp</code> — copie e salve com esse nome.</strong></p>
+<!-- input-source: resultados/agua_c60/agua_c60.inp -->
+
+<pre><code class="language-text"># Agua encapsulada: todos os atomos da gaiola se movem.
+! MD XTB2 PAL8
+%maxcore 256
+
+%md
+  Timestep 0.5_fs
+  Randomize 42
+  Initvel 300_K
+  # Banho termico; o confinamento vem do proprio C60.
+  Thermostat CSVR 300_K Timecon 100_fs
+  Dump Position Stride 1 Filename &quot;agua_c60-traj.xyz&quot;
+  # 2000 x 0.5 fs = 1 ps (1e-12 s).
+  Run 2000
+end
+
+# Neutro, singlete; geometria previamente relaxada.
+* xyzfile 0 1 agua_c60.xyz
+</code></pre>
+<ul>
+<li><a href="inputs/preparar_agua_c60.inp" download="preparar_agua_c60.inp">Baixar input ORCA</a> · <a href="estruturas/agua_c60_inicial.xyz" download="agua_c60_inicial.xyz">Baixar geometria inicial (.xyz)</a> (obrigatório; manter na mesma pasta do input) · <a href="resultados/preparar_agua_c60/preparar_agua_c60.out">saída da otimização</a>.</li>
+</ul>
+<p><strong>Input completo · <code>preparar_agua_c60.inp</code> — copie e salve com esse nome.</strong></p>
+<!-- input-source: inputs/preparar_agua_c60.inp -->
+
+<pre><code class="language-text"># Relaxa a agua e a gaiola antes da dinamica.
+! XTB2 Opt TightOpt PAL8
+%maxcore 256
+
+# Sistema neutro, singlete; 63 atomos.
+* xyzfile 0 1 agua_c60_inicial.xyz
+</code></pre>
+<ul>
 <li><a href="https://docs.ase-lib.org/_modules/ase/build/molecule.html">ASE: código e coordenadas do C₆₀</a>.</li>
 <li><a href="https://doi.org/10.1126/science.1206376">Kurotobi e Murata, Science 2011: síntese de H₂O@C₆₀</a>.</li>
 <li><a href="https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html">Manual ORCA: dinâmica molecular</a>.</li>

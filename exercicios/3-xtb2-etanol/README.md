@@ -101,10 +101,91 @@ A continuação levou **136,1 s nesta máquina**, além dos 15,8 s originais. No
 - **NVE ampliado, 5 ps:** [trajetória completa](resultados/etanol_nve_5ps/etanol_nve_5ps-traj.xyz) · [energias](resultados/etanol_nve_5ps/etanol_nve_5ps-md-ener.csv) · [etapas e limites](resultados/etanol_nve_5ps/curso.json) · [verificação](resultados/etanol_nve_5ps/verificacao.json) · [pacote completo de resultados](resultado-etanol_nve_5ps.zip) · [input e checkpoint para continuar de 0,5 até 5 ps](aula-etanol_restart_5ps.zip). As saídas das duas execuções estão separadas por etapa no pacote.
 - **etanol_nve:** [saída](resultados/etanol_nve/etanol_nve.out) · [input usado](resultados/etanol_nve/etanol_nve.inp) · [energias](resultados/etanol_nve/etanol_nve-md-ener.csv) · [trajetória](resultados/etanol_nve/etanol_nve-traj.xyz) · [tempo de execução](resultados/etanol_nve/execucao.json).
 
+**Input completo · `etanol_nve.inp` — copie e salve com esse nome.**
+
+<!-- input-source: resultados/etanol_nve/etanol_nve.inp -->
+```text
+# Minicurso AIMD / ORCA 6.1.1 - etanol_nve
+# Estas linhas de comentario explicam as escolhas e nao alteram o calculo.
+# Execute um caso por vez; mantenha o arquivo XYZ na pasta de execucao.
+
+# Integra o movimento dos nucleos. PAL8 solicita oito recursos. XTB2 chama
+# GFN2-xTB externo; PAL8 tambem define suas threads.
+! MD XTB2 PAL8
+
+# Memoria em MB por processo. 256 x 8 = 2048 MB de orcamento, alem de memoria
+# adicional.
+%maxcore 256
+
+# Parametros da dinamica: as unidades sao explicitas em cada linha.
+%md
+  # Passo de integracao em femtossegundos. 1 fs = 1e-15 s.
+  Timestep 0.5_fs
+  # Semente fixa para repetir a preparacao aleatoria no mesmo ambiente.
+  Randomize 42
+  # Inicializa velocidades na temperatura indicada; nao substitui um
+  # termostato.
+  Initvel 300_K
+  # Sem troca de energia com banho: controle NVE para examinar a integracao.
+  Thermostat None
+  # Grava um quadro XYZ por passo. O nome identifica esta trajetoria.
+  Dump Position Stride 1 Filename "etanol_nve-traj.xyz"
+  # Numero de passos desta etapa. Duracao fisica = numero de passos x
+  # timestep.
+  Run 1000
+end
+
+# Le o XYZ: carga total 0, multiplicidade 1. O nome do arquivo deve coincidir
+# exatamente.
+* xyzfile 0 1 etanol.xyz
+```
+
+
 [Manual ORCA: dinâmica molecular](https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html).
 
 ## Inputs das variantes e preparações
 
 - **preparar_etanol:** [Baixar input ORCA](inputs/preparar_etanol.inp) · [Baixar geometria inicial (.xyz)](estruturas/etanol_inicial.xyz) (opcional para executar; as coordenadas já estão no input).
 
+**Input completo · `preparar_etanol.inp` — copie e salve com esse nome.**
+
+<!-- input-source: inputs/preparar_etanol.inp -->
+```text
+# Apoio: otimiza o etanol com GFN2-xTB.
+! XTB2 Opt TightOpt PAL8
+%maxcore 256
+
+# Carga 0, multiplicidade 1; coordenadas abaixo; XYZ separado opcional.
+* xyz 0 1
+C  -0.8883105789  0.1670031805 -0.0273158886
+C   0.4657530425 -0.5115589698 -0.0367953327
+O   1.4310747879  0.3229162225  0.5866699934
+H  -0.8487409911  1.1174800549 -0.5695241286
+H  -1.6471213402 -0.4704427172 -0.4896365992
+H  -1.1963971221  0.3978445473  0.9977232020
+H   0.7919970008 -0.7224282495 -1.0597258424
+H   0.4246036544 -1.4558617236  0.5137906469
+H   1.4671415467  1.1550476549  0.0848139491
+*
+```
+
+
 **Continuação de 0,5 até 5 ps:** [Baixar input ORCA](resultados/etanol_nve_5ps/etapas/ethanol_00500_05000fs.inp) · [Baixar geometria inicial (.xyz)](resultados/etanol_nve_5ps/etapas/ethanol_restart.xyz) (obrigatório; manter na mesma pasta do input) · [Baixar checkpoint obrigatório](resultados/etanol_nve_5ps/etapas/etanol_nve.mdrestart) (fornece o estado de continuação; manter junto do input). O XYZ isolado não substitui o checkpoint.
+
+**Input completo · `ethanol_00500_05000fs.inp` — copie e salve com esse nome.**
+
+<!-- input-source: resultados/etanol_nve_5ps/etapas/ethanol_00500_05000fs.inp -->
+```text
+# Finite NVE continuation; positions and velocities retained from checkpoint.
+! MD XTB2 PAL8
+%maxcore 256
+%md
+  Timestep 0.5_fs
+  Thermostat None
+  Randomize 42
+  Dump Position Stride 1 Filename "ethanol_00500_05000fs-traj.xyz"
+  Restart "etanol_nve.mdrestart"
+  Run 9000
+end
+* xyzfile 0 1 ethanol_restart.xyz
+```

@@ -126,7 +126,46 @@ A referência longa do aplicativo contém todos os **40001 quadros**, espaçados
 
 - [Saída ORCA](resultados/proton_shared/proton_shared.out) · [Energias](resultados/proton_shared/proton_shared-md-ener.csv) · [Trajetória completa](resultados/proton_shared/proton_shared-traj.xyz).
 - [Input original da referência](resultados/proton_shared/proton_shared.inp) · [Registro de execução](resultados/proton_shared/execucao.json).
+
+**Input completo · `proton_shared.inp` — copie e salve com esse nome.**
+
+<!-- input-source: resultados/proton_shared/proton_shared.inp -->
+```text
+# H5O2+ a 300 K: 2 ps, sem solvente, parede ou forca de transferencia.
+! MD XTB2 PAL8
+%maxcore 256
+%md
+  Timestep 0.25_fs
+  Thermostat CSVR 300_K Timecon 100_fs
+  Dump Position Stride 1 Filename "z01_dinamica-traj.xyz"
+  Randomize 93201
+  Initvel 300_K
+  Run 8000
+end
+* xyzfile 1 1 h5o2_otimizado.xyz
+```
+
 - [Baixar input ORCA](inputs/z00_otimizar.inp) · [Baixar geometria inicial (.xyz)](estruturas/h5o2_inicial.xyz) (opcional para executar; as coordenadas já estão no input) · [Saída da otimização](resultados/otimizacao/z00_otimizar.out).
+
+**Input completo · `z00_otimizar.inp` — copie e salve com esse nome.**
+
+<!-- input-source: inputs/z00_otimizar.inp -->
+```text
+# Dimero protonado isolado; relaxar antes da dinamica.
+! XTB2 Opt TightOpt PAL8
+%maxcore 256
+%geom MaxIter 200 end
+* xyz 1 1
+O -1.225000  0.000000  0.000000
+O  1.225000  0.000000  0.000000
+H  0.080000  0.015000 -0.008000
+H -1.810000  0.765000  0.010000
+H -1.825000 -0.758000 -0.020000
+H  1.820000  0.015000  0.763000
+H  1.813000 -0.010000 -0.770000
+*
+```
+
 - [Manual ORCA 6.1: dinâmica molecular, timestep e termostatos](https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html).
 
 **Entrega da dupla:** anote um cruzamento com retorno e explique como a conclusão muda ao exigir persistência.
@@ -135,4 +174,43 @@ A referência longa do aplicativo contém todos os **40001 quadros**, espaçados
 
 - **z01_dinamica — etapa após a otimização; usa a geometria otimizada:** [Baixar input ORCA](inputs/z01_dinamica.inp) · [Baixar geometria inicial (.xyz)](estruturas/h5o2_otimizado.xyz) (obrigatório; manter na mesma pasta do input).
 
+**Input completo · `z01_dinamica.inp` — copie e salve com esse nome.**
+
+<!-- input-source: inputs/z01_dinamica.inp -->
+```text
+# H5O2+ a 300 K: 2 ps, sem solvente, parede ou forca de transferencia.
+! MD XTB2 PAL8
+%maxcore 256
+%md
+  Timestep 0.25_fs
+  Thermostat CSVR 300_K Timecon 100_fs
+  Dump Position Stride 1 Filename "z01_dinamica-traj.xyz"
+  Randomize 93201
+  Initvel 300_K
+  Run 8000
+end
+* xyzfile 1 1 h5o2_otimizado.xyz
+```
+
+
 **Continuação de 2 até 10 ps:** [Baixar input ORCA](resultados/proton_shared_10ps/etapas/z02_02000_10000fs.inp) · [Baixar geometria inicial (.xyz)](resultados/proton_shared_10ps/etapas/h5o2_restart_2ps.xyz) (obrigatório; manter na mesma pasta do input) · [Baixar checkpoint obrigatório](resultados/proton_shared_10ps/etapas/z01_dinamica.mdrestart) (fornece o estado de continuação; manter junto do input). O XYZ isolado não substitui o checkpoint.
+
+**Input completo · `z02_02000_10000fs.inp` — copie e salve com esse nome.**
+
+<!-- input-source: resultados/proton_shared_10ps/etapas/z02_02000_10000fs.inp -->
+```text
+# H5O2+: continue the retained 2 ps state for 8 ps, reaching 10 ps.
+# Same Hamiltonian, integration step, thermostat settings and explicit seed.
+# Positions and velocities come from the checkpoint; do not initialize velocities.
+! MD XTB2 PAL8
+%maxcore 256
+%md
+  Timestep 0.25_fs
+  Thermostat CSVR 300_K Timecon 100_fs
+  Dump Position Stride 1 Filename "z02_02000_10000fs-traj.xyz"
+  Randomize 93201
+  Restart "z01_dinamica.mdrestart"
+  Run 32000
+end
+* xyzfile 1 1 h5o2_restart_2ps.xyz
+```

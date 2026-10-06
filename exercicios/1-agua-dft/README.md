@@ -18,6 +18,34 @@ Começamos por uma molécula de água. Com três átomos, podemos acompanhar cad
 
 [Abrir água isolada em 3D](../../visualizador/index.html?exemplo=water_single&aba=trajetoria) · [Pacote da referência DFT](aula-agua_dft.zip) · [Input DFT](inputs/agua_dft.inp) · [Geometria inicial (.xyz)](estruturas/agua.xyz) (opcional para executar; as coordenadas já estão no input)
 
+**Input completo · `agua_dft.inp` — copie e salve com esse nome.**
+
+<!-- input-source: inputs/agua_dft.inp -->
+```text
+# Agua com DFT, sem banho termico (NVE); PAL8 = 8 processos.
+! MD BLYP def2-SVP TightSCF PAL8
+%maxcore 256
+
+%md
+  Timestep 0.5_fs
+  Randomize 42
+  # Velocidades iniciais; nao mantem a temperatura fixa.
+  Initvel 300_K
+  Thermostat None
+  Dump Position Stride 1 Filename "agua_dft-traj.xyz"
+  # 40 x 0.5 fs = 20 fs (2e-14 s).
+  Run 40
+end
+
+# Carga 0, multiplicidade 1; coordenadas abaixo; XYZ separado opcional.
+* xyz 0 1
+  O          -0.00000000000561      0.00000000000000     -0.07350969363937
+  H           0.76032823354949      0.00000000000000      0.54103884681985
+  H          -0.76032823354388      0.00000000000000      0.54103884681952
+*
+```
+
+
 A referência BLYP/def2-SVP mostra **20 fs em 41 quadros**, com timestep de 0,5 fs e sem termostato. Abra os resultados fornecidos; não é preciso repetir DFT durante a aula. A geometria inicial foi otimizada nesse mesmo nível. Em dinâmica, cada passo responde às forças: ele não é uma nova otimização da molécula.
 
 1. Em **Geometria**, meça **O 0–H 1**, **O 0–H 2** e o ângulo **1–0–2**. Avance os quadros e identifique uma mudança de comprimento ou ângulo; girar a câmera não altera essas medidas.
@@ -132,7 +160,7 @@ Com as medidas internas da água em mãos, acrescente a segunda molécula e proc
 
 [Pacote para executar](aula-agua_dump.zip) · [Input](inputs/agua_dump.inp) · [Resultados completos](resultado-agua_dump.zip)
 
-<details markdown="1"><summary>Abrir o input completo e as perguntas</summary>
+<details markdown="1" open><summary>Abrir o input completo e as perguntas</summary>
 
 <!-- input-source: inputs/agua_dump.inp -->
 ```text
@@ -265,11 +293,39 @@ O tempo medido de **56,5 s** não é garantia para outros computadores. Se ultra
 
 </details>
 
-<details markdown="1"><summary>Comparação DFT já calculada</summary>
+<details markdown="1" open><summary>Comparação DFT já calculada</summary>
 
 Não execute DFT durante a aula. A referência curta B97-3c simulou **60 fs** em **275,5 s** nesta máquina; ela permite comparar a geometria e o custo com XTB2. Compare apenas a janela comum de 0–60 fs. XTB2 usa uma aproximação diferente para a energia eletrônica; trajetórias mais longas não demonstram maior precisão.
 
 [Abrir DFT em 3D](../../visualizador/index.html?exemplo=water_dft&aba=trajetoria) · [Baixar input ORCA](inputs/dimero_b97.inp) · [Baixar geometria inicial (.xyz)](estruturas/dimero_b97.xyz) (opcional para executar; as coordenadas já estão no input) · [Pacote DFT, para estudo posterior](aula-dimero_b97.zip).
+
+**Input completo · `dimero_b97.inp` — copie e salve com esse nome.**
+
+<!-- input-source: inputs/dimero_b97.inp -->
+```text
+# Exemplo didatico; oito processos solicitados.
+! MD B97-3c TightSCF PAL8
+%maxcore 256
+
+%md
+  Randomize 42
+  Initvel 300_K
+  Dump Position Stride 1 Filename "dimero_b97-traj.xyz"
+  Timestep 0.5_fs
+  Thermostat None
+  # 60 fs: observar vibracao e geometria da ligacao H.
+  Run 120
+end
+* xyz 0 1
+  O          -0.07963526387957     -0.01964165075209     -0.00000000264085
+  H           0.88823357664041      0.04103734930643      0.00000002901791
+  H          -0.37106168405382      0.89703962065287     -0.00000002440793
+  O           2.88291572564215      0.11999069039073     -0.00000000005029
+  H           3.28977384105638      0.54578697932583      0.76197145433409
+  H           3.28977380459444      0.54578701107623     -0.76197145625293
+*
+```
+
 
 </details>
 
@@ -287,6 +343,27 @@ A continuação levou **91,1 s nesta máquina**, além dos 56,5 s originais. Nos
 
 - **XTB2, referência ampliada de 5 ps:** [trajetória completa](resultados/dimero_xtb2_5ps/dimero_xtb2_5ps-traj.xyz) · [energias](resultados/dimero_xtb2_5ps/dimero_xtb2_5ps-md-ener.csv) · [etapas e limites](resultados/dimero_xtb2_5ps/curso.json) · [verificação](resultados/dimero_xtb2_5ps/verificacao.json) · [pacote completo de resultados](resultado-dimero_xtb2_5ps.zip) · [input e checkpoint para continuar de 2 até 5 ps](aula-dimero_restart_5ps.zip). As saídas das duas execuções estão separadas por etapa no pacote.
 - **XTB2, 2 ps:** [saída](resultados/dimero_xtb2_2ps/dimero_xtb2_2ps.out) · [input usado](resultados/dimero_xtb2_2ps/dimero_xtb2_2ps.inp) · [energias](resultados/dimero_xtb2_2ps/dimero_xtb2_2ps-md-ener.csv) · [trajetória completa](resultados/dimero_xtb2_2ps/dimero_xtb2_2ps-traj.xyz) · [tempo de execução](resultados/dimero_xtb2_2ps/execucao.json).
+
+**Input completo · `dimero_xtb2_2ps.inp` — copie e salve com esse nome.**
+
+<!-- input-source: resultados/dimero_xtb2_2ps/dimero_xtb2_2ps.inp -->
+```text
+# Duas aguas: 2 ps = 2e-12 s, sem banho termico nem parede.
+! MD XTB2 PAL8
+%maxcore 256
+
+%md
+  Randomize 42
+  Initvel 300_K
+  Timestep 0.5_fs
+  Thermostat None
+  Dump Position Stride 1 Filename "dimero_xtb2_2ps-traj.xyz"
+  # Geometria inicial compartilhada com a demonstracao DFT.
+  Run 4000
+end
+* xyzfile 0 1 dimero_b97.xyz
+```
+
 - **DFT, comparação pronta de 60 fs:** [saída](resultados/dimero_b97/dimero_b97.out) · [energias](resultados/dimero_b97/dimero_b97-md-ener.csv) · [trajetória](resultados/dimero_b97/dimero_b97-traj.xyz).
 
 [Manual ORCA: dinâmica molecular](https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html).
@@ -300,4 +377,39 @@ Métodos: [preparar XTB2 no ORCA](../../tutoriais/05-xtb-solvator.md) · [B97-3c
 - **agua_dft:** [Baixar input ORCA](inputs/agua_dft.inp) · [Baixar geometria inicial (.xyz)](estruturas/agua.xyz) (opcional para executar; as coordenadas já estão no input).
 - **preparar_agua:** [Baixar input ORCA](inputs/preparar_agua.inp) · [Baixar geometria inicial (.xyz)](estruturas/agua_inicial.xyz) (opcional para executar; as coordenadas já estão no input).
 
+**Input completo · `preparar_agua.inp` — copie e salve com esse nome.**
+
+<!-- input-source: inputs/preparar_agua.inp -->
+```text
+# Apoio: otimiza a agua no nivel DFT usado na dinamica.
+! BLYP def2-SVP TightSCF Opt PAL8
+%maxcore 256
+
+# Carga 0, multiplicidade 1; coordenadas abaixo; XYZ separado opcional.
+* xyz 0 1
+O   0.0000000000  0.0000000000  0.0000000000
+H   0.7586020000  0.0000000000  0.5042840000
+H  -0.7586020000  0.0000000000  0.5042840000
+*
+```
+
+
 **Continuação de 2 até 5 ps:** [Baixar input ORCA](resultados/dimero_xtb2_5ps/etapas/water_02000_05000fs.inp) · [Baixar geometria inicial (.xyz)](resultados/dimero_xtb2_5ps/etapas/water_restart.xyz) (obrigatório; manter na mesma pasta do input) · [Baixar checkpoint obrigatório](resultados/dimero_xtb2_5ps/etapas/dimero_xtb2_2ps.mdrestart) (fornece o estado de continuação; manter junto do input). O XYZ isolado não substitui o checkpoint.
+
+**Input completo · `water_02000_05000fs.inp` — copie e salve com esse nome.**
+
+<!-- input-source: resultados/dimero_xtb2_5ps/etapas/water_02000_05000fs.inp -->
+```text
+# Finite NVE continuation; positions and velocities retained from checkpoint.
+! MD XTB2 PAL8
+%maxcore 256
+%md
+  Timestep 0.5_fs
+  Thermostat None
+  Randomize 42
+  Dump Position Stride 1 Filename "water_02000_05000fs-traj.xyz"
+  Restart "dimero_xtb2_2ps.mdrestart"
+  Run 6000
+end
+* xyzfile 0 1 water_restart.xyz
+```

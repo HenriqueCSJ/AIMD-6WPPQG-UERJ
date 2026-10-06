@@ -77,7 +77,44 @@ Esta trajetória curta não descreve a entrada da água através de uma gaiola i
 
 - **agua_c60:** [input usado](resultados/agua_c60/agua_c60.inp) · [saída](resultados/agua_c60/agua_c60.out) · [energias](resultados/agua_c60/agua_c60-md-ener.csv) · [trajetória](resultados/agua_c60/agua_c60-traj.xyz).
 
+**Input completo · `agua_c60.inp` — copie e salve com esse nome.**
+
+<!-- input-source: resultados/agua_c60/agua_c60.inp -->
+```text
+# Agua encapsulada: todos os atomos da gaiola se movem.
+! MD XTB2 PAL8
+%maxcore 256
+
+%md
+  Timestep 0.5_fs
+  Randomize 42
+  Initvel 300_K
+  # Banho termico; o confinamento vem do proprio C60.
+  Thermostat CSVR 300_K Timecon 100_fs
+  Dump Position Stride 1 Filename "agua_c60-traj.xyz"
+  # 2000 x 0.5 fs = 1 ps (1e-12 s).
+  Run 2000
+end
+
+# Neutro, singlete; geometria previamente relaxada.
+* xyzfile 0 1 agua_c60.xyz
+```
+
+
 - [Baixar input ORCA](inputs/preparar_agua_c60.inp) · [Baixar geometria inicial (.xyz)](estruturas/agua_c60_inicial.xyz) (obrigatório; manter na mesma pasta do input) · [saída da otimização](resultados/preparar_agua_c60/preparar_agua_c60.out).
+
+**Input completo · `preparar_agua_c60.inp` — copie e salve com esse nome.**
+
+<!-- input-source: inputs/preparar_agua_c60.inp -->
+```text
+# Relaxa a agua e a gaiola antes da dinamica.
+! XTB2 Opt TightOpt PAL8
+%maxcore 256
+
+# Sistema neutro, singlete; 63 atomos.
+* xyzfile 0 1 agua_c60_inicial.xyz
+```
+
 - [ASE: código e coordenadas do C₆₀](https://docs.ase-lib.org/_modules/ase/build/molecule.html).
 - [Kurotobi e Murata, Science 2011: síntese de H₂O@C₆₀](https://doi.org/10.1126/science.1206376).
 - [Manual ORCA: dinâmica molecular](https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html).

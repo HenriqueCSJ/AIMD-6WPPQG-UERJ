@@ -60,13 +60,133 @@ O terceiro arquivo de hidratação foi interrompido após 9864 fs. O percurso us
 ## Inputs das variantes e preparações
 
 - **m01a_N_sem_vies_agua:** [Baixar input ORCA](inputs/m01a_N_sem_vies_agua.inp) · [Baixar geometria inicial (.xyz)](estruturas/encontro_real_R1.xyz) (obrigatório; manter na mesma pasta do input).
+
+**Input completo · `m01a_N_sem_vies_agua.inp` — copie e salve com esse nome.**
+
+<!-- input-source: inputs/m01a_N_sem_vies_agua.inp -->
+```text
+# Encontro real hidratado: trecho assistido, sem significado cinetico.
+! MD XTB2 ALPB(water) PAL8
+%maxcore 256
+%md
+  Timestep 0.25_fs
+  Randomize 93001
+  Initvel 300_K
+  Thermostat CSVR 300_K Timecon 100_fs
+  Walls Sphere 0, 0, 0, 9.0_A Spring 50.0
+  Dump Position Stride 4 Filename "m01a_N_sem_vies_agua-traj.xyz"
+  Manage_Colvar Define 1 Distance Atom 0 Atom 61
+  Manage_Colvar Define 2 Distance Atom 0 Atom 64
+  Manage_Colvar Define 3 CoordNumber Atom 0 Group 1 4 7 10 13 16 19 22 25 28 31 34 37 40 43 46 49 52 55 58 Cutoff 2.6_A
+  # Aproximar apenas N61; todas as aguas e N64 ficam sem vies.
+  # Upper nao obriga a agua individual nem impoe ligacoes covalentes.
+  Restraint Add Colvar 1 Harmonic Spring 200.0 Upper Ramp 3.886868 2.2
+  Run 4000
+  # Revisar antes de retirar o unico vies em outro bloco.
+end
+* xyzfile 2 1 encontro_real_R1.xyz
+```
+
 - **m02_livre_apos_N1:** [Baixar input ORCA](inputs/m02_livre_apos_N1.inp) · [Baixar geometria inicial (.xyz)](estruturas/encontro_real_R1.xyz) (obrigatório; manter na mesma pasta do input) · [Baixar checkpoint obrigatório](inputs/m01a_N_sem_vies_agua.mdrestart) (fornece o estado de continuação; manter junto do input).
+
+**Input completo · `m02_livre_apos_N1.inp` — copie e salve com esse nome.**
+
+<!-- input-source: inputs/m02_livre_apos_N1.inp -->
+```text
+# Retirar a aproximacao Zn-N; continuar posicoes, velocidades e relogio.
+! MD XTB2 ALPB(water) PAL8
+%maxcore 256
+%md
+  Timestep 0.25_fs
+  Randomize 93002
+  Thermostat CSVR 300_K Timecon 100_fs
+  Walls Sphere 0, 0, 0, 9.0_A Spring 50.0
+  Dump Position Stride 4 Filename "m02_livre_apos_N1-traj.xyz"
+  Manage_Colvar Define 1 Distance Atom 0 Atom 61
+  Manage_Colvar Define 2 Distance Atom 0 Atom 64
+  Manage_Colvar Define 3 CoordNumber Atom 0 Group 1 4 7 10 13 16 19 22 25 28 31 34 37 40 43 46 49 52 55 58 Cutoff 2.6_A
+  Restraint Reset Colvar 1
+  Restraint Reset Colvar 3
+  Restart "m01a_N_sem_vies_agua.mdrestart"
+  Run 8000
+end
+* xyzfile 2 1 encontro_real_R1.xyz
+```
+
 
 ## Inputs da sequência de hidratação
 
 - **Hidratação inicial (0–500 fs da sequência):** [Baixar input ORCA](resultados/chelation_continuous/etapas/r9_rep1_piloto_0500fs/r9_rep1_piloto_0500fs.inp) · [Baixar geometria inicial (.xyz)](estruturas/zn_20h2o_3en_r9.xyz) (obrigatório; manter na mesma pasta do input).
+
+**Input completo · `r9_rep1_piloto_0500fs.inp` — copie e salve com esse nome.**
+
+<!-- input-source: resultados/chelation_continuous/etapas/r9_rep1_piloto_0500fs/r9_rep1_piloto_0500fs.inp -->
+```text
+# Replica 1: mesma geometria; velocidades iniciais com semente 42.
+! MD XTB2 ALPB(water) PAL8
+%maxcore 256
+
+%md
+  Timestep 0.25_fs
+  Randomize 42
+  Initvel 300_K
+  # Todos os atomos com folga inicial; sem restricoes Zn-O ou Zn-N.
+  Walls Sphere 0, 0, 0, 9.0_A Spring 50.0
+  Dump Position Stride 2 Filename "r9_rep1_piloto_0500fs-traj.xyz"
+  # Dissipar o calor da hidratacao antes da extensao a 10 ps.
+  Thermostat CSVR 300_K Timecon 20_fs
+  Run 2000
+end
+
+* xyzfile 2 1 zn_20h2o_3en_r9.xyz
+```
+
 - **Continuação da hidratação (500–5000 fs):** [Baixar input ORCA](resultados/chelation_continuous/etapas/r9_rep1_00500_05000fs/r9_rep1_00500_05000fs.inp) · [Baixar geometria inicial (.xyz)](estruturas/zn_20h2o_3en_r9.xyz) (obrigatório; manter na mesma pasta do input) · [Baixar checkpoint obrigatório](resultados/chelation_continuous/etapas/r9_rep1_piloto_0500fs/r9_rep1_piloto_0500fs.mdrestart) (fornece o estado de continuação; manter junto do input).
+
+**Input completo · `r9_rep1_00500_05000fs.inp` — copie e salve com esse nome.**
+
+<!-- input-source: resultados/chelation_continuous/etapas/r9_rep1_00500_05000fs/r9_rep1_00500_05000fs.inp -->
+```text
+# Replica 1, continuacao 0.5-5 ps: preservar velocidades.
+! MD XTB2 ALPB(water) PAL8
+%maxcore 256
+
+%md
+  Timestep 0.25_fs
+  Randomize 43
+  Walls Sphere 0, 0, 0, 9.0_A Spring 50.0
+  Thermostat CSVR 300_K Timecon 100_fs
+  Dump Position Stride 4 Filename "r9_rep1_00500_05000fs-traj.xyz"
+  Restart "r9_rep1_piloto_0500fs.mdrestart"
+  Run 18000
+end
+
+* xyzfile 2 1 zn_20h2o_3en_r9.xyz
+```
+
 - **Continuação; o percurso utiliza o trecho até 7083 fs:** [Baixar input ORCA](resultados/chelation_continuous/etapas/r9_rep1_05000_10000fs/r9_rep1_05000_10000fs.inp) · [Baixar geometria inicial (.xyz)](estruturas/zn_20h2o_3en_r9.xyz) (obrigatório; manter na mesma pasta do input) · [Baixar checkpoint obrigatório](resultados/chelation_continuous/etapas/r9_rep1_00500_05000fs/r9_rep1_00500_05000fs.mdrestart) (fornece o estado de continuação; manter junto do input).
+
+**Input completo · `r9_rep1_05000_10000fs.inp` — copie e salve com esse nome.**
+
+<!-- input-source: resultados/chelation_continuous/etapas/r9_rep1_05000_10000fs/r9_rep1_05000_10000fs.inp -->
+```text
+# Replica 1, continuacao 5-10 ps: preservar velocidades.
+! MD XTB2 ALPB(water) PAL8
+%maxcore 256
+
+%md
+  Timestep 0.25_fs
+  Randomize 44
+  Walls Sphere 0, 0, 0, 9.0_A Spring 50.0
+  Thermostat CSVR 300_K Timecon 100_fs
+  Dump Position Stride 4 Filename "r9_rep1_05000_10000fs-traj.xyz"
+  Restart "r9_rep1_00500_05000fs.mdrestart"
+  Run 20000
+end
+
+* xyzfile 2 1 zn_20h2o_3en_r9.xyz
+```
+
 
 A geometria acima é o início da sequência de hidratação. Nas continuações, o checkpoint fornece posições, velocidades e o estado dinâmico. Os inputs `m01a_N_sem_vies_agua` e `m02_livre_apos_N1` listados acima usam a geometria de encontro selecionada: o primeiro reinicializa velocidades; o segundo exige o checkpoint do primeiro.
 
@@ -78,9 +198,117 @@ A geometria acima é o início da sequência de hidratação. Nas continuações
 Compare separadamente o efeito da parede e o efeito da assistência ao primeiro N:
 
 - **en livre, sem parede:** [input](inputs/en_livre_sem_parede.inp) · [pacote](aula-en_livre_sem_parede.zip).
+
+**Input completo · `en_livre_sem_parede.inp` — copie e salve com esse nome.**
+
+<!-- input-source: inputs/en_livre_sem_parede.inp -->
+```text
+# 04c: referencia independente; 97 atomos = Zn + 20 H2O + 3 en.
+# Mesmo encontro hidratado retido em todos os quatro ramos.
+# NAO e uma continuacao da nova montagem SOLVATOR de 61 atomos.
+! MD XTB2 ALPB(water) PAL8
+%maxcore 256
+%md
+  Timestep 0.25_fs
+  Randomize 93001
+  Initvel 300_K
+  Thermostat CSVR 300_K Timecon 100_fs
+  Cell None
+  Dump Position Stride 4 Filename "en_livre_sem_parede-traj.xyz"
+  Manage_Colvar Define 1 Distance Atom 0 Atom 61
+  Manage_Colvar Define 2 Distance Atom 0 Atom 64
+  # Controle de 3 ps sem nenhuma assistencia Zn-N.
+  Run 12000
+end
+* xyzfile 2 1 encontro_real_R1.xyz
+```
+
 - **en livre, com parede:** [input](inputs/en_livre_com_parede.inp) · [pacote](aula-en_livre_com_parede.zip).
+
+**Input completo · `en_livre_com_parede.inp` — copie e salve com esse nome.**
+
+<!-- input-source: inputs/en_livre_com_parede.inp -->
+```text
+# 04c: referencia independente; 97 atomos = Zn + 20 H2O + 3 en.
+# Mesmo encontro hidratado retido em todos os quatro ramos.
+# NAO e uma continuacao da nova montagem SOLVATOR de 61 atomos.
+! MD XTB2 ALPB(water) PAL8
+%maxcore 256
+%md
+  Timestep 0.25_fs
+  Randomize 93001
+  Initvel 300_K
+  Thermostat CSVR 300_K Timecon 100_fs
+  Cell Sphere 0, 0, 0, 9.0_A Spring 50.0
+  Dump Position Stride 4 Filename "en_livre_com_parede-traj.xyz"
+  Manage_Colvar Define 1 Distance Atom 0 Atom 61
+  Manage_Colvar Define 2 Distance Atom 0 Atom 64
+  # Controle de 3 ps sem nenhuma assistencia Zn-N.
+  Run 12000
+end
+* xyzfile 2 1 encontro_real_R1.xyz
+```
+
 - **primeiro N assistido, sem parede:** [input](inputs/en_assistida_sem_parede.inp) · [pacote](aula-en_assistida_sem_parede.zip).
+
+**Input completo · `en_assistida_sem_parede.inp` — copie e salve com esse nome.**
+
+<!-- input-source: inputs/en_assistida_sem_parede.inp -->
+```text
+# 04c: referencia independente; 97 atomos = Zn + 20 H2O + 3 en.
+# Mesmo encontro hidratado retido em todos os quatro ramos.
+# NAO e uma continuacao da nova montagem SOLVATOR de 61 atomos.
+! MD XTB2 ALPB(water) PAL8
+%maxcore 256
+%md
+  Timestep 0.25_fs
+  Randomize 93001
+  Initvel 300_K
+  Thermostat CSVR 300_K Timecon 100_fs
+  Cell None
+  Dump Position Stride 4 Filename "en_assistida_sem_parede-traj.xyz"
+  Manage_Colvar Define 1 Distance Atom 0 Atom 61
+  Manage_Colvar Define 2 Distance Atom 0 Atom 64
+  # Somente o primeiro N recebe forca de aproximacao durante 1 ps.
+  Restraint Add Colvar 1 Harmonic Spring 200.0 Upper Ramp 3.886868 2.2
+  Run 4000
+  # Retirar a assistencia e observar o segundo N por mais 2 ps.
+  Restraint Reset Colvar 1
+  Run 8000
+end
+* xyzfile 2 1 encontro_real_R1.xyz
+```
+
 - **primeiro N assistido, com parede:** [input](inputs/en_assistida_com_parede.inp) · [pacote](aula-en_assistida_com_parede.zip).
+
+**Input completo · `en_assistida_com_parede.inp` — copie e salve com esse nome.**
+
+<!-- input-source: inputs/en_assistida_com_parede.inp -->
+```text
+# 04c: referencia independente; 97 atomos = Zn + 20 H2O + 3 en.
+# Mesmo encontro hidratado retido em todos os quatro ramos.
+# NAO e uma continuacao da nova montagem SOLVATOR de 61 atomos.
+! MD XTB2 ALPB(water) PAL8
+%maxcore 256
+%md
+  Timestep 0.25_fs
+  Randomize 93001
+  Initvel 300_K
+  Thermostat CSVR 300_K Timecon 100_fs
+  Cell Sphere 0, 0, 0, 9.0_A Spring 50.0
+  Dump Position Stride 4 Filename "en_assistida_com_parede-traj.xyz"
+  Manage_Colvar Define 1 Distance Atom 0 Atom 61
+  Manage_Colvar Define 2 Distance Atom 0 Atom 64
+  # Somente o primeiro N recebe forca de aproximacao durante 1 ps.
+  Restraint Add Colvar 1 Harmonic Spring 200.0 Upper Ramp 3.886868 2.2
+  Run 4000
+  # Retirar a assistencia e observar o segundo N por mais 2 ps.
+  Restraint Reset Colvar 1
+  Run 8000
+end
+* xyzfile 2 1 encontro_real_R1.xyz
+```
+
 
 Os pares com/sem parede usam as mesmas posições e a mesma regra de inicialização das velocidades. A parede, quando presente, tem **raio 9 Å e Spring 50**. Nos inputs assistidos, o primeiro N (**N 61**) recebe a rampa durante **1 ps**; a restrição é removida e seguem **2 ps livres no mesmo input**, com continuidade de velocidades. **N 64 não recebe guia.** Nos inputs livres, nenhum N recebe restrição de coordenação.
 
@@ -88,3 +316,224 @@ Execute um por vez e carregue os arquivos no laboratório. Registre primeiro se 
 
 
 **Próxima etapa do percurso:** [04d · en sem assistência sob 1, 1000 e 4000 bar](../14-zn-en-pressao/README.md). Os três controles partem do início do sistema de 97 átomos, com en afastada; não partem do quelato final nem da geometria de encontro selecionada acima.
+
+<!-- copyable-geometries -->
+## Geometria: copiar e colar ou baixar
+
+Os inputs acima usam `xyzfile`. Você pode copiar a geometria abaixo, salvá-la com o nome indicado e mantê-la na mesma pasta do input. O download é uma alternativa.
+
+Use **`encontro_real_R1.xyz`** nos controles de en e na etapa assistida; **`zn_20h2o_3en_r9.xyz`** pertence ao início afastado da sequência de hidratação. Nas continuações com `Restart`, o checkpoint indicado continua obrigatório e está nos links e pacotes acima.
+
+### `encontro_real_R1.xyz`
+
+[Baixar a geometria, se preferir](estruturas/encontro_real_R1.xyz).
+
+<!-- xyz-source: estruturas/encontro_real_R1.xyz -->
+```text
+97
+Selected R1 unbound encounter; original t=7083.0 fs; new MD time origin
+Zn  3.5975034436  1.2952864952 -4.3081669524
+O   1.1513192422  6.7132278230 -1.6597703147
+H   1.2628587275  7.4632920562 -2.2536995113
+H   1.1539388810  7.0468601583 -0.7684394292
+O  -3.7079891481  0.9648554929 -5.1720347885
+H  -3.8097207638  0.1134424250 -4.7286475770
+H  -4.0397798112  1.6570209215 -4.5602483453
+O   3.6716085082 -0.4210400580 -3.3200196010
+H   4.0730689149 -0.8304895155 -2.5518032088
+H   2.7654033762 -0.8008592713 -3.3998688486
+O   5.5526115152  1.2431077435 -4.4762839683
+H   6.2354690343  1.0681394601 -5.1016003481
+H   5.8960623463  1.4762315115 -3.5994452295
+O   3.5025786143  0.2489827292 -6.0679685001
+H   3.1639200314 -0.6597888008 -6.0932160463
+H   4.3205950935  0.1991046686 -6.5521402400
+O   3.6860368748  2.2107788815 -2.6096428789
+H   4.6333408431  2.3194264734 -2.1632094436
+H   3.3196980881  3.0440008791 -2.4845732479
+O  -3.3943047120  0.2876629512 -1.8773509693
+H  -3.2732613706  1.0425952702 -1.2876319053
+H  -2.5471553385 -0.1384959402 -1.7274552493
+O   1.5536118042  1.3531020343 -4.5657937950
+H   1.0848902447  1.1431114598 -5.3843503541
+H   0.9779628847  2.0377985698 -4.1645086500
+O   3.6482451557  3.2353552340 -5.3610779120
+H   3.5203736598  4.0736768399 -4.9720735768
+H   3.3692410508  3.3015709495 -6.2467422432
+O  -1.9026279368  3.2869130302 -0.0225985065
+H  -1.5111201397  3.5450942982  0.7845316209
+H  -1.3754817551  3.7743088584 -0.7049086108
+O   0.1691061742 -6.0530107195 -2.9515767687
+H   0.5823508648 -5.8824264757 -3.8245079840
+H   0.3017784824 -7.0074658742 -2.8908238601
+O   4.4968382423 -4.9358764855  3.1155656695
+H   4.2682034046 -4.3921457232  2.3584257096
+H   3.8260994521 -4.6378738013  3.7371223740
+O  -0.8202974437 -5.7977522591  4.3898992759
+H  -0.6936385122 -4.9495561415  3.9257937299
+H  -0.4967366463 -6.4092158602  3.7520842102
+O  -4.6842751757 -0.9425113531  6.2361239315
+H  -5.6180174500 -1.0705046691  6.4549676450
+H  -4.3238967902 -0.8909685961  7.1224600106
+O   8.1144796154 -1.9394100779  1.0349950713
+H   8.4443799943 -1.7734480108  0.1650346391
+H   8.6542427371 -2.6794129170  1.3700432941
+O  -5.9807739752  1.2801220704  2.4156555381
+H  -6.1751392794  0.9634036400  1.5217038253
+H  -6.0817018800  0.5435365736  3.0268124601
+O  -5.0681231474 -6.2465501145 -1.5763148703
+H  -4.8681337501 -5.3488288027 -1.8684750843
+H  -4.2715841681 -6.7187689270 -1.3093494240
+O  -4.8047332942  6.7009480835 -2.4148153157
+H  -4.5709200173  6.6066370964 -3.3474417529
+H  -3.9808769943  6.9670243357 -1.9700190073
+O   0.5096770482  0.9180847246 -7.4109065637
+H   0.8449751689  0.9298470790 -8.3198279614
+H  -0.3872273618  1.1913669263 -7.5758622075
+O  -3.5363282993 -5.3275244524  4.3283857497
+H  -4.1411585034 -4.6104666841  4.1626732420
+H  -2.5998312529 -5.0507438998  4.2456101698
+N   5.5220912209  1.8103200444 -0.9707356451
+C   6.7908124465  2.4930615183 -1.0467038465
+C   6.5332806840  3.9513261114 -1.4746654670
+N   5.5530512642  4.1487961713 -2.5351907988
+H   5.5168344799  0.8004979155 -0.8517541190
+H   4.9793359770  2.0969803313 -0.1718183450
+H   7.3836146576  2.5408142386 -0.1142151820
+H   7.3439176070  2.0478574626 -1.8242883459
+H   7.5310731845  4.3005910533 -1.7361874807
+H   6.1950057622  4.4994747934 -0.6422185037
+H   5.2427353424  5.0850351088 -2.4704020995
+H   5.9561567039  3.8208322945 -3.4230534433
+N   2.6636274265  0.3423606384  4.9394220531
+C   3.7218829377  1.3348386232  4.8145258353
+C   4.4195557997  1.3534229927  3.4066749220
+N   5.4072410062  2.4604878983  3.1470385634
+H   2.3534417534  0.4014264171  5.8971211895
+H   1.8890487558  0.4214525362  4.2940449603
+H   3.3321458526  2.3493060945  5.0363105398
+H   4.5322155362  1.1624926039  5.5293203949
+H   3.6777976856  1.4792163776  2.6388866029
+H   4.9611886241  0.3971032984  3.3218417250
+H   5.0263771901  3.3856922338  3.3715660654
+H   6.2813920303  2.2707898103  3.6323814770
+N  -2.9795018903  4.2319153467  5.5447701806
+C  -2.8592821731  3.9060942268  4.0941307956
+C  -3.5994332069  4.8753698351  3.0725466897
+N  -3.6820943592  6.2236315857  3.5182016890
+H  -2.5883339424  5.1316517115  5.7859980644
+H  -3.9595083218  4.2386957502  5.8405575217
+H  -1.7904282537  3.8890880724  3.8948024919
+H  -3.3510941504  2.8881738209  4.0146999556
+H  -4.6068523923  4.3550753375  2.9031923739
+H  -3.0594757614  4.7358983887  2.1237025435
+H  -4.3305110302  6.8249984730  3.0107461857
+H  -3.8995960980  6.2597304901  4.4949339828
+```
+
+### `zn_20h2o_3en_r9.xyz`
+
+[Baixar a geometria, se preferir](estruturas/zn_20h2o_3en_r9.xyz).
+
+<!-- xyz-source: estruturas/zn_20h2o_3en_r9.xyz -->
+```text
+97
+Zn2+ +20H2O +3en; separated fragments inside9A; shared replica geometry
+Zn  0.0000000000  0.0000000000  0.0000000000
+O   1.3512586725  2.7900000000  0.0000000000
+H   2.3003842161  2.9901516985  0.0000000000
+H   0.9198402204  3.6587796724  0.0000000000
+O  -1.6324187912  2.1700000000  1.4954293331
+H  -1.3322251034  3.0467655290  1.7819008971
+H  -2.5580403127  2.1246255373  1.7819008971
+O   0.2347099855  1.5500000000 -2.6743992265
+H   1.0379962107  1.7320955552 -3.1867198773
+H  -0.4786519147  1.9617552065 -3.1867198773
+O   1.7992824116  0.9300000000  2.3468452875
+H   2.4961264248  0.4268174624  2.7964181460
+H   1.7917966116  1.7894929946  2.7964181460
+O  -3.0373103958  0.3100000000 -0.5372574424
+H  -3.5412767031  1.1323901253 -0.6401770364
+H  -3.6970273736 -0.3936199730 -0.6401770364
+O   2.6025303468 -0.3100000000 -1.6555167755
+H   3.0103673614 -1.1309701756 -1.9726554522
+H   3.1917995442  0.3922000233 -1.9726554522
+O  -0.7677048422 -0.9300000000  2.8558237472
+H  -1.5062473135 -0.6198971975  3.4028989432
+H  -0.3232927615 -1.5964132595  3.4028989432
+O  -1.2373872958 -1.5500000000 -2.3825139413
+H  -2.0738217159 -1.3684200357 -2.8389196569
+H  -0.8750324808 -2.3254307259 -2.8389196569
+O   2.0795097008 -2.1700000000  0.7594336075
+H   1.9241186052 -3.1163556245  0.9049143256
+H   3.0316223575 -2.0550354418  0.9049143256
+O  -1.2490299491 -2.7900000000  0.5155814060
+H  -2.1883216869 -3.0110793200  0.6143486352
+H  -0.7882784607 -3.6378520510  0.6143486352
+O  -2.3814853186  4.1931165900 -1.3214768026
+H  -2.8723776754  4.8029423591 -0.7487314617
+H  -2.4562917100  4.5793250132 -2.2081261457
+O   1.3871593461 -4.3626535038 -2.0107320443
+H   1.4752393898 -4.5816210053 -2.9515801400
+H   1.6285855561 -5.1799920448 -1.5475138510
+O   4.8110042380  1.2380181824  0.5670530858
+H   5.4715570219  1.3875337029 -0.1273640286
+H   5.2932588665  1.3825818781  1.3961681630
+O  -4.3026380954 -1.0555811975  2.3179848480
+H  -4.4242309011 -1.5097118405  3.1664425951
+H  -5.2030952536 -0.8521936337  2.0201419279
+O   1.3438314144 -1.3263651076 -4.6297810673
+H   1.3777249695 -0.7670038704 -5.4215299121
+H   1.6291519829 -2.2007915166 -4.9377918277
+O  -0.6479903569  2.0627832061  4.5083293959
+H  -0.9123612737  2.9735122955  4.7122424759
+H  -0.5375432668  1.6420482680  5.3753262541
+O   2.7223355107 -2.1594028632  3.5952564083
+H   2.9402581122 -3.0997086347  3.6913542542
+H   3.1510773157 -1.7320423058  4.3531768649
+O  -3.2247221461  1.2246228192 -3.6195947330
+H  -3.1080046127  1.8849268999 -4.3205052397
+H  -4.1074411606  0.8552160161 -3.7784838619
+O  -1.2105131046  0.0666704752 -4.8507950968
+H  -1.6851442832 -0.6134729435 -5.3538161445
+H  -1.0234275777  0.7626508188 -5.5000333943
+O  -3.3290880750 -3.3124717278 -1.7160138815
+H  -4.1298537363 -3.6337064346 -1.2727502818
+H  -3.3191150093 -3.7780825643 -2.5668999414
+N   6.4045782233 -1.9347324243 -2.1864070923
+C   6.1632489276 -2.3423968824 -0.8131265196
+C   5.8927029728 -3.8445570009 -0.6338286728
+N   4.7248460470 -4.2337306609 -1.4146923920
+H   7.2245154973 -2.4185965676 -2.5390212270
+H   5.6191996693 -2.2432595561 -2.7515243303
+H   7.0314671179 -2.0616622179 -0.2116023002
+H   5.2992842888 -1.7780600715 -0.4494071003
+H   5.7913915177 -4.0589904672  0.4436882270
+H   6.7473648898 -4.4147628549 -1.0116561565
+H   4.5490306339 -5.2254966928 -1.3038122366
+H   3.9082653416 -3.7369336207 -1.0725514061
+N   4.3023345732  4.5193665199  1.8207810094
+C   3.7901029070  5.3793491273  2.8735764815
+C   2.2845014788  5.6726830682  2.7789858293
+N   1.9849316212  6.3174813701  1.5063558221
+H   3.8311456739  3.6211404102  1.8647042084
+H   4.0574672809  4.9329500762  0.9261556085
+H   4.0025530795  4.9098541729  3.8373635826
+H   4.3415262209  6.3231518668  2.8248787721
+H   1.9857646135  6.2722299441  3.6556774630
+H   1.7285711492  4.7301924301  2.8104211813
+H   0.9914403180  6.5051015637  1.4386873380
+H   2.4697838945  7.2080132347  1.4559269316
+N  -0.2974963908 -5.1660825696  3.9335844708
+C  -1.5683858475 -5.8202323934  3.6742436377
+C  -2.7658211849 -4.8630776319  3.5654721878
+N  -2.9100118736 -4.1081041230  4.8041481467
+H  -0.0881584772 -4.5292815577  3.1710751401
+H  -0.3982938045 -4.5969537260  4.7686283005
+H  -1.4808652677 -6.3895994581  2.7454770049
+H  -1.7481068186 -6.5255636461  4.4911958674
+H  -3.6629886610 -5.4484575441  3.3014470567
+H  -2.5837789961 -4.1443266988  2.7601194369
+H  -3.6945813221 -3.4708941539  4.7319015830
+H  -3.1027007582 -4.7469905470  5.5692409076
+```

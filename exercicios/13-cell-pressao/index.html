@@ -6,8 +6,12 @@
 <p>O comando <code>Cell</code> define uma parede repulsiva suave, <strong>sem periodicidade</strong>. Ela pode ter tamanho fixo ou responder à pressão. <code>Spring</code> controla a rigidez, em kJ mol⁻¹ Å⁻²; <code>Pressure</code> define o alvo em bar. A versão 6.1.1 testada aceita <code>Cell</code> e avisa que o nome foi atualizado para <code>Walls</code>; esse aviso isolado não indica falha. <a href="https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html#cell">Manual oficial, Cell</a>.</p>
 <p>Nos comentários dos inputs originais preservados, “estado inicial do exercício 04b” refere-se ao <strong>antigo 04b do complexo pré-formado</strong>. O checkpoint de 100 fs, os raios de 6 Å e os resultados abaixo pertencem somente àquele sistema.</p>
 <h2 id="preparar-e-executar">Preparar e executar</h2>
-<p>Baixe e extraia <strong>um pacote por pasta</strong>. Execute um cálculo por vez, com ORCA/XTB2 já configurados. O XYZ e o <code>.mdrestart</code> do pacote são obrigatórios; o reinício conserva posições e velocidades. Não acrescente <code>Initvel</code> aos ramos.</p>
-<p>No <strong>Windows</strong>, abra <code>cmd</code> na pasta extraída. No <strong>Ubuntu/WSL</strong>, entre na pasta pelo terminal. Nos dois casos, para o exemplo de 1000 bar:</p>
+<p>Copie o input completo da variante abaixo e salve-o com o nome indicado, ou baixe o arquivo se preferir. Os pacotes são outra opção; use <strong>uma pasta por variante</strong> e execute um cálculo por vez, com ORCA/XTB2 já configurados. O XYZ e o <code>.mdrestart</code> correspondentes são obrigatórios; o reinício conserva posições e velocidades. Não acrescente <code>Initvel</code> aos ramos.</p>
+<ul>
+<li><strong>C1 e C2:</strong> <a href="estruturas/zn_solvato.xyz" download="zn_solvato.xyz">geometria <code>zn_solvato.xyz</code></a> e <a href="estruturas/preparacao_termica.mdrestart" download="preparacao_termica.mdrestart">checkpoint <code>preparacao_termica.mdrestart</code></a>.</li>
+<li><strong>C3:</strong> <a href="estruturas/zn_comprimido.xyz" download="zn_comprimido.xyz">geometria <code>zn_comprimido.xyz</code></a> e <a href="estruturas/comprimido.mdrestart" download="comprimido.mdrestart">checkpoint <code>comprimido.mdrestart</code></a>.</li>
+</ul>
+<p>No <strong>Windows</strong>, abra <code>cmd</code> na pasta dos arquivos. No <strong>Ubuntu/WSL</strong>, entre na pasta pelo terminal. Nos dois casos, para o exemplo de 1000 bar:</p>
 <pre><code class="language-text">orca zn_cell_1000bar.inp &gt; zn_cell_1000bar.out
 </code></pre>
 <p>Espere terminar antes de iniciar o próximo. Troque o nome para executar outra variante. Os tempos abaixo foram medidos na máquina de referência e variam entre computadores. No laboratório, carregue juntos <code>.out</code>, <code>-md-ener.csv</code> e <code>-traj.xyz</code>, ou abra as referências pelos botões de cada etapa.</p>
@@ -17,8 +21,25 @@
 <p>Agora compare duas paredes com <strong>raio fixo de 6 Å</strong>, <code>Spring 10</code> e <code>Spring 50</code>, por 500 fs adicionais. Ambas partem do mesmo checkpoint de 100 fs e terminam em 600 fs, com XTB2/ALPB(water), CSVR a 300 K e timestep de 0,5 fs.</p>
 <p><strong><a href="../../visualizador/index.html?exemplo=cell_rigidity&amp;aba=trajetoria">Abrir C1 no laboratório</a></strong></p>
 <p><strong>Spring 10:</strong> <a href="aula-zn_cell_spring10.zip">Pacote para executar</a> · <a href="inputs/zn_cell_spring10.inp" download="zn_cell_spring10.inp">Input</a> · <a href="resultado-zn_cell_spring10.zip">Resultados completos</a>. Execução de referência: 35,3 s</p>
+<p><strong>Input completo · <code>zn_cell_spring10.inp</code> — copie e salve com esse nome.</strong></p>
+<!-- input-source: inputs/zn_cell_spring10.inp -->
+
+<pre><code class="language-text"># Mesmo estado inicial do exercicio 04b; alvo de pressao em bar.
+! MD XTB2 ALPB(water) PAL8
+%maxcore 256
+%md
+ Randomize 42
+ Timestep 0.5_fs
+ Thermostat CSVR 300_K Timecon 100_fs
+ Cell Sphere 0, 0, 0, 6.0_A Spring 10
+ Restart &quot;preparacao_termica.mdrestart&quot;
+ Dump Position Stride 1 Filename &quot;zn_cell_spring10-traj.xyz&quot;
+ Run 1000
+end
+* xyzfile 2 1 zn_solvato.xyz
+</code></pre>
 <p><strong>Spring 50:</strong> <a href="aula-zn_cell_spring50.zip">Pacote para executar</a> · <a href="inputs/zn_cell_spring50.inp" download="zn_cell_spring50.inp">Input</a> · <a href="resultado-zn_cell_spring50.zip">Resultados completos</a>. Execução de referência: 29,4 s</p>
-<details>
+<details open>
 <summary>Input comentado da parede mais rígida</summary>
 <!-- input-source: inputs/zn_cell_spring50.inp -->
 <pre><code class="language-text"># Mesmo estado inicial do exercicio 04b; alvo de pressao em bar.
@@ -49,8 +70,25 @@ end
 <p>A parede tende a contrair quando a pressão média que o sistema exerce sobre ela fica abaixo do alvo externo; tende a expandir quando fica acima. Há atraso e oscilações. <strong>O alvo não é a pressão medida a cada instante.</strong> <a href="https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html#cell">Manual oficial, cela elástica</a>.</p>
 <p><strong><a href="../../visualizador/index.html?exemplo=cell_pressure&amp;aba=trajetoria">Abrir C2 e observar a parede móvel</a></strong></p>
 <p><strong>1 bar:</strong> <a href="aula-zn_cell_1bar.zip">Pacote para executar</a> · <a href="inputs/zn_cell_1bar.inp" download="zn_cell_1bar.inp">Input</a> · <a href="resultado-zn_cell_1bar.zip">Resultados completos</a>. Execução de referência: 59,3 s</p>
+<p><strong>Input completo · <code>zn_cell_1bar.inp</code> — copie e salve com esse nome.</strong></p>
+<!-- input-source: inputs/zn_cell_1bar.inp -->
+
+<pre><code class="language-text"># Mesmo estado inicial do exercicio 04b; alvo de pressao em bar.
+! MD XTB2 ALPB(water) PAL8
+%maxcore 256
+%md
+ Randomize 42
+ Timestep 0.5_fs
+ Thermostat CSVR 300_K Timecon 100_fs
+ Cell Sphere 0, 0, 0, 6.0_A Spring 50 Elastic 100_fs, 0.001 Pressure 1
+ Restart &quot;preparacao_termica.mdrestart&quot;
+ Dump Position Stride 1 Filename &quot;zn_cell_1bar-traj.xyz&quot;
+ Run 2000
+end
+* xyzfile 2 1 zn_solvato.xyz
+</code></pre>
 <p><strong>1000 bar:</strong> <a href="aula-zn_cell_1000bar.zip">Pacote para executar</a> · <a href="inputs/zn_cell_1000bar.inp" download="zn_cell_1000bar.inp">Input</a> · <a href="resultado-zn_cell_1000bar.zip">Resultados completos</a>. Execução de referência: 56,9 s</p>
-<details>
+<details open>
 <summary>Input comentado da cela elástica a 1000 bar</summary>
 <!-- input-source: inputs/zn_cell_1000bar.inp -->
 <pre><code class="language-text"># Mesmo estado inicial do exercicio 04b; alvo de pressao em bar.
@@ -87,7 +125,24 @@ end
 <p><strong><a href="../../visualizador/index.html?exemplo=cell_release&amp;aba=trajetoria">Abrir C3 no laboratório</a></strong></p>
 <p><strong>Parede fixa:</strong> <a href="aula-zn_cell_fixed.zip">Pacote para executar</a> · <a href="inputs/zn_cell_fixed.inp" download="zn_cell_fixed.inp">Input</a> · <a href="resultado-zn_cell_fixed.zip">Resultados completos</a>. Execução de referência: 30,5 s</p>
 <p><strong>Sem parede:</strong> <a href="aula-zn_cell_none.zip">Pacote para executar</a> · <a href="inputs/zn_cell_none.inp" download="zn_cell_none.inp">Input</a> · <a href="resultado-zn_cell_none.zip">Resultados completos</a>. Execução de referência: 29,9 s</p>
-<details>
+<p><strong>Input completo · <code>zn_cell_none.inp</code> — copie e salve com esse nome.</strong></p>
+<!-- input-source: inputs/zn_cell_none.inp -->
+
+<pre><code class="language-text"># Continuacao do mesmo estado comprimido em 1100 fs; sem reinicializar velocidades.
+! MD XTB2 ALPB(water) PAL8
+%maxcore 256
+%md
+ Randomize 42
+ Timestep 0.5_fs
+ Thermostat CSVR 300_K Timecon 100_fs
+ Cell None
+ Restart &quot;comprimido.mdrestart&quot;
+ Dump Position Stride 1 Filename &quot;zn_cell_none-traj.xyz&quot;
+ Run 1000
+end
+* xyzfile 2 1 zn_comprimido.xyz
+</code></pre>
+<details open>
 <summary>Input da continuação com parede fixa</summary>
 <!-- input-source: inputs/zn_cell_fixed.inp -->
 <pre><code class="language-text"># Continuacao do mesmo estado comprimido em 1100 fs; sem reinicializar velocidades.

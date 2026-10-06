@@ -10,9 +10,12 @@ Nos comentários dos inputs originais preservados, “estado inicial do exercíc
 
 ## Preparar e executar
 
-Baixe e extraia **um pacote por pasta**. Execute um cálculo por vez, com ORCA/XTB2 já configurados. O XYZ e o `.mdrestart` do pacote são obrigatórios; o reinício conserva posições e velocidades. Não acrescente `Initvel` aos ramos.
+Copie o input completo da variante abaixo e salve-o com o nome indicado, ou baixe o arquivo se preferir. Os pacotes são outra opção; use **uma pasta por variante** e execute um cálculo por vez, com ORCA/XTB2 já configurados. O XYZ e o `.mdrestart` correspondentes são obrigatórios; o reinício conserva posições e velocidades. Não acrescente `Initvel` aos ramos.
 
-No **Windows**, abra `cmd` na pasta extraída. No **Ubuntu/WSL**, entre na pasta pelo terminal. Nos dois casos, para o exemplo de 1000 bar:
+- **C1 e C2:** [geometria `zn_solvato.xyz`](estruturas/zn_solvato.xyz) e [checkpoint `preparacao_termica.mdrestart`](estruturas/preparacao_termica.mdrestart).
+- **C3:** [geometria `zn_comprimido.xyz`](estruturas/zn_comprimido.xyz) e [checkpoint `comprimido.mdrestart`](estruturas/comprimido.mdrestart).
+
+No **Windows**, abra `cmd` na pasta dos arquivos. No **Ubuntu/WSL**, entre na pasta pelo terminal. Nos dois casos, para o exemplo de 1000 bar:
 
 ```text
 orca zn_cell_1000bar.inp > zn_cell_1000bar.out
@@ -32,9 +35,29 @@ Agora compare duas paredes com **raio fixo de 6 Å**, `Spring 10` e `Spring 50`,
 
 **Spring 10:** [Pacote para executar](aula-zn_cell_spring10.zip) · [Input](inputs/zn_cell_spring10.inp) · [Resultados completos](resultado-zn_cell_spring10.zip). Execução de referência: 35,3 s
 
+**Input completo · `zn_cell_spring10.inp` — copie e salve com esse nome.**
+
+<!-- input-source: inputs/zn_cell_spring10.inp -->
+```text
+# Mesmo estado inicial do exercicio 04b; alvo de pressao em bar.
+! MD XTB2 ALPB(water) PAL8
+%maxcore 256
+%md
+ Randomize 42
+ Timestep 0.5_fs
+ Thermostat CSVR 300_K Timecon 100_fs
+ Cell Sphere 0, 0, 0, 6.0_A Spring 10
+ Restart "preparacao_termica.mdrestart"
+ Dump Position Stride 1 Filename "zn_cell_spring10-traj.xyz"
+ Run 1000
+end
+* xyzfile 2 1 zn_solvato.xyz
+```
+
+
 **Spring 50:** [Pacote para executar](aula-zn_cell_spring50.zip) · [Input](inputs/zn_cell_spring50.inp) · [Resultados completos](resultado-zn_cell_spring50.zip). Execução de referência: 29,4 s
 
-<details markdown="1"><summary>Input comentado da parede mais rígida</summary>
+<details markdown="1" open><summary>Input comentado da parede mais rígida</summary>
 
 <!-- input-source: inputs/zn_cell_spring50.inp -->
 ```text
@@ -74,9 +97,29 @@ A parede tende a contrair quando a pressão média que o sistema exerce sobre el
 
 **1 bar:** [Pacote para executar](aula-zn_cell_1bar.zip) · [Input](inputs/zn_cell_1bar.inp) · [Resultados completos](resultado-zn_cell_1bar.zip). Execução de referência: 59,3 s
 
+**Input completo · `zn_cell_1bar.inp` — copie e salve com esse nome.**
+
+<!-- input-source: inputs/zn_cell_1bar.inp -->
+```text
+# Mesmo estado inicial do exercicio 04b; alvo de pressao em bar.
+! MD XTB2 ALPB(water) PAL8
+%maxcore 256
+%md
+ Randomize 42
+ Timestep 0.5_fs
+ Thermostat CSVR 300_K Timecon 100_fs
+ Cell Sphere 0, 0, 0, 6.0_A Spring 50 Elastic 100_fs, 0.001 Pressure 1
+ Restart "preparacao_termica.mdrestart"
+ Dump Position Stride 1 Filename "zn_cell_1bar-traj.xyz"
+ Run 2000
+end
+* xyzfile 2 1 zn_solvato.xyz
+```
+
+
 **1000 bar:** [Pacote para executar](aula-zn_cell_1000bar.zip) · [Input](inputs/zn_cell_1000bar.inp) · [Resultados completos](resultado-zn_cell_1000bar.zip). Execução de referência: 56,9 s
 
-<details markdown="1"><summary>Input comentado da cela elástica a 1000 bar</summary>
+<details markdown="1" open><summary>Input comentado da cela elástica a 1000 bar</summary>
 
 <!-- input-source: inputs/zn_cell_1000bar.inp -->
 ```text
@@ -128,7 +171,27 @@ No ramo fixo, a esfera é redeclarada com **4,985 Å**, o raio final arredondado
 
 **Sem parede:** [Pacote para executar](aula-zn_cell_none.zip) · [Input](inputs/zn_cell_none.inp) · [Resultados completos](resultado-zn_cell_none.zip). Execução de referência: 29,9 s
 
-<details markdown="1"><summary>Input da continuação com parede fixa</summary>
+**Input completo · `zn_cell_none.inp` — copie e salve com esse nome.**
+
+<!-- input-source: inputs/zn_cell_none.inp -->
+```text
+# Continuacao do mesmo estado comprimido em 1100 fs; sem reinicializar velocidades.
+! MD XTB2 ALPB(water) PAL8
+%maxcore 256
+%md
+ Randomize 42
+ Timestep 0.5_fs
+ Thermostat CSVR 300_K Timecon 100_fs
+ Cell None
+ Restart "comprimido.mdrestart"
+ Dump Position Stride 1 Filename "zn_cell_none-traj.xyz"
+ Run 1000
+end
+* xyzfile 2 1 zn_comprimido.xyz
+```
+
+
+<details markdown="1" open><summary>Input da continuação com parede fixa</summary>
 
 <!-- input-source: inputs/zn_cell_fixed.inp -->
 ```text

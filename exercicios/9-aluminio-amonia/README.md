@@ -20,6 +20,19 @@ Para reproduzir esta referência opcional, prefira **0,5 fs**; o pacote de **1 f
 
 [Baixar input ORCA](inputs/al_agua_nh3_dt05.inp) · [Baixar geometria inicial (.xyz)](estruturas/al_agua_nh3.xyz) (obrigatório; manter na mesma pasta do input) · [Baixar scc.inp obrigatório](inputs/scc.inp) (manter junto do input e do XYZ)
 
+**Input completo · `scc.inp` — copie e salve com esse nome.**
+
+<!-- input-source: inputs/scc.inp -->
+```text
+$scc
+  broydamp=0.1
+  iterations=1000
+$write
+  output file=properties.out
+$end
+```
+
+
 <!-- input-source: inputs/al_agua_nh3_dt05.inp -->
 ```text
 # Caso fornecido: Al3+ + 6 aguas + NH3, agora com XTB2.
@@ -46,7 +59,7 @@ end
 
 </details>
 
-<details markdown="1"><summary>Input de 1 fs · passo do exemplo original</summary>
+<details markdown="1" open><summary>Input de 1 fs · passo do exemplo original</summary>
 
 [Baixar input ORCA](inputs/al_agua_nh3_scc.inp) · [Baixar geometria inicial (.xyz)](estruturas/al_agua_nh3.xyz) (obrigatório; manter na mesma pasta do input) · [Baixar scc.inp obrigatório](inputs/scc.inp) (manter junto do input e do XYZ)
 

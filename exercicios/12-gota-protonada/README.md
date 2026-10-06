@@ -43,10 +43,127 @@ Cada trajetória completa tem **5001 quadros, espaçados de 0,5 fs**, e 10001 re
 ## Inputs e consulta
 
 - **Preparação dinâmica comum de 0,5 ps:** [Baixar input ORCA](inputs/p03_equilibrar.inp) · [Baixar geometria inicial (.xyz)](estruturas/gota_equilibrar.xyz) (obrigatório; manter na mesma pasta do input) · [Checkpoint produzido, usado pelos quatro ramos](inputs/p03_equilibrar.mdrestart).
+
+**Input completo · `p03_equilibrar.inp` — copie e salve com esse nome.**
+
+<!-- input-source: inputs/p03_equilibrar.inp -->
+```text
+# Equilibracao inicial de 0.5 ps; revisar antes de observar.
+! MD XTB2 ALPB(water) PAL8
+%maxcore 256
+%md
+  Timestep 0.25_fs
+  Thermostat CSVR 300_K Timecon 100_fs
+  # Parede fora da gota revisada; nao guia transferencias O-H.
+  Walls Sphere 0, 0, 0, 8.5000_A Spring 10.0000
+  Dump Position Stride 2 Filename "p03_equilibrar-traj.xyz"
+  Randomize 93101
+  Initvel 300_K
+  Run 2000
+end
+* xyzfile 1 1 gota_equilibrar.xyz
+```
+
 - **Controle 300 K:** [Baixar input ORCA](inputs/p04_observar.inp) · [Baixar geometria inicial (.xyz)](estruturas/gota_equilibrar.xyz) (obrigatório; manter na mesma pasta do input) · [Baixar checkpoint obrigatório](inputs/p03_equilibrar.mdrestart) (fornece o estado de continuação; manter junto do input).
+
+**Input completo · `p04_observar.inp` — copie e salve com esse nome.**
+
+<!-- input-source: inputs/p04_observar.inp -->
+```text
+# Observar por 2 ps; preservar posicoes, velocidades e relogio.
+! MD XTB2 ALPB(water) PAL8
+%maxcore 256
+%md
+  Timestep 0.25_fs
+  Thermostat CSVR 300_K Timecon 100_fs
+  # Parede fora da gota revisada; nao guia transferencias O-H.
+  Walls Sphere 0, 0, 0, 8.5000_A Spring 10.0000
+  Dump Position Stride 2 Filename "p04_observar-traj.xyz"
+  Randomize 93102
+  Restart "p03_equilibrar.mdrestart"
+  Run 8000
+end
+* xyzfile 1 1 gota_equilibrar.xyz
+```
+
 - **Ramo 400 K:** [Baixar input ORCA](inputs/h01_aquecer.inp) · [Baixar geometria inicial (.xyz)](estruturas/gota_equilibrar.xyz) (obrigatório; manter na mesma pasta do input) · [Baixar checkpoint obrigatório](inputs/p03_equilibrar.mdrestart) (fornece o estado de continuação; manter junto do input).
+
+**Input completo · `h01_aquecer.inp` — copie e salve com esse nome.**
+
+<!-- input-source: inputs/h01_aquecer.inp -->
+```text
+# Comparacao didatica: mesma gota e checkpoint do controle a 300 K.
+! MD XTB2 ALPB(water) PAL8
+%maxcore 256
+%md
+  Timestep 0.25_fs
+  Walls Sphere 0, 0, 0, 8.5_A Spring 10
+  Dump Position Stride 2 Filename "h01_aquecer-traj.xyz"
+  Randomize 93102
+  Restart "p03_equilibrar.mdrestart"
+
+  # Subir o alvo de 300 para 400 K ao longo de 0.5 ps.
+  Thermostat CSVR 300_K Timecon 100_fs Ramp 400_K
+  Run 2000
+
+  # A rampa terminou: os proximos 1.5 ps mantem o alvo em 400 K.
+  Run 6000
+end
+* xyzfile 1 1 gota_equilibrar.xyz
+```
+
 - **Ramo 500 K:** [Baixar input ORCA](inputs/t500_gota.inp) · [Baixar geometria inicial (.xyz)](estruturas/gota_equilibrar.xyz) (obrigatório; manter na mesma pasta do input) · [Baixar checkpoint obrigatório](inputs/p03_equilibrar.mdrestart) (fornece o estado de continuação; manter junto do input).
+
+**Input completo · `t500_gota.inp` — copie e salve com esse nome.**
+
+<!-- input-source: inputs/t500_gota.inp -->
+```text
+# Comparacao didatica: mesma gota e checkpoint do controle a 300 K.
+! MD XTB2 ALPB(water) PAL8
+%maxcore 256
+%md
+  Timestep 0.25_fs
+  Walls Sphere 0, 0, 0, 8.5_A Spring 10
+  Dump Position Stride 2 Filename "t500_gota-traj.xyz"
+  Randomize 93102
+  Restart "p03_equilibrar.mdrestart"
+
+  # Subir o alvo de 300 para 500 K ao longo de 0.5 ps.
+  Thermostat CSVR 300_K Timecon 100_fs Ramp 500_K
+  Run 2000
+
+  # A rampa terminou: os proximos 1.5 ps mantem o alvo em 500 K.
+  Run 6000
+end
+* xyzfile 1 1 gota_equilibrar.xyz
+```
+
 - **Ramo 600 K:** [Baixar input ORCA](inputs/t600_gota.inp) · [Baixar geometria inicial (.xyz)](estruturas/gota_equilibrar.xyz) (obrigatório; manter na mesma pasta do input) · [Baixar checkpoint obrigatório](inputs/p03_equilibrar.mdrestart) (fornece o estado de continuação; manter junto do input).
+
+**Input completo · `t600_gota.inp` — copie e salve com esse nome.**
+
+<!-- input-source: inputs/t600_gota.inp -->
+```text
+# Comparacao didatica: mesma gota e checkpoint do controle a 300 K.
+! MD XTB2 ALPB(water) PAL8
+%maxcore 256
+%md
+  Timestep 0.25_fs
+  Walls Sphere 0, 0, 0, 8.5_A Spring 10
+  Dump Position Stride 2 Filename "t600_gota-traj.xyz"
+  Randomize 93102
+  Restart "p03_equilibrar.mdrestart"
+
+  # Subir o alvo de 300 para 600 K ao longo de 0.5 ps.
+  Thermostat CSVR 300_K Timecon 100_fs Ramp 600_K
+  Run 2000
+
+  # A rampa terminou: os proximos 1.5 ps mantem o alvo em 600 K.
+  Run 6000
+end
+* xyzfile 1 1 gota_equilibrar.xyz
+```
+
 - [Saída do prefixo](resultados/etapas/p03_equilibrar.out) · [300 K](resultados/etapas/p04_observar.out) · [400 K](resultados/etapas/h01_aquecer.out) · [500 K](resultados/etapas/t500_gota.out) · [600 K](resultados/etapas/t600_gota.out).
 - Os ramos de 400/500/600 K levaram, respectivamente, **556,566 / 598,407 / 601,037 s** para 2 ps adicionais na máquina de referência. Não é necessário executá-los durante a aula. Para uma reprodução posterior, use uma pasta separada por ramo, copie o mesmo restart comum para cada uma e execute um cálculo por vez.
 - [Manual ORCA 6.1: termostatos, rampa e restart](https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html) · [SOLVATOR: construção de solvatação explícita](https://www.faccts.de/docs/orca/6.1/manual/contents/structurereactivity/solvator.html).

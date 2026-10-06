@@ -153,7 +153,52 @@ O [teste de 5 fs](../../visualizador/index.html?exemplo=timestep_abrupt) falha e
 ## Resultados e manual
 
 - **etanol_instavel:** [saída](resultados/etanol_instavel/etanol_instavel.out) · [input usado](resultados/etanol_instavel/etanol_instavel.inp) · [energias](resultados/etanol_instavel/etanol_instavel-md-ener.csv) · [trajetória](resultados/etanol_instavel/etanol_instavel-traj.xyz) · [tempo de execução](resultados/etanol_instavel/execucao.json).
+
+**Input completo · `etanol_instavel.inp` — copie e salve com esse nome.**
+
+<!-- input-source: resultados/etanol_instavel/etanol_instavel.inp -->
+```text
+# Exemplo didatico; oito processos solicitados.
+! MD XTB2 PAL8
+%maxcore 256
+
+%md
+  Randomize 42
+  Initvel 300_K
+  Dump Position Stride 1 Filename "etanol_instavel-traj.xyz"
+  # Passo propositadamente excessivo; nao usar em producao.
+  Timestep 2.5_fs
+  Thermostat None
+  Run 200
+end
+* xyzfile 0 1 etanol.xyz
+```
+
 - **etanol_corrigido:** [saída](resultados/etanol_corrigido/etanol_corrigido.out) · [input usado](resultados/etanol_corrigido/etanol_corrigido.inp) · [energias](resultados/etanol_corrigido/etanol_corrigido-md-ener.csv) · [trajetória](resultados/etanol_corrigido/etanol_corrigido-traj.xyz) · [tempo de execução](resultados/etanol_corrigido/execucao.json).
+
+**Input completo · `etanol_corrigido.inp` — copie e salve com esse nome.**
+
+<!-- input-source: resultados/etanol_corrigido/etanol_corrigido.inp -->
+```text
+# Etanol com GFN2-xTB, sem banho termico (NVE).
+! MD XTB2 PAL8
+%maxcore 256
+
+%md
+  Timestep 0.5_fs
+  Randomize 42
+  # Velocidades iniciais; nao mantem a temperatura fixa.
+  Initvel 300_K
+  Thermostat None
+  Dump Position Stride 1 Filename "etanol_corrigido-traj.xyz"
+  # 1000 x 0.5 fs = 500 fs (5e-13 s).
+  Run 1000
+end
+
+# Carga 0, multiplicidade 1; XYZ na mesma pasta.
+* xyzfile 0 1 etanol.xyz
+```
+
 
 [Manual ORCA: dinâmica molecular](https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html).
 
@@ -162,5 +207,106 @@ O [teste de 5 fs](../../visualizador/index.html?exemplo=timestep_abrupt) falha e
 ## Inputs das variantes e preparações
 
 - **etanol_dt025:** [Baixar input ORCA](inputs/etanol_dt025.inp) · [Baixar geometria inicial (.xyz)](estruturas/etanol.xyz) (opcional para executar; as coordenadas já estão no input).
+
+**Input completo · `etanol_dt025.inp` — copie e salve com esse nome.**
+
+<!-- input-source: inputs/etanol_dt025.inp -->
+```text
+# Passo menor: compare com o mesmo tempo fisico de NVE.
+! MD XTB2 PAL8
+%maxcore 256
+
+%md
+  Timestep 0.25_fs
+  Randomize 42
+  # Velocidades iniciais; nao mantem a temperatura fixa.
+  Initvel 300_K
+  Thermostat None
+  Dump Position Stride 1 Filename "etanol_dt025-traj.xyz"
+  # 2000 x 0.25 fs = 500 fs (5e-13 s).
+  Run 2000
+end
+
+# Carga 0, multiplicidade 1; coordenadas abaixo; XYZ separado opcional.
+* xyz 0 1
+  C          -0.90144100150192      0.17625125426761     -0.03297153896772
+  C           0.46936125625488     -0.49209041813779     -0.04596375886747
+  O           1.46256276612237      0.28843917261435      0.57717031816153
+  H          -0.88148499664442      1.09990657237907     -0.61006530877166
+  H          -1.64361180355502     -0.48789343144170     -0.46692815539801
+  H          -1.19233363929951      0.41110994548345      0.98810024770280
+  H           0.76068917865250     -0.72317969030966     -1.08182288177168
+  H           0.44081648762406     -1.42618852781151      0.51953633130848
+  H           1.48544175234705      1.15364512295618      0.15294474650374
+*
+```
+
 - **etanol_dt200:** [Baixar input ORCA](inputs/etanol_dt200.inp) · [Baixar geometria inicial (.xyz)](estruturas/etanol.xyz) (opcional para executar; as coordenadas já estão no input).
+
+**Input completo · `etanol_dt200.inp` — copie e salve com esse nome.**
+
+<!-- input-source: inputs/etanol_dt200.inp -->
+```text
+# Passo grande de proposito: observe o erro de integracao.
+! MD XTB2 PAL8
+%maxcore 256
+
+%md
+  Timestep 2.0_fs
+  Randomize 42
+  # Velocidades iniciais; nao mantem a temperatura fixa.
+  Initvel 300_K
+  Thermostat None
+  Dump Position Stride 1 Filename "etanol_dt200-traj.xyz"
+  # 250 x 2 fs = 500 fs (5e-13 s).
+  Run 250
+end
+
+# Carga 0, multiplicidade 1; coordenadas abaixo; XYZ separado opcional.
+* xyz 0 1
+  C          -0.90144100150192      0.17625125426761     -0.03297153896772
+  C           0.46936125625488     -0.49209041813779     -0.04596375886747
+  O           1.46256276612237      0.28843917261435      0.57717031816153
+  H          -0.88148499664442      1.09990657237907     -0.61006530877166
+  H          -1.64361180355502     -0.48789343144170     -0.46692815539801
+  H          -1.19233363929951      0.41110994548345      0.98810024770280
+  H           0.76068917865250     -0.72317969030966     -1.08182288177168
+  H           0.44081648762406     -1.42618852781151      0.51953633130848
+  H           1.48544175234705      1.15364512295618      0.15294474650374
+*
+```
+
 - **etanol_dt500:** [Baixar input ORCA](inputs/etanol_dt500.inp) · [Baixar geometria inicial (.xyz)](estruturas/etanol.xyz) (opcional para executar; as coordenadas já estão no input).
+
+**Input completo · `etanol_dt500.inp` — copie e salve com esse nome.**
+
+<!-- input-source: inputs/etanol_dt500.inp -->
+```text
+# Passo grande de proposito: observe o erro de integracao.
+! MD XTB2 PAL8
+%maxcore 256
+
+%md
+  Timestep 5.0_fs
+  Randomize 42
+  # Velocidades iniciais; nao mantem a temperatura fixa.
+  Initvel 300_K
+  Thermostat None
+  Dump Position Stride 1 Filename "etanol_dt500-traj.xyz"
+  # 100 x 5 fs = 500 fs (5e-13 s).
+  Run 100
+end
+
+# Carga 0, multiplicidade 1; coordenadas abaixo; XYZ separado opcional.
+* xyz 0 1
+  C          -0.90144100150192      0.17625125426761     -0.03297153896772
+  C           0.46936125625488     -0.49209041813779     -0.04596375886747
+  O           1.46256276612237      0.28843917261435      0.57717031816153
+  H          -0.88148499664442      1.09990657237907     -0.61006530877166
+  H          -1.64361180355502     -0.48789343144170     -0.46692815539801
+  H          -1.19233363929951      0.41110994548345      0.98810024770280
+  H           0.76068917865250     -0.72317969030966     -1.08182288177168
+  H           0.44081648762406     -1.42618852781151      0.51953633130848
+  H           1.48544175234705      1.15364512295618      0.15294474650374
+*
+```

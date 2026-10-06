@@ -85,6 +85,27 @@ Espere o prompt voltar antes de iniciar outro cálculo. Os arquivos de resultado
 
 - **dimero_b97_cpcm:** [saída](resultados/dimero_b97_cpcm/dimero_b97_cpcm.out) · [input usado](resultados/dimero_b97_cpcm/dimero_b97_cpcm.inp) · [energias](resultados/dimero_b97_cpcm/dimero_b97_cpcm-md-ener.csv) · [trajetória](resultados/dimero_b97_cpcm/dimero_b97_cpcm-traj.xyz) · [tempo de execução](resultados/dimero_b97_cpcm/execucao.json).
 
+**Input completo · `dimero_b97_cpcm.inp` — copie e salve com esse nome.**
+
+<!-- input-source: resultados/dimero_b97_cpcm/dimero_b97_cpcm.inp -->
+```text
+# Exemplo didatico; oito processos solicitados.
+! MD B97-3c TightSCF CPCM(water) PAL8
+%maxcore 256
+
+%md
+  Randomize 42
+  Initvel 300_K
+  Dump Position Stride 1 Filename "dimero_b97_cpcm-traj.xyz"
+  Timestep 0.5_fs
+  Thermostat None
+  # 60 fs: observar vibracao e geometria da ligacao H.
+  Run 120
+end
+* xyzfile 0 1 dimero_b97.xyz
+```
+
+
 [Manual ORCA: dinâmica molecular](https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html).
 
 [Compare também a água isolada no vácuo e com CPCM](apoio.md).
@@ -92,3 +113,30 @@ Espere o prompt voltar antes de iniciar outro cálculo. Os arquivos de resultado
 ## Inputs das variantes e preparações
 
 - **agua_cpcm:** [Baixar input ORCA](inputs/agua_cpcm.inp) · [Baixar geometria inicial (.xyz)](estruturas/agua.xyz) (opcional para executar; as coordenadas já estão no input).
+
+**Input completo · `agua_cpcm.inp` — copie e salve com esse nome.**
+
+<!-- input-source: inputs/agua_cpcm.inp -->
+```text
+# Mesmo teste de agua; CPCM acrescenta o solvente continuo.
+! MD BLYP def2-SVP TightSCF CPCM(water) PAL8
+%maxcore 256
+
+%md
+  Timestep 0.5_fs
+  Randomize 42
+  # Velocidades iniciais; nao mantem a temperatura fixa.
+  Initvel 300_K
+  Thermostat None
+  Dump Position Stride 1 Filename "agua_cpcm-traj.xyz"
+  # 40 x 0.5 fs = 20 fs (2e-14 s).
+  Run 40
+end
+
+# Carga 0, multiplicidade 1; coordenadas abaixo; XYZ separado opcional.
+* xyz 0 1
+  O          -0.00000000000561      0.00000000000000     -0.07350969363937
+  H           0.76032823354949      0.00000000000000      0.54103884681985
+  H          -0.76032823354388      0.00000000000000      0.54103884681952
+*
+```

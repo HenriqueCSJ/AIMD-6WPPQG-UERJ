@@ -117,13 +117,151 @@ end
 <h2 id="resultados-e-manual">Resultados e manual</h2>
 <ul>
 <li><strong>etanol_instavel:</strong> <a href="resultados/etanol_instavel/etanol_instavel.out">saída</a> · <a href="resultados/etanol_instavel/etanol_instavel.inp" download="etanol_instavel.inp">input usado</a> · <a href="resultados/etanol_instavel/etanol_instavel-md-ener.csv">energias</a> · <a href="resultados/etanol_instavel/etanol_instavel-traj.xyz" download="etanol_instavel-traj.xyz">trajetória</a> · <a href="resultados/etanol_instavel/execucao.json">tempo de execução</a>.</li>
+</ul>
+<p><strong>Input completo · <code>etanol_instavel.inp</code> — copie e salve com esse nome.</strong></p>
+<!-- input-source: resultados/etanol_instavel/etanol_instavel.inp -->
+
+<pre><code class="language-text"># Exemplo didatico; oito processos solicitados.
+! MD XTB2 PAL8
+%maxcore 256
+
+%md
+  Randomize 42
+  Initvel 300_K
+  Dump Position Stride 1 Filename &quot;etanol_instavel-traj.xyz&quot;
+  # Passo propositadamente excessivo; nao usar em producao.
+  Timestep 2.5_fs
+  Thermostat None
+  Run 200
+end
+* xyzfile 0 1 etanol.xyz
+</code></pre>
+<ul>
 <li><strong>etanol_corrigido:</strong> <a href="resultados/etanol_corrigido/etanol_corrigido.out">saída</a> · <a href="resultados/etanol_corrigido/etanol_corrigido.inp" download="etanol_corrigido.inp">input usado</a> · <a href="resultados/etanol_corrigido/etanol_corrigido-md-ener.csv">energias</a> · <a href="resultados/etanol_corrigido/etanol_corrigido-traj.xyz" download="etanol_corrigido-traj.xyz">trajetória</a> · <a href="resultados/etanol_corrigido/execucao.json">tempo de execução</a>.</li>
 </ul>
+<p><strong>Input completo · <code>etanol_corrigido.inp</code> — copie e salve com esse nome.</strong></p>
+<!-- input-source: resultados/etanol_corrigido/etanol_corrigido.inp -->
+
+<pre><code class="language-text"># Etanol com GFN2-xTB, sem banho termico (NVE).
+! MD XTB2 PAL8
+%maxcore 256
+
+%md
+  Timestep 0.5_fs
+  Randomize 42
+  # Velocidades iniciais; nao mantem a temperatura fixa.
+  Initvel 300_K
+  Thermostat None
+  Dump Position Stride 1 Filename &quot;etanol_corrigido-traj.xyz&quot;
+  # 1000 x 0.5 fs = 500 fs (5e-13 s).
+  Run 1000
+end
+
+# Carga 0, multiplicidade 1; XYZ na mesma pasta.
+* xyzfile 0 1 etanol.xyz
+</code></pre>
 <p><a href="https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html">Manual ORCA: dinâmica molecular</a>.</p>
 <p><a href="resultados/etanol_instavel/etanol_instavel.scf.log">Registro eletrônico da falha</a>.</p>
 <h2 id="inputs-das-variantes-e-preparacoes">Inputs das variantes e preparações</h2>
 <ul>
 <li><strong>etanol_dt025:</strong> <a href="inputs/etanol_dt025.inp" download="etanol_dt025.inp">Baixar input ORCA</a> · <a href="estruturas/etanol.xyz" download="etanol.xyz">Baixar geometria inicial (.xyz)</a> (opcional para executar; as coordenadas já estão no input).</li>
+</ul>
+<p><strong>Input completo · <code>etanol_dt025.inp</code> — copie e salve com esse nome.</strong></p>
+<!-- input-source: inputs/etanol_dt025.inp -->
+
+<pre><code class="language-text"># Passo menor: compare com o mesmo tempo fisico de NVE.
+! MD XTB2 PAL8
+%maxcore 256
+
+%md
+  Timestep 0.25_fs
+  Randomize 42
+  # Velocidades iniciais; nao mantem a temperatura fixa.
+  Initvel 300_K
+  Thermostat None
+  Dump Position Stride 1 Filename &quot;etanol_dt025-traj.xyz&quot;
+  # 2000 x 0.25 fs = 500 fs (5e-13 s).
+  Run 2000
+end
+
+# Carga 0, multiplicidade 1; coordenadas abaixo; XYZ separado opcional.
+* xyz 0 1
+  C          -0.90144100150192      0.17625125426761     -0.03297153896772
+  C           0.46936125625488     -0.49209041813779     -0.04596375886747
+  O           1.46256276612237      0.28843917261435      0.57717031816153
+  H          -0.88148499664442      1.09990657237907     -0.61006530877166
+  H          -1.64361180355502     -0.48789343144170     -0.46692815539801
+  H          -1.19233363929951      0.41110994548345      0.98810024770280
+  H           0.76068917865250     -0.72317969030966     -1.08182288177168
+  H           0.44081648762406     -1.42618852781151      0.51953633130848
+  H           1.48544175234705      1.15364512295618      0.15294474650374
+*
+</code></pre>
+<ul>
 <li><strong>etanol_dt200:</strong> <a href="inputs/etanol_dt200.inp" download="etanol_dt200.inp">Baixar input ORCA</a> · <a href="estruturas/etanol.xyz" download="etanol.xyz">Baixar geometria inicial (.xyz)</a> (opcional para executar; as coordenadas já estão no input).</li>
+</ul>
+<p><strong>Input completo · <code>etanol_dt200.inp</code> — copie e salve com esse nome.</strong></p>
+<!-- input-source: inputs/etanol_dt200.inp -->
+
+<pre><code class="language-text"># Passo grande de proposito: observe o erro de integracao.
+! MD XTB2 PAL8
+%maxcore 256
+
+%md
+  Timestep 2.0_fs
+  Randomize 42
+  # Velocidades iniciais; nao mantem a temperatura fixa.
+  Initvel 300_K
+  Thermostat None
+  Dump Position Stride 1 Filename &quot;etanol_dt200-traj.xyz&quot;
+  # 250 x 2 fs = 500 fs (5e-13 s).
+  Run 250
+end
+
+# Carga 0, multiplicidade 1; coordenadas abaixo; XYZ separado opcional.
+* xyz 0 1
+  C          -0.90144100150192      0.17625125426761     -0.03297153896772
+  C           0.46936125625488     -0.49209041813779     -0.04596375886747
+  O           1.46256276612237      0.28843917261435      0.57717031816153
+  H          -0.88148499664442      1.09990657237907     -0.61006530877166
+  H          -1.64361180355502     -0.48789343144170     -0.46692815539801
+  H          -1.19233363929951      0.41110994548345      0.98810024770280
+  H           0.76068917865250     -0.72317969030966     -1.08182288177168
+  H           0.44081648762406     -1.42618852781151      0.51953633130848
+  H           1.48544175234705      1.15364512295618      0.15294474650374
+*
+</code></pre>
+<ul>
 <li><strong>etanol_dt500:</strong> <a href="inputs/etanol_dt500.inp" download="etanol_dt500.inp">Baixar input ORCA</a> · <a href="estruturas/etanol.xyz" download="etanol.xyz">Baixar geometria inicial (.xyz)</a> (opcional para executar; as coordenadas já estão no input).</li>
-</ul></article><nav class="route-nav route-fim" aria-label="Navegação do percurso — fim"><div class="route-status">Etapa 3 de 9 · Bloco 02b<progress class="course-progress" value="3" max="9" aria-label="Etapa 3 de 9"></progress></div><div class="route-controls"><a class="route-prev" rel="prev" href="../3-xtb2-etanol/index.html"><small>Anterior</small><span>← Etanol: controle</span></a><a class="route-next" rel="next" href="../5-termostato/index.html"><small>Próximo</small><span>Aquecer e resfriar →</span></a></div><a class="route-map" href="../index.html">Mapa completo do percurso</a></nav></main></div><footer>Henrique de Castro Silva Junior e Virginia Camila Rufino Ferreira · ORCA 6.1.1 · Materiais e dados locais; links externos levam à documentação oficial.</footer></body></html>
+</ul>
+<p><strong>Input completo · <code>etanol_dt500.inp</code> — copie e salve com esse nome.</strong></p>
+<!-- input-source: inputs/etanol_dt500.inp -->
+
+<pre><code class="language-text"># Passo grande de proposito: observe o erro de integracao.
+! MD XTB2 PAL8
+%maxcore 256
+
+%md
+  Timestep 5.0_fs
+  Randomize 42
+  # Velocidades iniciais; nao mantem a temperatura fixa.
+  Initvel 300_K
+  Thermostat None
+  Dump Position Stride 1 Filename &quot;etanol_dt500-traj.xyz&quot;
+  # 100 x 5 fs = 500 fs (5e-13 s).
+  Run 100
+end
+
+# Carga 0, multiplicidade 1; coordenadas abaixo; XYZ separado opcional.
+* xyz 0 1
+  C          -0.90144100150192      0.17625125426761     -0.03297153896772
+  C           0.46936125625488     -0.49209041813779     -0.04596375886747
+  O           1.46256276612237      0.28843917261435      0.57717031816153
+  H          -0.88148499664442      1.09990657237907     -0.61006530877166
+  H          -1.64361180355502     -0.48789343144170     -0.46692815539801
+  H          -1.19233363929951      0.41110994548345      0.98810024770280
+  H           0.76068917865250     -0.72317969030966     -1.08182288177168
+  H           0.44081648762406     -1.42618852781151      0.51953633130848
+  H           1.48544175234705      1.15364512295618      0.15294474650374
+*
+</code></pre></article><nav class="route-nav route-fim" aria-label="Navegação do percurso — fim"><div class="route-status">Etapa 3 de 9 · Bloco 02b<progress class="course-progress" value="3" max="9" aria-label="Etapa 3 de 9"></progress></div><div class="route-controls"><a class="route-prev" rel="prev" href="../3-xtb2-etanol/index.html"><small>Anterior</small><span>← Etanol: controle</span></a><a class="route-next" rel="next" href="../5-termostato/index.html"><small>Próximo</small><span>Aquecer e resfriar →</span></a></div><a class="route-map" href="../index.html">Mapa completo do percurso</a></nav></main></div><footer>Henrique de Castro Silva Junior e Virginia Camila Rufino Ferreira · ORCA 6.1.1 · Materiais e dados locais; links externos levam à documentação oficial.</footer></body></html>

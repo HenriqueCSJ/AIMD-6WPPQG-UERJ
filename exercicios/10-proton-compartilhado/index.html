@@ -91,7 +91,44 @@ end
 <p><a href="resultados/proton_shared/proton_shared.out">Saída ORCA</a> · <a href="resultados/proton_shared/proton_shared-md-ener.csv">Energias</a> · <a href="resultados/proton_shared/proton_shared-traj.xyz" download="proton_shared-traj.xyz">Trajetória completa</a>.</p>
 </li>
 <li><a href="resultados/proton_shared/proton_shared.inp" download="proton_shared.inp">Input original da referência</a> · <a href="resultados/proton_shared/execucao.json">Registro de execução</a>.</li>
+</ul>
+<p><strong>Input completo · <code>proton_shared.inp</code> — copie e salve com esse nome.</strong></p>
+<!-- input-source: resultados/proton_shared/proton_shared.inp -->
+
+<pre><code class="language-text"># H5O2+ a 300 K: 2 ps, sem solvente, parede ou forca de transferencia.
+! MD XTB2 PAL8
+%maxcore 256
+%md
+  Timestep 0.25_fs
+  Thermostat CSVR 300_K Timecon 100_fs
+  Dump Position Stride 1 Filename &quot;z01_dinamica-traj.xyz&quot;
+  Randomize 93201
+  Initvel 300_K
+  Run 8000
+end
+* xyzfile 1 1 h5o2_otimizado.xyz
+</code></pre>
+<ul>
 <li><a href="inputs/z00_otimizar.inp" download="z00_otimizar.inp">Baixar input ORCA</a> · <a href="estruturas/h5o2_inicial.xyz" download="h5o2_inicial.xyz">Baixar geometria inicial (.xyz)</a> (opcional para executar; as coordenadas já estão no input) · <a href="resultados/otimizacao/z00_otimizar.out">Saída da otimização</a>.</li>
+</ul>
+<p><strong>Input completo · <code>z00_otimizar.inp</code> — copie e salve com esse nome.</strong></p>
+<!-- input-source: inputs/z00_otimizar.inp -->
+
+<pre><code class="language-text"># Dimero protonado isolado; relaxar antes da dinamica.
+! XTB2 Opt TightOpt PAL8
+%maxcore 256
+%geom MaxIter 200 end
+* xyz 1 1
+O -1.225000  0.000000  0.000000
+O  1.225000  0.000000  0.000000
+H  0.080000  0.015000 -0.008000
+H -1.810000  0.765000  0.010000
+H -1.825000 -0.758000 -0.020000
+H  1.820000  0.015000  0.763000
+H  1.813000 -0.010000 -0.770000
+*
+</code></pre>
+<ul>
 <li><a href="https://www.faccts.de/docs/orca/6.1/manual/contents/moleculardynamics/moldyn.html">Manual ORCA 6.1: dinâmica molecular, timestep e termostatos</a>.</li>
 </ul>
 <p><strong>Entrega da dupla:</strong> anote um cruzamento com retorno e explique como a conclusão muda ao exigir persistência.</p>
@@ -99,4 +136,38 @@ end
 <ul>
 <li><strong>z01_dinamica — etapa após a otimização; usa a geometria otimizada:</strong> <a href="inputs/z01_dinamica.inp" download="z01_dinamica.inp">Baixar input ORCA</a> · <a href="estruturas/h5o2_otimizado.xyz" download="h5o2_otimizado.xyz">Baixar geometria inicial (.xyz)</a> (obrigatório; manter na mesma pasta do input).</li>
 </ul>
-<p><strong>Continuação de 2 até 10 ps:</strong> <a href="resultados/proton_shared_10ps/etapas/z02_02000_10000fs.inp" download="z02_02000_10000fs.inp">Baixar input ORCA</a> · <a href="resultados/proton_shared_10ps/etapas/h5o2_restart_2ps.xyz" download="h5o2_restart_2ps.xyz">Baixar geometria inicial (.xyz)</a> (obrigatório; manter na mesma pasta do input) · <a href="resultados/proton_shared_10ps/etapas/z01_dinamica.mdrestart" download="z01_dinamica.mdrestart">Baixar checkpoint obrigatório</a> (fornece o estado de continuação; manter junto do input). O XYZ isolado não substitui o checkpoint.</p></article><nav class="route-nav route-fim" aria-label="Navegação do percurso — fim"><div class="route-status">Etapa 9 de 9 · Bloco 05<progress class="course-progress" value="9" max="9" aria-label="Etapa 9 de 9"></progress></div><div class="route-controls"><a class="route-prev" rel="prev" href="../14-zn-en-pressao/index.html"><small>Anterior</small><span>← Zn–en sem assistência: 1 / 1000 / 4000 bar</span></a><a class="route-next" href="../index.html"><small>Percurso concluído</small><span>Voltar ao mapa →</span></a></div><a class="route-map" href="../index.html">Mapa completo do percurso</a></nav></main></div><footer>Henrique de Castro Silva Junior e Virginia Camila Rufino Ferreira · ORCA 6.1.1 · Materiais e dados locais; links externos levam à documentação oficial.</footer></body></html>
+<p><strong>Input completo · <code>z01_dinamica.inp</code> — copie e salve com esse nome.</strong></p>
+<!-- input-source: inputs/z01_dinamica.inp -->
+
+<pre><code class="language-text"># H5O2+ a 300 K: 2 ps, sem solvente, parede ou forca de transferencia.
+! MD XTB2 PAL8
+%maxcore 256
+%md
+  Timestep 0.25_fs
+  Thermostat CSVR 300_K Timecon 100_fs
+  Dump Position Stride 1 Filename &quot;z01_dinamica-traj.xyz&quot;
+  Randomize 93201
+  Initvel 300_K
+  Run 8000
+end
+* xyzfile 1 1 h5o2_otimizado.xyz
+</code></pre>
+<p><strong>Continuação de 2 até 10 ps:</strong> <a href="resultados/proton_shared_10ps/etapas/z02_02000_10000fs.inp" download="z02_02000_10000fs.inp">Baixar input ORCA</a> · <a href="resultados/proton_shared_10ps/etapas/h5o2_restart_2ps.xyz" download="h5o2_restart_2ps.xyz">Baixar geometria inicial (.xyz)</a> (obrigatório; manter na mesma pasta do input) · <a href="resultados/proton_shared_10ps/etapas/z01_dinamica.mdrestart" download="z01_dinamica.mdrestart">Baixar checkpoint obrigatório</a> (fornece o estado de continuação; manter junto do input). O XYZ isolado não substitui o checkpoint.</p>
+<p><strong>Input completo · <code>z02_02000_10000fs.inp</code> — copie e salve com esse nome.</strong></p>
+<!-- input-source: resultados/proton_shared_10ps/etapas/z02_02000_10000fs.inp -->
+
+<pre><code class="language-text"># H5O2+: continue the retained 2 ps state for 8 ps, reaching 10 ps.
+# Same Hamiltonian, integration step, thermostat settings and explicit seed.
+# Positions and velocities come from the checkpoint; do not initialize velocities.
+! MD XTB2 PAL8
+%maxcore 256
+%md
+  Timestep 0.25_fs
+  Thermostat CSVR 300_K Timecon 100_fs
+  Dump Position Stride 1 Filename &quot;z02_02000_10000fs-traj.xyz&quot;
+  Randomize 93201
+  Restart &quot;z01_dinamica.mdrestart&quot;
+  Run 32000
+end
+* xyzfile 1 1 h5o2_restart_2ps.xyz
+</code></pre></article><nav class="route-nav route-fim" aria-label="Navegação do percurso — fim"><div class="route-status">Etapa 9 de 9 · Bloco 05<progress class="course-progress" value="9" max="9" aria-label="Etapa 9 de 9"></progress></div><div class="route-controls"><a class="route-prev" rel="prev" href="../14-zn-en-pressao/index.html"><small>Anterior</small><span>← Zn–en sem assistência: 1 / 1000 / 4000 bar</span></a><a class="route-next" href="../index.html"><small>Percurso concluído</small><span>Voltar ao mapa →</span></a></div><a class="route-map" href="../index.html">Mapa completo do percurso</a></nav></main></div><footer>Henrique de Castro Silva Junior e Virginia Camila Rufino Ferreira · ORCA 6.1.1 · Materiais e dados locais; links externos levam à documentação oficial.</footer></body></html>
