@@ -294,7 +294,7 @@
     }
   }
   function renderAll(preferredTrajectory){
-    const loaded=state.runs.length>0;$('workspace').hidden=!loaded;$('welcome-guide').hidden=loaded;document.body.classList.toggle('loaded',loaded);if(!loaded){updateExerciseReturn();stop();clearTrajectoryScene();const expanded=$('expand-trajectory').getAttribute('aria-expanded')==='true';expandTrajectory(false,false);if(expanded)$('upload-button').focus();return;}
+    const loaded=state.runs.length>0;$('workspace').hidden=!loaded;$('welcome-guide').hidden=loaded;document.body.classList.toggle('loaded',loaded);if(!loaded){updateExerciseReturn();stop();clearTrajectoryScene();state.distanceChart=null;renderDihedralCircle(null,[]);const expanded=$('expand-trajectory').getAttribute('aria-expanded')==='true';expandTrajectory(false,false);if(expanded)$('upload-button').focus();return;}
     renderRuns();updateRunSelectors(preferredTrajectory);renderDetails();changeTab(state.tab);
   }
   function changeTab(tab){stop();state.tab=tab;const expanded=$('expand-trajectory').getAttribute('aria-expanded')==='true';if(tab!=='trajectory')expandTrajectory(false,false);for(const name of ['energy','trajectory','distance']){$('panel-'+name).hidden=name!==tab;$('tab-'+name).setAttribute('aria-selected',name===tab);$('tab-'+name).tabIndex=name===tab?0:-1;}if(expanded&&tab!=='trajectory')$('tab-'+tab).focus();
@@ -824,7 +824,7 @@
   function renderDistances(resetControls=false){
     updateExerciseReturn();
     const run=currentDistance(),has=!!run;$('distance-empty').hidden=has;$('distance-content').hidden=!has;$('export-distance').disabled=!has;
-    if(!has){state.distanceSeries=[];state.geometrySeries=[];$('distance-chart').replaceChildren();$('distance-stats').replaceChildren();$('geometry-preview-note').hidden=true;$('geometry-preview-note').textContent='';$('distance-empty').innerHTML=!visible().length?'<strong>Marque uma simulação acima.</strong>As caixas selecionam os cálculos disponíveis nas três abas.':'<strong>Escolha uma medida geométrica.</strong>Carregue uma trajetória XYZ, ou o CSV de Colvars do ORCA, para uma simulação marcada.';return;}
+    if(!has){state.distanceSeries=[];state.geometrySeries=[];state.distanceChart=null;renderDihedralCircle(null,[]);$('distance-chart').replaceChildren();$('distance-stats').replaceChildren();$('geometry-preview-note').hidden=true;$('geometry-preview-note').textContent='';$('distance-empty').innerHTML=!visible().length?'<strong>Marque uma simulação acima.</strong>As caixas selecionam os cálculos disponíveis nas três abas.':'<strong>Escolha uma medida geométrica.</strong>Carregue uma trajetória XYZ, ou o CSV de Colvars do ORCA, para uma simulação marcada.';return;}
     const source=$('distance-source');source.options[0].disabled=!run.xyz;source.options[1].disabled=!run.colvars;
     if(!run.xyz)source.value='colvars';else if(!run.colvars)source.value='xyz';
     const fromXYZ=source.value==='xyz';$('atom-pair-controls').hidden=!fromXYZ;$('colvar-controls').hidden=fromXYZ;$('distance-chips').hidden=!fromXYZ;
@@ -833,7 +833,7 @@
       const xyz=run.xyz,measures=ensureGeometryMeasures(run);timed=xyz.frames.every(f=>f.time!==null);populateGeometrySelectors(xyz,resetControls);type=geometryType();unit=type==='distance'?'Å':'°';
       const previewNote=$('geometry-preview-note');if(previewNote){previewNote.hidden=!(xyz.previewStride&&xyz.previewStride>1);previewNote.textContent=previewNote.hidden?'':`Esta é uma prévia: 1 a cada ${xyz.previewStride} quadros originais, mais o último. As medidas usam somente os quadros carregados; os XYZ originais preservam todos os quadros.`;}
       const firstFrame=xyz.frames[0];$('ethanol-preset').hidden=!G.isEthanolSkeleton(xyz.elements,firstFrame.coords);
-      series=measures[type].map((indices,i)=>({name:geometryLabel(xyz,indices,type),color:colors[i%colors.length],dash:i%2?'5 3':'',showSegmentStarts:type!=='dihedral',points:geometryValues(xyz,type,indices).map(p=>({x:p.time,y:p.value,segment:p.plotSegment??p.segment,sourceSegment:p.segment}))}));
+      series=measures[type].map((indices,i)=>({name:geometryLabel(xyz,indices,type),color:colors[i%colors.length],dash:i%2?'5 3':'',showSegmentStarts:type!=='dihedral',points:geometryValues(xyz,type,indices).map(p=>({x:p.time,y:p.value,segment:p.plotSegment??p.segment,sourceSegment:p.segment,sourceKey:p.sourceKey,gapBefore:p.gapBefore,breakBefore:p.breakBefore}))}));
       $('distance-chips').innerHTML=measures[type].map((indices,i)=>`<span class="distance-chip" style="--run-color:${colors[i%colors.length]}">${geometryLabel(xyz,indices,type)}<button type="button" data-measure="${i}" aria-label="Remover medida">×</button></span>`).join('');
       $('distance-chips').querySelectorAll('[data-measure]').forEach(button=>button.addEventListener('click',()=>{measures[type].splice(Number(button.dataset.measure),1);if(type==='distance')state.pairs[run.id]=measures.distance;renderDistances();}));
     }else{
@@ -846,10 +846,42 @@
     }
     if(fromXYZ)$('geometry-type').disabled=false;
     state.distanceSeries=series;state.geometrySeries=series;const title=fromXYZ?(type==='distance'?'Distâncias entre átomos':type==='angle'?'Ângulos entre átomos':'Diedros assinados'):'Distâncias de Colvars';$('distance-chart-title').textContent=title;$('distance-chart-unit-note').textContent=fromXYZ?(type==='distance'?'Coordenadas em Å':type==='angle'?'Graus':'Valores originais; −180° e +180° são equivalentes'):'Coordenadas em Å';
-    new ScientificChart($('distance-chart'),{title,series,...(type==='dihedral'?{yDomain:[-180,180],yTicks:[-180,-90,0,90,180]}:{}),yLabel:type==='distance'?'Distância (Å)':type==='angle'?'Ângulo (°)':'Diedro (°)',yUnit:unit,xLabel:timed?`${sequenceClock(run)?'Tempo da sequência':'Tempo'} (fs)`:'Quadro (sem tempo físico)',xUnit:timed?'fs':'quadro'});
+    state.distanceChart=new ScientificChart($('distance-chart'),{title,series,...(type==='dihedral'?{yDomain:[-180,180],yTicks:[-180,-90,0,90,180],cursorDash:'3 5',onCursor:seekDihedralTime,onSeek:seekDihedralTime}:{}),yLabel:type==='distance'?'Distância (Å)':type==='angle'?'Ângulo (°)':'Diedro (°)',yUnit:unit,xLabel:timed?`${sequenceClock(run)?'Tempo da sequência':'Tempo'} (fs)`:'Quadro (sem tempo físico)',xUnit:timed?'fs':'quadro'});
+    renderDihedralCircle(run,series);
     $('distance-stats').innerHTML=series.map(s=>{const stat=R.stats(s.points.map(p=>({value:p.y})),'value');return stat?`<div class="stat" style="--run-color:${s.color}"><span class="stat-name">${esc(s.name)}</span><strong>${num(stat.min,4)}–${num(stat.max,4)} ${unit}</strong><p>Faixa nos quadros carregados</p></div>`:'';}).join('');
   }
   function geometrySelection(type){return [Number($('atom-a').value),Number($('atom-b').value),Number($('atom-c').value),Number($('atom-d').value)].slice(0,type==='distance'?2:type==='angle'?3:4);}
+  function setDihedralFrame(index){
+    const run=currentDistance(),frames=run?.xyz?.frames;
+    if(!state.dihedralCircle||!frames?.length)return;
+    state.dihedralFrame=Math.max(0,Math.min(frames.length-1,Number.isFinite(index)?Math.round(index):0));
+    const frame=frames[state.dihedralFrame],timed=state.dihedralTimed;
+    const position=state.dihedralFrame+1;
+    $('dihedral-frame-slider').value=position;$('dihedral-frame-number').value=position;
+    $('dihedral-previous').disabled=state.dihedralFrame===0;$('dihedral-next').disabled=position===frames.length;
+    const timeText=timed?`${clockLabel(run)}: ${num(frame.time,9)} fs`:'Sem tempo físico registrado';
+    $('dihedral-frame-label').textContent=`Quadro ${position} de ${frames.length} · ${timeText}${sourceClock(frame)?' · '+sourceClock(frame):''}`;
+    $('dihedral-frame-slider').setAttribute('aria-valuetext',`Quadro ${position} de ${frames.length}, ${timeText}`);
+    state.dihedralCircle.setIndex(state.dihedralFrame);
+    state.distanceChart?.setCursorX(timed?frame.time:position);
+  }
+  function seekDihedralTime(time){
+    const index=state.dihedralTimeIndex?.nearest(time,state.dihedralFrame||0);
+    if(index!==null&&index!==undefined)setDihedralFrame(index);
+  }
+  function renderDihedralCircle(run,series){
+    const enabled=!!run?.xyz&&$('distance-source').value==='xyz'&&geometryType()==='dihedral'&&series.length>0;
+    $('dihedral-circular-panel').hidden=!enabled;state.dihedralCircle=null;state.dihedralTimeIndex=null;state.dihedralCrossings=[];
+    if(!enabled){$('dihedral-circle-chart').replaceChildren();if(!run){state.dihedralRun=null;state.dihedralFrame=0;}return;}
+    const frames=run.xyz.frames,timed=frames.every(f=>Number.isFinite(f.time));state.dihedralTimed=timed;
+    if(state.dihedralRun!==run.id){state.dihedralFrame=0;state.dihedralRun=run.id;}
+    state.dihedralTimeIndex=TrajectoryTime.index(frames.map((frame,i)=>({time:timed?frame.time:i+1})));
+    const crossings=new Set();for(const s of series)for(let i=1;i<s.points.length;i++){const p=s.points[i],a=s.points[i-1];if(Number.isFinite(p.y)&&Number.isFinite(a.y)&&Number.isFinite(p.x)&&Number.isFinite(a.x)&&p.x>a.x&&p.sourceSegment===a.sourceSegment&&p.sourceKey===a.sourceKey&&!p.gapBefore&&!p.breakBefore&&Math.abs(p.y-a.y)>180)crossings.add(i);}
+    state.dihedralCrossings=[...crossings].sort((a,b)=>a-b);$('dihedral-next-crossing').disabled=!state.dihedralCrossings.length;
+    for(const id of ['dihedral-frame-slider','dihedral-frame-number']){$(id).max=frames.length;$(id).disabled=frames.length<2;}
+    state.dihedralCircle=new DihedralCircleChart($('dihedral-circle-chart'),{series,index:state.dihedralFrame||0});
+    setDihedralFrame(state.dihedralFrame||0);
+  }
   function addGeometryMeasure(run,type,indices){
     const measures=ensureGeometryMeasures(run),needed=type==='distance'?2:type==='angle'?3:4;
     if(indices.length!==needed||indices.some(i=>!Number.isInteger(i)||i<0||i>=run.xyz.elements.length)||new Set(indices).size!==indices.length){message(`Escolha ${needed} átomos diferentes para ${type==='distance'?'a distância':type==='angle'?'o ângulo':'o diedro'}.`);return false;}
@@ -907,6 +939,12 @@
   $('frame-number').addEventListener('change',()=>seekFrame($('frame-number').valueAsNumber-1));$('frame-number').addEventListener('keydown',event=>{if(event.key==='Enter'){event.preventDefault();seekFrame($('frame-number').valueAsNumber-1);}});
   $('goto-distances').addEventListener('click',()=>{const run=currentTrajectory();if(run)$('distance-run').value=run.id;changeTab('distance');});
   $('distance-run').addEventListener('change',()=>renderDistances(true));$('distance-source').addEventListener('change',()=>renderDistances(true));$('geometry-type').addEventListener('change',()=>renderDistances());
+  $('dihedral-frame-slider').addEventListener('input',()=>setDihedralFrame(Number($('dihedral-frame-slider').value)-1));
+  $('dihedral-frame-number').addEventListener('change',()=>setDihedralFrame(Number($('dihedral-frame-number').value)-1));
+  $('dihedral-frame-number').addEventListener('input',()=>{const value=Number($('dihedral-frame-number').value);if(Number.isInteger(value)&&value>=1&&value<=Number($('dihedral-frame-number').max))setDihedralFrame(value-1);});
+  $('dihedral-previous').addEventListener('click',()=>setDihedralFrame((state.dihedralFrame||0)-1));
+  $('dihedral-next').addEventListener('click',()=>setDihedralFrame((state.dihedralFrame||0)+1));
+  $('dihedral-next-crossing').addEventListener('click',()=>{const next=state.dihedralCrossings?.find(i=>i>(state.dihedralFrame||0))??state.dihedralCrossings?.[0];if(next!==undefined)setDihedralFrame(next);});
   $('add-distance').addEventListener('click',()=>{const run=currentDistance();if(!run?.xyz)return;const type=geometryType(),indices=geometrySelection(type);if(addGeometryMeasure(run,type,indices)){renderDistances();message(`${type==='distance'?'Distância':type==='angle'?'Ângulo':'Diedro'} calculado a partir dos quadros XYZ.`,true);}});
   $('ethanol-preset').addEventListener('click',()=>{const run=currentDistance();if(!run?.xyz||!G.isEthanolSkeleton(run.xyz.elements,run.xyz.frames[0].coords))return;$('geometry-type').value='dihedral';renderDistances();for(const [id,value] of [['atom-a',0],['atom-b',1],['atom-c',2],['atom-d',8]])$(id).value=String(value);if(addGeometryMeasure(run,'dihedral',[0,1,2,8])){renderDistances();message('Preset Etanol C0–C1–O2–H8 adicionado. O diedro é assinado em graus.',true);}});
   $('export-energy').addEventListener('click',exportEnergy);$('export-distance').addEventListener('click',exportDistance);

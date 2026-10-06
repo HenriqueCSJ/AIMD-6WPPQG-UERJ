@@ -162,6 +162,24 @@ html{scroll-padding-top:64px}
 @media(max-width:700px){.guide-shortcut{padding:6px 18px}.guide-shortcut span{display:none}}
 @media print{.guide-shortcut,.expanded-guide-shortcut{display:none}}
 /* Keep the exercise return usable at tablet and phone widths. */
+.dihedral-circular-panel{padding-bottom:20px}
+.dihedral-circular-help{max-width:90ch;margin:12px 0 16px}
+.dihedral-circular-body{display:grid;grid-template-columns:minmax(220px,.75fr) minmax(0,2fr);gap:22px;align-items:center}
+.dihedral-time-controls{display:flex;align-items:flex-end;gap:12px;flex-wrap:wrap}
+.dihedral-time-controls label{display:flex;flex-direction:column;gap:6px;font-size:12px;font-weight:600;color:var(--muted)}
+.dihedral-slider-label{flex:1;min-width:160px}
+.dihedral-time-controls input[type=range]{width:100%;min-height:41px;margin:0;accent-color:var(--teal)}
+.dihedral-number-label input{width:100px;min-height:41px;border:1px solid #bccdc8;border-radius:8px;padding:7px 10px;color:var(--ink);background:white;font-variant-numeric:tabular-nums}
+.dihedral-frame-label{margin:12px 0 16px;font-size:13px;font-variant-numeric:tabular-nums;color:var(--ink)}
+.dihedral-crossing-button{margin-top:12px}
+.dihedral-circle-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:16px}
+.dihedral-circle-card{margin:0;padding:16px 12px;text-align:center;background:#f5f8f6;border:1px solid var(--line);border-radius:10px;min-width:0}
+.dihedral-circle-name{font-size:13px;font-weight:650;overflow-wrap:anywhere}
+.dihedral-circle-svg{display:block;width:100%;max-width:320px;height:auto;margin:8px auto 0}
+.dihedral-circle-value{font-size:20px;font-weight:650;margin:0;font-variant-numeric:tabular-nums}
+.dihedral-circle-previous{font-size:12px;color:var(--muted);margin:4px 0 0;font-variant-numeric:tabular-nums}
+@media(max-width:800px){.dihedral-circular-body{grid-template-columns:minmax(0,1fr);gap:6px}}
+@media(max-width:600px){.dihedral-time-controls{gap:8px}.dihedral-number-label{flex:1}.dihedral-number-label input{width:100%}.dihedral-slider-label{min-width:120px}.dihedral-frame-label{font-size:12px}}
 .topbar{height:auto;min-height:86px;padding-top:14px;padding-bottom:14px;flex-wrap:wrap}
 .topbar nav{flex-wrap:wrap;gap:10px 20px}
 .topbar nav a{line-height:1.4;overflow-wrap:anywhere}

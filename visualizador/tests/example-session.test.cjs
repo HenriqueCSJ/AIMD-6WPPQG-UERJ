@@ -49,9 +49,13 @@ function session({inspectState=false,search='?exemplo=__test_no_auto__',presets=
     constructor(node,options){this.node=node;this.options=options;this.currentTime=null;node.chart=options;node.chartRenderer=this;}
     setCursorX(value){this.currentTime=value;this.node.chartCursor=value;}
   }
+  class CircleDouble{
+    constructor(node,options){this.node=node;this.options=options;node.circle=options;this.setIndex(options.index);}
+    setIndex(index){this.index=index;this.node.circleIndex=index;}
+  }
   const context=vm.createContext({
     console,URLSearchParams,location:{search},OrcaReader,RunAssociation,Geometry,HighlightSelection,TrajectoryTime:{index:timeIndex},
-    chartNumber:value=>String(value),ScientificChart:RendererDouble,
+    chartNumber:value=>String(value),ScientificChart:RendererDouble,DihedralCircleChart:CircleDouble,
     cancelAnimationFrame(id){cancelled.push(id);animationFrames.delete(id);},requestAnimationFrame(callback){const id=++animationId;animationFrames.set(id,callback);return id;},setTimeout,clearTimeout,
     document:{body:new Element('body'),getElementById:id=>nodes[id],createElement:tag=>new Element(tag),addEventListener(type,callback){documentListeners[type]=callback;},
       querySelector:selector=>selector==='.example-card'?card:selector==='.playback-note'?playbackNote:null,
@@ -757,6 +761,31 @@ test('both reported ethanol torsions and CSV preserve every original signed meas
  assert.equal(rows[0][4],'diedro_graus');assert.equal(rows[0].length,5);
  for(let i=1;i<rows.length;i++){const p=chart.series[Math.floor((i-1)/run.xyz.frames.length)].points[(i-1)%run.xyz.frames.length];assert.equal(rows[i][4],p.y);assert.equal(rows[i][3],p.sourceSegment);}
  assert.doesNotMatch(ui.html,/dihedral-display|curva contínua|diedro_continuo/);
+ assert.equal(ui.nodes['dihedral-circular-panel'].hidden,false);
+ assert.equal(ui.nodes['dihedral-circle-chart'].circle.series,chart.series,'Both views share the exact original values');
+ const sourceBefore=JSON.stringify(run.xyz.frames),csvBefore=JSON.stringify(ui.exports.distanceRows());
+ const crossing=chart.series[0].points.findIndex((p,i,points)=>i>0&&Math.abs(p.y-points[i-1].y)>180);
+ assert.equal(crossing,18,'The real H4-C0-C1-O2 record first crosses at frame 19');
+ assert.equal(chart.cursorDash,'3 5');assert.equal(ui.nodes['dihedral-next-crossing'].disabled,false);
+ ui.nodes['dihedral-next-crossing'].fire('click');assert.equal(ui.state.dihedralFrame,crossing);
+ ui.nodes['dihedral-frame-slider'].value=String(crossing+1);ui.nodes['dihedral-frame-slider'].fire('input');
+ assert.equal(ui.nodes['dihedral-circle-chart'].circleIndex,crossing);
+ assert.equal(ui.nodes['distance-chart'].chartCursor,run.xyz.frames[crossing].time);
+ assert.match(ui.nodes['dihedral-frame-label'].textContent,new RegExp(`Quadro ${crossing+1} de`));
+ ui.nodes['dihedral-next'].fire('click');assert.equal(ui.state.dihedralFrame,crossing+1);
+ ui.nodes['dihedral-previous'].fire('click');assert.equal(ui.state.dihedralFrame,crossing);
+ chart.onCursor(run.xyz.frames[20].time);assert.equal(ui.state.dihedralFrame,20);
+ ui.nodes['dihedral-frame-number'].value='999999';ui.nodes['dihedral-frame-number'].fire('change');
+ assert.equal(ui.state.dihedralFrame,run.xyz.frames.length-1);assert.equal(ui.nodes['dihedral-next'].disabled,true);
+ ui.nodes['dihedral-next-crossing'].fire('click');assert.equal(ui.state.dihedralFrame,crossing,'After the last frame the shortcut returns to the first recorded crossing');
+ ui.nodes['dihedral-frame-number'].value='0';ui.nodes['dihedral-frame-number'].fire('change');
+ assert.equal(ui.state.dihedralFrame,0);assert.equal(ui.nodes['dihedral-previous'].disabled,true);
+ assert.equal(JSON.stringify(run.xyz.frames),sourceBefore);assert.equal(JSON.stringify(ui.exports.distanceRows()),csvBefore);
+ ui.nodes['geometry-type'].value='distance';ui.nodes['geometry-type'].fire('change');
+ assert.equal(ui.nodes['dihedral-circular-panel'].hidden,true);assert.equal(ui.state.dihedralCircle,null);
+ ui.nodes['geometry-type'].value='dihedral';ui.nodes['geometry-type'].fire('change');
+ assert.equal(ui.nodes['dihedral-circular-panel'].hidden,false);
+ ui.nodes['clear-button'].fire('click');assert.equal(ui.nodes['dihedral-circular-panel'].hidden,true);assert.equal(ui.state.dihedralRun,null);
 });
 
 test('sparse ethanol plays each actual frame at native cadence without interpolation or camera changes',async()=>{

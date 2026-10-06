@@ -4,10 +4,11 @@
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="Leia resultados de dinâmica molecular do ORCA: energias, temperatura, trajetórias e medidas geométricas. Tudo no seu navegador.">
   <title>Laboratório de trajetórias · AIMD com ORCA</title>
-  <link rel="stylesheet" href="app.css?v=20261006-playback2">
-  <script defer src="orca-parser.js?v=20261006-cell"></script><script defer src="charts.js?v=20261006-native-cadence1"></script><script defer src="run-association.js?v=20261006-cell"></script><script defer src="geometry.js?v=20261006-native-cadence1"></script>
+  <link rel="stylesheet" href="app.css?v=20261006-circular1">
+  <script defer src="orca-parser.js?v=20261006-cell"></script><script defer src="charts.js?v=20261006-circular1"></script><script defer src="run-association.js?v=20261006-cell"></script><script defer src="geometry.js?v=20261006-native-cadence1"></script>
   <script defer src="highlight-selection.js?v=20261001-temperature1"></script>
-  <script defer src="vendor/3Dmol-min.js?v=20261001-performance1"></script><script defer src="examples.js?v=20261006-playback2"></script><script defer src="example-loader.js?v=20260929-loading1"></script><script defer src="app.js?v=20261006-native-cadence1"></script>
+  <script defer src="dihedral-circle.js?v=20261006-circular1"></script>
+  <script defer src="vendor/3Dmol-min.js?v=20261001-performance1"></script><script defer src="examples.js?v=20261006-playback2"></script><script defer src="example-loader.js?v=20260929-loading1"></script><script defer src="app.js?v=20261006-circular1"></script>
 </head>
 <body>
 <a class="skip" href="#main">Ir para o conteúdo</a>
@@ -188,7 +189,24 @@
         <div id="atom-pair-controls" class="pair-controls"><label>Medida<select id="geometry-type"><option value="distance">Distância · 2 átomos</option><option value="angle">Ângulo · 3 átomos</option><option value="dihedral">Diedro assinado · 4 átomos</option></select></label><div id="geometry-atom-a"><label>Átomo 1<select id="atom-a"></select></label></div><span class="pair-dash" aria-hidden="true">—</span><div id="geometry-atom-b"><label>Átomo 2<select id="atom-b"></select></label></div><div id="geometry-atom-c" hidden><span class="pair-dash" aria-hidden="true">—</span><label>Átomo 3<select id="atom-c"></select></label></div><div id="geometry-atom-d" hidden><span class="pair-dash" aria-hidden="true">—</span><label>Átomo 4<select id="atom-d"></select></label></div><button type="button" class="button secondary" id="add-distance">Adicionar medida</button><button type="button" class="button" id="ethanol-preset" hidden>Etanol C–C–O–H</button><p id="geometry-help" class="small muted">Índices começam em 0, como no ORCA. Medidas usam as coordenadas de cada quadro.</p></div>
         <p id="geometry-preview-note" class="preview-note small muted" hidden></p>
         <div id="colvar-controls" class="series-controls" hidden></div><div id="distance-chips" class="distance-chips"></div>
-        <div class="chart-card"><div class="chart-heading"><h3 id="distance-chart-title">Medidas geométricas</h3><span id="distance-chart-unit-note" class="muted small">Distâncias em Å</span></div><div id="distance-chart" class="chart"></div></div><div id="distance-stats" class="stats-row"></div>
+        <div class="chart-card"><div class="chart-heading"><h3 id="distance-chart-title">Medidas geométricas</h3><span id="distance-chart-unit-note" class="muted small">Distâncias em Å</span></div><div id="distance-chart" class="chart"></div></div>
+        <section id="dihedral-circular-panel" class="chart-card dihedral-circular-panel" aria-labelledby="dihedral-circular-title" hidden>
+          <div class="chart-heading"><h3 id="dihedral-circular-title">Orientação circular</h3><span class="muted small">−180° e +180° no mesmo lugar</span></div>
+          <p class="small muted dihedral-circular-help">Percorra o tempo abaixo ou passe pelo gráfico acima. O círculo mostra o mesmo diedro: ponto cheio no quadro atual e ponto vazado no anterior, sem criar posições intermediárias.</p>
+          <div class="dihedral-circular-body"><div class="dihedral-controls">
+          <div class="dihedral-time-controls">
+            <button id="dihedral-previous" type="button" class="button small-button" aria-label="Quadro anterior na orientação circular">←</button>
+            <label class="dihedral-slider-label" for="dihedral-frame-slider">Percorrer os quadros originais<input id="dihedral-frame-slider" type="range" min="1" max="1" value="1" step="1" aria-describedby="dihedral-frame-label"></label>
+            <button id="dihedral-next" type="button" class="button small-button" aria-label="Próximo quadro na orientação circular">→</button>
+            <label class="dihedral-number-label" for="dihedral-frame-number">Ir ao quadro<input id="dihedral-frame-number" type="number" min="1" max="1" value="1" step="1" inputmode="numeric"></label>
+          </div>
+          <button id="dihedral-next-crossing" type="button" class="button small-button dihedral-crossing-button">Próxima passagem por ±180°</button>
+          <p id="dihedral-frame-label" class="dihedral-frame-label"></p>
+          </div>
+          <div id="dihedral-circle-chart" class="dihedral-circle-grid"></div>
+          </div>
+        </section>
+        <div id="distance-stats" class="stats-row"></div>
       </div>
       <aside class="interpret"><h3>Uma medida é uma observação. A interpretação precisa do contexto.</h3><p>A curva oscila em uma faixa ou muda de maneira persistente? Compare a medida com a trajetória. Ângulos e diedros estão em graus; distâncias estão em Å e não são misturados no mesmo gráfico.</p><p>−180° e +180° representam a mesma orientação. Uma pequena oscilação em torno desse limite aparece nas duas bordas do gráfico. As lacunas evitam uma linha falsa entre elas; os valores assinados originais são preservados, sem suavização ou transformação angular.</p></aside>
     </section>
