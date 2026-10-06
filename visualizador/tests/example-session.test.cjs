@@ -6,6 +6,7 @@ const path=require('node:path');
 const vm=require('node:vm');
 const OrcaReader=require('../orca-parser.js'),Geometry=require('../geometry.js'),HighlightSelection=require('../highlight-selection.js');
 const {timeIndex}=require('../charts.js');
+const RunAssociation=require('../run-association.js');
 const viewer=path.resolve(__dirname,'..');
 const inputFile=(name,text)=>new File([text],name);
 const deferred=()=>{let resolve,reject;const promise=new Promise((a,b)=>{resolve=a;reject=b;});return {promise,resolve,reject};};
@@ -49,7 +50,7 @@ function session({inspectState=false,search='?exemplo=__test_no_auto__',presets=
     setCursorX(value){this.currentTime=value;this.node.chartCursor=value;}
   }
   const context=vm.createContext({
-    console,URLSearchParams,location:{search},OrcaReader,Geometry,HighlightSelection,TrajectoryTime:{index:timeIndex},
+    console,URLSearchParams,location:{search},OrcaReader,RunAssociation,Geometry,HighlightSelection,TrajectoryTime:{index:timeIndex},
     chartNumber:value=>String(value),ScientificChart:RendererDouble,
     cancelAnimationFrame(id){cancelled.push(id);animationFrames.delete(id);},requestAnimationFrame(callback){const id=++animationId;animationFrames.set(id,callback);return id;},setTimeout,clearTimeout,
     document:{body:new Element('body'),getElementById:id=>nodes[id],createElement:tag=>new Element(tag),addEventListener(type,callback){documentListeners[type]=callback;},
@@ -687,4 +688,187 @@ test('clearing a loaded session releases labels, models, contact shapes and cach
   assert.equal(ui.counts.labelsDisposed,96);assert.equal(ui.counts.shapesRemoved,1);
   assert.equal(ui.state.model,null);assert.equal(ui.state.renderAtoms,null);assert.equal(ui.state.renderFrame,null);assert.equal(ui.state.frameGeometry,null);assert.equal(ui.state.labelRecords.length,0);
   assert.equal(ui.nodes.workspace.hidden,true);
+});
+
+
+function renamedWaterUploads(){
+ const folder=path.join(viewer,'../exercicios/1-agua-dft/resultados/agua_xtb2_nve'),read=suffix=>fs.readFileSync(path.join(folder,'agua_xtb2_nve'+suffix),'utf8');
+ return {out:inputFile('water.out',read('.out')),csv:inputFile('water-md-ener.csv',read('-md-ener.csv')),xyz:inputFile('agua_xtb2_nve-traj.xyz',read('-traj.xyz'))};
+}
+async function upload(ui,files){await ui.nodes['file-input'].fire('change',{target:{files}});}
+
+test('own files with different names populate every panel together, incrementally, without CSV, or without output',async()=>{
+ for(const order of [['out,csv,xyz'],['out,csv','xyz'],['xyz','out,csv'],['out,xyz'],['csv,xyz'],['csv','csv,out,xyz','xyz']]){
+   const ui=session({inspectState:true}),files=renamedWaterUploads();
+   for(const batch of order)await upload(ui,batch.split(',').map(key=>files[key]));
+   assert.equal(ui.state.runs.length,1,order.join(' -> '));const run=ui.state.runs[0];
+   assert.equal(run.reference,false);assert.equal(run.xyz.frames.length,1001);assert.equal((run.energy||run.out).rows.length,1001);
+   assert.equal(ui.nodes['trajectory-run'].options.length,1);assert.equal(ui.nodes['trajectory-data-link'].hidden,true);
+   ui.trajectoryHooks.renderTrajectoryChart(run);
+   assert.equal(ui.nodes['trajectory-energy-chart'].hidden,false);assert.equal(ui.nodes['trajectory-temperature-chart'].hidden,false);
+   assert.equal(ui.state.energyIndex.exact(500,run.xyz.frames.at(-1)).total,(run.energy||run.out).rows.at(-1).total);
+   if(order.join(',').includes('out'))assert.equal(run.out.metadata.ensemble,'NVE');
+   ui.nodes['tab-energy'].fire('click');assert.equal(ui.nodes['energy-chart'].chart.series.length,3,'One calculation, not duplicated curves');
+   ui.nodes['tab-distance'].fire('click');assert.equal(ui.nodes['distance-run'].options.length,1);
+ }
+});
+
+test('all three independent basenames still unite energies, conditions and trajectory in every order',async()=>{
+ const original=renamedWaterUploads(),files={out:inputFile('saida.out',await original.out.text()),csv:inputFile('energias.csv',await original.csv.text()),xyz:original.xyz};
+ for(const batches of [['out,csv,xyz'],['out','csv','xyz'],['out','xyz','csv'],['csv','out','xyz'],['csv','xyz','out'],['xyz','out','csv'],['xyz','csv','out']]){
+  const ui=session({inspectState:true});for(const batch of batches)await upload(ui,batch.split(',').map(key=>files[key]));
+  assert.equal(ui.state.runs.length,1,batches.join(' -> '));const run=ui.state.runs[0];assert.ok(run.xyz&&run.out&&run.energy);assert.equal(run.out.metadata.ensemble,'NVE');
+  assert.equal(ui.nodes['trajectory-data-link'].hidden,true);
+ }
+});
+
+test('renamed Colvars join verified XYZ and conditions, while contradictory measures stay separate',async()=>{
+ const folder=path.join(viewer,'../exercicios/7-dinamica-complexo/resultados/zn_parede');
+ const files=Object.fromEntries([['out','.out','saida.out'],['csv','-md-ener.csv','energias.csv'],['xyz','-traj.xyz','movimento.xyz'],['colvars','-colvars.csv','distancias.csv']].map(([key,suffix,name])=>[key,inputFile(name,fs.readFileSync(path.join(folder,'zn_parede'+suffix),'utf8'))]));
+ for(const batches of [['out,csv,xyz,colvars'],['colvars','xyz','out','csv'],['xyz,csv','colvars','out']]){
+  const ui=session({inspectState:true});for(const batch of batches)await upload(ui,batch.split(',').map(key=>files[key]));
+  assert.equal(ui.state.runs.length,1,batches.join(' -> '));assert.equal(ui.state.runs[0].out.metadata.colvars.length,12);assert.equal(ui.state.runs[0].colvars.columns.length,12);
+ }
+ const foreign=fs.readFileSync(path.join(viewer,'../exercicios/7-dinamica-complexo/resultados/zn_sem_parede/zn_sem_parede-colvars.csv'),'utf8');
+ const ui=session({inspectState:true});await upload(ui,[inputFile('calc.out',await files.out.text()),inputFile('calc-md-ener.csv',await files.csv.text()),inputFile('calc-traj.xyz',await files.xyz.text()),inputFile('calc-colvars.csv',foreign)]);
+ assert.equal(ui.state.runs.length,2);const trajectory=ui.state.runs.find(run=>run.xyz);assert.ok(trajectory.energy&&trajectory.out);assert.equal(trajectory.colvars,undefined);assert.match(ui.nodes.message.textContent,/Colvar|distância/);
+});
+
+test('ambiguous matching uploads wait for a manual choice and keep the other calculation intact',async()=>{
+ const ui=session({inspectState:true}),files=renamedWaterUploads(),second=inputFile('another-md-ener.csv',await files.csv.text());
+ await upload(ui,[files.csv,second,files.xyz]);assert.equal(ui.state.runs.length,3);assert.equal(ui.nodes['trajectory-data-link'].hidden,false);
+ assert.equal(ui.nodes['trajectory-energy-source'].options.length,3);assert.equal(ui.nodes['associate-trajectory-data'].disabled,true);
+ const chosen=ui.state.runs.find(run=>run.key==='another');ui.nodes['trajectory-energy-source'].value=chosen.id;
+ ui.nodes['trajectory-energy-source'].fire('change');ui.nodes['associate-trajectory-data'].fire('click');
+ assert.equal(ui.state.runs.length,2);assert.ok(chosen.xyz);assert.equal(ui.nodes['trajectory-run'].value,String(chosen.id));
+ assert.equal(ui.nodes['trajectory-data-link'].hidden,true);assert.ok(ui.state.runs.find(run=>run.key==='water').energy);
+});
+
+test('a static XYZ never replaces the full trajectory, regardless of upload order or repetition',async()=>{
+ const folder=path.join(viewer,'../exercicios/8-agua-no-fulereno/resultados/agua_c60');
+ const files=Object.fromEntries([['out','.out'],['csv','-md-ener.csv'],['xyz','-traj.xyz'],['static','.xyz']].map(([key,suffix])=>[key,inputFile('agua_c60'+suffix,fs.readFileSync(path.join(folder,'agua_c60'+suffix),'utf8'))]));
+ for(const batches of [['out,csv,xyz,static'],['static,out,csv,xyz'],['out,csv,static','xyz'],['static','out,csv,xyz'],['out,csv,xyz','static'],['out,csv,xyz,static','out,csv,xyz,static']]){
+  const ui=session({inspectState:true});for(const batch of batches)await upload(ui,batch.split(',').map(key=>files[key]));
+  assert.equal(ui.state.runs.length,2,batches.join(' -> '));
+  const dynamic=ui.state.runs.find(run=>run.xyz?.frames.length>1),structure=ui.state.runs.find(run=>run.xyz?.frames.length===1);
+  assert.equal(dynamic.xyz.frames.length,2001);assert.ok(dynamic.energy,batches.join(' -> '));assert.equal(dynamic.energy.rows.length,2001);assert.ok(dynamic.out);
+  assert.equal(structure.xyz.name,'agua_c60.xyz');assert.equal(structure.energy,undefined);
+  const selected=batches.at(-1)==='static'?structure:dynamic;
+  assert.equal(ui.nodes['trajectory-run'].value,String(selected.id),batches.join(' -> '));assert.equal(ui.nodes['play-button'].disabled,selected===structure);
+  assert.equal(ui.state.runs.reduce((count,run)=>count+run.files.length,0),4);
+ }
+});
+
+test('matching basenames cannot pair another calculation with incompatible trajectory energies',async()=>{
+ const files=renamedWaterUploads(),folder=path.join(viewer,'../exercicios/1-agua-dft/resultados/agua_xtb2_csvr');
+ const csv=inputFile('calc-md-ener.csv',await files.csv.text()),xyz=inputFile('calc-traj.xyz',fs.readFileSync(path.join(folder,'agua_xtb2_csvr-traj.xyz'),'utf8'));
+ for(const batches of [[csv,xyz],[xyz,csv]])for(const incremental of [false,true]){
+  const ui=session({inspectState:true});if(incremental){for(const file of batches)await upload(ui,[file]);}else await upload(ui,batches);
+  assert.equal(ui.state.runs.length,2);assert.equal(ui.state.runs.some(run=>run.xyz&&run.energy),false);
+  assert.match(ui.nodes.message.textContent,/energias potenciais.*diferentes/);assert.equal(ui.nodes['trajectory-data-link'].hidden,true);
+ }
+});
+
+test('different contents in the same slot are preserved and repeated contents are reused',async()=>{
+ const ui=session({inspectState:true}),a=inputFile('calc-md-ener.csv','# Step; Sim. Time; E_Tot\n0;0;-1\n1;1;-1.1\n'),b=inputFile('calc-md-ener.csv','# Step; Sim. Time; E_Tot\n0;0;-2\n1;1;-2.1\n');
+ await upload(ui,[a,b]);assert.equal(ui.state.runs.length,2);
+ assert.deepEqual(Array.from(ui.state.runs,run=>run.energy.rows[0].total).sort((a,b)=>a-b),[-2,-1]);
+ await upload(ui,[a,b]);assert.equal(ui.state.runs.length,2);
+});
+
+test('associating a renamed energy source preserves the ensemble chosen for its XYZ',async()=>{
+ const ui=session({inspectState:true}),files=renamedWaterUploads();await upload(ui,[files.xyz]);ui.state.runs[0].ensembleOverride='NVT';
+ await upload(ui,[files.csv]);assert.equal(ui.state.runs.length,1);assert.equal(ui.state.runs[0].ensembleOverride,'NVT');
+});
+
+test('energy rectangle zoom preserves physical time, original delta baseline and full CSV export',async()=>{
+ const ui=session({inspectState:true}),load=ui.choose('range'),data=preset('range',{energyRows:[0,1,2,3].map(step=>({time:step*100,step,kinetic:.1,potential:-1+step*.01,total:-.9+step*.01,temperature:300+step,segment:0}))});
+ ui.requests[0].resolve(data);await load;const original=JSON.stringify(ui.state.runs[0].energy),exported=JSON.stringify(ui.exports.energyRows());
+ ui.nodes['energy-unit'].value='eh';ui.nodes['energy-unit'].fire('change');ui.nodes['time-unit'].value='ps';ui.nodes['time-unit'].fire('change');
+ ui.nodes['energy-chart'].chart.onRangeSelect({x:[.1,.2],y:[.005,.025]});
+ assert.equal(ui.nodes['energy-window-from'].value,'100');assert.equal(ui.nodes['energy-window-to'].value,'200');
+ assert.deepEqual(Array.from(ui.nodes['energy-chart'].chart.yDomain),[.005,.025]);
+ assert.deepEqual(Array.from(ui.nodes['energy-chart'].chart.xDomain),[.1,.2]);
+ assert.ok(Math.abs(ui.nodes['energy-chart'].chart.series[0].points[0].y-.01)<1e-12,'Delta remains relative to the original first point');
+ assert.equal(JSON.stringify(ui.exports.energyRows()),exported,'Zoom does not truncate the original export');
+ ui.nodes['temperature-chart'].chart.onRangeSelect({x:[.15,.25],y:[0,1000]});assert.equal(ui.nodes['energy-y-min'].value,'0.005');
+ ui.nodes['energy-mode'].value='absolute';ui.nodes['energy-mode'].fire('change');assert.equal(ui.nodes['energy-y-min'].value,'');assert.equal(ui.nodes['energy-chart'].chart.yDomain,null);
+ ui.nodes['energy-window-full'].fire('click');assert.equal(ui.nodes['energy-window-from'].value,'');assert.equal(ui.nodes['energy-chart'].chart.series[0].points.length,4);
+ assert.equal(JSON.stringify(ui.state.runs[0].energy),original);
+});
+
+test('numeric zoom rejects inverted limits, restores full data and clears limits when replacing an example',async()=>{
+ const ui=session({inspectState:true}),load=ui.choose('range');ui.requests[0].resolve(preset('range'));await load;
+ ui.nodes['energy-window-from'].value='10';ui.nodes['energy-window-to'].value='0';ui.nodes['energy-window-to'].fire('change');
+ assert.equal(ui.nodes['energy-range-status'].hidden,false);assert.match(ui.nodes['energy-range-status'].textContent,/tempo inicial/);
+ ui.nodes['energy-window-full'].fire('click');ui.nodes['energy-y-min'].value='2';ui.nodes['energy-y-max'].value='1';ui.nodes['energy-y-max'].fire('change');
+ assert.equal(ui.nodes['energy-range-status'].hidden,false);assert.match(ui.nodes['energy-range-status'].textContent,/mínima/);
+ const other=ui.choose('other');ui.requests[1].resolve(preset('other'));await other;
+ for(const id of ['energy-window-from','energy-window-to','energy-y-min','energy-y-max'])assert.equal(ui.nodes[id].value,'');
+ assert.equal(ui.nodes['energy-range-status'].hidden,true);
+});
+
+async function energyRangeReviewSession(rows){
+ const ui=session({inspectState:true}),load=ui.choose('range-review');
+ ui.requests[0].resolve(preset('range-review',{energyRows:rows||[0,250,500].map((time,step)=>({time,step,kinetic:.1,potential:-1+step*.01,total:-.9+step*.01,temperature:300+step,segment:0}))}));await load;
+ return ui;
+}
+
+test('selecting the full seconds axis retains every recorded endpoint and the original export',async()=>{
+ const ui=await energyRangeReviewSession(),original=JSON.stringify(ui.state.runs[0].energy),exported=JSON.stringify(ui.exports.energyRows());
+ ui.nodes['time-unit'].value='s';ui.nodes['time-unit'].fire('change');
+ const chart=ui.nodes['energy-chart'].chart;assert.equal(chart.xDomain[1],5e-13);
+ chart.onRangeSelect({x:Array.from(chart.xDomain),y:[-1,100]});
+ assert.equal(ui.nodes['energy-window-to'].value,'500');assert.equal(ui.nodes['energy-chart'].chart.series[0].points.length,3);
+ assert.equal(ui.nodes['energy-chart'].chart.series[0].points.at(-1).x,5e-13);
+ // A manually entered limit with the same round-trip noise retains that sample
+ // for statistics too; a materially smaller limit does not.
+ ui.nodes['energy-window-to'].value=String(5e-13/1e-15);ui.nodes['energy-window-to'].fire('change');
+ assert.match(ui.nodes['energy-stats'].innerHTML,/T média no intervalo de tempo: 301 K/);
+ ui.nodes['energy-window-to'].value='499.99';ui.nodes['energy-window-to'].fire('change');
+ assert.match(ui.nodes['energy-stats'].innerHTML,/T média no intervalo de tempo: 300.5 K/);
+ assert.equal(JSON.stringify(ui.state.runs[0].energy),original);assert.equal(JSON.stringify(ui.exports.energyRows()),exported);
+});
+
+test('invalid range notices clear when all data are deselected or a static example replaces them',async()=>{
+ const ui=await energyRangeReviewSession();
+ const invalid=()=>{ui.nodes['energy-window-from'].value='10';ui.nodes['energy-window-to'].value='0';ui.nodes['energy-window-to'].fire('change');assert.equal(ui.nodes['energy-range-status'].hidden,false);};
+ invalid();ui.toggle(0,false);assert.equal(ui.nodes['energy-range-status'].hidden,true);assert.equal(ui.nodes['energy-range-status'].textContent,'');
+ ui.toggle(0,true);invalid();const load=ui.choose('solvator');ui.requests[1].resolve(preset('solvator',{staticOnly:true}));await load;
+ assert.equal(ui.nodes['energy-range-status'].hidden,true);assert.equal(ui.nodes['energy-range-status'].textContent,'');
+ for(const id of ['energy-window-from','energy-window-to','energy-y-min','energy-y-max'])assert.equal(ui.nodes[id].value,'');
+});
+
+test('a window between saved samples clips their original segment without inventing statistics',async()=>{
+ const ui=await energyRangeReviewSession(),original=JSON.stringify(ui.state.runs[0].energy),exported=JSON.stringify(ui.exports.energyRows());
+ ui.nodes['energy-window-from'].value='100';ui.nodes['energy-window-to'].value='200';ui.nodes['energy-window-to'].fire('change');
+ const energy=ui.nodes['energy-chart'].chart,temperature=ui.nodes['temperature-chart'].chart;
+ assert.deepEqual(Array.from(energy.xDomain),[100,200]);assert.deepEqual(Array.from(temperature.xDomain),[100,200]);
+ assert.deepEqual(Array.from(energy.series[0].points,p=>p.x),[0,250]);assert.deepEqual(Array.from(temperature.series[0].points,p=>p.x),[0,250]);
+ assert.match(ui.nodes['energy-range-status'].textContent,/linhas entre registros vizinhos.*não contém uma amostra gravada/);
+ assert.match(ui.nodes['energy-stats'].innerHTML,/<strong>—<\/strong>/);assert.match(ui.nodes['energy-stats'].innerHTML,/Temperatura indisponível/);
+ assert.equal(JSON.stringify(ui.state.runs[0].energy),original);assert.equal(JSON.stringify(ui.exports.energyRows()),exported);
+});
+
+test('clipping neighbors do not enter window statistics and are omitted at exact sampled limits',async()=>{
+ const ui=await energyRangeReviewSession();ui.nodes['energy-window-from'].value='100';ui.nodes['energy-window-to'].value='400';ui.nodes['energy-window-to'].fire('change');
+ assert.deepEqual(Array.from(ui.nodes['energy-chart'].chart.series[0].points,p=>p.x),[0,250,500]);
+ assert.match(ui.nodes['energy-stats'].innerHTML,/≈ 0,00 kJ\/mol/);assert.match(ui.nodes['energy-stats'].innerHTML,/T média no intervalo de tempo: 301 K/);
+ assert.equal(ui.nodes['energy-range-status'].hidden,true);
+ ui.nodes['energy-window-from'].value='250';ui.nodes['energy-window-to'].value='500';ui.nodes['energy-window-to'].fire('change');
+ assert.deepEqual(Array.from(ui.nodes['energy-chart'].chart.series[0].points,p=>p.x),[250,500]);
+ ui.nodes['energy-window-from'].value='100';ui.nodes['energy-window-to'].value='100';ui.nodes['energy-window-to'].fire('change');
+ assert.equal(ui.nodes['energy-chart'].chart.series[0].points.length,0,'A zero-width interval between samples does not expand to its neighbors');
+});
+
+test('a crop between different segments or missing values never creates a connecting line',async()=>{
+ for(const rows of [
+   [{time:0,step:0,total:0,temperature:300,segment:0},{time:250,step:1,total:1,temperature:301,segment:1}],
+   [{time:0,step:0,total:0,temperature:300,segment:0},{time:250,step:1,total:null,temperature:null,segment:0}]
+ ]){
+   const ui=await energyRangeReviewSession(rows);ui.nodes['energy-window-from'].value='100';ui.nodes['energy-window-to'].value='200';ui.nodes['energy-window-to'].fire('change');
+   assert.match(ui.nodes['energy-range-status'].textContent,/Sem pontos de energia/);assert.doesNotMatch(ui.nodes['energy-range-status'].textContent,/linhas entre registros/);
+   const series=ui.nodes['energy-chart'].chart.series.find(s=>s.name==='Total · E');
+   assert.ok(!series||series.points.length===0||series.points.some(p=>p.y===null));
+ }
 });

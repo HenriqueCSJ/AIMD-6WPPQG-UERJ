@@ -1,4 +1,4 @@
-/* ORCA 6.1 MD reader. Shared text and chunked-file readers for browser and tests. */
+/* ORCA 5/6 MD reader. Shared text and chunked-file readers for browser and tests. */
 (function (root, factory) {
   if (typeof module === 'object' && module.exports) module.exports = factory();
   else root.OrcaReader = factory();
@@ -117,6 +117,7 @@
     const hasMD=/!.*\bMD\b/i.test(input) || /ORCA ab initio Molecular Dynamics/.test(text);
     const thermostats=[...input.matchAll(/Thermostat\s+(\S+)(?:\s+([\d.]+)_?K)?/ig)].map(m=>m[0].toLowerCase());
     const timesteps=[...input.matchAll(/Timestep\s+([\d.]+)(?:_|\s+)?fs/ig)].map(m=>Number(m[1]));
+    const trajectoryFiles=[...input.matchAll(/\bDump\s+Position\b[^\n]*?\bFilename\s+(?:"([^"]+)"|'([^']+)'|(\S+))/ig)].map(match=>match[1]||match[2]||match[3]);
     const stages=stagesFromInput(input);
     const changingConditions=new Set(thermostats).size>1||new Set(timesteps).size>1||/\bThermostat\b[^\n]*\bRamp\b/i.test(input);
     const activeThermostat=thermo&&!/^none$/i.test(thermo[1]);
@@ -125,7 +126,7 @@
     const sphere=sphereLine.match(/\b(?:Cell|Walls)\s+Sphere\s+([+-]?[\d.]+)\s*,\s*([+-]?[\d.]+)\s*,\s*([+-]?[\d.]+)\s*,\s*([\d.]+)(?:_A(?:ngstrom)?)?(?=\s*(?:Spring\b|Fixed\b|$))/im);
     const sphereValues=sphere?sphere.slice(1,5).map(Number):null;
     const wallSphere=sphereValues&&sphereValues.every(Number.isFinite)&&sphereValues[3]>0&&!/\b(?:Elastic|Pressure)\b/i.test(sphereLine)?{center:{x:sphereValues[0],y:sphereValues[1],z:sphereValues[2]},radius:sphereValues[3]}:null;
-    return {stages,wallSphere,version:version?.[1]||null,method:(input.match(/^\s*!\s*(.*)$/m)||[])[1]||null,ensemble:changingConditions||/\bBarostat\s+(?!None\b)/i.test(input)?'unknown':activeThermostat?'NVT':hasMD&&input?'NVE':'unknown',thermostat:activeThermostat?thermo[1]:null,targetTemperature:changingConditions?null:thermo?.[2]?Number(thermo[2]):null,timestep:new Set(timesteps).size>1?null:dt?Number(dt[1]):null,charge:charge?Number(charge[1]):null,multiplicity:charge?Number(charge[2]):null,wall:/\b(?:Cell|Walls)\s+(Sphere|Cube|Cuboid)/i.test(input),normal:/ORCA TERMINATED NORMALLY/.test(text),failed:/ORCA finished by error termination|ERROR TERMINATION|orca_md aborted by error|Errors occurred in the MD loop/.test(text),runtime:runtime?Number(runtime[1])*86400+Number(runtime[2])*3600+Number(runtime[3])*60+Number(runtime[4])+Number(runtime[5])/1000:null,colvars:defs,finalEnergy:finalE.length?Number(finalE.at(-1)[1]):null,hasMD,changingConditions};
+    return {trajectoryFiles,stages,wallSphere,version:version?.[1]||null,method:(input.match(/^\s*!\s*(.*)$/m)||[])[1]||null,ensemble:changingConditions||/\bBarostat\s+(?!None\b)/i.test(input)?'unknown':activeThermostat?'NVT':hasMD&&input?'NVE':'unknown',thermostat:activeThermostat?thermo[1]:null,targetTemperature:changingConditions?null:thermo?.[2]?Number(thermo[2]):null,timestep:new Set(timesteps).size>1?null:dt?Number(dt[1]):null,charge:charge?Number(charge[1]):null,multiplicity:charge?Number(charge[2]):null,wall:/\b(?:Cell|Walls)\s+(Sphere|Cube|Cuboid)/i.test(input),normal:/ORCA TERMINATED NORMALLY/.test(text),failed:/ORCA finished by error termination|ERROR TERMINATION|orca_md aborted by error|Errors occurred in the MD loop/.test(text),runtime:runtime?Number(runtime[1])*86400+Number(runtime[2])*3600+Number(runtime[3])*60+Number(runtime[4])+Number(runtime[5])/1000:null,colvars:defs,finalEnergy:finalE.length?Number(finalE.at(-1)[1]):null,hasMD,changingConditions};
   }
   function outReader(name) {
     const warnings=[],rows=[],input=[],markers=new Map();
@@ -135,7 +136,7 @@
       if(/ORCA|O\s+R\s+C\s+A|Program Version/.test(line))recognized=true;
       if(/^\s*\|\s*\d+>/.test(line))input.push(line);
       patterns.forEach((pattern,index)=>{if(pattern.test(line)&&(!markers.has(index)||index===2))markers.set(index,line);});
-      if(/^\s*Step\s*\|\s*Sim\. Time\s*\|/.test(line)) {header=line.split('|').map(x=>x.trim());cuts=[-1,...[...line.matchAll(/\|/g)].map(m=>m.index)];return;}
+      if(/^\s*(?:Step\s*)?\|\s*Sim\. Time\s*\|/.test(line)) {header=line.split('|').map(x=>x.trim());if(!header[0])header[0]='Step';cuts=[-1,...[...line.matchAll(/\|/g)].map(m=>m.index)];return;}
       if(!header || !/^\s*\d+\s+[+-]?\d/.test(line))return;
       const fields=cuts.map((c,i)=>line.slice(c+1,i+1<cuts.length?cuts[i+1]:line.length));
       const row=energyRow(header,fields);

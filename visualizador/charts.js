@@ -2,9 +2,12 @@
 (function(root){
   'use strict';
   const NS='http://www.w3.org/2000/svg';
+  let nextClipId=0;
   function el(tag,attrs={},text){const node=document.createElementNS(NS,tag);Object.entries(attrs).forEach(([k,v])=>node.setAttribute(k,String(v)));if(text!==undefined)node.textContent=text;return node;}
-  function number(n,precision=5){if(!Number.isFinite(n))return '—';if(n===0)return '0';if(Math.abs(n)<.001||Math.abs(n)>=1e7)return n.toExponential(Math.min(precision-1,8)).replace(/(\.\d*?[1-9])0+e/,'$1e').replace(/\.0+e/,'e').replace('e-','e−');return new Intl.NumberFormat('pt-BR',{maximumSignificantDigits:precision}).format(n);}
-  function ticks(min,max,count){if(min===max)return [min];const rough=(max-min)/count,power=10**Math.floor(Math.log10(rough)),ratio=rough/power,step=(ratio<=1?1:ratio<=2?2:ratio<=5?5:10)*power;const result=[];for(let t=Math.ceil(min/step)*step;t<=max+step*1e-8;t+=step)result.push(Math.abs(t)<step*1e-9?0:t);return result;}
+  function number(n,precision=5){if(!Number.isFinite(n))return '—';if(n===0)return '0';if(Math.abs(n)<.001||Math.abs(n)>=1e7)return n.toExponential(Math.min(precision-1,14)).replace(/(\.\d*?[1-9])0+e/,'$1e').replace(/\.0+e/,'e').replace('e-','e−');return new Intl.NumberFormat('pt-BR',{maximumSignificantDigits:precision}).format(n);}
+  function ticks(min,max,count){if(min===max)return [min];const rough=(max-min)/count,power=10**Math.floor(Math.log10(rough)),ratio=rough/power,step=(ratio<=1?1:ratio<=2?2:ratio<=5?5:10)*power;const result=[];for(let t=Math.ceil(min/step)*step;t<=max+step*1e-8;){result.push(Math.abs(t)<step*1e-9?0:t);const next=t+step;if(next===t)break;t=next;}return result;}
+  const domain=value=>Array.isArray(value)&&value.length===2&&value.every(Number.isFinite)&&value[1]>value[0]?value:null;
+  const axisDigits=(min,max,floor=3)=>Math.min(15,Math.max(floor,Math.ceil(Math.log10(Math.max(Math.abs(min),Math.abs(max),Number.MIN_VALUE)))-Math.floor(Math.log10(max-min))+2));
   // Index timestamps once. XYZ and energy files may use different dump strides;
   // an array offset is never a physical-time correspondence.
   function timeIndex(samples,valid=()=>true,equivalentFields=[]){
@@ -59,37 +62,59 @@
       const width=Math.max(240,host.clientWidth||800),height=o.height||250,small=width<440,margin={l:small?58:76,r:18,t:34,b:48},w=width-margin.l-margin.r,h=height-margin.t-margin.b;
       let xmin=Infinity,xmax=-Infinity,ymin=Infinity,ymax=-Infinity;
       all.forEach(p=>{xmin=Math.min(xmin,p.x);xmax=Math.max(xmax,p.x);ymin=Math.min(ymin,p.y);ymax=Math.max(ymax,p.y);});
-      if(o.xDomain){xmin=o.xDomain[0];xmax=o.xDomain[1];}
+      const xDomain=domain(o.xDomain),yDomain=domain(o.yDomain),canSelect=typeof o.onRangeSelect==='function';
+      if(xDomain){xmin=xDomain[0];xmax=xDomain[1];}
       (o.references||[]).forEach(r=>{ymin=Math.min(ymin,r.value);ymax=Math.max(ymax,r.value);});
       if(xmin===xmax)xmax=xmin+1;
-      const pad=(ymax-ymin||Math.max(Math.abs(ymax)*.01,.001))*.09;ymin-=pad;ymax+=pad;
+      if(yDomain){ymin=yDomain[0];ymax=yDomain[1];}
+      else{const pad=(ymax-ymin||Math.max(Math.abs(ymax)*.01,.001))*.09;ymin-=pad;ymax+=pad;}
       const x=v=>margin.l+(v-xmin)/(xmax-xmin)*w,y=v=>margin.t+h-(v-ymin)/(ymax-ymin)*h;
-      const svg=el('svg',{viewBox:`0 0 ${width} ${height}`,height,role:'img',tabindex:0,'aria-label':`${o.title}. ${o.yLabel}. ${o.xLabel}. Use as setas esquerda e direita para consultar os pontos.${o.onSeek?' Enter seleciona o quadro mais próximo.':''}`});
+      const svg=el('svg',{viewBox:`0 0 ${width} ${height}`,height,role:'img',tabindex:0,'aria-label':`${o.title}. ${o.yLabel}. ${o.xLabel}. Use as setas esquerda e direita para consultar os pontos.${o.onSeek?' Enter seleciona o quadro mais próximo.':''}${canSelect?' Arraste para selecionar uma faixa; Escape cancela. Os campos de intervalo permitem ajustar os limites pelo teclado.':''}`});
       svg.append(el('title',{},o.title));svg.append(el('text',{x:0,y:17,fill:'#536975','font-size':12,'font-family':'inherit'},o.yLabel));
-      const yDigits=Math.min(10,Math.max(3,Math.ceil(Math.log10(Math.max(Math.abs(ymin),Math.abs(ymax),1)))-Math.floor(Math.log10(ymax-ymin))+2));
+      // Clip only the data, keeping axes and exact source points intact. IDs must
+      // be unique because multiple energy/temperature charts share one page.
+      let clip=null;if(xDomain||yDomain){const id=`chart-clip-${++nextClipId}`,defs=el('defs'),area=el('clipPath',{id,clipPathUnits:'userSpaceOnUse'});area.append(el('rect',{x:margin.l,y:margin.t,width:w,height:h}));defs.append(area);svg.append(defs);clip=`url(#${id})`;}
+      const appendData=node=>{if(clip)node.setAttribute('clip-path',clip);svg.append(node);};
+      const yDigits=axisDigits(ymin,ymax),xDigits=axisDigits(xmin,xmax,5);
       ticks(ymin,ymax,4).forEach(t=>{svg.append(el('line',{x1:margin.l,x2:width-margin.r,y1:y(t),y2:y(t),stroke:Math.abs(t)<1e-12?'#a9bcb7':'#e4eae8','stroke-width':1}));svg.append(el('text',{x:margin.l-9,y:y(t)+4,'text-anchor':'end',fill:'#536975','font-size':12,'font-family':'inherit'},number(t,yDigits)));});
       const xt=[xmin,...ticks(xmin,xmax,small?3:5).filter(t=>t>xmin+(xmax-xmin)*.12&&t<xmax-(xmax-xmin)*.12),xmax];
-      xt.forEach(t=>{svg.append(el('line',{x1:x(t),x2:x(t),y1:margin.t+h,y2:margin.t+h+4,stroke:'#9bafaa'}));svg.append(el('text',{x:x(t),y:margin.t+h+19,'text-anchor':t===xmin?'start':t===xmax?'end':'middle',fill:'#536975','font-size':12,'font-family':'inherit'},number(t)));});
+      xt.forEach(t=>{svg.append(el('line',{x1:x(t),x2:x(t),y1:margin.t+h,y2:margin.t+h+4,stroke:'#9bafaa'}));svg.append(el('text',{x:x(t),y:margin.t+h+19,'text-anchor':t===xmin?'start':t===xmax?'end':'middle',fill:'#536975','font-size':12,'font-family':'inherit'},number(t,xDigits)));});
       svg.append(el('line',{x1:margin.l,x2:width-margin.r,y1:margin.t+h,y2:margin.t+h,stroke:'#b9c9c4'}));svg.append(el('text',{x:margin.l+w/2,y:height-6,'text-anchor':'middle',fill:'#536975','font-size':12,'font-family':'inherit'},o.xLabel));
-      (o.references||[]).forEach(r=>{svg.append(el('line',{x1:margin.l,x2:width-margin.r,y1:y(r.value),y2:y(r.value),stroke:'#61726b','stroke-dasharray':'3 5','stroke-width':1}));});
-      series.forEach(s=>{let path='',prev=null;for(const p of s.points){if(!Number.isFinite(p.x)||!Number.isFinite(p.y)){prev=null;continue;}const move=!prev||prev.segment!==p.segment;path+=`${move?'M':'L'}${x(p.x).toFixed(2)},${y(p.y).toFixed(2)} `;if(move)svg.append(el('circle',{cx:x(p.x),cy:y(p.y),r:2,fill:s.color}));prev=p;}svg.append(el('path',{d:path,fill:'none',stroke:s.color,'stroke-width':1.75,'stroke-dasharray':s.dash||'','vector-effect':'non-scaling-stroke'}));});
-      const playbackCursor=el('line',{class:'playback-cursor',x1:0,x2:0,y1:margin.t,y2:margin.t+h,stroke:'#172f40','stroke-width':2,visibility:'hidden','pointer-events':'none'});svg.append(playbackCursor);
+      (o.references||[]).forEach(r=>{appendData(el('line',{x1:margin.l,x2:width-margin.r,y1:y(r.value),y2:y(r.value),stroke:'#61726b','stroke-dasharray':'3 5','stroke-width':1}));});
+      series.forEach(s=>{let path='',prev=null;for(const p of s.points){if(!Number.isFinite(p.x)||!Number.isFinite(p.y)){prev=null;continue;}const move=!prev||prev.segment!==p.segment;path+=`${move?'M':'L'}${x(p.x).toFixed(2)},${y(p.y).toFixed(2)} `;if(move)appendData(el('circle',{cx:x(p.x),cy:y(p.y),r:2,fill:s.color}));prev=p;}appendData(el('path',{d:path,fill:'none',stroke:s.color,'stroke-width':1.75,'stroke-dasharray':s.dash||'','vector-effect':'non-scaling-stroke'}));});
+      const playbackCursor=el('line',{class:'playback-cursor',x1:0,x2:0,y1:margin.t,y2:margin.t+h,stroke:'#172f40','stroke-width':2,visibility:'hidden','pointer-events':'none'});appendData(playbackCursor);
       this.plot={cursor:playbackCursor,x,min:xmin,max:xmax};this.setCursorX(this.currentTime);
-      const cursor=el('line',{x1:0,x2:0,y1:margin.t,y2:margin.t+h,stroke:'#526d63','stroke-dasharray':'2 3',visibility:'hidden'});svg.append(cursor);
+      const cursor=el('line',{x1:0,x2:0,y1:margin.t,y2:margin.t+h,stroke:'#526d63','stroke-dasharray':'2 3',visibility:'hidden'});appendData(cursor);
       const hit=el('rect',{x:margin.l,y:margin.t,width:w,height:h,fill:'transparent'});svg.append(hit);host.append(svg);
-      if(o.onSeek)hit.style.cursor='crosshair';
+      if(o.onSeek||canSelect)hit.style.cursor='crosshair';
       const tip=document.createElement('div');tip.className='chart-tip';tip.hidden=true;tip.setAttribute('aria-live','polite');host.append(tip);
-      const values=[...new Set(all.map(p=>p.x))].sort((a,b)=>a-b);let index=0;
-      const show=(target,clientY)=>{const nearest=values.reduce((a,b)=>Math.abs(b-target)<Math.abs(a-target)?b:a);index=values.indexOf(nearest);cursor.setAttribute('x1',x(nearest));cursor.setAttribute('x2',x(nearest));cursor.setAttribute('visibility','visible');tip.replaceChildren();const heading=document.createElement('strong');heading.textContent=`${number(nearest,8)} ${o.xUnit}`;tip.append(heading);
-        series.forEach(s=>{const exact=s.points.filter(p=>p.x===nearest&&Number.isFinite(p.y));for(const p of exact){const line=document.createElement('div');line.textContent=`${s.name}: ${number(p.y,9)} ${o.yUnit}`;tip.append(line);}});
+      const values=[...new Set(all.filter(p=>p.x>=xmin&&p.x<=xmax).map(p=>p.x))].sort((a,b)=>a-b);let index=0,drag=null,suppressClick=false;
+      const hideTip=()=>{tip.hidden=true;cursor.setAttribute('visibility','hidden');};
+      const show=(target,clientY)=>{if(!values.length){hideTip();return;}const nearest=values.reduce((a,b)=>Math.abs(b-target)<Math.abs(a-target)?b:a);index=values.indexOf(nearest);cursor.setAttribute('x1',x(nearest));cursor.setAttribute('x2',x(nearest));cursor.setAttribute('visibility','visible');tip.replaceChildren();const heading=document.createElement('strong');heading.textContent=`${number(nearest,Math.max(8,xDigits))} ${o.xUnit}`;tip.append(heading);
+        series.forEach(s=>{const exact=s.points.filter(p=>p.x===nearest&&Number.isFinite(p.y));for(const p of exact){const line=document.createElement('div');line.textContent=`${s.name}: ${number(p.y,Math.max(9,yDigits))} ${o.yUnit}`;tip.append(line);}});
         tip.hidden=false;tip.style.left=`${Math.max(0,Math.min(width-260,x(nearest)+12))}px`;tip.style.top=`${legend.offsetHeight+Math.min(height-80,Math.max(27,(clientY||60)-35))}px`;
         if(o.onCursor)o.onCursor(nearest);
       };
-      hit.addEventListener('pointermove',event=>{const rect=svg.getBoundingClientRect(),px=(event.clientX-rect.left)*width/rect.width;show(xmin+(px-margin.l)/w*(xmax-xmin),(event.clientY-rect.top)*height/rect.height);});
-      if(o.onSeek)hit.addEventListener('click',event=>{const rect=svg.getBoundingClientRect(),px=(event.clientX-rect.left)*width/rect.width;o.onSeek(Math.max(xmin,Math.min(xmax,xmin+(px-margin.l)/w*(xmax-xmin))));});
-      hit.addEventListener('pointerleave',()=>{tip.hidden=true;cursor.setAttribute('visibility','hidden');});
-      svg.addEventListener('focus',()=>show(values[index]));svg.addEventListener('blur',()=>{tip.hidden=true;cursor.setAttribute('visibility','hidden');});
-      svg.addEventListener('keydown',event=>{if(o.onSeek&&(event.key==='Enter'||event.key===' ')){event.preventDefault();o.onSeek(values[index]);return;}if(!['ArrowLeft','ArrowRight','Home','End'].includes(event.key))return;event.preventDefault();index=event.key==='Home'?0:event.key==='End'?values.length-1:Math.max(0,Math.min(values.length-1,index+(event.key==='ArrowRight'?1:-1)));show(values[index]);});
+      const pointer=event=>{const rect=svg.getBoundingClientRect();return {x:Math.max(margin.l,Math.min(margin.l+w,(event.clientX-rect.left)*width/rect.width)),y:Math.max(margin.t,Math.min(margin.t+h,(event.clientY-rect.top)*height/rect.height)),rect};};
+      const xValue=px=>xmin+(px-margin.l)/w*(xmax-xmin),yValue=py=>ymin+(margin.t+h-py)/h*(ymax-ymin);
+      let selection=null;
+      const release=()=>{if(!drag)return;const id=drag.id;drag=null;selection.setAttribute('visibility','hidden');try{if(hit.hasPointerCapture?.(id))hit.releasePointerCapture(id);}catch(_){/* A detached chart may already have lost capture. */}};
+      const cancel=()=>{if(drag){suppressClick=true;release();hideTip();}};
+      const drawSelection=point=>{const left=Math.min(drag.start.x,point.x),top=o.rangeMode==='x'?margin.t:Math.min(drag.start.y,point.y);selection.setAttribute('x',left);selection.setAttribute('y',top);selection.setAttribute('width',Math.abs(point.x-drag.start.x));selection.setAttribute('height',o.rangeMode==='x'?h:Math.abs(point.y-drag.start.y));selection.setAttribute('visibility','visible');};
+      if(canSelect){
+        selection=el('rect',{class:'chart-range-selection',x:0,y:0,width:0,height:0,fill:'#006e66','fill-opacity':.12,stroke:'#006e66','stroke-width':1,visibility:'hidden','pointer-events':'none'});svg.append(selection);hit.style.touchAction='none';svg.style.userSelect='none';
+        hit.addEventListener('pointerdown',event=>{if(event.button!==0||event.isPrimary===false||drag)return;suppressClick=false;const start=pointer(event);drag={id:event.pointerId,start};svg.focus?.({preventScroll:true});hideTip();drawSelection(start);try{hit.setPointerCapture?.(event.pointerId);}catch(_){/* The pointer may have ended before capture. */}event.preventDefault();});
+        hit.addEventListener('pointerup',event=>{if(!drag||event.pointerId!==drag.id)return;const end=pointer(event),start=drag.start,dx=Math.abs(end.x-start.x)*end.rect.width/width,dy=Math.abs(end.y-start.y)*end.rect.height/height,selected=dx>=6&&(o.rangeMode==='x'||dy>=6),moved=Math.hypot(dx,dy)>=6;
+          const range={x:[xValue(Math.min(start.x,end.x)),xValue(Math.max(start.x,end.x))],y:o.rangeMode==='x'?[ymin,ymax]:[yValue(Math.max(start.y,end.y)),yValue(Math.min(start.y,end.y))]};
+          suppressClick=moved;release();hideTip();if(selected&&range.x[1]>range.x[0]&&range.y[1]>range.y[0]){event.preventDefault();o.onRangeSelect(range);}
+        });
+        hit.addEventListener('pointercancel',event=>{if(drag?.id===event.pointerId)cancel();});hit.addEventListener('lostpointercapture',event=>{if(drag?.id===event.pointerId)cancel();});
+      }
+      hit.addEventListener('pointermove',event=>{const point=pointer(event);if(drag){if(event.pointerId===drag.id){drawSelection(point);event.preventDefault();}return;}show(xValue(point.x),point.y);});
+      if(o.onSeek)hit.addEventListener('click',event=>{if(suppressClick){suppressClick=false;event.preventDefault();return;}o.onSeek(xValue(pointer(event).x));});
+      hit.addEventListener('pointerleave',hideTip);
+      svg.addEventListener('focus',()=>show(values[index]));svg.addEventListener('blur',()=>{cancel();hideTip();});
+      svg.addEventListener('keydown',event=>{if(event.key==='Escape'&&drag){event.preventDefault();cancel();return;}if(!values.length)return;if(o.onSeek&&(event.key==='Enter'||event.key===' ')){event.preventDefault();o.onSeek(values[index]);return;}if(!['ArrowLeft','ArrowRight','Home','End'].includes(event.key))return;event.preventDefault();index=event.key==='Home'?0:event.key==='End'?values.length-1:Math.max(0,Math.min(values.length-1,index+(event.key==='ArrowRight'?1:-1)));show(values[index]);});
     }
   }
   root.ScientificChart=ScientificChart;root.chartNumber=number;root.TrajectoryTime={index:timeIndex};

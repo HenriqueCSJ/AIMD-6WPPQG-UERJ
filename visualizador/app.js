@@ -1,6 +1,6 @@
 (function(){
   'use strict';
-  const R=OrcaReader,G=Geometry,H=HighlightSelection,$=id=>document.getElementById(id),num=(n,p=5)=>chartNumber(n,p);
+  const R=OrcaReader,A=RunAssociation,G=Geometry,H=HighlightSelection,$=id=>document.getElementById(id),num=(n,p=5)=>chartNumber(n,p);
   const colors=['#006e66','#a35b00','#6853a6','#176ba0','#a54664','#55612b'];
   const referenceColors={etanol_dt500:colors[4],etanol_instavel:colors[4],etanol_corrigido:colors[0],etanol_etapas:colors[0],thermostat_compare:colors[1],dimero_b97:colors[0],dimero_b97_cpcm:colors[1],dimero_dft:colors[0],dimero_cpcm:colors[1],agua_isolada:colors[0],water_single:colors[0],solvent_single:colors[1],zn_parede_longo:colors[0],zn_sem_parede_longo:colors[1],agua_c60:colors[0],agua_dft:colors[0],agua_cpcm:colors[1],etanol_dt025:colors[0],etanol_nve:colors[1],etanol_dt200:colors[2],etanol_csvr:colors[0],zn_parede:colors[0],zn_sem_parede:colors[1],zn_solvator:colors[0],preparar_complexo:colors[1]};
   const patterns=['','7 3','2 3','9 3 2 3','12 3','4 2 1 2','1 4','10 2 3 2','5 5','12 3 2 3 2 3','3 2','8 5'];
@@ -8,7 +8,7 @@
   const elementRadii={H:.23,C:.37,N:.35,O:.34,Zn:.53,S:.44,P:.44};
   const state={runs:[],nextId:1,tab:'trajectory',viewer:null,initialView:null,model:null,viewRun:null,frame:0,selectedAtom:null,playing:false,timer:null,playback:{runId:null,startFrame:0,baseDuration:0,phase:0,lastTimestamp:null},timeFormat:null,pairs:{},geometryMeasures:{},colvars:{},distanceSeries:[],geometrySeries:[],contactShapes:[],busy:false,exampleRequest:0,exampleLoading:false,exampleRetry:null};
   const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  const energy=run=>run.energy||run.out;
+  const energy=run=>run.energy?.rows?.length?run.energy:run.out;
   const metadata=run=>run?.metadata||run?.out?.metadata||{};
   const sequenceClock=run=>metadata(run).clockMode==='sequence_elapsed';
   const clockLabel=run=>sequenceClock(run)?'Tempo da sequência':'Tempo físico';
@@ -123,30 +123,98 @@
   function cancelExampleLoad(){state.exampleRequest++;exampleLoading(false);state.exampleRetry=null;$('example-retry').hidden=true;}
   function stop(){state.playing=false;if(state.timer!==null){cancelAnimationFrame(state.timer);state.timer=null;}state.playback.lastTimestamp=null;$('play-button').textContent='▶ Reproduzir';}
   function makeRun(key,label,reference=false){const id=state.nextId++;return {id,key,label:label||key,reference,visible:true,color:colors[(id-1)%colors.length],files:[],warnings:[]};}
+  const parsedSlot=parsed=>parsed.kind==='xyz'?'xyz':parsed.kind==='colvars'?'colvars':parsed.kind==='out'?'out':'energy';
+  const hasRunKey=(run,key)=>run.key===key||run.aliases?.includes(key)||run.files.some(file=>R.runKey(file.name)===key);
+  function combinedData(target,source){const joined={...target};for(const slot of ['xyz','out','energy','colvars'])if(source[slot]&&!joined[slot])joined[slot]=source[slot];return joined;}
+  function mergeIssue(target,source){
+    if(['xyz','out','energy','colvars'].some(slot=>target[slot]&&source[slot]&&!A.sameData(target[slot],source[slot])))return 'Os arquivos deste tipo contêm dados diferentes.';
+    return A.validateRun(combinedData(target,source));
+  }
+  function combineUploadedRuns(target,source){
+    if(target===source||target.reference||source.reference)return false;
+    if(mergeIssue(target,source))return false;
+    for(const slot of ['xyz','out','energy','colvars'])if(source[slot]&&!target[slot])target[slot]=source[slot];
+    for(const file of source.files)if(!target.files.some(other=>other.name===file.name&&other.kind===file.kind))target.files.push(file);
+    target.aliases=[...new Set([...(target.aliases||[]),...(source.aliases||[]),source.key])];
+    target.warnings.push(...source.warnings);target.visible=target.visible||source.visible;
+    if(!target.ensembleOverride&&source.ensembleOverride)target.ensembleOverride=source.ensembleOverride;
+    for(const key of ['highlights','highlightSettings'])if(source[key])target[key]=source[key];
+    for(const collection of [state.pairs,state.geometryMeasures,state.colvars])if(collection[source.id]){collection[target.id]=collection[source.id];delete collection[source.id];}
+    if(state.viewRun===source.id)clearTrajectoryScene();
+    state.runs=state.runs.filter(run=>run!==source);return true;
+  }
+  function renderTrajectoryDataLink(run){
+    const host=$('trajectory-data-link'),select=$('trajectory-energy-source');host.hidden=true;select.replaceChildren();
+    if(!run?.xyz||run.reference)return;
+    const candidates=state.runs.filter(other=>other!==run&&!other.reference&&!other.xyz&&['out','energy','colvars'].some(slot=>other[slot]&&!run[slot])&&!mergeIssue(run,other));
+    if(!candidates.length)return;
+    const placeholder=document.createElement('option');placeholder.value='';placeholder.textContent='Escolha os dados do mesmo cálculo';select.append(placeholder);
+    for(const candidate of candidates){const rows=energy(candidate)?.rows,option=document.createElement('option');option.value=String(candidate.id);option.textContent=`${candidate.label} · ${rows?.length?`${num(rows[0].time)}–${num(rows.at(-1).time)} fs`:candidate.colvars?'medidas geométricas':'condições do cálculo'}`;select.append(option);}
+    select.value='';$('associate-trajectory-data').disabled=true;host.hidden=false;
+  }
+  function associateTrajectoryData(){
+    const source=currentTrajectory(),target=state.runs.find(run=>run.id===Number($('trajectory-energy-source').value));
+    if(!source||!target)return;const issue=mergeIssue(target,source);
+    if(issue||!combineUploadedRuns(target,source)){message(issue||'Estes arquivos contêm dados incompatíveis.');return;}
+    stop();state.tab='trajectory';renderAll(target.id);message('Arquivos associados. Trajetória, energias, temperatura e condições disponíveis reunidas no mesmo cálculo.',true);
+  }
   function addParsed(run,parsed){
-    const slot=parsed.kind==='xyz'?'xyz':parsed.kind==='colvars'?'colvars':parsed.kind==='out'?'out':'energy';
-    const issue=R.validateEnergySources(slot==='energy'?parsed:run.energy,slot==='out'?parsed:run.out);
+    const slot=parsedSlot(parsed);
+    if(run[slot]&&A.sameData(run[slot],parsed)){if(!run.files.some(file=>file.name===parsed.name&&file.kind===parsed.kind))run.files.push({name:parsed.name,kind:parsed.kind});return;}
+    const replaceStatic=slot==='xyz'&&run.xyz?.frames.length===1&&parsed.frames.length>1;
+    if(run[slot]&&!replaceStatic)throw new Error(`${parsed.name}: outro arquivo deste tipo já está carregado; os dois foram preservados separadamente.`);
+    const candidate={...run,[slot]:parsed},issue=A.validateRun(candidate);
     if(issue)throw new Error(issue);
+    if(replaceStatic){
+      // A final/input geometry must never replace an animation, including when
+      // the geometry arrived in an earlier upload. Keep both original XYZs.
+      const structure=makeRun(run.key,`${run.xyz.name} · estrutura estática`);structure.xyz=run.xyz;
+      structure.files=run.files.filter(file=>file.kind==='xyz');run.files=run.files.filter(file=>file.kind!=='xyz');state.runs.push(structure);
+      if(state.viewRun===run.id)clearTrajectoryScene();
+    }
     run[slot]=parsed;run.files.push({name:parsed.name,kind:parsed.kind});
   }
   async function importFiles(files){
     if(state.busy)return;cancelExampleLoad();state.busy=true;document.body.classList.add('busy');stop();message('Lendo os arquivos…',true);
-    const warnings=[],groups=new Map();let accepted=0,trajectoryRun=null;
+    const warnings=[],notices=[],groups=new Map();let accepted=0,trajectoryRun=null;
     for(const file of files){
       if(file.size>R.MAX_FILE_BYTES){warnings.push(`${file.name}: limite de 1 GB por arquivo.`);continue;}
       try{const parsed=await R.parseBlob(file,file.name,(read,total)=>message(`Lendo ${file.name}… ${total?Math.floor(read/total*100):100}%`,true));warnings.push(...parsed.warnings.filter(w=>!w.startsWith('O .out pode')&&!w.startsWith('XYZ convencional')).map(w=>`${file.name}: ${w}`));if(!groups.has(parsed.key))groups.set(parsed.key,[]);groups.get(parsed.key).push(parsed);}
       catch(error){warnings.push(`${file.name}: ${error.message}`);}
     }
+    const rememberTrajectory=run=>{if(run.xyz&&(!trajectoryRun||(trajectoryRun.xyz.frames.length<2&&run.xyz.frames.length>1)))trajectoryRun=run;};
     for(const [key,parts] of groups){
-      let run=state.runs.find(r=>!r.reference&&r.key===key&&!parts.some(p=>r[p.kind==='xyz'?'xyz':p.kind==='colvars'?'colvars':p.kind==='out'?'out':'energy']));
+      // Read conditions and energies first, then the full trajectory, then
+      // geometric series that can be checked against those coordinates.
+      const priority=part=>part.kind==='colvars'?2:part.kind==='xyz'?1:0;
+      parts.sort((a,b)=>priority(a)-priority(b)||(a.kind==='xyz'&&b.kind==='xyz'?b.frames.length-a.frames.length:0));
+      let run=state.runs.find(r=>!r.reference&&hasRunKey(r,key)&&parts.every(p=>!r[parsedSlot(p)]||A.sameData(r[parsedSlot(p)],p)||(p.kind==='xyz'&&(p.frames.length===1||r.xyz.frames.length===1))));
       if(!run){run=makeRun(key);const n=state.runs.filter(r=>r.key===key).length;if(n)run.label=`${key} (${n+1})`;state.runs.push(run);}
-      for(const part of parts){try{addParsed(run,part);accepted++;if(run.xyz&&!trajectoryRun)trajectoryRun=run;}catch(error){const separate=makeRun(key,`${key} · ${part.kind==='out'?'.out':'CSV'} separado`);addParsed(separate,part);state.runs.push(separate);warnings.push(error.message);accepted++;if(part.kind==='xyz'&&!trajectoryRun)trajectoryRun=separate;}}
+      for(const part of parts){
+        const existing=state.runs.find(other=>other!==run&&!other.reference&&hasRunKey(other,key)&&A.sameData(other[parsedSlot(part)],part));
+        if(existing){addParsed(existing,part);accepted++;rememberTrajectory(existing);continue;}
+        try{addParsed(run,part);accepted++;rememberTrajectory(run);}
+        catch(error){
+          let separate=state.runs.find(other=>!other.reference&&hasRunKey(other,key)&&A.sameData(other[parsedSlot(part)],part));
+          if(!separate){separate=makeRun(key,`${part.name} · ${part.kind==='xyz'&&part.frames.length===1?'estrutura estática':'separado'}`);addParsed(separate,part);state.runs.push(separate);}
+          warnings.push(error.message);accepted++;rememberTrajectory(separate);
+        }
+      }
+      if(!run.files.length)state.runs=state.runs.filter(other=>other!==run);
     }
+    let joined;
+    do{
+      joined=false;
+      for(const {source,target,evidence} of A.find(state.runs))if(state.runs.includes(source)&&state.runs.includes(target)&&combineUploadedRuns(target,source)){
+        if(trajectoryRun===source)trajectoryRun=target;rememberTrajectory(target);joined=true;
+        notices.push(`${source.xyz?.name||source.label} associado a ${target.label}: ${evidence.reason}`);
+      }
+    }while(joined);
     if(trajectoryRun)trajectoryRun.visible=true;
     const selected=trajectoryRun?[trajectoryRun,...visible().filter(r=>r!==trajectoryRun)]:visible();if(selected.length>4){selected.slice(4).forEach(r=>r.visible=false);warnings.push('Quatro simulações selecionadas para comparação. Use as caixas para escolher outras.');}
     state.busy=false;document.body.classList.remove('busy');$('file-input').value='';
     if(trajectoryRun)state.tab='trajectory';else if(accepted)state.tab='energy';
-    renderAll(trajectoryRun?.id);message([accepted?`${accepted} arquivo(s) carregado(s).`:'Nenhum arquivo foi carregado.',accepted&&!state.runs.some(r=>r.xyz)?'Para ver o movimento em 3D, carregue também o arquivo -traj.xyz.':'',...warnings].filter(Boolean).join('\n'),warnings.length===0);
+    renderAll(trajectoryRun?.id);message([accepted?`${accepted} arquivo(s) carregado(s).`:'Nenhum arquivo foi carregado.',accepted&&!state.runs.some(r=>r.xyz)?'Para ver o movimento em 3D, carregue também o arquivo -traj.xyz.':'',...notices,...warnings].filter(Boolean).join('\n'),warnings.length===0);
     if(accepted)$(trajectoryRun?'tab-trajectory':'workspace').scrollIntoView({block:'start',behavior:'smooth'});
   }
   async function loadExample(key,preferredTab){
@@ -161,7 +229,7 @@
       const references=runs.map(src=>{const run=Object.assign(makeRun(src.key,src.label,true),src,{exampleKey:src.key,visible:true});run.color=referenceColors[src.key]||run.color;return run;});
       stop();clearTrajectoryScene();state.runs=state.runs.filter(r=>!r.reference);state.runs.forEach(r=>r.visible=false);state.runs.push(...references);
       document.querySelectorAll('[name="energy-series"]').forEach(c=>c.checked=config.runs.length>1?c.value==='total':true);
-      $('energy-mode').value='delta';$('time-unit').value='fs';$('energy-window-from').value='';$('energy-window-to').value='';state.tab=preferredTab||(references.some(run=>run.xyz)?'trajectory':'energy');renderAll(references[0].id);
+      $('energy-mode').value='delta';$('time-unit').value='fs';resetEnergyRange();state.tab=preferredTab||(references.some(run=>run.xyz)?'trajectory':'energy');renderAll(references[0].id);
       const staticOnly=references.every(run=>run.xyz?.frames.length===1&&!energy(run)?.rows.length);
       message(staticOnly?'Estruturas de referência carregadas. SOLVATOR mostra geometrias antes e depois da solvatação; este exemplo não contém uma dinâmica, energias ao longo do tempo ou animação. Escolha a estrutura no campo Simulação.':'Referência da aula carregada. Explore a trajetória e compare suas medidas.',true);
       $(state.tab==='trajectory'?'tab-trajectory':'workspace').scrollIntoView({block:'start',behavior:'smooth'});
@@ -191,20 +259,68 @@
     if(tab==='energy')renderEnergy();if(tab==='trajectory')renderTrajectory();if(tab==='distance')renderDistances(true);
   }
   function energyWindow(){const read=id=>{const raw=$(id)?.value?.trim()||'';return raw===''?null:Number(raw);};const from=read('energy-window-from'),to=read('energy-window-to');return {from:Number.isFinite(from)?from:-Infinity,to:Number.isFinite(to)?to:Infinity,active:Number.isFinite(from)||Number.isFinite(to)};}
-  function energyRowsInWindow(run){const window=energyWindow();return energy(run).rows.filter(row=>row.time>=window.from&&row.time<=window.to);}
+  function resetEnergyRange(){for(const id of ['energy-window-from','energy-window-to','energy-y-min','energy-y-max'])$(id).value='';$('energy-range-status').hidden=true;$('energy-range-status').textContent='';}
+  function energyTimeTolerance(...values){return 8*Number.EPSILON*Math.max(1,...values.filter(Number.isFinite).map(Math.abs));}
+  function energyTimeInWindow(time,window){const tolerance=energyTimeTolerance(time,window.from,window.to);return Number.isFinite(time)&&time>=window.from-tolerance&&time<=window.to+tolerance;}
+  function selectedEnergyRange(range,includeEnergy=true){
+    const factor=timeFactor(),physicalTime=value=>{
+      const converted=value/factor;let closest=converted,best=Infinity;
+      // Round-trip conversion through ps or s may land a few ULPs beside an
+      // existing sample. Retain that recorded endpoint, not a rounded grid.
+      for(const run of visible())for(const row of energy(run)?.rows||[]){const difference=Math.abs(row.time-converted);if(Number.isFinite(row.time)&&difference<=energyTimeTolerance(row.time,converted)&&difference<best){closest=row.time;best=difference;}}
+      return closest;
+    };
+    $('energy-window-from').value=String(physicalTime(range.x[0]));$('energy-window-to').value=String(physicalTime(range.x[1]));
+    if(includeEnergy){$('energy-y-min').value=String(range.y[0]);$('energy-y-max').value=String(range.y[1]);}
+    renderEnergy();
+  }
+  function energyYDomain(series){
+    const read=id=>$(id).value.trim()===''?null:Number($(id).value),min=read('energy-y-min'),max=read('energy-y-max');
+    if(min===null&&max===null)return null;
+    let low=Infinity,high=-Infinity;for(const s of series)for(const p of s.points)if(Number.isFinite(p.y)){low=Math.min(low,p.y);high=Math.max(high,p.y);}
+    if(!Number.isFinite(low))return null;
+    const padding=(high-low||Math.max(Math.abs(high)*.01,.001))*.09;
+    return [min??low-padding,max??high+padding];
+  }
+  function energyRowsInWindow(run){const window=energyWindow();return energy(run).rows.filter(row=>energyTimeInWindow(row.time,window));}
+  function energyRowsForPlot(run){
+    const window=energyWindow(),rows=energy(run).rows,indices=new Set();
+    if(window.from>=window.to)return energyRowsInWindow(run);
+    for(let i=0;i<rows.length;i++){
+      const row=rows[i],previous=rows[i-1];if(energyTimeInWindow(row.time,window))indices.add(i);
+      if(!previous||previous.segment!==row.segment||!Number.isFinite(previous.time)||!Number.isFinite(row.time))continue;
+      const tolerance=energyTimeTolerance(previous.time,row.time,window.from,window.to);
+      // Preserve the original endpoints of a line crossing the window. The
+      // renderer clips it; no new samples or joins across segments are made.
+      if(Math.max(previous.time,row.time)>window.from+tolerance&&Math.min(previous.time,row.time)<window.to-tolerance){indices.add(i-1);indices.add(i);}
+    }
+    return rows.filter((_,index)=>indices.has(index));
+  }
   function renderEnergy(){
+    const status=$('energy-range-status');status.hidden=true;status.textContent='';
     const runs=visible().filter(r=>energy(r)?.rows.length),has=runs.length>0;$('energy-empty').hidden=has;$('energy-content').hidden=!has;$('export-energy').disabled=!has;
     renderStageSummary(runs,'energy-stage-summary');$('energy-first-window').hidden=!runs.some(r=>r.key==='etanol_instavel');
     if(!has){for(const id of ['energy-chart','temperature-chart','energy-stats','time-summary'])$(id).replaceChildren();$('energy-empty').innerHTML=!visible().length?'<strong>Marque uma simulação acima.</strong>As caixas selecionam os cálculos disponíveis nas três abas.':'<strong>Adicione uma série de dinâmica.</strong>Carregue o arquivo -md-ener.csv ou um .out com a tabela de MD. Uma otimização ou um XYZ isolado não contém todas as energias da dinâmica.';$('energy-guide').innerHTML='<h3>Qual pergunta o seu arquivo permite responder?</h3><p>Uma geometria pode ser explorada nas abas Trajetória e Geometria. Para acompanhar energia e temperatura, precisamos da série ao longo do tempo.</p>';return;}
+    const window=energyWindow();
+    $('energy-y-min-label').textContent=`${$('energy-mode').value==='delta'?'Δ energia':'Energia'} mínima (${energyUnit()})`;$('energy-y-max-label').textContent=`${$('energy-mode').value==='delta'?'Δ energia':'Energia'} máxima (${energyUnit()})`;
     const keys=[...document.querySelectorAll('[name="energy-series"]:checked')].map(x=>x.value),labels={total:'Total · E',potential:'Potencial · U',kinetic:'Cinética · K'},metricColors={total:'#006e66',potential:'#8e5ea2',kinetic:'#ac6300'},dashes={total:'',potential:'5 3',kinetic:'2 3'},delta=$('energy-mode').value==='delta',factor=energyFactor(),tf=timeFactor();
-    const series=[];for(const [ri,r] of runs.entries()){const rows=energy(r).rows,viewRows=energyRowsInWindow(r);for(const [ki,key] of keys.entries()){const first=rows.find(x=>x[key]!==null)?.[key];if(first===undefined)continue;series.push({name:runs.length===1?labels[key]:`${r.label} · ${labels[key]}`,color:runs.length===1?metricColors[key]:r.color,dash:runs.length===1?dashes[key]:patterns[ri*keys.length+ki],points:viewRows.map(x=>({x:x.time*tf,y:x[key]===null?null:(x[key]-(delta?first:0))*factor,segment:x.segment}))});}}
+    const series=[];for(const [ri,r] of runs.entries()){const rows=energy(r).rows,viewRows=energyRowsForPlot(r);for(const [ki,key] of keys.entries()){const first=rows.find(x=>x[key]!==null)?.[key];if(first===undefined)continue;series.push({name:runs.length===1?labels[key]:`${r.label} · ${labels[key]}`,color:runs.length===1?metricColors[key]:r.color,dash:runs.length===1?dashes[key]:patterns[ri*keys.length+ki],points:viewRows.map(x=>({x:x.time*tf,y:x[key]===null?null:(x[key]-(delta?first:0))*factor,segment:x.segment}))});}}
     let xmin=Infinity,xmax=-Infinity;for(const r of runs)for(const row of energyRowsInWindow(r)){xmin=Math.min(xmin,row.time*tf);xmax=Math.max(xmax,row.time*tf);}if(!Number.isFinite(xmin)){xmin=0;xmax=1;}
+    if(Number.isFinite(window.from))xmin=window.from*tf;if(Number.isFinite(window.to))xmax=window.to*tf;
+    const yDomain=energyYDomain(series);
+    if(window.from>window.to||(yDomain&&yDomain[0]>=yDomain[1])){
+      status.hidden=false;status.textContent=window.from>window.to?'O tempo inicial deve ser menor ou igual ao tempo final.':'A energia mínima deve ser menor que a máxima; ajuste os limites ou restaure a visão completa.';
+      for(const id of ['energy-chart','temperature-chart','energy-stats'])$(id).replaceChildren();return;
+    }
+    const hasInterior=runs.some(run=>energyRowsInWindow(run).some(row=>keys.some(key=>Number.isFinite(row[key]))));
+    const hasCrossing=series.some(s=>s.points.some((point,i)=>{const previous=s.points[i-1];return previous&&previous.segment===point.segment&&Number.isFinite(previous.y)&&Number.isFinite(point.y)&&Math.max(previous.x,point.x)>=xmin&&Math.min(previous.x,point.x)<=xmax;}));
+    if(!hasInterior){status.hidden=false;status.textContent=hasCrossing?'A janela cruza linhas entre registros vizinhos, mas não contém uma amostra gravada de energia. Amplie o intervalo para consultar valores.':'Sem pontos de energia nesta faixa. Ajuste os limites ou restaure a visão completa.';}
     $('energy-title').textContent=delta?'Variação das energias':'Energias absolutas';$('delta-note').textContent=delta?'ΔX = X(t) − X(primeiro ponto), para cada curva.':'Os zeros de energia dependem do método e da composição.';
-    new ScientificChart($('energy-chart'),{title:$('energy-title').textContent,series,yLabel:`${delta?'Δ energia':'Energia'} (${energyUnit()})`,xLabel:`${runs.some(sequenceClock)?'Tempo da sequência':'Tempo'} (${$('time-unit').value})`,xUnit:$('time-unit').value,yUnit:energyUnit(),xDomain:[xmin,xmax]});
-    const temperatures=runs.map((r,i)=>({name:r.label,color:r.color,dash:patterns[i],points:energyRowsInWindow(r).map(x=>({x:x.time*tf,y:x.temperature,segment:x.segment}))}));
-    new ScientificChart($('temperature-chart'),{title:'Temperatura',series:temperatures,yLabel:'Temperatura (K)',xLabel:`${runs.some(sequenceClock)?'Tempo da sequência':'Tempo'} (${$('time-unit').value})`,xUnit:$('time-unit').value,yUnit:'K',xDomain:[xmin,xmax]});
+    new ScientificChart($('energy-chart'),{title:$('energy-title').textContent,series,yLabel:`${delta?'Δ energia':'Energia'} (${energyUnit()})`,xLabel:`${runs.some(sequenceClock)?'Tempo da sequência':'Tempo'} (${$('time-unit').value})`,xUnit:$('time-unit').value,yUnit:energyUnit(),xDomain:[xmin,xmax],yDomain,onRangeSelect:range=>selectedEnergyRange(range)});
+    const temperatures=runs.map((r,i)=>({name:r.label,color:r.color,dash:patterns[i],points:energyRowsForPlot(r).map(x=>({x:x.time*tf,y:x.temperature,segment:x.segment}))}));
+    new ScientificChart($('temperature-chart'),{title:'Temperatura',series:temperatures,yLabel:'Temperatura (K)',xLabel:`${runs.some(sequenceClock)?'Tempo da sequência':'Tempo'} (${$('time-unit').value})`,xUnit:$('time-unit').value,yUnit:'K',xDomain:[xmin,xmax],rangeMode:'x',onRangeSelect:range=>selectedEnergyRange(range,false)});
     $('time-summary').textContent=runs.map(r=>{const rows=energy(r).rows,start=rows[0].time,end=rows.at(-1).time;return `${r.label}: ${sequenceClock(r)?'tempo da sequência · ':''}${rows.length} pontos · ${num(start)}–${num(end)} fs · intervalo de ${num(end-start)} fs = ${num((end-start)/1000)} ps = ${num((end-start)*1e-15)} s`;}).join('  |  ');
-    $('energy-stats').innerHTML=runs.map(r=>{const viewRows=energyRowsInWindow(r),e=R.stats(viewRows,'total'),t=R.stats(viewRows,'temperature');const amplitude=e?($('energy-unit').value==='kj'?(e.span*factor>0&&e.span*factor<.01?num(e.span*factor,2):(e.span*factor).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})):num(e.span,3)):null;return `<div class="stat" style="--run-color:${r.color}"><span class="stat-name">${esc(r.label)}</span><strong>${e?'≈ '+amplitude+' '+energyUnit():'—'}</strong><p>Amplitude de E na janela selecionada</p><p>${t?'T média nos pontos exibidos: '+num(t.mean,4)+' K':'Temperatura indisponível'}</p></div>`;}).join('');
+    $('energy-stats').innerHTML=runs.map(r=>{const viewRows=energyRowsInWindow(r),e=R.stats(viewRows,'total'),t=R.stats(viewRows,'temperature');const amplitude=e?($('energy-unit').value==='kj'?(e.span*factor>0&&e.span*factor<.01?num(e.span*factor,2):(e.span*factor).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})):num(e.span,3)):null;return `<div class="stat" style="--run-color:${r.color}"><span class="stat-name">${esc(r.label)}</span><strong>${e?'≈ '+amplitude+' '+energyUnit():'—'}</strong><p>Amplitude de E no intervalo de tempo</p><p>${t?'T média no intervalo de tempo: '+num(t.mean,4)+' K':'Temperatura indisponível'}</p></div>`;}).join('');
     const sets=new Set(runs.map(ensemble)),unknown=sets.has('unknown'),hasNVT=sets.has('NVT'),hasNVE=sets.has('NVE'),changing=runs.some(r=>metadata(r).changingConditions===true);
     let context=changing?'O input muda as condições ao longo da trajetória. Leia as etapas; durante as rampas não há um único estado NVT estacionário.':unknown?'O ensemble não foi identificado em todos os arquivos. Adicione o .out ou informe NVE/NVT em “Arquivos e condições”.':hasNVT&&hasNVE?'Compare a NVE com a dinâmica acoplada ao banho. A energia pode mudar em NVT pela troca com o termostato.':hasNVT?'Com termostato, o sistema troca energia com o banho. Uma variação de K + U não indica, sozinha, erro numérico.':'Em NVE, sem outras forças dependentes do tempo, observe se a energia total oscila em uma faixa pequena ou deriva.';
     if(runs.some(r=>metadata(r).wall))context+=' Há confinamento em pelo menos uma simulação; considere também as forças da parede.';
@@ -383,7 +499,7 @@
   function renderTrajectoryEnergyChart(run,rows,domain){
     const keys=['kinetic','potential','total'],selected=keys.filter(key=>$('trajectory-show-'+key).checked),has=rows.some(row=>Number.isFinite(row.time)&&selected.some(key=>Number.isFinite(row[key])));
     $('trajectory-energy-chart').hidden=!has;$('trajectory-energy-empty').hidden=has;
-    if(!has){$('trajectory-energy-chart').replaceChildren();$('trajectory-energy-empty').textContent=!selected.length?'Selecione ao menos uma energia nas caixas acima.':state.hasTrajectoryEnergy?'As energias selecionadas não constam deste arquivo. Escolha outra curva nas caixas acima.':'Carregue o arquivo -md-ener.csv ou um .out de MD com o mesmo nome-base do XYZ para acompanhar as energias.';$('trajectory-energy-note').textContent='Curvas associadas ao XYZ pelo tempo físico registrado.';return;}
+    if(!has){$('trajectory-energy-chart').replaceChildren();$('trajectory-energy-empty').textContent=!selected.length?'Selecione ao menos uma energia nas caixas acima.':state.hasTrajectoryEnergy?'As energias selecionadas não constam deste arquivo. Escolha outra curva nas caixas acima.':'Carregue o arquivo -md-ener.csv ou o .out de MD deste cálculo para acompanhar as energias. Se necessário, escolha a associação acima.';$('trajectory-energy-note').textContent='Curvas associadas ao XYZ pelo tempo físico registrado.';return;}
     const labels={kinetic:'Cinética · K',potential:'Potencial · U',total:'Total · E'},colors={kinetic:'#ac6300',potential:'#8e5ea2',total:'#006e66'},dashes={kinetic:'2 3',potential:'5 3',total:''};
     const delta=$('trajectory-energy-mode').value==='delta';
     const series=selected.map(key=>{const first=rows.find(row=>Number.isFinite(row.time)&&Number.isFinite(row[key]))?.[key];return {name:labels[key],color:colors[key],dash:dashes[key],points:rows.map(row=>({x:row.time,y:Number.isFinite(row[key])?(row[key]-(delta?first:0))*R.HARTREE_TO_KJMOL:null,segment:row.segment}))};});
@@ -483,7 +599,7 @@
   }
   function renderTrajectory(){
     const run=currentTrajectory(),has=!!run?.xyz;$('trajectory-empty').hidden=has;$('trajectory-content').hidden=!has;
-    $('reset-view').disabled=!has;renderPlaybackControls(run);
+    $('reset-view').disabled=!has;renderPlaybackControls(run);renderTrajectoryDataLink(run);
     if(!has){
       stop();clearTrajectoryScene();state.frame=0;state.selectedAtom=null;
       $('trajectory-status').hidden=true;$('trajectory-status').textContent='';
@@ -678,11 +794,14 @@
   $('example-button').addEventListener('click',()=>loadExample($('example-select').value));
   $('example-energy-button').addEventListener('click',()=>loadExample($('example-select').value,'energy'));
   $('example-retry').addEventListener('click',()=>{const retry=state.exampleRetry;if(retry)loadExample(retry.key,retry.preferredTab);});
-  $('clear-button').addEventListener('click',()=>{cancelExampleLoad();stop();clearContactShapes();state.runs=[];state.viewRun=null;state.pairs={};state.geometryMeasures={};state.colvars={};state.geometrySeries=[];renderAll();message('Sessão limpa. Seus arquivos originais continuam intactos.',true);});
+  $('clear-button').addEventListener('click',()=>{cancelExampleLoad();stop();clearContactShapes();state.runs=[];state.viewRun=null;state.pairs={};state.geometryMeasures={};state.colvars={};state.geometrySeries=[];resetEnergyRange();renderAll();message('Sessão limpa. Seus arquivos originais continuam intactos.',true);});
   document.querySelectorAll('[data-tab]').forEach(b=>{b.addEventListener('click',()=>changeTab(b.dataset.tab));b.addEventListener('keydown',e=>{if(!['ArrowLeft','ArrowRight'].includes(e.key))return;e.preventDefault();const names=['trajectory','energy','distance'],i=names.indexOf(state.tab),next=names[(i+(e.key==='ArrowRight'?1:2))%3];changeTab(next);$('tab-'+next).focus();});});
-  for(const id of ['energy-mode','energy-unit','time-unit','energy-window-from','energy-window-to'])$(id).addEventListener('change',renderEnergy);
-  $('energy-window-full').addEventListener('click',()=>{$('energy-window-from').value='';$('energy-window-to').value='';renderEnergy();});$('energy-first-window').addEventListener('click',()=>{$('energy-window-from').value='0';$('energy-window-to').value='75';renderEnergy();});
+  for(const id of ['time-unit','energy-window-from','energy-window-to','energy-y-min','energy-y-max'])$(id).addEventListener('change',renderEnergy);
+  for(const id of ['energy-mode','energy-unit'])$(id).addEventListener('change',()=>{$('energy-y-min').value='';$('energy-y-max').value='';renderEnergy();});
+  $('energy-window-full').addEventListener('click',()=>{resetEnergyRange();renderEnergy();});$('energy-first-window').addEventListener('click',()=>{resetEnergyRange();$('energy-window-from').value='0';$('energy-window-to').value='75';renderEnergy();});
   document.querySelectorAll('[name="energy-series"]').forEach(c=>c.addEventListener('change',renderEnergy));
+  $('trajectory-energy-source').addEventListener('change',()=>{$('associate-trajectory-data').disabled=!$('trajectory-energy-source').value;});
+  $('associate-trajectory-data').addEventListener('click',associateTrajectoryData);
   $('trajectory-run').addEventListener('change',()=>{stop();renderTrajectory();});$('reset-view').addEventListener('click',resetView);for(const id of ['atom-labels','proximity-lines','hydrogen-bonds','coordination-contacts'])$(id).addEventListener('change',()=>{drawFrame();renderContactLegend(currentTrajectory());});$('coordination-cutoff').addEventListener('input',()=>drawFrame());
   $('rotate-molecule').addEventListener('click',()=>setInteraction('rotate'));$('pan-molecule').addEventListener('click',()=>setInteraction('pan'));
   $('highlight-kind').addEventListener('change',highlightMode);

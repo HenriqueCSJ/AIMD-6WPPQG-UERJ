@@ -143,3 +143,5 @@ body.trajectory-open{overflow:hidden}
 @media(max-width:600px){.trajectory-energy-card,.trajectory-temperature-card{padding:14px 12px 10px}}
 
 .tabs button{scroll-margin-top:18px}
+
+.chart-range-controls{padding:12px;background:#f4f8f6;border:1px solid var(--line);border-radius:10px}.chart-range-controls .energy-window-input{width:145px}.trajectory-data-link{display:flex;flex-wrap:wrap;align-items:end;gap:12px;padding:12px;margin:0 0 16px;border:1px solid #b7cfc5;border-radius:10px;background:#f4f8f6}.trajectory-data-link[hidden]{display:none}.trajectory-data-link label{display:flex;flex-direction:column;gap:5px}.trajectory-data-link p{flex-basis:100%;margin:0}@media(max-width:600px){.chart-range-controls label,.chart-range-controls .energy-window-input{width:100%}.trajectory-data-link label{max-width:100%}}
