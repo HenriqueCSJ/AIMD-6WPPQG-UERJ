@@ -19,7 +19,7 @@ test('exercise links resolve retained data while the main menu stays focused',()
  const html=read('visualizador/index.html'),select=html.match(/<select id="example-select">([\s\S]*?)<\/select>/)[1];
  const options=[...select.matchAll(/<option value="([^"]+)"/g)].map(m=>m[1]);
  assert.equal(new Set(options).size,options.length,'No duplicate menu choices');
- const directOnly=['water_nve','water_csvr','solvator','complex','complex_short','solvator_two','water_short','ethanol_short','proton_shared_short','chelation_previous'];
+ const directOnly=['water_nve','water_csvr','solvator','complex','complex_short','solvator_two','water_short','ethanol_short','proton_shared_short','chelation_previous','zn_hydration_radial_history'];
  const inputPresets=Object.keys(JSON.parse(read('exercicios/arquivos-exercicios.json')).presets);
  assert.deepEqual([...options,...directOnly,...inputPresets].sort(),Object.keys(store.presets).sort());
  const main=select.match(/<optgroup label="Durante a aula · cinco blocos">([\s\S]*?)<\/optgroup>/)[1];
@@ -76,22 +76,18 @@ test('two-water SOLVATOR shows the retained static structure and the unchanged s
 });
 
 
-test('the new primary SOLVATOR preserves raw assembly separately from the rigid radial hydration preparation',()=>{
- const keys=Array.from(store.presets.zn_solvation.runs);assert.deepEqual(keys,['zn2_isolado','zn_ion_20h2o_solvator','zn_20h2o_inicial']);
- const raw=bundle('zn_ion_20h2o_solvator'),prepared=bundle('zn_20h2o_inicial'),ion=bundle('zn2_isolado');
+test('the primary SOLVATOR contains only the isolated ion and unmodified ORCA assembly',()=>{
+ const keys=Array.from(store.presets.zn_solvation.runs);assert.deepEqual(keys,['zn2_isolado','zn_ion_20h2o_solvator']);
+ const raw=bundle('zn_ion_20h2o_solvator'),ion=bundle('zn2_isolado');
+ assert.equal(store.sources.zn_20h2o_inicial,undefined);
+ const original=R.parseXYZ(read('exercicios/6-complexo-solvator/resultados/zn_ion_20h2o_solvator/zn_ion_20h2o_solvator.solvator.xyz'),'raw.xyz');
+ assert.deepEqual(raw.xyz.frames[0].coords,JSON.parse(JSON.stringify(original.frames[0].coords)));
  assert.deepEqual(ion.xyz.elements,['Zn']);assert.equal(ion.xyz.frames.length,1);
  assert.equal(raw.out.metadata.normal,true);assert.equal(raw.xyz.elements.length,61);assert.equal(raw.xyz.frames.length,1);assert.equal(raw.energy,undefined);
- assert.deepEqual(prepared.xyz.elements,raw.xyz.elements);assert.equal(prepared.xyz.frames.length,1);assert.equal(prepared.out,undefined);assert.equal(prepared.energy,undefined);
- const a=raw.xyz.frames[0].coords,b=prepared.xyz.frames[0].coords,d=(c,i,j)=>Math.hypot(...c[i].map((v,k)=>v-c[j][k]));
- assert.deepEqual(a[0],b[0]);
+ const a=raw.xyz.frames[0].coords,d=(c,i,j)=>Math.hypot(...c[i].map((v,k)=>v-c[j][k]));
  const oxygens=raw.xyz.elements.map((e,i)=>e==='O'?i:null).filter(i=>i!==null);assert.equal(oxygens.length,20);
- assert.equal(oxygens.filter(i=>d(a,0,i)<2.6).length,3);assert.equal(oxygens.filter(i=>d(b,0,i)<2.6).length,0);
- for(const i of oxygens){
-  assert.equal(raw.xyz.elements[i+1],'H');assert.equal(raw.xyz.elements[i+2],'H');
-  assert.ok(Math.abs(d(b,0,i)-d(a,0,i)-.8)<2e-7);
-  for(const j of [i+1,i+2])for(let k=0;k<3;k++)assert.ok(Math.abs((b[j][k]-a[j][k])-(b[i][k]-a[i][k]))<2e-7,'Water translates rigidly');
-  assert.ok(Math.abs(d(a,i,i+1)-d(b,i,i+1))<2e-7);assert.ok(Math.abs(d(a,i,i+2)-d(b,i,i+2))<2e-7);
- }
+ assert.equal(oxygens.filter(i=>d(a,0,i)<2.6).length,3);
+ assert.ok(raw.resultXYZ.some(file=>file.path.endsWith('zn_ion_20h2o_solvator.solvator.xyz')));
  const menu=read('visualizador/index.html').match(/<optgroup label="Durante a aula · cinco blocos">([\s\S]*?)<\/optgroup>/)[1];
  assert.doesNotMatch(menu,/value="(?:solvator|complex|complex_short|solvator_two)"/);
  const lesson=read('exercicios/11-formacao-quelato/README.md');assert.match(lesson,/referência independente de 97 átomos/);assert.match(lesson,/não foi calculada a partir da nova saída do SOLVATOR/);
@@ -100,9 +96,11 @@ test('the new primary SOLVATOR preserves raw assembly separately from the rigid 
 
 test('the hydration comparison loads four complete original 61-atom runs with common initial coordinates',()=>{
  const config=store.presets.zn_hydration;
- if(config.awaitingResults){assert.deepEqual(Array.from(config.runs),[]);return;}
- const keys=['zn_h2o_sem_parede','zn_h2o_spring10','zn_h2o_spring50','zn_h2o_spring200'];assert.deepEqual(Array.from(config.runs),keys);
+ const keys=['zn_solv_h2o_sem_parede','zn_solv_h2o_spring10','zn_solv_h2o_spring50','zn_solv_h2o_spring200'];assert.deepEqual(Array.from(config.runs),keys);
  const loaded=keys.map(key=>bundle(key));
+ const raw=bundle('zn_ion_20h2o_solvator').xyz.frames[0].coords;
+ for(const run of loaded)run.xyz.frames[0].coords.forEach((point,i)=>point.forEach((v,k)=>assert.ok(Math.abs(v-raw[i][k])<1e-6,'MD starts from the raw SOLVATOR geometry')));
+ assert.deepEqual(Array.from(store.presets.zn_hydration_radial_history.runs),['zn_h2o_sem_parede','zn_h2o_spring10','zn_h2o_spring50','zn_h2o_spring200']);
  for(const run of loaded){
   const key=run.key,base=`exercicios/7-dinamica-complexo/resultados/${key}/${key}`;
   const xyz=R.parseXYZ(read(base+'-traj.xyz'),key+'-traj.xyz'),csv=R.parseEnergyCSV(read(base+'-md-ener.csv'),key+'-md-ener.csv');

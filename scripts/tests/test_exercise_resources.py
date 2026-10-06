@@ -33,6 +33,49 @@ def protocol(path):
 
 
 class ExerciseResourcesTests(unittest.TestCase):
+    def test_raw_solvator_packages_include_the_native_scf_logs(self):
+        folder = EX / '7-dinamica-complexo'
+        with zipfile.ZipFile(folder / 'resultados-completos.zip') as combined:
+            for suffix in ['sem_parede', 'spring10', 'spring50', 'spring200']:
+                case = 'zn_solv_h2o_' + suffix
+                with zipfile.ZipFile(folder / f'resultado-{case}.zip') as own:
+                    name = case + '.scf.log'
+                    self.assertGreater(own.getinfo(name).file_size, 0)
+                    self.assertEqual(combined.read(f'resultados/{case}/{name}'), own.read(name))
+
+    def test_generated_results_have_direct_xyz_downloads_in_every_visible_input_card(self):
+        manifest = json.loads((ROOT / 'visualizador/examples.js').read_text(encoding='utf-8').split('window.AIMD_EXAMPLES = ', 1)[1].strip().rstrip(';'))
+        for page in EX.glob('*/*.md'):
+            blocks = BLOCK.findall(page.read_text(encoding='utf-8-sig'))
+            if not blocks:
+                continue
+            output = page.with_name('index.html') if page.name == 'README.md' else page.with_suffix('.html')
+            rendered = output.read_text(encoding='utf-8')
+            for relative, _ in blocks:
+                key = (page.parent / relative).resolve().relative_to(ROOT).as_posix()
+                item = DATA['inputs'][key]
+                expected = [result for run in manifest['presets'][item['preset']]['runs'] for result in manifest['sources'][run]['resultXYZ']]
+                if item['state'].startswith('prepared'):
+                    continue
+                if item['state'].startswith('complete') or item['state'] in {'failed_partial_md', 'partial_interrupted_md'}:
+                    self.assertTrue(expected, f'Generated XYZ missing: {key}')
+                card = re.search(r'<div class="input-resources" data-input="' + re.escape(key) + r'">(.*?)</div></div>', rendered, re.S)
+                self.assertIsNotNone(card, key)
+                links = re.findall(r'<a href="([^"]+)" download[^>]*>Baixar XYZ do resultado', card[1])
+                linked = {(output.parent / html.unescape(link)).resolve() for link in links}
+                for result in expected:
+                    self.assertIn((ROOT / result['path']).resolve(), linked, key)
+                    self.assertTrue((ROOT / result['path']).is_file(), result['path'])
+        for run, stage in [('dimero_xtb2_5ps', 'water_02000_05000fs-traj.xyz'), ('etanol_nve_5ps', 'ethanol_00500_05000fs-traj.xyz'), ('proton_shared_10ps', 'z02_02000_10000fs-traj.xyz')]:
+            self.assertTrue(any(result['name'] == stage for result in manifest['sources'][run]['resultXYZ']), stage)
+        generated_paths = {result['path'] for source in manifest['sources'].values() for result in source['resultXYZ']}
+        for stage in ['h01_aquecer', 'p03_equilibrar', 'p04_observar', 't500_gota', 't600_gota']:
+            self.assertIn(f'exercicios/12-gota-protonada/resultados/etapas/originais/{stage}/{stage}-traj.xyz', generated_paths)
+        for key in ['zn2_isolado', 'z00_otimizar_inicial', 'probe_properties', 'al_agua_nh3_xtb2']:
+            self.assertEqual(manifest['sources'][key]['resultXYZ'], [], key)
+        self.assertTrue(manifest['sources']['zn_ion_20h2o_solvator']['resultXYZ'][0]['path'].endswith('.solvator.xyz'))
+        self.assertTrue(manifest['sources']['z00_otimizar']['resultXYZ'][0]['path'].endswith('h5o2_otimizado.xyz'))
+
     def test_every_input_protocol_has_a_complete_visible_copy_block(self):
         displayed = []
         for page in EX.glob('*/*.md'):

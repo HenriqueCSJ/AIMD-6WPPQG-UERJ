@@ -1,0 +1,62 @@
+{
+  "geometry_source": "exercicios/6-complexo-solvator/resultados/zn_ion_20h2o_solvator/zn_ion_20h2o_solvator.solvator.xyz",
+  "coordinate_modifications": false,
+  "cases": [
+    {
+      "case": "zn_solv_h2o_sem_parede",
+      "normal_termination": true,
+      "frames": 2001,
+      "energy_rows": 4001,
+      "first_fs": 0.0,
+      "last_fs": 1000.0,
+      "initial_contacts": 3,
+      "final_contacts": 6,
+      "first_six_contacts_fs": 20.5,
+      "max_radius_origin_A": 17.988242246712847,
+      "oh_min_A": 0.9146207149623382,
+      "oh_max_A": 1.053913696697026
+    },
+    {
+      "case": "zn_solv_h2o_spring10",
+      "normal_termination": true,
+      "frames": 2001,
+      "energy_rows": 4001,
+      "first_fs": 0.0,
+      "last_fs": 1000.0,
+      "initial_contacts": 3,
+      "final_contacts": 6,
+      "first_six_contacts_fs": 20.5,
+      "max_radius_origin_A": 7.616572911115337,
+      "oh_min_A": 0.9146207149623382,
+      "oh_max_A": 1.053913696697026
+    },
+    {
+      "case": "zn_solv_h2o_spring50",
+      "normal_termination": true,
+      "frames": 2001,
+      "energy_rows": 4001,
+      "first_fs": 0.0,
+      "last_fs": 1000.0,
+      "initial_contacts": 3,
+      "final_contacts": 6,
+      "first_six_contacts_fs": 20.5,
+      "max_radius_origin_A": 7.04767005419373,
+      "oh_min_A": 0.9146207149623382,
+      "oh_max_A": 1.053913696697026
+    },
+    {
+      "case": "zn_solv_h2o_spring200",
+      "normal_termination": true,
+      "frames": 2001,
+      "energy_rows": 4001,
+      "first_fs": 0.0,
+      "last_fs": 1000.0,
+      "initial_contacts": 3,
+      "final_contacts": 6,
+      "first_six_contacts_fs": 20.5,
+      "max_radius_origin_A": 6.739286925222414,
+      "oh_min_A": 0.9146207149623382,
+      "oh_max_A": 1.053913696697026
+    }
+  ]
+}

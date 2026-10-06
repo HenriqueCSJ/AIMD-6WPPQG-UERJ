@@ -21,6 +21,8 @@ def input_resources(body, folder):
     if not registry.exists():
         return body
     assets = json.loads(registry.read_text(encoding='utf-8'))['inputs']
+    manifest_text = (ROOT / 'visualizador/examples.js').read_text(encoding='utf-8').split('window.AIMD_EXAMPLES = ', 1)[1].strip().rstrip(';')
+    manifest = json.loads(manifest_text)
     def resource_card(match):
         relative = match.group(1)
         key = (folder / relative).resolve().relative_to(ROOT).as_posix()
@@ -33,7 +35,14 @@ def input_resources(body, folder):
             return f'<a href="{html.escape(href, quote=True)}"{attr}>{html.escape(label)}</a>'
         links = [link(key, 'Baixar input completo')]
         for structure in item['structures']:
-            links.append(link(structure, 'Baixar estrutura · ' + Path(structure).name))
+            links.append(link(structure, 'Baixar XYZ de entrada · ' + Path(structure).name))
+        results = {}
+        if not item['state'].startswith('prepared'):
+            for runkey in manifest['presets'][item['preset']]['runs']:
+                for result in manifest['sources'][runkey].get('resultXYZ', []):
+                    results[result['path']] = result
+        for result in sorted(results.values(), key=lambda result: (result['name'] != item['case'] + '-traj.xyz', result['name'])):
+            links.append(link(result['path'], 'Baixar XYZ do resultado' + (' parcial' if result.get('partial') else '') + ' · ' + result['name']))
         for dependency in item.get('dependencies', []):
             links.append(link(dependency, 'Auxiliar obrigatório · ' + Path(dependency).name))
         if item.get('executionPackage'):
@@ -124,7 +133,7 @@ def build_page(folder, title, source, index, filename='index.html'):
         resolved = (folder / href).resolve()
         if href.endswith('README.md') and (resolved.parent == EX or resolved.parent.name in dict(LESSONS)):
             href = href[:-len('README.md')] + 'index.html'
-        elif href.endswith('.md') and resolved.parent.name in dict(LESSONS) and resolved.stem in ('apoio', 'historico', 'historico-apoio', 'hidratacao', 'verificacao-dump'):
+        elif href.endswith('.md') and resolved.parent.name in dict(LESSONS) and resolved.stem in ('apoio', 'historico', 'historico-apoio', 'historico-radial', 'historico-radial-apoio', 'hidratacao', 'verificacao-dump'):
             href = href[:-3] + '.html'
         elif href.endswith('roteiro-4h.md') and resolved.parent == EX:
             href = href[:-len('roteiro-4h.md')] + 'roteiro-4h.html'
@@ -152,7 +161,7 @@ def build_page(folder, title, source, index, filename='index.html'):
     elif slug == '1-agua-dft' and filename == 'index.html':
         body = add_section_return(body, 'alem-das-posicoes', '<nav class="complement-steps" aria-label="Retorno do complemento Dump"><span>Complemento opcional · Dump</span><a href="#conteudo">↑ Voltar à etapa da água e à sequência da aula</a></nav>')
     return f'''<!doctype html>
-<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{html.escape(title)} · AIMD / ORCA</title><link rel="stylesheet" href="{prefix}pagina.css?v=20261006-inputs4"><script defer src="{prefix}pagina.js?v=20261006-inputs4"></script></head>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{html.escape(title)} · AIMD / ORCA</title><link rel="stylesheet" href="{prefix}pagina.css?v=20261006-solvator-direto"><script defer src="{prefix}pagina.js?v=20261006-solvator-direto"></script></head>
 <body><a class="skip" href="#conteudo">Ir para o conteúdo</a><header class="brand"><a href="{prefix}index.html"><strong>AIMD com ORCA</strong><small>6º Workshop PPGQ–UERJ · 7 de outubro de 2026</small></a><div class="logos"><img src="{repo_prefix}assets/uerj-logo.png" alt="UERJ"><img src="{repo_prefix}assets/ufrrj-logo-compacto.png" alt="UFRRJ"></div></header><div class="layout"><nav class="course-nav" aria-label="Mapa dos exercícios"><details class="course-map" open><summary>Mapa dos exercícios <small>{len(COURSE)} etapas + complementos opcionais</small></summary>{nav}</details></nav><main id="conteudo">{course_controls(index, prefix, filename, 'topo')}<article class="lesson-content">{body}</article>{course_controls(index, prefix, filename, 'fim')}</main></div><footer>Henrique de Castro Silva Junior e Virginia Camila Rufino Ferreira · ORCA 6.1.1 · Materiais e dados locais; links externos levam à documentação oficial.</footer></body></html>'''
 
 
@@ -168,7 +177,7 @@ def main():
         support = EX / slug / 'apoio.md'
         if support.exists():
             render(support.parent, f'Apoio · {title}', support.read_text(encoding='utf-8'), n, 'apoio.html')
-        for historical_name in ('historico', 'historico-apoio', 'verificacao-dump'):
+        for historical_name in ('historico', 'historico-apoio', 'historico-radial', 'historico-radial-apoio', 'verificacao-dump'):
             historical = EX / slug / f'{historical_name}.md'
             if historical.exists():
                 render(historical.parent, f'Histórico · {title}', historical.read_text(encoding='utf-8'), n, f'{historical_name}.html')

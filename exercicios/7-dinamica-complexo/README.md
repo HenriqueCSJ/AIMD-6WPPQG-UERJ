@@ -6,31 +6,27 @@
 
 > **Pergunta:** o que muda na hidratação quando removemos a parede ou aumentamos sua rigidez?
 
-## 1. Preserve a mesma condição inicial
+## 1. Use a saída do SOLVATOR sem modificações
 
-Depois de construir e inspecionar a montagem de Zn²⁺ + 20 águas em **[04a](../6-complexo-solvator/README.md)**, use aqui a geometria de referência já fornecida. Neste bloco não há en nem quelato pré-formado. Conte os átomos e confira os índices antes de comparar.
+O ponto de partida é **`zn_ion_20h2o_solvator.solvator.xyz`**, produzido em [04a](../6-complexo-solvator/README.md). Copie o XYZ completo ao fim desta página ou [baixe a estrutura gerada](estruturas/zn_ion_20h2o_solvator.solvator.xyz) e mantenha-a junto do input. **Nenhuma água é deslocada entre SOLVATOR e MD.**
 
-**Copie o [XYZ completo abaixo](#geometria-copiar-e-colar-ou-baixar), salve como `zn_20h2o_inicial.xyz` e coloque-o na mesma pasta do input escolhido. Execute somente ORCA.** O download é opcional; não há ajuste das águas a fazer antes da execução.
+Use exatamente a mesma geometria nos quatro controles. A referência tem 61 átomos, sem en, e já começa com três O a menos de 2,6 Å do Zn. A dinâmica mostra a reorganização e a evolução da hidratação a partir desse estado; contatos iniciais não são eventos formados pela MD.
 
-**Os quatro controles de 1 ps estão disponíveis como trajetórias de referência.** A geometria comum foi preparada a partir da saída verificada do novo SOLVATOR. Não use a antiga estrutura de 43 átomos no lugar dela.
-
-O arquivo comum **`zn_20h2o_inicial.xyz`** é uma preparação da nova montagem SOLVATOR: cada água foi transladada rigidamente **0,8 Å para fora na direção Zn→O**, mantendo suas distâncias e ângulos internos. O Zn permanece na origem; não há otimização intermediária. Essa intervenção didática afasta todas as águas além do corte inicial de 2,6 Å para observar a aproximação durante a MD. **Não é a saída bruta do SOLVATOR.** Use o mesmo [arquivo preparado](estruturas/zn_20h2o_inicial.xyz) em todos os controles, junto dos respectivos inputs. As distâncias iniciais Zn–O vão de **3,174 a 5,722 Å**; nenhum O está abaixo de 2,6 Å. O maior raio atômico é **6,141 Å**, menor que a parede de 6,5 Å.
-
-As variantes usam **XTB2/ALPB(water), timestep de 0,25 fs, velocidades inicializadas a 300 K, semente 42 e CSVR a 300 K com acoplamento de 100 fs**. São **4000 passos = 1000 fs = 1 ps** por controle. As posições e velocidades iniciais foram conferidas e são **idênticas nos quatro controles**; a parede é a variável comparada.
+As variantes usam **XTB2/ALPB(water), timestep de 0,25 fs, velocidades inicializadas a 300 K, semente 42 e CSVR a 300 K com acoplamento de 100 fs**. São **4000 passos = 1000 fs = 1 ps** por controle. A parede é a variável comparada.
 
 ## 2. Compare ausência de parede e três valores de Spring
 
-[Baixar todos os inputs de parede](aula-zn_h2o_paredes.zip)
+[Baixar todos os inputs de parede](aula-zn_solv_h2o_paredes.zip)
 
-- **Sem parede:** [input](inputs/zn_h2o_sem_parede.inp) · [pacote](aula-zn_h2o_sem_parede.zip).
+- **Sem parede:** [input](inputs/zn_solv_h2o_sem_parede.inp) · [pacote](aula-zn_solv_h2o_sem_parede.zip).
 
-**Input completo · `zn_h2o_sem_parede.inp` — copie e salve com esse nome.**
+**Input completo · `zn_solv_h2o_sem_parede.inp` — copie e salve com esse nome.**
 
-<!-- input-source: inputs/zn_h2o_sem_parede.inp -->
+<!-- input-source: inputs/zn_solv_h2o_sem_parede.inp -->
 ```text
 # 04b: Zn2+ + 20 H2O, sem etilenodiamina (61 atomos).
-# Use a MESMA montagem SOLVATOR em todos os quatro ramos.
-# Use a preparacao fornecida: aguas transladadas rigidamente +0.8 A apos SOLVATOR.
+# Use diretamente a saida bruta do SOLVATOR, sem deslocar as aguas.
+# A MESMA geometria inicial deve ser usada nos quatro ramos.
 # Raio fixo 6.5 A; Spring finito, inclusive no ramo mais rigido.
 ! MD XTB2 ALPB(water) PAL8
 %maxcore 256
@@ -40,22 +36,22 @@ As variantes usam **XTB2/ALPB(water), timestep de 0,25 fs, velocidades inicializ
   Initvel 300_K
   Thermostat CSVR 300_K Timecon 100_fs
   Cell None
-  Dump Position Stride 2 Filename "zn_h2o_sem_parede-traj.xyz"
-  Dump Velocity Stride 2000 Filename "zn_h2o_sem_parede-vel.xyz"
+  Dump Position Stride 2 Filename "zn_solv_h2o_sem_parede-traj.xyz"
+  Dump Velocity Stride 2000 Filename "zn_solv_h2o_sem_parede-vel.xyz"
   Run 4000
 end
-* xyzfile 2 1 zn_20h2o_inicial.xyz
+* xyzfile 2 1 zn_ion_20h2o_solvator.solvator.xyz
 ```
 
-- **Parede suave · Spring 10:** [input](inputs/zn_h2o_spring10.inp) · [pacote](aula-zn_h2o_spring10.zip).
+- **Parede suave · Spring 10:** [input](inputs/zn_solv_h2o_spring10.inp) · [pacote](aula-zn_solv_h2o_spring10.zip).
 
-**Input completo · `zn_h2o_spring10.inp` — copie e salve com esse nome.**
+**Input completo · `zn_solv_h2o_spring10.inp` — copie e salve com esse nome.**
 
-<!-- input-source: inputs/zn_h2o_spring10.inp -->
+<!-- input-source: inputs/zn_solv_h2o_spring10.inp -->
 ```text
 # 04b: Zn2+ + 20 H2O, sem etilenodiamina (61 atomos).
-# Use a MESMA montagem SOLVATOR em todos os quatro ramos.
-# Use a preparacao fornecida: aguas transladadas rigidamente +0.8 A apos SOLVATOR.
+# Use diretamente a saida bruta do SOLVATOR, sem deslocar as aguas.
+# A MESMA geometria inicial deve ser usada nos quatro ramos.
 # Raio fixo 6.5 A; Spring finito, inclusive no ramo mais rigido.
 ! MD XTB2 ALPB(water) PAL8
 %maxcore 256
@@ -65,22 +61,22 @@ end
   Initvel 300_K
   Thermostat CSVR 300_K Timecon 100_fs
   Cell Sphere 0, 0, 0, 6.5_A Spring 10.0
-  Dump Position Stride 2 Filename "zn_h2o_spring10-traj.xyz"
-  Dump Velocity Stride 2000 Filename "zn_h2o_spring10-vel.xyz"
+  Dump Position Stride 2 Filename "zn_solv_h2o_spring10-traj.xyz"
+  Dump Velocity Stride 2000 Filename "zn_solv_h2o_spring10-vel.xyz"
   Run 4000
 end
-* xyzfile 2 1 zn_20h2o_inicial.xyz
+* xyzfile 2 1 zn_ion_20h2o_solvator.solvator.xyz
 ```
 
-- **Parede intermediária · Spring 50:** [input](inputs/zn_h2o_spring50.inp) · [pacote](aula-zn_h2o_spring50.zip).
+- **Parede intermediária · Spring 50:** [input](inputs/zn_solv_h2o_spring50.inp) · [pacote](aula-zn_solv_h2o_spring50.zip).
 
-**Input completo · `zn_h2o_spring50.inp` — copie e salve com esse nome.**
+**Input completo · `zn_solv_h2o_spring50.inp` — copie e salve com esse nome.**
 
-<!-- input-source: inputs/zn_h2o_spring50.inp -->
+<!-- input-source: inputs/zn_solv_h2o_spring50.inp -->
 ```text
 # 04b: Zn2+ + 20 H2O, sem etilenodiamina (61 atomos).
-# Use a MESMA montagem SOLVATOR em todos os quatro ramos.
-# Use a preparacao fornecida: aguas transladadas rigidamente +0.8 A apos SOLVATOR.
+# Use diretamente a saida bruta do SOLVATOR, sem deslocar as aguas.
+# A MESMA geometria inicial deve ser usada nos quatro ramos.
 # Raio fixo 6.5 A; Spring finito, inclusive no ramo mais rigido.
 ! MD XTB2 ALPB(water) PAL8
 %maxcore 256
@@ -90,22 +86,22 @@ end
   Initvel 300_K
   Thermostat CSVR 300_K Timecon 100_fs
   Cell Sphere 0, 0, 0, 6.5_A Spring 50.0
-  Dump Position Stride 2 Filename "zn_h2o_spring50-traj.xyz"
-  Dump Velocity Stride 2000 Filename "zn_h2o_spring50-vel.xyz"
+  Dump Position Stride 2 Filename "zn_solv_h2o_spring50-traj.xyz"
+  Dump Velocity Stride 2000 Filename "zn_solv_h2o_spring50-vel.xyz"
   Run 4000
 end
-* xyzfile 2 1 zn_20h2o_inicial.xyz
+* xyzfile 2 1 zn_ion_20h2o_solvator.solvator.xyz
 ```
 
-- **Parede mais rígida · Spring 200:** [input](inputs/zn_h2o_spring200.inp) · [pacote](aula-zn_h2o_spring200.zip).
+- **Parede mais rígida · Spring 200:** [input](inputs/zn_solv_h2o_spring200.inp) · [pacote](aula-zn_solv_h2o_spring200.zip).
 
-**Input completo · `zn_h2o_spring200.inp` — copie e salve com esse nome.**
+**Input completo · `zn_solv_h2o_spring200.inp` — copie e salve com esse nome.**
 
-<!-- input-source: inputs/zn_h2o_spring200.inp -->
+<!-- input-source: inputs/zn_solv_h2o_spring200.inp -->
 ```text
 # 04b: Zn2+ + 20 H2O, sem etilenodiamina (61 atomos).
-# Use a MESMA montagem SOLVATOR em todos os quatro ramos.
-# Use a preparacao fornecida: aguas transladadas rigidamente +0.8 A apos SOLVATOR.
+# Use diretamente a saida bruta do SOLVATOR, sem deslocar as aguas.
+# A MESMA geometria inicial deve ser usada nos quatro ramos.
 # Raio fixo 6.5 A; Spring finito, inclusive no ramo mais rigido.
 ! MD XTB2 ALPB(water) PAL8
 %maxcore 256
@@ -115,11 +111,11 @@ end
   Initvel 300_K
   Thermostat CSVR 300_K Timecon 100_fs
   Cell Sphere 0, 0, 0, 6.5_A Spring 200.0
-  Dump Position Stride 2 Filename "zn_h2o_spring200-traj.xyz"
-  Dump Velocity Stride 2000 Filename "zn_h2o_spring200-vel.xyz"
+  Dump Position Stride 2 Filename "zn_solv_h2o_spring200-traj.xyz"
+  Dump Velocity Stride 2000 Filename "zn_solv_h2o_spring200-vel.xyz"
   Run 4000
 end
-* xyzfile 2 1 zn_20h2o_inicial.xyz
+* xyzfile 2 1 zn_ion_20h2o_solvator.solvator.xyz
 ```
 
 
@@ -136,7 +132,7 @@ Execute **um cálculo por vez**. Se o tempo da aula permitir somente um, escolha
 Na pasta do input e da geometria comum, com ORCA já [instalado](../../tutoriais/01-wsl2-ubuntu-orca.md):
 
 ```bash
-orca zn_h2o_spring10.inp > zn_h2o_spring10.out &
+orca zn_solv_h2o_spring10.inp > zn_solv_h2o_spring10.out &
 ```
 
 Espere encerrar antes de executar a próxima variante. Substitua o basename pelo do controle escolhido.
@@ -148,7 +144,7 @@ Espere encerrar antes de executar a próxima variante. Substitua o basename pelo
 No Prompt de Comando (`cmd`), na pasta dos arquivos, com ORCA e MS-MPI [configurados](../../tutoriais/02-windows-orca-msmpi.md):
 
 ```bat
-orca zn_h2o_spring10.inp > zn_h2o_spring10.out
+orca zn_solv_h2o_spring10.inp > zn_solv_h2o_spring10.out
 ```
 
 Espere o prompt voltar antes de iniciar outro cálculo.
@@ -161,33 +157,29 @@ Espere o prompt voltar antes de iniciar outro cálculo.
 
 Carregue juntos **`.out`**, **`-md-ener.csv`** e **`-traj.xyz`** de cada cálculo. Use as caixas para escolher até quatro simulações e o campo **Simulação** para alternar a trajetória.
 
-1. Compare as distâncias Zn–O no início e ao longo do tempo. Quais águas formam a primeira camada? A saída bruta de SOLVATOR tem três O próximos; a preparação usada nestas MD começa com zero O abaixo de 2,6 Å. Confira qual estrutura está aberta antes de dizer que algo se formou durante a MD.
+1. Compare as distâncias Zn–O no início e ao longo do tempo. A saída do SOLVATOR começa com três O abaixo de 2,6 Å. Quais contatos persistem, surgem ou se desfazem durante a MD?
 2. Compare as águas da camada externa. Quais se afastam mais? Elas realmente alcançam a fronteira da parede?
 3. Observe sem parede, Spring 10, Spring 50 e Spring 200 no mesmo intervalo físico. A retenção espacial não prova coordenação Zn–O.
 4. Relacione movimento, energia e temperatura. O mesmo termostato não apaga a mudança física introduzida pela parede. A rigidez maior pode exigir atenção ao timestep; término normal sozinho não garante uma comparação adequada.
 
 ### Resultados desta comparação
 
-Todos os ramos terminaram normalmente e usam **2001 quadros reais, de 0 a 1000 fs, a cada 0,5 fs**, sem redução no laboratório. As energias conservam os **4001 registros nativos**, com os tempos impressos pelo ORCA. Veja a [verificação dos quatro controles](resultados/verificacao-hidratacao.json).
+**Os quatro controles terminaram normalmente: 1 ps, 2001 quadros reais de 0 a 1000 fs e 4001 registros de energia por ramo.** O laboratório mantém todos os quadros. As coordenadas iniciais correspondem à saída bruta do SOLVATOR; posições e velocidades iniciais são iguais entre os quatro controles. Veja a [verificação desta comparação](resultados/verificacao-solvator-direto.json).
 
-Em todos os ramos, o primeiro O entra abaixo do corte Zn–O de **2,6 Å em 51 fs**, e seis O atendem ao critério em **77,5 fs**. A hidratação inicial ocorre nos quatro casos; a presença da parede não é condição para esses contatos aparecerem nesta referência.
+Com corte Zn–O estritamente menor que 2,6 Å, todos começam com **três O próximos**, alcançam seis O pela primeira vez em **20,5 fs** e terminam com **seis O** dentro do corte. As três proximidades iniciais já vêm da montagem; não foram criadas pela dinâmica.
 
-Ao final de 1 ps, os números de O abaixo do corte são **6 sem parede, 6 com Spring 10, 5 com Spring 50 e 6 com Spring 200**. São contagens geométricas do quadro final; não devem ser tratadas como populações de equilíbrio.
+O maior raio atômico ao longo do filme, medido a partir da origem fixa, é **17,988 Å sem parede**, **7,617 Å com Spring 10**, **7,048 Å com Spring 50** e **6,739 Å com Spring 200**. Mesmo a parede mais rígida permite penetração além do raio de 6,5 Å. Esses valores descrevem esta janela de 1 ps; não comprovam equilíbrio nem retenção indefinida.
 
-O **maior raio atômico ao longo da trajetória, medido a partir do centro fixo da parede**, foi **17,639 Å sem parede**, **7,842 Å com Spring 10**, **7,219 Å com Spring 50** e **6,853 Å com Spring 200**. Compare esses valores com o raio de **6,5 Å**: mesmo Spring 200 permite penetração além da borda. Maior rigidez reduz o afastamento observado nesta janela, sem tornar a parede impenetrável.
-
-- **Sem parede:** [resultados completos](resultado-zn_h2o_sem_parede.zip) · [saída](resultados/zn_h2o_sem_parede/zn_h2o_sem_parede.out) · [energia](resultados/zn_h2o_sem_parede/zn_h2o_sem_parede-md-ener.csv) · [trajetória](resultados/zn_h2o_sem_parede/zn_h2o_sem_parede-traj.xyz).
-- **Spring 10:** [resultados completos](resultado-zn_h2o_spring10.zip) · [saída](resultados/zn_h2o_spring10/zn_h2o_spring10.out) · [energia](resultados/zn_h2o_spring10/zn_h2o_spring10-md-ener.csv) · [trajetória](resultados/zn_h2o_spring10/zn_h2o_spring10-traj.xyz).
-- **Spring 50:** [resultados completos](resultado-zn_h2o_spring50.zip) · [saída](resultados/zn_h2o_spring50/zn_h2o_spring50.out) · [energia](resultados/zn_h2o_spring50/zn_h2o_spring50-md-ener.csv) · [trajetória](resultados/zn_h2o_spring50/zn_h2o_spring50-traj.xyz).
-- **Spring 200:** [resultados completos](resultado-zn_h2o_spring200.zip) · [saída](resultados/zn_h2o_spring200/zn_h2o_spring200.out) · [energia](resultados/zn_h2o_spring200/zn_h2o_spring200-md-ener.csv) · [trajetória](resultados/zn_h2o_spring200/zn_h2o_spring200-traj.xyz).
-
-Uma dinâmica curta descreve esse modelo e essa janela, sem demonstrar equilíbrio, retenção indefinida ou uma taxa macroscópica de evaporação. Se você repetir os cálculos, extraia os números dos seus próprios arquivos antes de compará-los à referência.
+- **Sem parede: [baixar XYZ do resultado](resultados/zn_solv_h2o_sem_parede/zn_solv_h2o_sem_parede-traj.xyz)** · [pacote completo](resultado-zn_solv_h2o_sem_parede.zip) · [saída ORCA](resultados/zn_solv_h2o_sem_parede/zn_solv_h2o_sem_parede.out) · [energias](resultados/zn_solv_h2o_sem_parede/zn_solv_h2o_sem_parede-md-ener.csv).
+- **Spring 10: [baixar XYZ do resultado](resultados/zn_solv_h2o_spring10/zn_solv_h2o_spring10-traj.xyz)** · [pacote completo](resultado-zn_solv_h2o_spring10.zip) · [saída ORCA](resultados/zn_solv_h2o_spring10/zn_solv_h2o_spring10.out) · [energias](resultados/zn_solv_h2o_spring10/zn_solv_h2o_spring10-md-ener.csv).
+- **Spring 50: [baixar XYZ do resultado](resultados/zn_solv_h2o_spring50/zn_solv_h2o_spring50-traj.xyz)** · [pacote completo](resultado-zn_solv_h2o_spring50.zip) · [saída ORCA](resultados/zn_solv_h2o_spring50/zn_solv_h2o_spring50.out) · [energias](resultados/zn_solv_h2o_spring50/zn_solv_h2o_spring50-md-ener.csv).
+- **Spring 200: [baixar XYZ do resultado](resultados/zn_solv_h2o_spring200/zn_solv_h2o_spring200-traj.xyz)** · [pacote completo](resultado-zn_solv_h2o_spring200.zip) · [saída ORCA](resultados/zn_solv_h2o_spring200/zn_solv_h2o_spring200.out) · [energias](resultados/zn_solv_h2o_spring200/zn_solv_h2o_spring200-md-ener.csv).
 
 ## 4. Só depois passe à en
 
 Siga para **[04c · Primeiro N assistido, segundo N livre](../11-formacao-quelato/README.md)**. A referência pronta de 97 átomos foi preparada separadamente, com Zn²⁺, 20 águas e três en. Não é uma continuação calculada a partir da nova saída de 04a–b. Nela, apenas o primeiro N recebe ajuda; depois a restrição é removida e o segundo N fecha livremente o quelato.
 
-[Entenda os controles](apoio.md) · [Histórico: parede no complexo pré-formado de 43 átomos](historico.md) · [Referência anterior com águas e en afastados](hidratacao.md)
+[Entenda os controles](apoio.md) · [Histórico separado: águas deslocadas previamente](historico-radial.md) · [Histórico: parede no complexo pré-formado de 43 átomos](historico.md) · [Referência anterior com águas e en afastados](hidratacao.md)
 
 **Complemento opcional:** [Cell: rigidez, pressão e parede móvel](../13-cell-pressao/README.md). As referências desse complemento pertencem ao sistema pré-formado indicado ali; seus resultados não substituem estes controles de hidratação sem en.
 
@@ -198,73 +190,73 @@ Siga para **[04c · Primeiro N assistido, segundo N livre](../11-formacao-quelat
 
 Os inputs acima usam `xyzfile`. Você pode copiar a geometria abaixo, salvá-la com o nome indicado e mantê-la na mesma pasta do input. O download é uma alternativa.
 
-### `zn_20h2o_inicial.xyz`
+### `zn_ion_20h2o_solvator.solvator.xyz`
 
-[Baixar a geometria, se preferir](estruturas/zn_20h2o_inicial.xyz).
+[Baixar o XYZ gerado pelo SOLVATOR](estruturas/zn_ion_20h2o_solvator.solvator.xyz).
 
-<!-- xyz-source: estruturas/zn_20h2o_inicial.xyz -->
+<!-- xyz-source: estruturas/zn_ion_20h2o_solvator.solvator.xyz -->
 ```text
 61
-Zn +20H2O; SOLVATOR stochastic then rigid radial translation +0.8 A per water; no optimization
-Zn 0.000000000000 0.000000000000 0.000000000000
-O 0.555922824394 3.361864876730 -0.749550543529
-H 0.848992725669 3.272555950946 -1.663605253468
-H 1.227492237545 3.928136335538 -0.352444485045
-O 0.907336483050 -0.504818746404 -3.250720903823
-H 0.372796938523 -0.206358303924 -3.995402650364
-H 1.795489729954 -0.206358303615 -3.477584822347
-O -1.941213164387 -1.746900323706 2.016141991644
-H -1.916743736919 -1.911826479869 2.965648534093
-H -2.295243248466 -2.567406864723 1.654487765706
-O -0.507316049519 -3.421046497298 -0.025926027498
-H 0.014622933538 -3.536888594850 -0.828124488241
-H 0.124579111423 -3.596393902415 0.680702486305
-O 1.509655722563 1.048345337380 2.587898760688
-H 1.207217059541 0.569589208327 3.368081744367
-H 2.158513920841 1.667444310423 2.941539204539
-O -3.179388747899 -0.368313004839 -1.535925312285
-H -3.174760976902 -0.147072510254 -2.474218065807
-H -4.108180039360 -0.287762796647 -1.290526729791
-O 2.436122861745 -2.169349443097 -0.862006720971
-H 2.984633805154 -2.837670423323 -0.435573987271
-H 3.078115465096 -1.590244370837 -1.288439454175
-O -3.581610018565 1.394715908999 0.717596977793
-H -3.908410896291 2.057842786491 1.336326316589
-H -4.169680983881 1.485741097647 -0.040854746582
-O 3.637584021629 2.479532131035 -0.176639434438
-H 3.259614023317 2.965671619972 -0.918373309687
-H 3.203043415082 2.867688453473 0.591391290232
-O -0.318471094804 3.397453833453 2.638276467646
-H -0.684599778044 2.505651515204 2.637586182034
-H -0.591118119047 3.753077567459 1.784720714689
-O 4.239424624396 -0.031697738997 1.730865250130
-H 4.571843667201 -0.873119196178 1.397894417478
-H 3.848475987020 0.379790378174 0.951635658941
-O -3.013388276393 4.016291079013 -0.163874444807
-H -2.963420352655 3.821383025167 -1.106676715256
-H -2.098459505797 3.940269156923 0.130214105665
-O 0.416257787868 -2.118763425535 4.083713353440
-H 1.076077030207 -2.765576519626 3.808697985193
-H 0.480144740629 -2.127488842692 5.045588806805
-O -1.202708339562 0.386551986140 4.133001633399
-H -1.787727240414 0.580944264210 4.874167331399
-H -1.808748088520 0.273630351846 3.391835936260
-O -2.431405977003 -1.869764539336 -3.794942330087
-H -2.729866419483 -2.386713189762 -4.551941353282
-H -2.729866419792 -2.386713190296 -3.037943307773
-O -3.349936993776 2.137377947889 -2.498515974724
-H -4.154747599743 2.017352761505 -3.015464625150
-H -2.843586831207 2.774351784526 -3.015464625684
-O 2.462156908433 -3.422949350182 -3.072960718529
-H 3.343771192520 -3.593286284558 -3.423822011495
-H 1.936091410309 -4.150626138290 -3.423822011857
-O 2.260858093917 -3.935689779744 2.073682044161
-H 2.389641847235 -4.550601312333 1.342477137182
-H 2.728995225671 -4.354675548654 2.804886950289
-O 3.080988711794 1.675100711530 -3.442321417927
-H 3.947612499314 1.662139096174 -3.864408223515
-H 2.636451730842 2.419138119306 -3.864408223951
-O 1.118154798626 5.105776129341 -2.329383480226
-H 0.313344192660 5.622724779767 -2.449408666610
-H 1.624504961196 5.622724780301 -1.692409643589
+2.797566
+Zn 0.00000000000000000000 0.00000000000000000000 0.00000000000000000000
+O  0.42845356185829014395 2.59101248899220459876 -0.57768378284810573131
+H  0.72152346313317139437 2.50170356320817166562 -1.49173849278749504066
+H  1.10002297500853729595 3.15728394779962373562 -0.18057772436439845087
+O  0.69462876587447974774 -0.38647362842322374732 -2.48865144497861745521
+H  0.16008922134722947117 -0.08801318594256334060 -3.23333319151951359416
+H  1.58278201277829011495 -0.08801318563421281493 -2.71551536350186806246
+O  -1.47050359065344538045 -1.32330814855911138572 1.52726351354390765813
+H  -1.44603416318533950502 -1.48823430472195950003 2.47677005599271105041
+H  -1.82453367473264282950 -2.14381468957607257408 1.16560928760624049616
+O  -0.38996852419066885265 -2.62972254672934457886 -0.01992906530541278115
+H  0.13197045886722991170 -2.74556464428122692922 -0.82212752604914629551
+H  0.24192663675200987150 -2.80506995184657137443 0.68669944849741770820
+O  1.12916967872432216780 0.78412564540994578177 1.93565775858849686841
+H  0.82673101570190821175 0.30536951635660081195 2.71584074226823757314
+H  1.77802787700234032897 1.40322461845323354090 2.28929820243996839935
+O  -2.46292763603569975217 -0.28531530751868061646 -1.18981137522486135616
+H  -2.45829986503900466133 -0.06407481293447533921 -2.12810412874696153196
+H  -3.39171892749672476697 -0.20476509932706229988 -0.94441279273147182849
+O  1.85849913102955199840 -1.65497977060495071733 -0.65761820432961581862
+H  2.40701007443896353166 -2.32330075083047971063 -0.23118547062961608551
+H  2.50049173438110461376 -1.07587469834478866026 -1.08405093753353720665
+O  -2.84879998146069945975 1.10935211681448175902 0.57077410618049029267
+H  -3.17560085918615753187 1.77247899430619226813 1.18950344497598781146
+H  -3.43687094677624749295 1.20037730546274223897 -0.18767761819470252238
+O  2.97707960581166863889 2.02930420173608228041 -0.14456563881958151008
+H  2.59910960750009500941 2.51544369067337925117 -0.88629951406897167221
+H  2.54253899926512971774 2.41746052417395329570 0.62346508585032867078
+O  -0.25940345521809138329 2.76731947646626208481 2.14894865717717786779
+H  -0.62553213845824462425 1.87551715821688969044 2.14825837156489773960
+H  -0.53205047946105421541 3.12294321047169365357 1.29539290421969965905
+O  3.49879407703708267263 -0.02616012107435483625 1.42848183936440875641
+H  3.83121311984185375366 -0.86758157825487736137 1.09551100671188450519
+H  3.10784543966109172430 0.38532799609697931942 0.64925224817580295955
+O  -2.53352448985324585351 3.37672111050920387143 -0.13777843447303217417
+H  -2.48355656611498387676 3.18181305666285219047 -1.08058070492185964717
+H  -1.61859571925644596391 3.30069918841922094188 0.15631011599993194228
+O  0.34416964052217580150 -1.75183280114361039637 3.37648975662189387847
+H  1.00398888286132614844 -2.39864589523441118502 3.10147438837490696528
+H  0.40805659328371468586 -1.76055821830096981273 4.33836520998661612225
+O  -0.98007541117425667210 0.31499748051503323465 3.36794311804039914193
+H  -1.56509431202642645964 0.50938975858476953640 4.10910881604114308630
+H  -1.58611516013209996601 0.20207584622120586260 2.62677742090187127388
+O  -2.03277249547840188626 -1.56321320443097588893 -3.17275455579725296218
+H  -2.33123293795906283421 -2.08016185485696825097 -3.92975357899169797093
+H  -2.33123293826741351253 -2.08016185539104769830 -2.41575553348344351789
+O  -2.77899843987057915129 1.77309901458798124807 -2.07268733968674823132
+H  -3.58380904583730375279 1.65307382820375559085 -2.58963599011274103745
+H  -2.27264827730134166828 2.41007285122492254104 -2.58963599064682048478
+O  2.08463113673704913964 -2.89810400402355927696 -2.60177959165629157923
+H  2.96624542082403985788 -3.06844093839956011394 -2.95264088462192830775
+H  1.55856563861335972732 -3.62578079213164716776 -2.95264088498441612529
+O  1.89840453959815591567 -3.30473255460799109073 1.74123595678574005774
+H  2.02718829291598989784 -3.91964408719734747066 1.01003104980662916645
+H  2.36654167135260884436 -3.72371832351866194344 2.47244086291422426882
+O  2.57940983849328642208 1.40239762620646524205 -2.88191829417254830048
+H  3.44603362601369322959 1.38943601085069512457 -3.30400509976057277228
+H  2.13487285754159339390 2.14643503398247581515 -3.30400510019664706007
+O  0.96183363445903169442 4.39197436459716517021 -2.00372916307002357783
+H  0.15702302849230723170 4.90892301502316108497 -2.12375434945424945710
+H  1.46818379702826895539 4.90892301555723697959 -1.36675532643308250691
 ```

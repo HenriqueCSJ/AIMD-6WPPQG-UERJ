@@ -35,7 +35,7 @@ test('menu presets and retained direct links resolve all runs and original downl
   const {store,loader}=bundledLoader();
   const selector=read('index.html').match(/<select id="example-select">([\s\S]*?)<\/select>/)[1];
   const exposed=[...selector.matchAll(/<option value="([^"]+)"/g)].map(match=>match[1]);
-  const directLinks=['water_nve','water_csvr','solvator','complex','complex_short','solvator_two','proton_shared_short','water_short','ethanol_short','chelation_previous'];
+  const directLinks=['water_nve','water_csvr','solvator','complex','complex_short','solvator_two','proton_shared_short','water_short','ethanol_short','chelation_previous','zn_hydration_radial_history'];
   const inputPresets=Object.keys(JSON.parse(read('../exercicios/arquivos-exercicios.json')).presets);
   assert.deepEqual(Object.keys(store.presets).sort(),[...exposed,...directLinks,...inputPresets].sort());
   assert.deepEqual(Array.from(store.presets.chelation.runs),['chelation_continuous']);

@@ -1,0 +1,17 @@
+# 04b: Zn2+ + 20 H2O, sem etilenodiamina (61 atomos).
+# Use diretamente a saida bruta do SOLVATOR, sem deslocar as aguas.
+# A MESMA geometria inicial deve ser usada nos quatro ramos.
+# Raio fixo 6.5 A; Spring finito, inclusive no ramo mais rigido.
+! MD XTB2 ALPB(water) PAL8
+%maxcore 256
+%md
+  Timestep 0.25_fs
+  Randomize 42
+  Initvel 300_K
+  Thermostat CSVR 300_K Timecon 100_fs
+  Cell Sphere 0, 0, 0, 6.5_A Spring 10.0
+  Dump Position Stride 2 Filename "zn_solv_h2o_spring10-traj.xyz"
+  Dump Velocity Stride 2000 Filename "zn_solv_h2o_spring10-vel.xyz"
+  Run 4000
+end
+* xyzfile 2 1 zn_ion_20h2o_solvator.solvator.xyz

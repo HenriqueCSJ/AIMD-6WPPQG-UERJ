@@ -2,14 +2,19 @@
 from pathlib import Path
 import json
 import zipfile
+import argparse
 
 ROOT = Path(__file__).resolve().parents[1]
 EX = ROOT / 'exercicios'
 REGISTRY = json.loads((EX / 'arquivos-exercicios.json').read_text(encoding='utf-8'))
 
 
-def main():
-    for lesson in sorted({Path(key).parts[1] for key in REGISTRY['inputs']}):
+def main(lessons=None):
+    available = {Path(key).parts[1] for key in REGISTRY['inputs']}
+    selected = set(lessons) if lessons else available
+    if not selected <= available:
+        raise ValueError(f'Unknown exercise: {selected - available}')
+    for lesson in sorted(selected):
         folder = EX / lesson
         cases = {key: value for key, value in REGISTRY['inputs'].items() if Path(key).parts[1] == lesson}
         lines = [f'Resultados completos: {lesson}', '',
@@ -27,6 +32,16 @@ def main():
             archive.write(folder / 'README.md', 'README-EXERCICIO.md')
             for file in files:
                 archive.write(file, file.relative_to(folder).as_posix())
+            # Large native SCF logs may be retained in each calculation's result
+            # ZIP instead of duplicated as loose files in the website tree.
+            for case, package in sorted({(item['case'], item['casePackage']) for item in cases.values() if item.get('casePackage')}):
+                name = case + '.scf.log'
+                target = f'resultados/{case}/{name}'
+                if target in archive.namelist():
+                    continue
+                with zipfile.ZipFile(ROOT / package) as source:
+                    if name in source.namelist():
+                        archive.writestr(target, source.read(name))
             for key, item in cases.items():
                 # The retained path distinguishes original and didactic inputs with the same basename.
                 location = Path('executar') / Path(key).relative_to(Path('exercicios') / lesson).with_suffix('')
@@ -38,4 +53,6 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--lesson', action='append')
+    main(parser.parse_args().lesson)

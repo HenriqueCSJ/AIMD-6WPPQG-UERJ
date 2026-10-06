@@ -8,7 +8,8 @@
   <script defer src="orca-parser.js?v=20261006-review1"></script><script defer src="charts.js?v=20261006-circular1"></script><script defer src="run-association.js?v=20261006-znpressure1"></script><script defer src="geometry.js?v=20261006-native-cadence1"></script>
   <script defer src="highlight-selection.js?v=20261001-temperature1"></script>
   <script defer src="dihedral-circle.js?v=20261006-circular1"></script>
-  <script defer src="vendor/3Dmol-min.js?v=20261001-performance1"></script><script defer src="examples.js?v=20261006-inputs4"></script><script defer src="example-loader.js?v=20261006-znpressure1"></script><script defer src="app.js?v=20261006-inputs4"></script>
+  <script defer src="vendor/3Dmol-min.js?v=20261001-performance1"></script><script defer src="examples.js?v=20261006-solvator-direto"></script><script defer src="example-loader.js?v=20261006-znpressure1"></script><script defer src="xyz-download.js?v=20261006-solvator-direto"></script>
+<script defer src="app.js?v=20261006-solvator-direto"></script>
 </head>
 <body>
 <a class="skip" href="#main">Ir para o conteúdo</a>
@@ -130,6 +131,7 @@
       <nav class="expanded-guide-shortcut" aria-label="Consulta rápida na trajetória ampliada"><a href="../guia-md/index.html" target="_blank" rel="noopener" aria-label="Guia de parâmetros %md (abre em outra aba)">Guia de parâmetros <code>%md</code> ↗</a></nav>
       <div class="toolbar"><label>Simulação<select id="trajectory-run"></select></label><button type="button" class="button small-button" id="reset-view">Centralizar</button><label class="check-label"><input id="proximity-lines" type="checkbox" checked> Traços de proximidade</label><label class="check-label"><input id="atom-labels" type="checkbox"> Mostrar índices</label><label class="check-label"><input id="hydrogen-bonds" type="checkbox" checked> Ligações H</label><label class="check-label"><input id="coordination-contacts" type="checkbox" checked> Coordenação</label><label class="contact-cutoff-control">Corte metal–N/O (Å)<input id="coordination-cutoff" type="number" min="2" max="3.5" step="0.1" value="2.6" inputmode="decimal"></label></div>
       <p class="contact-heuristic">Contatos tracejados são sugestões geométricas por quadro: não inferem ordem de ligação, protonação nem a química de aceitador/coordenação a partir do XYZ. O corte metal–N/O é genérico e ajustável.</p>
+      <div id="trajectory-xyz-downloads" class="toolbar" aria-label="Baixar XYZ desta simulação" hidden></div>
       <div id="trajectory-data-link" class="trajectory-data-link" hidden>
         <label>Dados desta trajetória<select id="trajectory-energy-source"></select></label>
         <button type="button" id="associate-trajectory-data" class="button small-button">Associar arquivos</button>

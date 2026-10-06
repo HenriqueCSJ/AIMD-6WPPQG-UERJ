@@ -231,7 +231,7 @@
     const warnings=[],notices=[],groups=new Map();let accepted=0,trajectoryRun=null;
     for(const file of files){
       if(file.size>R.MAX_FILE_BYTES){warnings.push(`${file.name}: limite de 1 GB por arquivo.`);continue;}
-      try{const parsed=await R.parseBlob(file,file.name,(read,total)=>message(`Lendo ${file.name}… ${total?Math.floor(read/total*100):100}%`,true));warnings.push(...parsed.warnings.filter(w=>!w.startsWith('O .out pode')&&!w.startsWith('XYZ convencional')).map(w=>`${file.name}: ${w}`));if(!groups.has(parsed.key))groups.set(parsed.key,[]);groups.get(parsed.key).push(parsed);}
+      try{const parsed=await R.parseBlob(file,file.name,(read,total)=>message(`Lendo ${file.name}… ${total?Math.floor(read/total*100):100}%`,true));if(parsed.kind==='xyz')parsed.sourceFile=file;warnings.push(...parsed.warnings.filter(w=>!w.startsWith('O .out pode')&&!w.startsWith('XYZ convencional')).map(w=>`${file.name}: ${w}`));if(!groups.has(parsed.key))groups.set(parsed.key,[]);groups.get(parsed.key).push(parsed);}
       catch(error){warnings.push(`${file.name}: ${error.message}`);}
     }
     const rememberTrajectory=run=>{if(run.xyz&&(!trajectoryRun||(trajectoryRun.xyz.frames.length<2&&run.xyz.frames.length>1)))trajectoryRun=run;};
@@ -688,7 +688,7 @@
   function renderTrajectory(frameTime=null){
     updateExerciseReturn();
     const run=currentTrajectory(),has=!!run?.xyz;$('trajectory-empty').hidden=has;$('trajectory-content').hidden=!has;
-    $('reset-view').disabled=!has;renderPlaybackControls(run);renderTrajectoryDataLink(run);
+    $('reset-view').disabled=!has;renderPlaybackControls(run);renderTrajectoryDataLink(run);renderXYZDownloads(run);
     if(!has){
       stop();clearTrajectoryScene();state.frame=0;state.selectedAtom=null;
       $('trajectory-status').hidden=true;$('trajectory-status').textContent='';
@@ -908,7 +908,19 @@
     if(measures[type].length>=6){message('Mostre até seis medidas por vez para manter o gráfico legível.');return false;}
     measures[type].push(indices);if(type==='distance')state.pairs[run.id]=measures.distance;return true;
   }
-  function download(name,content){const blob=new Blob(['\uFEFF'+content],{type:'text/csv;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
+  function downloadBlob(name,blob){const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
+  function download(name,content){downloadBlob(name,new Blob(['\uFEFF'+content],{type:'text/csv;charset=utf-8'}));}
+  function renderXYZDownloads(run){
+    const host=$('trajectory-xyz-downloads');if(!host)return;host.replaceChildren();host.hidden=!run?.xyz;if(!run?.xyz)return;
+    const results=run.resultXYZ||[];
+    const files=results.length?results:run.files.filter(file=>file.kind==='xyz'&&file.path).map(file=>({...file,label:'Baixar XYZ de entrada · '+file.name}));
+    for(const file of files){const a=document.createElement('a');a.className='button small-button';a.href='../'+file.path;a.download=file.name;a.textContent=file.label;host.append(a);}
+    if(!run.reference&&run.xyz.sourceFile){const button=document.createElement('button');button.type='button';button.className='button small-button';button.textContent='Baixar XYZ original carregado';button.addEventListener('click',()=>downloadBlob(run.xyz.sourceFile.name,run.xyz.sourceFile));host.append(button);}
+    for(const [label,last] of [['Baixar quadro atual (XYZ)',false],['Baixar último quadro (XYZ)',true]]){
+      const button=document.createElement('button');button.type='button';button.className='button small-button';button.textContent=label;
+      button.addEventListener('click',()=>{const index=last?run.xyz.frames.length-1:state.frame;downloadBlob(`${run.key}-${last?'ultimo':'quadro-'+(index+1)}.xyz`,new Blob([window.AIMD_XYZ_DOWNLOAD.frameText(run.xyz,index,run.label)],{type:'chemical/x-xyz;charset=utf-8'}));});host.append(button);
+    }
+  }
   const csvText=rows=>rows.map(row=>row.map(v=>typeof v==='string'?`"${(/^[=+@-]/.test(v)?"'"+v:v).replace(/"/g,'""')}"`:v??'').join(';')).join('\r\n');
   function energyExportRows(){const sequence=visible().some(sequenceClock),rows=[['simulacao','origem','passo',sequence?'tempo_exibido_fs':'tempo_fs','trecho','K_Eh','U_Eh','E_Eh','T_K','quantidade_conservada_Eh',...(sequence?['relogio','fonte','tempo_original_fs','passo_original']:[])]];for(const r of visible())for(const p of energy(r)?.rows||[])rows.push([r.label,r.reference?'referencia':'upload',p.step,p.time,p.segment,p.kinetic,p.potential,p.total,p.temperature,p.conserved,...(sequence?[sequenceClock(r)?'sequence_elapsed':'physical',p.sourceKey||'',p.sourceTime??p.time,p.sourceStep??p.step]:[])]);return rows;}
   function exportEnergy(){const rows=energyExportRows();download('energias-dados-originais.csv',csvText(rows));message('CSV exportado com valores originais em Hartree, tempo em fs e temperatura em K. As transformações visuais não alteram os dados.',true);}

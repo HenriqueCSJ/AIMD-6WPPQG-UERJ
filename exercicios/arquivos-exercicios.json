@@ -1325,7 +1325,7 @@
       "dependencies": [],
       "preset": "arquivo_zn_h2o_sem_parede",
       "state": "complete_md",
-      "status": "Dinâmica executada; resultados disponíveis.",
+      "status": "Histórico: MD com águas deslocadas previamente; fora do percurso atual.",
       "resultsPackage": "exercicios/7-dinamica-complexo/resultados-completos.zip",
       "case": "zn_h2o_sem_parede",
       "executionPackage": "exercicios/7-dinamica-complexo/aula-zn_h2o_sem_parede.zip"
@@ -1337,7 +1337,7 @@
       "dependencies": [],
       "preset": "arquivo_zn_h2o_spring10",
       "state": "complete_md",
-      "status": "Dinâmica executada; resultados disponíveis.",
+      "status": "Histórico: MD com águas deslocadas previamente; fora do percurso atual.",
       "resultsPackage": "exercicios/7-dinamica-complexo/resultados-completos.zip",
       "case": "zn_h2o_spring10",
       "executionPackage": "exercicios/7-dinamica-complexo/aula-zn_h2o_spring10.zip"
@@ -1349,7 +1349,7 @@
       "dependencies": [],
       "preset": "arquivo_zn_h2o_spring200",
       "state": "complete_md",
-      "status": "Dinâmica executada; resultados disponíveis.",
+      "status": "Histórico: MD com águas deslocadas previamente; fora do percurso atual.",
       "resultsPackage": "exercicios/7-dinamica-complexo/resultados-completos.zip",
       "case": "zn_h2o_spring200",
       "executionPackage": "exercicios/7-dinamica-complexo/aula-zn_h2o_spring200.zip"
@@ -1361,7 +1361,7 @@
       "dependencies": [],
       "preset": "arquivo_zn_h2o_spring50",
       "state": "complete_md",
-      "status": "Dinâmica executada; resultados disponíveis.",
+      "status": "Histórico: MD com águas deslocadas previamente; fora do percurso atual.",
       "resultsPackage": "exercicios/7-dinamica-complexo/resultados-completos.zip",
       "case": "zn_h2o_spring50",
       "executionPackage": "exercicios/7-dinamica-complexo/aula-zn_h2o_spring50.zip"
@@ -1462,7 +1462,7 @@
       "dependencies": [],
       "preset": "arquivo_zn_h2o_sem_parede",
       "state": "complete_md",
-      "status": "Dinâmica executada; resultados disponíveis.",
+      "status": "Histórico: MD com águas deslocadas previamente; fora do percurso atual.",
       "resultsPackage": "exercicios/7-dinamica-complexo/resultados-completos.zip",
       "case": "zn_h2o_sem_parede"
     },
@@ -1473,7 +1473,7 @@
       "dependencies": [],
       "preset": "arquivo_zn_h2o_spring10",
       "state": "complete_md",
-      "status": "Dinâmica executada; resultados disponíveis.",
+      "status": "Histórico: MD com águas deslocadas previamente; fora do percurso atual.",
       "resultsPackage": "exercicios/7-dinamica-complexo/resultados-completos.zip",
       "case": "zn_h2o_spring10"
     },
@@ -1484,7 +1484,7 @@
       "dependencies": [],
       "preset": "arquivo_zn_h2o_spring200",
       "state": "complete_md",
-      "status": "Dinâmica executada; resultados disponíveis.",
+      "status": "Histórico: MD com águas deslocadas previamente; fora do percurso atual.",
       "resultsPackage": "exercicios/7-dinamica-complexo/resultados-completos.zip",
       "case": "zn_h2o_spring200"
     },
@@ -1495,7 +1495,7 @@
       "dependencies": [],
       "preset": "arquivo_zn_h2o_spring50",
       "state": "complete_md",
-      "status": "Dinâmica executada; resultados disponíveis.",
+      "status": "Histórico: MD com águas deslocadas previamente; fora do percurso atual.",
       "resultsPackage": "exercicios/7-dinamica-complexo/resultados-completos.zip",
       "case": "zn_h2o_spring50"
     },
@@ -1700,6 +1700,106 @@
       "resultsPackage": "exercicios/9-aluminio-amonia/resultados-completos.zip",
       "case": "scc",
       "labLabel": "Abrir os dois controles que usam este auxiliar"
+    },
+    "exercicios/7-dinamica-complexo/inputs/zn_solv_h2o_sem_parede.inp": {
+      "structures": [
+        "exercicios/7-dinamica-complexo/estruturas/zn_ion_20h2o_solvator.solvator.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_zn_solv_h2o_sem_parede",
+      "state": "complete_md",
+      "status": "MD executada diretamente da saída SOLVATOR, sem ajuste das águas; 1 ps.",
+      "resultsPackage": "exercicios/7-dinamica-complexo/resultados-completos.zip",
+      "case": "zn_solv_h2o_sem_parede",
+      "executionPackage": "exercicios/7-dinamica-complexo/aula-zn_solv_h2o_sem_parede.zip",
+      "casePackage": "exercicios/7-dinamica-complexo/resultado-zn_solv_h2o_sem_parede.zip"
+    },
+    "exercicios/7-dinamica-complexo/inputs/zn_solv_h2o_spring10.inp": {
+      "structures": [
+        "exercicios/7-dinamica-complexo/estruturas/zn_ion_20h2o_solvator.solvator.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_zn_solv_h2o_spring10",
+      "state": "complete_md",
+      "status": "MD executada diretamente da saída SOLVATOR, sem ajuste das águas; 1 ps.",
+      "resultsPackage": "exercicios/7-dinamica-complexo/resultados-completos.zip",
+      "case": "zn_solv_h2o_spring10",
+      "executionPackage": "exercicios/7-dinamica-complexo/aula-zn_solv_h2o_spring10.zip",
+      "casePackage": "exercicios/7-dinamica-complexo/resultado-zn_solv_h2o_spring10.zip"
+    },
+    "exercicios/7-dinamica-complexo/inputs/zn_solv_h2o_spring50.inp": {
+      "structures": [
+        "exercicios/7-dinamica-complexo/estruturas/zn_ion_20h2o_solvator.solvator.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_zn_solv_h2o_spring50",
+      "state": "complete_md",
+      "status": "MD executada diretamente da saída SOLVATOR, sem ajuste das águas; 1 ps.",
+      "resultsPackage": "exercicios/7-dinamica-complexo/resultados-completos.zip",
+      "case": "zn_solv_h2o_spring50",
+      "executionPackage": "exercicios/7-dinamica-complexo/aula-zn_solv_h2o_spring50.zip",
+      "casePackage": "exercicios/7-dinamica-complexo/resultado-zn_solv_h2o_spring50.zip"
+    },
+    "exercicios/7-dinamica-complexo/inputs/zn_solv_h2o_spring200.inp": {
+      "structures": [
+        "exercicios/7-dinamica-complexo/estruturas/zn_ion_20h2o_solvator.solvator.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_zn_solv_h2o_spring200",
+      "state": "complete_md",
+      "status": "MD executada diretamente da saída SOLVATOR, sem ajuste das águas; 1 ps.",
+      "resultsPackage": "exercicios/7-dinamica-complexo/resultados-completos.zip",
+      "case": "zn_solv_h2o_spring200",
+      "executionPackage": "exercicios/7-dinamica-complexo/aula-zn_solv_h2o_spring200.zip",
+      "casePackage": "exercicios/7-dinamica-complexo/resultado-zn_solv_h2o_spring200.zip"
+    },
+    "exercicios/7-dinamica-complexo/resultados/zn_solv_h2o_sem_parede/zn_solv_h2o_sem_parede.inp": {
+      "structures": [
+        "exercicios/7-dinamica-complexo/resultados/zn_solv_h2o_sem_parede/zn_ion_20h2o_solvator.solvator.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_zn_solv_h2o_sem_parede",
+      "state": "complete_md",
+      "status": "MD executada diretamente da saída SOLVATOR, sem ajuste das águas; 1 ps.",
+      "resultsPackage": "exercicios/7-dinamica-complexo/resultados-completos.zip",
+      "case": "zn_solv_h2o_sem_parede",
+      "casePackage": "exercicios/7-dinamica-complexo/resultado-zn_solv_h2o_sem_parede.zip"
+    },
+    "exercicios/7-dinamica-complexo/resultados/zn_solv_h2o_spring10/zn_solv_h2o_spring10.inp": {
+      "structures": [
+        "exercicios/7-dinamica-complexo/resultados/zn_solv_h2o_spring10/zn_ion_20h2o_solvator.solvator.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_zn_solv_h2o_spring10",
+      "state": "complete_md",
+      "status": "MD executada diretamente da saída SOLVATOR, sem ajuste das águas; 1 ps.",
+      "resultsPackage": "exercicios/7-dinamica-complexo/resultados-completos.zip",
+      "case": "zn_solv_h2o_spring10",
+      "casePackage": "exercicios/7-dinamica-complexo/resultado-zn_solv_h2o_spring10.zip"
+    },
+    "exercicios/7-dinamica-complexo/resultados/zn_solv_h2o_spring50/zn_solv_h2o_spring50.inp": {
+      "structures": [
+        "exercicios/7-dinamica-complexo/resultados/zn_solv_h2o_spring50/zn_ion_20h2o_solvator.solvator.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_zn_solv_h2o_spring50",
+      "state": "complete_md",
+      "status": "MD executada diretamente da saída SOLVATOR, sem ajuste das águas; 1 ps.",
+      "resultsPackage": "exercicios/7-dinamica-complexo/resultados-completos.zip",
+      "case": "zn_solv_h2o_spring50",
+      "casePackage": "exercicios/7-dinamica-complexo/resultado-zn_solv_h2o_spring50.zip"
+    },
+    "exercicios/7-dinamica-complexo/resultados/zn_solv_h2o_spring200/zn_solv_h2o_spring200.inp": {
+      "structures": [
+        "exercicios/7-dinamica-complexo/resultados/zn_solv_h2o_spring200/zn_ion_20h2o_solvator.solvator.xyz"
+      ],
+      "dependencies": [],
+      "preset": "arquivo_zn_solv_h2o_spring200",
+      "state": "complete_md",
+      "status": "MD executada diretamente da saída SOLVATOR, sem ajuste das águas; 1 ps.",
+      "resultsPackage": "exercicios/7-dinamica-complexo/resultados-completos.zip",
+      "case": "zn_solv_h2o_spring200",
+      "casePackage": "exercicios/7-dinamica-complexo/resultado-zn_solv_h2o_spring200.zip"
     }
   },
   "newRuns": [
@@ -2572,10 +2672,10 @@
       ],
       "tab": "trajectory",
       "returnRoute": {
-        "href": "../exercicios/7-dinamica-complexo/index.html",
-        "label": "04b · Hidratação sem en e rigidez da parede"
+        "href": "../exercicios/7-dinamica-complexo/historico-radial.html",
+        "label": "Histórico · águas deslocadas previamente"
       },
-      "loadMessage": "Dinâmica executada; resultados disponíveis."
+      "loadMessage": "Histórico: MD com águas deslocadas previamente; fora do percurso atual."
     },
     "arquivo_zn_h2o_spring10": {
       "runs": [
@@ -2583,10 +2683,10 @@
       ],
       "tab": "trajectory",
       "returnRoute": {
-        "href": "../exercicios/7-dinamica-complexo/index.html",
-        "label": "04b · Hidratação sem en e rigidez da parede"
+        "href": "../exercicios/7-dinamica-complexo/historico-radial.html",
+        "label": "Histórico · águas deslocadas previamente"
       },
-      "loadMessage": "Dinâmica executada; resultados disponíveis."
+      "loadMessage": "Histórico: MD com águas deslocadas previamente; fora do percurso atual."
     },
     "arquivo_zn_h2o_spring200": {
       "runs": [
@@ -2594,10 +2694,10 @@
       ],
       "tab": "trajectory",
       "returnRoute": {
-        "href": "../exercicios/7-dinamica-complexo/index.html",
-        "label": "04b · Hidratação sem en e rigidez da parede"
+        "href": "../exercicios/7-dinamica-complexo/historico-radial.html",
+        "label": "Histórico · águas deslocadas previamente"
       },
-      "loadMessage": "Dinâmica executada; resultados disponíveis."
+      "loadMessage": "Histórico: MD com águas deslocadas previamente; fora do percurso atual."
     },
     "arquivo_zn_h2o_spring50": {
       "runs": [
@@ -2605,10 +2705,10 @@
       ],
       "tab": "trajectory",
       "returnRoute": {
-        "href": "../exercicios/7-dinamica-complexo/index.html",
-        "label": "04b · Hidratação sem en e rigidez da parede"
+        "href": "../exercicios/7-dinamica-complexo/historico-radial.html",
+        "label": "Histórico · águas deslocadas previamente"
       },
-      "loadMessage": "Dinâmica executada; resultados disponíveis."
+      "loadMessage": "Histórico: MD com águas deslocadas previamente; fora do percurso atual."
     },
     "arquivo_zn_parede": {
       "runs": [
@@ -2743,6 +2843,50 @@
         "label": "Verificação de Dump no ORCA 6.1.1"
       },
       "loadMessage": "Diagnóstico falhou antes da dinâmica: 0 fs. Estrutura inicial e saída da falha preservadas."
+    },
+    "arquivo_zn_solv_h2o_sem_parede": {
+      "runs": [
+        "zn_solv_h2o_sem_parede"
+      ],
+      "tab": "trajectory",
+      "returnRoute": {
+        "href": "../exercicios/7-dinamica-complexo/index.html",
+        "label": "04b · MD diretamente do SOLVATOR"
+      },
+      "loadMessage": "MD executada diretamente da saída SOLVATOR, sem ajuste das águas; 1 ps."
+    },
+    "arquivo_zn_solv_h2o_spring10": {
+      "runs": [
+        "zn_solv_h2o_spring10"
+      ],
+      "tab": "trajectory",
+      "returnRoute": {
+        "href": "../exercicios/7-dinamica-complexo/index.html",
+        "label": "04b · MD diretamente do SOLVATOR"
+      },
+      "loadMessage": "MD executada diretamente da saída SOLVATOR, sem ajuste das águas; 1 ps."
+    },
+    "arquivo_zn_solv_h2o_spring50": {
+      "runs": [
+        "zn_solv_h2o_spring50"
+      ],
+      "tab": "trajectory",
+      "returnRoute": {
+        "href": "../exercicios/7-dinamica-complexo/index.html",
+        "label": "04b · MD diretamente do SOLVATOR"
+      },
+      "loadMessage": "MD executada diretamente da saída SOLVATOR, sem ajuste das águas; 1 ps."
+    },
+    "arquivo_zn_solv_h2o_spring200": {
+      "runs": [
+        "zn_solv_h2o_spring200"
+      ],
+      "tab": "trajectory",
+      "returnRoute": {
+        "href": "../exercicios/7-dinamica-complexo/index.html",
+        "label": "04b · MD diretamente do SOLVATOR"
+      },
+      "loadMessage": "MD executada diretamente da saída SOLVATOR, sem ajuste das águas; 1 ps."
     }
   }
 }
