@@ -81,26 +81,19 @@
     return result;
   }
 
-  /* Display-only torsion presentation. Raw signed values and source segments
-     remain intact for exports. Unwrapping chooses the nearest periodic image
-     within each uninterrupted source segment; it cannot infer rotations larger
-     than 180 degrees between retained frames. Callers mark real gaps with a
-     segment change or gapBefore, rather than guessing a sampling stride. */
-  function dihedralSeries(samples,options={}){
-    let previous=null,offset=0,plotSegment=-1;
+  /* Signed torsion chart segmentation only: every numerical value and source
+     segment stays unchanged. Break the drawing at periodic crossings and real
+     gaps; never interpolate or unwrap the recorded angular measurements. */
+  function dihedralSeries(samples){
+    let previous=null,plotSegment=-1;
     return samples.map(sample=>{
       const valid=Number.isFinite(sample.value)&&(sample.time===undefined||Number.isFinite(sample.time));
-      if(!valid){previous=null;offset=0;return {...sample,displayValue:null,plotSegment:null};}
-      const interrupted=!previous||sample.segment!==previous.segment||sample.gapBefore===true||
+      if(!valid){previous=null;return {...sample,displayValue:null,plotSegment:null};}
+      const interrupted=!previous||sample.segment!==previous.segment||sample.sourceKey!==previous.sourceKey||sample.gapBefore===true||sample.breakBefore===true||
         (Number.isFinite(sample.time)&&Number.isFinite(previous.time)&&sample.time<=previous.time);
-      if(interrupted){offset=0;plotSegment++;}
-      else{
-        const delta=sample.value-previous.value;
-        if(delta>180){if(options.continuous)offset-=360;else plotSegment++;}
-        else if(delta< -180){if(options.continuous)offset+=360;else plotSegment++;}
-      }
+      if(interrupted||Math.abs(sample.value-previous.value)>180)plotSegment++;
       previous=sample;
-      return {...sample,displayValue:sample.value+offset,plotSegment};
+      return {...sample,displayValue:sample.value,plotSegment};
     });
   }
 

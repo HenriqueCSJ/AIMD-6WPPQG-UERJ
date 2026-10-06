@@ -38,7 +38,7 @@ class Element{
 function session({inspectState=false,search='?exemplo=__test_no_auto__',presets={water:true},molecularViewer=null}={}){
   const html=fs.readFileSync(path.join(viewer,'index.html'),'utf8'),nodes={};
   for(const match of html.matchAll(/<([\w-]+)\b[^>]*\bid="([^"]+)"[^>]*>/g))nodes[match[2]]=new Element(match[1]);
-  for(const [id,value] of Object.entries({'energy-mode':'delta','energy-unit':'kj','time-unit':'fs','distance-source':'xyz','geometry-type':'distance','highlight-kind':'atom','highlight-color':'#e6007e','highlight-size':'1.6','highlight-atom':'0','playback-duration':'78','playback-speed':'1'}))nodes[id].value=value;
+  for(const [id,value] of Object.entries({'energy-mode':'delta','energy-unit':'kj','time-unit':'fs','distance-source':'xyz','geometry-type':'distance','highlight-kind':'atom','highlight-color':'#e6007e','highlight-size':'1.6','highlight-atom':'0','playback-duration':'auto','playback-speed':'1'}))nodes[id].value=value;
   nodes['distance-source'].append(...['xyz','colvars'].map(value=>Object.assign(new Element('option'),{value})));
   const checkboxes=['total','potential','kinetic'].map(value=>Object.assign(new Element('input'),{value,checked:true}));
   for(const key of ['kinetic','potential','total'])nodes['trajectory-show-'+key].checked=true;
@@ -508,15 +508,15 @@ test('invalid or unsampled stages are omitted and a different run restores full 
   assert.equal(ui.nodes['playback-interval'].value,'full');assert.equal(ui.nodes['playback-interval-field'].hidden,true);assert.equal(ui.state.playing,false);
 });
 
-test('default playback takes 78 seconds, stops at the final frame and preserves original frame times',async()=>{
+test('automatic playback follows source cadence, stops at the final frame and preserves original frame times',async()=>{
   const ui=await playbackSession(undefined,{defaults:true}),before=ui.state.runs[0].xyz.frames.map(frame=>frame.time);
-  assert.match(ui.html,/<option value="78" selected>78 s<\/option>/);
+  assert.match(ui.html,/<option value="auto" selected>Automática · quadros originais<\/option>/);
   assert.equal(ui.nodes['playback-duration'].disabled,false);
-  assert.match(ui.playbackNote.textContent,/78 s de reprodução/);
+  assert.match(ui.playbackNote.textContent,/50 s de reprodução/);
   assert.equal(ui.nodes['playback-repeat'].checked,false);
   ui.nodes['play-button'].fire('click');ui.animationTick(1000);
-  ui.animationTick(20500);assert.equal(ui.state.frame,250);
-  ui.animationTick(79000);assert.equal(ui.state.frame,999);assert.equal(ui.state.playing,false);
+  ui.animationTick(13500);assert.equal(ui.state.frame,250);
+  ui.animationTick(51000);assert.equal(ui.state.frame,999);assert.equal(ui.state.playing,false);
   ui.animationTick(99999);assert.equal(ui.state.frame,999);
   ui.nodes['play-button'].fire('click');assert.equal(ui.state.frame,0);assert.equal(ui.state.playing,true);
   assert.deepEqual(ui.state.runs[0].xyz.frames.map(frame=>frame.time),before);
@@ -536,7 +536,7 @@ test('one-pass playback from the middle uses the remaining time and clamps a del
   const ui=await playbackSession(undefined,{defaults:true});
   ui.nodes['frame-slider'].value='500';ui.nodes['frame-slider'].fire('input');
   ui.nodes['play-button'].fire('click');ui.animationTick(1000);
-  ui.animationTick(20500);assert.equal(ui.state.frame,750);assert.equal(ui.state.playing,true);
+  ui.animationTick(13500);assert.equal(ui.state.frame,750);assert.equal(ui.state.playing,true);
   ui.animationTick(50000);assert.equal(ui.state.frame,999);assert.equal(ui.state.playing,false);
 });
 
@@ -552,7 +552,7 @@ test('one-pass stage playback ends at its real last frame and replay restarts th
 test('turning repeat off after multiple cycles preserves the visible frame and stops at the end',async()=>{
   const ui=await playbackSession(undefined,{defaults:true});
   ui.nodes['playback-repeat'].checked=true;ui.nodes['playback-repeat'].fire('change');
-  ui.nodes['play-button'].fire('click');ui.animationTick(0);ui.animationTick(175500);
+  ui.nodes['play-button'].fire('click');ui.animationTick(0);ui.animationTick(112500);
   assert.equal(ui.state.frame,250);assert.equal(ui.state.playing,true);
   ui.nodes['playback-repeat'].checked=false;ui.nodes['playback-repeat'].fire('change');
   assert.equal(ui.state.frame,250);assert.equal(ui.state.playback.startFrame,250);
@@ -612,7 +612,7 @@ test('stage playback and manual seeking retain matching physical energy and temp
   run.metadata={stages:[{startFs:.5,endFs:1.25,label:'Trecho'}]};
   ui.trajectoryHooks.renderTrajectoryChart(run);ui.nodes['playback-duration'].fire('change');
   ui.nodes['playback-interval'].value='stage-0';ui.nodes['playback-interval'].fire('change');
-  ui.nodes['play-button'].fire('click');ui.animationTick(0);ui.animationTick(39000);
+  ui.nodes['play-button'].fire('click');ui.animationTick(0);ui.animationTick(100);
   assert.equal(ui.state.frame,4);assert.equal(ui.nodes['trajectory-energy-chart'].chartCursor,1);assert.equal(ui.nodes['trajectory-temperature-chart'].chartCursor,1);
   assert.match(ui.nodes['trajectory-energy-status'].textContent,/1 fs/);assert.match(ui.nodes['trajectory-temperature-status'].textContent,/300 K/);
   assert.equal(ui.liveAtoms()[0].x,run.xyz.frames[4].coords[0][0]);
@@ -732,7 +732,7 @@ function renamedWaterUploads(){
 }
 async function upload(ui,files){await ui.nodes['file-input'].fire('change',{target:{files}});}
 
-test('both reported ethanol torsions keep their signed source values in continuous view and CSV',async()=>{
+test('both reported ethanol torsions and CSV preserve every original signed measurement',async()=>{
  const context={window:{AIMD_EXAMPLES:{runs:{}}}};
  vm.runInNewContext(fs.readFileSync(path.join(viewer,'examples/etanol_etapas.js'),'utf8'),context);
  const run=context.window.AIMD_EXAMPLES.runs.etanol_etapas,ui=session({inspectState:true}),load=ui.choose('ethanol');
@@ -742,30 +742,26 @@ test('both reported ethanol torsions keep their signed source values in continuo
   ['atom-a','atom-b','atom-c','atom-d'].forEach((id,i)=>ui.nodes[id].value=indices[i]);ui.nodes['add-distance'].fire('click');
  }
  const chart=ui.nodes['distance-chart'].chart;
- assert.equal(chart.series.length,2);assert.match(chart.title,/contínua/);
+ assert.equal(chart.series.length,2);assert.match(chart.title,/assinados/);
+ assert.deepEqual(Array.from(chart.yDomain),[-180,180]);assert.deepEqual(Array.from(chart.yTicks),[-180,-90,0,90,180]);
  for(let i=0;i<2;i++){
   const indices=[[4,0,1,2],[0,1,2,8]][i],series=chart.series[i];let wraps=0;
   for(let n=0;n<run.xyz.frames.length;n++){
    const p=series.points[n],frame=run.xyz.frames[n],raw=Geometry.dihedral(...indices.map(j=>frame.coords[j]));
-   assert.equal(p.rawValue,raw);assert.equal(p.x,frame.time);
-   assert.ok(Math.abs((p.y-raw)/360-Math.round((p.y-raw)/360))<1e-12);
-   if(n&&p.segment===series.points[n-1].segment){assert.ok(Math.abs(p.y-series.points[n-1].y)<=180+1e-9);if(Math.abs(raw-series.points[n-1].rawValue)>180)wraps++;}
+   assert.equal(p.y,raw);assert.equal(p.x,frame.time);assert.equal(p.sourceSegment,frame.segment||0);
+   if(n&&Math.abs(p.y-series.points[n-1].y)>180){assert.notEqual(p.segment,series.points[n-1].segment);wraps++;}
   }
   assert.ok(wraps>0,'Each reported torsion has periodic crossings');
  }
  const rows=ui.exports.distanceRows();assert.equal(rows.length,1+2*run.xyz.frames.length);
- assert.equal(rows[0][4],'diedro_assinado_graus');assert.equal(rows[0][5],'diedro_continuo_graus');
- for(let i=1;i<rows.length;i++){const p=chart.series[Math.floor((i-1)/run.xyz.frames.length)].points[(i-1)%run.xyz.frames.length];assert.equal(rows[i][4],p.rawValue);assert.equal(rows[i][5],p.y);}
- ui.nodes['dihedral-display'].value='signed';ui.nodes['dihedral-display'].fire('change');
- const signed=ui.nodes['distance-chart'].chart;assert.deepEqual(Array.from(signed.yDomain),[-180,180]);assert.deepEqual(Array.from(signed.yTicks),[-180,-90,0,90,180]);
- for(const series of signed.series)for(let n=0;n<series.points.length;n++){const p=series.points[n];assert.equal(p.y,p.rawValue);if(n&&Math.abs(p.y-series.points[n-1].y)>180)assert.notEqual(p.segment,series.points[n-1].segment);}
- assert.equal(ui.exports.distanceRows()[0].length,5);
- ui.nodes['geometry-type'].value='angle';ui.nodes['geometry-type'].fire('change');assert.equal(ui.nodes['dihedral-display-field'].hidden,true);
+ assert.equal(rows[0][4],'diedro_graus');assert.equal(rows[0].length,5);
+ for(let i=1;i<rows.length;i++){const p=chart.series[Math.floor((i-1)/run.xyz.frames.length)].points[(i-1)%run.xyz.frames.length];assert.equal(rows[i][4],p.y);assert.equal(rows[i][3],p.sourceSegment);}
+ assert.doesNotMatch(ui.html,/dihedral-display|curva contínua|diedro_continuo/);
 });
 
-test('unstable ethanol keeps every recorded frame and refits fragments without resetting rotation',async()=>{
- let atoms=[],fits=0,rotations=0;const styles=[];
- const model={addAtoms(values){atoms=values;},selectedAtoms(){return atoms;},setStyle(selection,style){styles.push({selection,style});},setClickable(){}};
+test('sparse ethanol plays each actual frame at native cadence without interpolation or camera changes',async()=>{
+ let atoms=[],fits=0,rotations=0;
+ const model={addAtoms(values){atoms=values;},selectedAtoms(){return atoms;},setStyle(){},setClickable(){}};
  const renderer={setProjection(){},getView(){return [0,0,0,0,0,0,1,0];},setView(){},rotate(){rotations++;},zoomTo(){fits++;},zoom(){},render(){},resize(){},removeAllModels(){},removeAllShapes(){},addModel(){return model;}};
  const ui=session({inspectState:true,molecularViewer:renderer}),context={window:{AIMD_EXAMPLES:{runs:{}}}};
  for(const name of ['time-fs','time-ps','time-s','temperature','kinetic','potential','total','atoms'])ui.nodes['frame-'+name]=new Element();
@@ -773,18 +769,24 @@ test('unstable ethanol keeps every recorded frame and refits fragments without r
   vm.runInNewContext(fs.readFileSync(path.join(viewer,`examples/${key}.js`),'utf8'),context);
   const run=context.window.AIMD_EXAMPLES.runs[key],raw=OrcaReader.parseXYZ(fs.readFileSync(path.join(viewer,'..',run.files.find(f=>f.kind==='xyz').path),'utf8'));
   const load=ui.choose(key,true);ui.requests.at(-1).resolve({config:{runs:[key]},runs:[run]});await load;
-  assert.equal(ui.nodes['follow-fragments'].checked,true);assert.equal(run.xyz.frames.length,raw.frames.length);
-  const initialRotations=rotations,initialFits=fits;
+  assert.equal(run.xyz.frames.length,raw.frames.length);assert.match(ui.playbackNote.textContent,/20 quadros\/s previstos, sem interpolação/);
+  const initialRotations=rotations,initialFits=fits,before=JSON.stringify(run.xyz.frames);
+  ui.nodes['play-button'].fire('click');ui.animationTick(0);
   for(let frame=1;frame<run.xyz.frames.length;frame++){
-   ui.nodes['frame-slider'].value=frame;ui.nodes['frame-slider'].fire('input');
+   ui.animationTick(frame*50+.0001);assert.equal(ui.state.frame,frame);
    assert.equal(atoms.length,9);for(let i=0;i<atoms.length;i++)assert.deepEqual([atoms[i].x,atoms[i].y,atoms[i].z],raw.frames[frame].coords[i]);
   }
-  assert.equal(fits-initialFits,run.xyz.frames.length-1);assert.equal(rotations,initialRotations);
-  assert.match(ui.nodes['fragment-framing-note'].textContent,/Esferas ampliadas/);assert.ok(styles.some(s=>s.selection.elem==='O'&&s.style.sphere?.radius>1));
-  const before=fits;ui.nodes['follow-fragments'].checked=false;ui.nodes['follow-fragments'].fire('change');
-  ui.nodes['previous-frame'].fire('click');assert.equal(fits,before);assert.equal(ui.nodes['fragment-framing-note'].hidden,true);
+  ui.animationTick(run.xyz.frames.length*50+1);assert.equal(ui.state.frame,run.xyz.frames.length-1);assert.equal(ui.state.playing,false);
+  assert.equal(fits,initialFits);assert.equal(rotations,initialRotations);assert.equal(JSON.stringify(run.xyz.frames),before);
  }
- ui.nodes['clear-button'].fire('click');assert.equal(ui.nodes['fragment-framing-note'].hidden,true);
+});
+
+test('automatic cadence keeps wall demonstrations at 78 seconds and respects explicit duration overrides',async()=>{
+ const ui=await playbackSession(undefined,{defaults:true}),run=ui.state.runs[0];run.metadata={dynamicCell:true};
+ ui.nodes['playback-duration'].fire('change');assert.match(ui.playbackNote.textContent,/78 s de reprodução/);
+ ui.nodes['playback-duration'].value='120';ui.nodes['playback-duration'].fire('change');assert.match(ui.playbackNote.textContent,/120 s de reprodução/);
+ const load=ui.choose('sparse',true);ui.requests.at(-1).resolve(preset('sparse',{frames:[{time:0,coords:[[0,0,0],[0,0,1]]},{time:1,coords:[[0,0,0],[0,0,2]]}]}));await load;
+ assert.equal(ui.nodes['playback-duration'].value,'120');assert.match(ui.playbackNote.textContent,/120 s de reprodução/);
 });
 
 test('own files with different names populate every panel together, incrementally, without CSV, or without output',async()=>{
