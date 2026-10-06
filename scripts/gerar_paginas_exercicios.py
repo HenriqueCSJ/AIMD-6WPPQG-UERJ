@@ -11,6 +11,7 @@ BADGES=['01','02a','02b','03','04a','04b','04c','05']+['↗']*len(OPTIONAL)
 def render(folder,title,source,index,filename='index.html'):
     inside=folder!=EX; prefix='../' if inside else '';repo_prefix='../../' if inside else '../'
     nav=f'<a class="home" href="{prefix}index.html">Visão geral do percurso</a>'
+    nav+=f'<a class="parameter-guide" href="{repo_prefix}guia-md/index.html" target="_blank" rel="noopener" aria-label="Guia de parâmetros %md (abre em outra aba)">Guia de parâmetros %md ↗</a>'
     for group,entries,offset in [('Durante a aula',COURSE,0),('Opcionais e referências',OPTIONAL,len(COURSE))]:
         nav+=f'<h3 class="nav-group">{group}</h3><div class="links">'
         for n,(slug,label) in enumerate(entries,1+offset):
@@ -46,7 +47,7 @@ def render(folder,title,source,index,filename='index.html'):
     elif index:
         endnav='<nav class="endnav" aria-label="Voltar"><a href="../index.html">← Percurso da aula</a><a href="../index.html#opcionais-e-referencias">Outros opcionais →</a></nav>'
     page=f'''<!doctype html>
-<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{html.escape(title)} · AIMD / ORCA</title><link rel="stylesheet" href="{prefix}pagina.css?v=20261001-course"><script defer src="{prefix}pagina.js"></script></head>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{html.escape(title)} · AIMD / ORCA</title><link rel="stylesheet" href="{prefix}pagina.css?v=20261006-guide1"><script defer src="{prefix}pagina.js"></script></head>
 <body><a class="skip" href="#conteudo">Ir para o conteúdo</a><header class="brand"><a href="{prefix}index.html"><strong>AIMD com ORCA</strong><small>6º Workshop PPGQ–UERJ · 7 de outubro de 2026</small></a><div class="logos"><img src="{repo_prefix}assets/uerj-logo.png" alt="UERJ"><img src="{repo_prefix}assets/ufrrj-logo-compacto.png" alt="UFRRJ"></div></header><div class="layout"><nav class="course-nav" aria-label="Exercícios"><h2>Do input à interpretação</h2>{nav}</nav><main id="conteudo">{body}{endnav}</main></div><footer>Henrique de Castro Silva Junior e Virginia Camila Rufino Ferreira · ORCA 6.1.1 · Materiais e dados locais; links externos levam à documentação oficial.</footer></body></html>'''
     (folder/filename).write_text(page,encoding='utf-8')
 for n,(slug,title) in enumerate(LESSONS,1):

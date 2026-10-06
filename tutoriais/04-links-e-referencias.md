@@ -7,6 +7,8 @@
 - [6º Workshop do Programa de Pós-Graduação em Química — UERJ](https://www.ppgq-iq.uerj.br/6o-workshop-do-programa-de-pos-graduacao-em-quimica-uerj)
 - [Repositório do minicurso](https://github.com/HenriqueCSJ/AIMD-6WPPQG-UERJ)
 
+- [Guia interativo dos parâmetros de `%md`](https://henriquecsj.github.io/AIMD-6WPPQG-UERJ/guia-md/) — consulta rápida aos comandos, com explicações e exemplos.
+
 ## ORCA 6.1.1
 
 - [Fórum ORCA](https://orcaforum.kofo.mpg.de/) · [Cadastro](https://orcaforum.kofo.mpg.de/index.php?register/) · [Filebase / downloads](https://orcaforum.kofo.mpg.de/filebase/)

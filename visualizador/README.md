@@ -4,6 +4,8 @@
 
 O aluno carrega os arquivos e passa diretamente à interpretação. Não precisa importar colunas em uma planilha, instalar Python ou escrever comandos para medir distâncias.
 
+O **[guia de parâmetros `%md`](https://henriquecsj.github.io/AIMD-6WPPQG-UERJ/guia-md/)** fica fixo no topo do laboratório, inclusive com a trajetória ampliada. Abre em outra aba para consultar comandos e exemplos sem perder os arquivos carregados.
+
 ## Para usar na aula
 
 1. Abra `visualizador/index.html` em um navegador moderno, mantendo as pastas do repositório juntas. Também funciona pelo site estático quando o repositório estiver publicado.

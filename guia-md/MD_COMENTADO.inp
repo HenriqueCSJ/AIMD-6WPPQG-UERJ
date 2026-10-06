@@ -1,0 +1,270 @@
+%md
+  # REFERENCIA COMENTADA: os 17 comandos do capitulo MD fornecido.
+  # Nucleo ativo: exemplo a 300 K, CSVR, 0.5 fs e 1000 passos (500 fs).
+  # As linhas iniciadas por # sao alternativas desativadas.
+  # Ajuste os valores e ative somente as opcoes do seu protocolo.
+  # Fora deste bloco, informe ! MD, metodo, carga, multiplicidade e geometria.
+  # Os comandos sao executados em ordem; outro Run continua a dinamica.
+  # Indices de atomos comecam em 0; adapte todos os exemplos ao seu XYZ.
+  # IDs de regioes e Colvars sao identificadores, nao indices de atomos.
+  # Use virgulas entre numeros negativos para evitar ambiguidade do parser.
+  # Unidades: comprimento = Angstrom/A/Bohr/pm/nm; tempo = fs/ps/au;
+  # temperatura = Kelvin/K/Celsius/C; angulo = Deg/Rad.
+  # Sem sufixo, os padroes sao Angstrom, fs, Kelvin e Deg.
+  # Parametros numericos opcionais abaixo sao exemplos, nao um protocolo universal.
+
+  # 1. RANDOMIZE: semente para inicializacao e processos estocasticos.
+  Randomize 12345                 # Inteiro positivo; sem comando, semente = 1.
+  # Randomize                    # Sem argumento: usa a hora do sistema.
+
+  # 2. PRINTLEVEL: quantidade de informacao no output principal.
+  PrintLevel Medium              # Low | Medium (padrao) | High | Debug.
+  # PrintLevel Low
+  # PrintLevel High
+  # PrintLevel Debug              # Diagnostico detalhado; pode reduzir desempenho.
+
+  # 3. SCFLOG: destino dos logs de estrutura eletronica de cada passo.
+  SCFLog Last                    # Conserva somente o ultimo output de cada modulo.
+  # SCFLog Append                # Padrao: acumula os passos nos mesmos logs.
+  # SCFLog Each                  # Arquivos separados por passo/modulo.
+  # SCFLog Discard               # Descarta os logs detalhados.
+  # Impressao eletronica adicional usa %output/%method FORA de %md.
+
+  # 4. TIMESTEP: passo de integracao, valido para os Run seguintes.
+  Timestep 0.5_fs                # Padrao do modulo; avaliar estabilidade no sistema.
+  # Timestep 0.25_fs             # Alternativa com passo menor.
+  # Timestep 0.0005_ps           # Mesmo valor que 0.5_fs.
+
+  # 5. MANAGE_REGION: Define | AddAtoms | RemoveAtoms.
+  # Regioes predefinidas: all, active, inactive.
+  # Em QM/MM: qm, mm, active_qm, active_mm (lidas da configuracao QM/MM).
+  # Apenas active pode ser redefinida entre as regioes predefinidas.
+  # Somente atomos em active se movem; inactive fica congelada.
+  # Manage_Region 1 Define 0, 1, 2             # Cria regiao numerada 1.
+  # Manage_Region 1 AddAtoms 3                 # Adiciona um atomo.
+  # Manage_Region 1 RemoveAtoms 2              # Remove um atomo da regiao.
+  # Manage_Region 1 Define                    # Apaga a regiao numerada, esvaziando-a.
+  # Manage_Region 2 Define 0..10..2            # Intervalo: 0, 2, 4, 6, 8, 10.
+  # Manage_Region 3 Define 0, 2..5, 7          # Mistura atomos e intervalos.
+  # Manage_Region 4 Define Element "H"         # Seleciona pelo elemento.
+  # Manage_Region 4 AddAtoms Element "O"
+  # Manage_Region 4 RemoveAtoms Element "H"
+  # Manage_Region active Define 0..2           # Congela todos os outros atomos.
+  # Manage_Region active RemoveAtoms 3         # Congela somente o atomo 3.
+  # Manage_Region active AddAtoms 3            # Torna o atomo 3 movel novamente.
+  # A regiao active nunca pode ficar vazia.
+
+  # 6. CELL: parede harmonica repulsiva; as celulas NAO sao periodicas.
+  # Distancias em A; Spring em kJ mol^-1 A^-2; Pressure em bar.
+  # Apenas uma geometria de celula pode estar ativa.
+  # Cube: um argumento = lado, centrado na origem; dois = limites iguais em x/y/z.
+  # Cell Cube 10.0_A
+  # Cell Cube -5.0_A, 5.0_A
+  # Rect: canto x1,y1,z1 seguido do canto x2,y2,z2.
+  # Cell Rect -5.0_A, -5.0_A, -5.0_A, 5.0_A, 5.0_A, 5.0_A
+  # Rhomb: canto (3 valores) + tres vetores da celula (9 valores).
+  # Cell Rhomb 0, 0, 0, 10, 0, 0, 2, 10, 0, 0, 0, 10
+  # Sphere: centro cx,cy,cz e raio; Spring tem padrao 10.0.
+  # Cell Sphere 0, 0, 0, 8.0_A Spring 10.0
+  # Ellipsoid XYZ: centro seguido de tres semieixos cartesianos.
+  # Cell Ellipsoid 0, 0, 0 XYZ 10.0_A, 8.0_A, 6.0_A
+  # Ellipsoid Vectors: centro + tres vetores ortogonais; modulos = semieixos.
+  # Cell Ellipsoid 0, 0, 0 Vectors 10, 0, 0, 0, 8, 0, 0, 0, 6
+  # Elastic: janela de media de pressao e resposta fracionaria por passo.
+  # Cell Rect -5, -5, -5, 5, 5, 5 Elastic 100_fs 0.001 Pressure 1.0
+  # Cell Elastic 100_fs 0.001                   # Torna elastica uma celula existente.
+  # Cell Anisotropic                          # Permite variar eixos independentemente.
+  # Cell Pressure 1.0                         # Pressao isotropica; padrao 1 bar.
+  # Cell Pressure 1.0, 1.0, 1.0                # Tres componentes para anisotropia.
+  # Cell Fixed                                # Fixa o tamanho de uma celula existente.
+  # Cell None                                 # Desliga a parede.
+  # Anisotropic se aplica a celulas elasticas Rect, Rhomb ou Ellipsoid.
+  # Cell nao e recuperada automaticamente por Restart.
+
+  # 7. CONSTRAINT: relacao geometrica imposta, com tolerancia numerica.
+  # Todos os atomos envolvidos precisam pertencer a active.
+  # Cartesian: atomos fixos em XYZ (padrao), XY, XZ, YZ, X, Y ou Z.
+  # Constraint Add Cartesian 0                # Fixa na posicao atual.
+  # Constraint Add Cartesian 0 XYZ Target 0, 0, 0
+  # Constraint Add Cartesian 0 X Target 1.0_A  # Fixa apenas x.
+  # Distance: dois indices; Angle: tres; Dihedral: quatro.
+  # Constraint Add Distance 0, 1              # Conserva a distancia atual.
+  # Constraint Add Distance 0, 1 Target 1.0_A
+  # Constraint Add Angle 1, 0, 2 Target 104.5_Deg
+  # Constraint Add Dihedral 0, 1, 2, 3 Target 180.0_Deg
+  # Center: fixa o centro de massa de um grupo; pesos customizados sao opcionais.
+  # Constraint Add Center 0..2
+  # Constraint Add Center 0..2 Weights 1.0, 1.0, 1.0 Target 0, 0, 0
+  # Rigid: mantem a geometria interna do grupo, permitindo movimento do conjunto.
+  # Constraint Add Rigid 0..2
+  # Ramp vem imediatamente depois de Target: valores iniciais e finais.
+  # Constraint Add Distance 0, 1 Target Ramp 1.0_A, 1.5_A
+  # Constraint Add Cartesian 0 XYZ Target Ramp 0, 0, 0, 1, 1, 1
+  # A rampa dura o proximo Run; nos Run seguintes, conserva o alvo final.
+  # Noprint: omite o calculo/registro da forca da constraint no CSV.
+  # Constraint Add Distance 0, 1 Target 1.0_A Noprint
+  # Constraint Remove Distance 0, 1           # Remove uma constraint especifica.
+  # Constraint Remove Angle All               # Remove todas deste tipo.
+  # Constraint Remove All                     # Remove todas as constraints.
+  # Constraint List                           # Lista as constraints ativas.
+  # Constraints contraditorias ou redundantes podem impedir a convergencia.
+
+  # 8. MINIMIZE: minimizacao cartesiana, opcional, antes de inicializar velocidades.
+  # Cada chamada executa uma minimizacao; as linhas abaixo sao alternativas.
+  # Minimize                                  # Metodo padrao: LBFGS.
+  # Minimize LBFGS Steps 500 MaxGrad 5.0 RMSGrad 1.0 StepLimit 0.1_A History 20 Noise 0.01_A
+  # Minimize Anneal Steps 500 MaxGrad 5.0 RMSGrad 1.0 TempConv 1.0_K Accel 4.0 Damp 0.98 StepLimit 0.1_A
+  # Minimize Combined                         # LBFGS -> Anneal -> LBFGS.
+  # Minimize LBFGS OnlyH                       # Move somente H durante a minimizacao.
+  # Steps: maximo de passos; padrao 500. Atingir esse limite nao prova convergencia.
+  # MaxGrad/RMSGrad: limiares em kJ mol^-1 A^-1; padroes 5.0 e 1.0.
+  # TempConv: criterio termico adicional para Anneal.
+  # Accel: fator de aceleracao de Anneal; padrao 4.0; 1.0 desliga a aceleracao.
+  # Damp: fator de amortecimento de Anneal; padrao 0.98, menor que 1.
+  # StepLimit: deslocamento maximo por passo; valor negativo desliga (padrao).
+  # History: memoria do LBFGS; padrao 20.
+  # Noise: perturbacao inicial de posicoes; desativada por padrao.
+  # OnlyH restaura a regiao active original depois da minimizacao.
+
+  # 9. INITVEL: inicializa velocidades segundo Maxwell-Boltzmann.
+  Initvel 300_K                  # Sobrescreve velocidades e remove momento linear inicial.
+  # Initvel 300_K Region 1       # Inicializa somente uma regiao previamente definida.
+  # Initvel 300_K No_Overwrite   # So inicializa se velocidades ainda nao foram definidas.
+  # Para preservar velocidades lidas, No_Overwrite deve vir depois de Restart.
+  # Para mudar T durante uma trajetoria, use Thermostat em vez de reinicializar.
+
+  # 10. THERMOSTAT: CSVR | NHC | Berendsen | None.
+  # T e opcional: se omitida, usa a ultima temperatura de Initvel.
+  Thermostat CSVR 300_K Timecon 100_fs
+  # O termostato troca energia com os atomos, como um controle virtual de calor.
+  # Timecon regula sua resposta: 10 fs = mais rapida/forte; 100 fs = mais suave.
+  # E uma escala de resposta, nao um intervalo entre acionamentos.
+  # Timestep = tamanho do passo; Timecon = resposta termica; Run = numero de passos.
+  # Padrao do manual: 10 fs; o manual indica 100 fs para producao.
+  # Thermostat CSVR Timecon 100_fs            # Usa T definida por Initvel.
+  # Thermostat NHC 300_K Timecon 100_fs Chain 3 MTS 2 Yoshida 3
+  # Chain/MTS/Yoshida: somente NHC; padroes 3/2/3; Yoshida = 1, 3, 5 ou 7.
+  # Thermostat Berendsen 300_K Timecon 10_fs   # Pre-equilibracao; nao amostra NVT corretamente.
+  # Thermostat CSVR 100_K Timecon 100_fs Ramp 300_K
+  # Ramp: vai de T inicial ao alvo no proximo Run; depois conserva o alvo final.
+  # Thermostat CSVR 300_K Timecon 100_fs Region 1
+  # Region: regiao numerada ou nome predefinido; padrao all.
+  # Thermostat NHC 300_K Timecon 10_fs Massive
+  # Massive: um termostato por grau de liberdade; destinado a pre-equilibracao.
+  # Thermostat None                           # Desliga todos os termostatos.
+  # Thermostat None Region 1                  # Desliga somente o desta regiao.
+  # Para NVE, substitua a linha CSVR ativa por Thermostat None.
+
+  # 11. DUMP: Position | Velocity | Force | GBW | EnGrad.
+  # Position/Velocity/Force: Format XYZ/PDB/DCD; Stride; Filename; Region; Replace; None.
+  Dump Position Format XYZ Stride 1 Filename "trajetoria.xyz"
+  # Stride n: grava a cada n passos; com dt=0.5 fs, Stride 10 = 5 fs entre frames.
+  # Stride 0: grava somente um snapshot quando o comando e executado.
+  # Sem Replace, XYZ/PDB acrescentam frames aos arquivos existentes.
+  # Dump Position Format XYZ Stride 1 Filename "trajetoria.xyz" Replace
+  # Replace apaga o arquivo uma vez; cuidado ao continuar uma trajetoria.
+  # Dump Velocity Format XYZ Stride 1 Filename "velocidades.xyz"  # A/fs.
+  # Dump Force Format XYZ Stride 1 Filename "forcas.xyz"          # Hartree/A.
+  # Dump Position Format XYZ Stride 1 Filename "regiao1.xyz" Region 1
+  # Dump Position Format PDB Stride 0 Filename "estrutura.pdb"
+  # Dump Position Format DCD Stride 10 Filename "trajetoria.dcd"
+  # DCD precisa de um snapshot PDB para identificar atomos; nao permite append.
+  # Format e inferido da extensao quando omitido; sem ambos, padrao XYZ.
+  # Dump GBW Stride 100 Filename "estado-"     # GBW individuais; prefixo sem .gbw.
+  # Dump EnGrad Stride 100 Filename "gradiente-" # ENGRAD individuais, nao trajetoria.
+  # GBW/EnGrad usam Stride/Filename; nao use Format nem Region.
+  # Dump Position None                        # Desliga dumps de posicoes de todas as regioes.
+  # Dump Position Region 1 None               # Desliga somente o desta regiao.
+  # Dump Velocity None
+  # Dump Force None
+
+  # 12. MANAGE_COLVAR: Define ID Tipo; definir nao aplica vies ao sistema.
+  # IDs permitidos: 1..10000. Redefinir um ID apaga restraints associados a ele.
+  # Cada ponto pode ser Atom indice ou Group lista; grupos usam massas como pesos.
+  # Manage_Colvar Define 1 Distance Atom 0 Atom 1
+  # Manage_Colvar Define 2 Angle Atom 1 Atom 0 Atom 2
+  # Manage_Colvar Define 3 Dihedral Atom 0 Atom 1 Atom 2 Atom 3
+  # Manage_Colvar Define 4 CoordNumber Atom 0 Group 1..10 Cutoff 2.0_A
+  # CoordNumber e uma coordenacao continua/adimensional; Cutoff define sua escala.
+  # Manage_Colvar Define 5 Distance Group 0..2 Group 3..5
+  # Manage_Colvar Define 6 Distance Atom 0 Group 1, 2, 3 Weights 1.0, 1.0, 1.0
+  # Weights vem depois de cada Group: um peso por atomo; pesos iguais = centro geometrico.
+  # Distance admite projecoes X/Y/Z/XY/XZ/YZ/XYZ (XYZ e o padrao).
+  # Manage_Colvar Define 7 Distance XY Atom 0 Atom 1
+  # Atom e Group tambem podem ser combinados em Angle e Dihedral.
+  # Manage_Colvar Define 8 Angle Group 0..2 Atom 3 Atom 4
+  # Manage_Colvar Define 9 Dihedral Atom 0 Group 1..3 Atom 4 Atom 5
+  # Manage_Colvar Define 10 Distance Atom 0 Atom 1 Noprint
+  # Noprint omite o registro desta Colvar em basename-colvars.csv.
+
+  # 13. RESTRAINT: potencial aplicado a uma Colvar previamente definida.
+  # Diferente de Constraint: permite flutuacoes em torno do alvo.
+  # Harmonic: Spring em kJ mol^-1 unidade^-2; para Distance, unidade = A.
+  # Restraint Add Colvar 1 Harmonic Target 2.0_A Spring 50.0
+  # Gaussian: Height em kJ/mol; Sigma e desvio padrao em unidades da Colvar.
+  # Restraint Add Colvar 1 Gaussian Target 2.0_A Height (-10.0) Sigma 0.2_A
+  # Altura negativa = poco; positiva = barreira. Exemplos nao sao valores universais.
+  # Lower/Upper: paredes que atuam abaixo/acima dos limites, respectivamente.
+  # Restraint Add Colvar 1 Harmonic Lower 1.0_A Upper 3.0_A Spring 50.0
+  # Ramp depois de Target, Lower ou Upper: alvo inicial e final no proximo Run.
+  # Restraint Add Colvar 1 Harmonic Target Ramp 3.0_A, 2.0_A Spring 50.0
+  # Restraint Add Colvar 1 Harmonic Lower Ramp 1.0_A, 1.5_A Spring 50.0
+  # Restraint Add Colvar 1 Harmonic Upper Ramp 3.0_A, 2.5_A Spring 50.0
+  # Restraint Add Colvar 1 Harmonic Target 2.0_A Spring 50.0 Noprint
+  # Noprint omite o registro deste restraint em basename-restraints.csv.
+  # Restraint Reset Colvar 1                   # Remove todos os restraints deste ID.
+  # Varios restraints podem coexistir na mesma Colvar.
+
+  # 14. METADYNAMICS: exemplo desativado; requer Colvars definidas acima.
+  # Selecione 1 ou 2 Colvars antes dos parametros globais (HillSpawn etc.).
+  # Scale/Wall/Range se referem a Colvar especificada imediatamente antes.
+  # Exemplo 1D: habilite Colvar 1 e depois os parametros globais desejados.
+  # Metadynamics Colvar 1 Scale 1.0_A Wall Lower 1.0_A 50.0 Upper 4.0_A 50.0 Range 0.5_A 5.0_A 100
+  # Para 2D, habilite tambem esta segunda selecao, antes de HillSpawn:
+  # Metadynamics Colvar 2 Scale 20.0_Deg Range 0.0_Deg 180.0_Deg 100
+  # Scale: divisor da coordenada; cria unidades internas adimensionais.
+  # Padroes de Scale: distancia 1 A; angulo/diedro 20 graus; coordenacao 0.2.
+  # Wall Lower/Upper: posicao em unidades fisicas e Spring opcional em kJ/mol/unidade^2.
+  # Range: minimo, maximo, numero de pontos; controla a saida do perfil, nao limita a dinamica.
+  # Metadynamics HillSpawn 40 0.5 0.2 Store 1000
+  # HillSpawn: frequencia em passos, altura em kJ/mol e Sigma em unidades internas.
+  # Aqui, 40 passos de 0.5 fs = uma hill a cada 20 fs.
+  # Store: intervalo de salvamento do perfil em passos; padrao 1000.
+  # Metadynamics Temperature 300_K            # T para reconstrucao quando nao obtida de Thermostat all.
+  # Metadynamics WellTempered 3000_K           # Temperatura de vies; diferente da T fisica.
+  # Metadynamics Lagrange 100.0 10.0           # Massa virtual (u) e mola em unidades internas.
+  # Metadynamics Lagrange 100.0 10.0 100_K 10_fs # Acrescenta termostato da particula virtual.
+  # O termostato virtual de Lagrange so resfria, conforme descrito no manual.
+  # Metadynamics HillSpawn Off                # Suspende novas hills; conserva o vies existente.
+  # Metadynamics Reset                        # Apaga as hills; conserva configuracao/geracao de hills.
+  # Metadynamics Off                          # Desliga, apaga hills e desfaz selecao de Colvars.
+  # Off deve aparecer sozinho na chamada; nao habilite as tres operacoes em sequencia.
+  # Configure a metadinamica antes de Restart para recuperar seu estado.
+
+  # 15. RESTART: recupera estado dinamico, nao apenas a geometria.
+  # Execute depois de definir dt, regioes, termostatos, dumps, constraints, cell e metadinamica.
+  # Restart                                   # Le basename.mdrestart; exige que exista.
+  # Restart IfExists                          # Le somente se existir; senao inicia sem reinicio.
+  # Restart "anterior.mdrestart"               # Le um arquivo explicitamente indicado.
+  # Restart "anterior.mdrestart" IfExists
+  # Recupera posicoes, velocidades, contadores, estado NHC e estado de metadinamica.
+  # Parametros de simulacao e definicoes acima precisam permanecer no input.
+  # Initvel 300_K No_Overwrite                 # Alternativa depois de Restart; conserva velocidades lidas.
+  # Nao execute Initvel sem No_Overwrite depois de Restart se deseja continuidade.
+
+  # 16. SCREENDUMP: imprime posicoes, velocidades, energias e estado atual.
+  # Screendump                                # Diagnostico antes da integracao.
+
+  # 17. RUN: numero de passos com a configuracao atual (velocity Verlet).
+  Run 1000                                   # 1000 x 0.5 fs = 500 fs = 0.5 ps.
+  # As linhas seguintes sao alternativas ao Run ativo, nao etapas obrigatorias.
+  # Run 1000 CenterCOM                        # Mantem fixo o centro de massa total.
+  # Run 1000 StepLimit 0.1_A                   # Limita artificialmente o deslocamento por passo.
+  # Run 1000 StepLimit 0.1_A CenterCOM
+  # StepLimit pode ajudar na estabilizacao inicial, mas altera a dinamica.
+  # Screendump                                # Diagnostico depois do Run, se desejado.
+  # Para continuar em outra etapa, altere as opcoes e acrescente outro Run.
+  # Exemplo opcional: trocar NVT por NVE sem reinicializar as velocidades.
+  # Thermostat None
+  # Run 1000                                  # Mais 500 fs, a partir do estado anterior.
+end

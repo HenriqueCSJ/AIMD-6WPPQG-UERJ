@@ -2,3 +2,5 @@
 
 /* Classroom navigation groups */
 .course-nav .nav-group{font-size:11px;text-transform:uppercase;letter-spacing:.08em;margin:22px 10px 8px;color:var(--muted)}.course-nav .num{min-width:26px}.course-nav{max-height:calc(100vh - 48px);overflow-y:auto;scrollbar-width:thin}.course-nav .links a:not([aria-current]):hover{background:#e4eeed}.endnav a{max-width:48%}@media(max-width:900px){.course-nav{max-height:none;overflow:visible}}
+
+.course-nav .parameter-guide{background:#e4eeed;color:var(--accent);font-weight:700;border:1px solid #bfd6cc;margin:10px 0 16px}

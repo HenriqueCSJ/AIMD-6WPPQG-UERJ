@@ -145,3 +145,16 @@ body.trajectory-open{overflow:hidden}
 .tabs button{scroll-margin-top:18px}
 
 .chart-range-controls{padding:12px;background:#f4f8f6;border:1px solid var(--line);border-radius:10px}.chart-range-controls .energy-window-input{width:145px}.trajectory-data-link{display:flex;flex-wrap:wrap;align-items:end;gap:12px;padding:12px;margin:0 0 16px;border:1px solid #b7cfc5;border-radius:10px;background:#f4f8f6}.trajectory-data-link[hidden]{display:none}.trajectory-data-link label{display:flex;flex-direction:column;gap:5px}.trajectory-data-link p{flex-basis:100%;margin:0}@media(max-width:600px){.chart-range-controls label,.chart-range-controls .energy-window-input{width:100%}.trajectory-data-link label{max-width:100%}}
+
+/* Keep the parameter reference at hand without leaving the current calculation. */
+html{scroll-padding-top:64px}
+.guide-shortcut,.expanded-guide-shortcut{position:sticky;top:0;z-index:10;display:flex;align-items:center;gap:24px;min-height:48px;padding:6px max(28px,calc((100vw - 1260px)/2));background:#edf5f0;border-bottom:1px solid #bfd6cc;box-shadow:0 2px 6px #172f4008}
+.guide-shortcut a,.expanded-guide-shortcut a{display:inline-flex;align-items:center;gap:6px;min-height:36px;font-size:14px;font-weight:700;text-decoration:none;white-space:nowrap}
+.guide-shortcut a:hover,.expanded-guide-shortcut a:hover{text-decoration:underline}
+.guide-shortcut code,.expanded-guide-shortcut code{font-size:14px;background:white;padding:0 5px;border:1px solid #c9ddd3;border-radius:5px}
+.guide-shortcut span{font-size:12px;color:#405e58}
+.expanded-guide-shortcut{display:none}
+.trajectory-expanded .expanded-guide-shortcut{display:flex;order:-1;flex-shrink:0;top:-12px;margin:-12px -20px 0;padding:6px 20px}
+@media(max-width:800px){.trajectory-expanded .expanded-guide-shortcut{top:-14px;margin:-14px -14px 14px;padding:6px 14px}}
+@media(max-width:700px){.guide-shortcut{padding:6px 18px}.guide-shortcut span{display:none}}
+@media print{.guide-shortcut,.expanded-guide-shortcut{display:none}}

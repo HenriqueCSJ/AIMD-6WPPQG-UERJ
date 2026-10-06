@@ -16,6 +16,8 @@
   <a href="https://henriquecsj.github.io/AIMD-6WPPQG-UERJ/visualizador/"><img src="assets/botao-laboratorio.svg" width="200" alt="Explorar os resultados"></a>
 </p>
 
+**[Guia interativo dos parâmetros de `%md` →](https://henriquecsj.github.io/AIMD-6WPPQG-UERJ/guia-md/)** · Explicações, busca e exemplos copiáveis. Disponível também no topo do laboratório e no menu dos exercícios. [Arquivos do guia](guia-md/README.md).
+
 ### Seu ponto de partida
 
 **Antes da aula:** [prepare e teste o ORCA](tutoriais/README.md). Recomendamos **WSL2 + Ubuntu**, com instruções desde a instalação do WSL. Há também uma rota para Windows nativo.

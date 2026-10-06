@@ -1,6 +1,6 @@
 # Execute. Observe. Explique.
 
-[← Início do minicurso](../index.html) · [Abrir o laboratório](../visualizador/index.html) · [Horários](roteiro-4h.md)
+[← Início do minicurso](../index.html) · [Abrir o laboratório](../visualizador/index.html) · [Horários](roteiro-4h.md) · <a href="../guia-md/index.html" target="_blank" rel="noopener">Guia de parâmetros %md ↗</a>
 
 **7 de outubro · 13h–16h e 17h–18h · remoto**
 Henrique de Castro Silva Junior · Virginia Camila Rufino Ferreira
