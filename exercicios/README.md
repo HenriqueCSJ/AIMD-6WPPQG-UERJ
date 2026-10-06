@@ -13,7 +13,7 @@ Use **Próximo** no topo ou no fim de cada atividade. O indicador **Etapa X de 9
 
 ## Caderno para ler no tablet
 
-**[Abrir o caderno completo em PDF](../materiais/caderno-aimd-orca-tablet.pdf)** · [Baixar os dez capítulos separados (ZIP)](../materiais/capitulos-aimd-tablet.zip)
+**[Abrir o caderno completo em PDF](../materiais/caderno-aimd-orca-tablet.pdf)** · [Baixar os onze capítulos separados (ZIP)](../materiais/capitulos-aimd-tablet.zip)
 
 84 páginas em formato A5, com explicações, interpretações, 24 figuras e respostas comentadas. O PDF preserva o mapa anterior de oito etapas. A nova etapa 04d está disponível nas páginas do curso e no laboratório. Cell tem um capítulo próprio com C1 → C2 → C3; o dump é um único complemento no capítulo da água. Sumário e marcadores são clicáveis. Versão de estudo atualizada em **6 de outubro de 2026**.
 

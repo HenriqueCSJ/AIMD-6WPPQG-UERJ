@@ -2,7 +2,7 @@
 
 [← Percurso](../README.md) · [Aplicativo de análise](../../visualizador/index.html)
 
-**Núcleo da aula · 20 min após o intervalo · interpretar resultado pronto · 97 átomos**
+**Núcleo da aula · 20 min compartilhados entre 04c e 04d após o intervalo · interpretar resultados prontos · 97 átomos**
 
 > **Pergunta:** como as águas coordenam o Zn e como uma en passa de um para dois N coordenados?
 

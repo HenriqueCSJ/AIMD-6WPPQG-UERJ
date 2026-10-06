@@ -461,6 +461,39 @@ async function playbackSession(stages,{stride=1,defaults=false}={}){
   return ui;
 }
 
+test('04d switches pressure at the same sampled time, pauses, and starts a newly opened example at zero',async()=>{
+  let atoms=[];
+  const model={addAtoms(values){atoms=values;},selectedAtoms(){return atoms;},setStyle(){},setClickable(){}};
+  const renderer={setProjection(){},getView(){return [0,0,0,0,0,0,1,0];},setView(){},rotate(){},zoomTo(){},zoom(){},render(){},resize(){},removeAllModels(){},removeAllShapes(){},addModel(){return model;}};
+  const ui=session({inspectState:true,molecularViewer:renderer,presets:{zn_pressure:true,other:true}});
+  for(const name of ['time-fs','time-ps','time-s','temperature','kinetic','potential','total','atoms'])ui.nodes['frame-'+name]=new Element();
+  const frames=[0,2500,5000].map((time,i)=>({time,step:time*4,coords:[[0,0,0],[0,0,1+i*.1]]}));
+  const runs=['zn_en_1bar','zn_en_1000bar','zn_en_4000bar'].map(key=>preset(key,{frames}).runs[0]);
+  const load=ui.choose('zn_pressure',true);ui.requests[0].resolve({config:{runs:runs.map(r=>r.key)},runs});await load;
+  ui.nodes['frame-slider'].value='1';ui.nodes['frame-slider'].fire('input');
+  const unchanged=JSON.stringify(ui.state.runs.map(r=>r.xyz));
+  ui.nodes['play-button'].fire('click');assert.equal(ui.state.playing,true);
+  for(const run of ui.state.runs.slice(1)){
+    ui.nodes['trajectory-run'].value=String(run.id);ui.nodes['trajectory-run'].fire('change');
+    assert.equal(ui.state.playing,false);assert.equal(run.xyz.frames[ui.state.frame].time,2500);
+    assert.equal(ui.nodes['frame-slider'].value,'1');
+  }
+  assert.equal(JSON.stringify(ui.state.runs.map(r=>r.xyz)),unchanged);
+  const other=ui.choose('other',true);ui.requests.at(-1).resolve(preset('other',{frames}));await other;
+  assert.equal(ui.state.frame,0);
+});
+
+test('04d initially measures all six N belonging to the three en molecules',async()=>{
+  const ui=session({inspectState:true,presets:{zn_pressure:true}}),load=ui.choose('zn_pressure',true);
+  const data=preset('zn_en_1bar');data.runs[0].xyz.elements=Array(97).fill('H');data.runs[0].xyz.elements[0]='Zn';
+  for(const n of [61,64,73,76,85,88])data.runs[0].xyz.elements[n]='N';
+  data.runs[0].xyz.frames[0].coords=Array.from({length:97},(_,i)=>[i,0,0]);
+  ui.requests[0].resolve(data);await load;
+  ui.nodes['tab-distance'].fire('click');
+  const measures=ui.state.geometryMeasures[ui.state.runs[0].id].distance;
+  assert.deepEqual(JSON.parse(JSON.stringify(measures)),[61,64,73,76,85,88].map(n=>[0,n]));
+});
+
 test('stage playback defaults to full, loops only retained interval frames and preserves the physical clock',async()=>{
   const ui=await playbackSession([{startFs:0,endFs:49.75,label:'Hidratação'},{startFs:50,endFs:99.75,label:'Encontro'}]);
   assert.equal(ui.nodes['playback-interval'].value,'full');assert.equal(ui.nodes['playback-interval-field'].hidden,false);

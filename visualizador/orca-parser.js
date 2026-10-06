@@ -23,11 +23,13 @@
   }
   function segmentRows(rows, warnings, label='série') {
     const gaps = rows.slice(1).map((r,i) => r.step !== null && rows[i].step !== null ? r.step-rows[i].step : r.time-rows[i].time).filter(x => x>0);
-    const middle=median(gaps),usual=median(gaps.filter(g=>g<=middle)); let segment=0, breaks=0;
+    const middle=median(gaps),usual=median(gaps.filter(g=>g<=middle));
+    const timeGaps=rows.slice(1).map((r,i)=>r.time-rows[i].time).filter(x=>x>0),timeMiddle=median(timeGaps),usualTime=median(timeGaps.filter(g=>g<=timeMiddle));
+    let segment=0, breaks=0;
     rows.forEach((r,i) => {
       if(i) {
         const prev=rows[i-1], gap = r.step !== null && prev.step !== null ? r.step-prev.step : r.time-prev.time;
-        if(r.time<=prev.time || gap<=0 || (usual && gap>Math.max(usual*1.8,usual+0.11)) || r.breakBefore) {segment++;breaks++;}
+        if(r.time<=prev.time || gap<=0 || (usual && gap>Math.max(usual*1.8,usual+0.11)) || (usualTime && r.time-prev.time>Math.max(usualTime*1.8,usualTime+0.11)) || r.breakBefore) {segment++;breaks++;}
       }
       r.segment=segment;
     });

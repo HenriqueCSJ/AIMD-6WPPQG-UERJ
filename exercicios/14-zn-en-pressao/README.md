@@ -20,6 +20,8 @@ Os inputs têm dois trechos contínuos: **500 fs com acoplamento térmico de 20 
 
 As três referências conservam **todos os 10001 quadros reais**, de 0 a 5000 fs, com gravação a cada **0,5 fs**. Marque os casos e alterne o campo **Simulação** para comparar o mesmo tempo físico. Ative **Coordenação** e acompanhe a esfera e seus indicadores.
 
+Na aba **Geometria**, as seis distâncias Zn–N já ficam selecionadas. Os índices começam em zero: **Zn 0; en 1: N 61 e N 64; en 2: N 73 e N 76; en 3: N 85 e N 88**. Confira os dois N de cada par para reconhecer uma mesma en bidentada; observar somente a primeira en não permite concluir sobre as três.
+
 1. Observe primeiro a hidratação do Zn. Meça Zn–O e compare com Zn–N; retenção espacial e coordenação são medidas distintas.
 2. Observe o raio da esfera em cada pressão. A referência de **1 bar expande**; as pressões maiores confinam o agregado mais fortemente.
 3. Meça as distâncias Zn–N ao longo dos 5 ps. Algum N cruza o corte geométrico de 2,6 Å? Existe contato simultâneo pelos dois N da mesma en?

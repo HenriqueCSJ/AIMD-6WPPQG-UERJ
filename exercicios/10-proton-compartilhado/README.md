@@ -8,7 +8,7 @@
 
 No dímero neutro da abertura, as águas mudam a orientação da ligação H e preservam suas ligações O–H covalentes. Aqui, o dímero protonado H₅O₂⁺ permite acompanhar o H compartilhado. Usamos GFN2-xTB, um método semiempírico de estrutura eletrônica, com núcleos clássicos. Não há solvente implícito, parede ou força aplicada para transferir o H.
 
-**Para observar com calma:** o laboratório abre a referência completa de **10 ps**, com **40001 quadros**. Um ciclo de reprodução começa em **60 s**; escolha **120 s** em **Duração a 1×**, ou reduza **Velocidade**, para acompanhar cada passagem por mais tempo. Esses controles não alteram o tempo físico.
+**Para observar com calma:** o laboratório abre a referência completa de **10 ps**, com **40001 quadros**. Um ciclo automático de reprodução leva **78 s**; escolha **120 s** em **Duração a 1×**, ou reduza **Velocidade**, para acompanhar cada passagem por mais tempo. Esses controles não alteram o tempo físico.
 
 O input curto abaixo permite executar os primeiros **2 ps** durante a aula. A referência longa preserva esses mesmos 2 ps e acrescenta **8 ps por restart**, sem reinicializar posições ou velocidades.
 
@@ -82,6 +82,8 @@ Execute um cálculo por vez. A referência completou **2 ps em 123,847 s**; a ot
 Uma passagem pelo ponto médio pode ser seguida de retorno. Para reconhecer essa diferença, compare a mudança de sinal de δ com a permanência no novo lado. Dois oxigênios permitem observar compartilhamento e recrossamentos; investigar transporte por uma rede de águas exige um modelo maior.
 
 <details markdown="1"><summary>Conferir cruzamentos e persistência depois da observação</summary>
+
+Para uma persistência mínima τ, cada lado precisa apresentar um episódio contínuo de pelo menos τ com **δ ≤ −0,10 Å** ou **δ ≥ +0,10 Å**. Entrar na faixa central interrompe esse episódio. Contamos mudanças entre lados confirmados sucessivos; a primeira localização e os episódios curtos não contam. Vários episódios confirmados no mesmo lado não acrescentam mudanças.
 
 Nos **2 ps originais** ocorreram **79 cruzamentos de δ = 0**. Exigir afastamento de pelo menos 0,10 Å da região central e permanência muda a contagem: nove mudanças para 20 fs, uma para 50 fs e nenhuma para 100 fs. **Um cruzamento não é uma taxa de reação.** O exemplo mostra compartilhamento e recrossamentos; dois oxigênios não constituem uma rede extensa de transporte de prótons.
 

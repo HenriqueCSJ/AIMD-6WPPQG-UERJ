@@ -685,7 +685,7 @@
     if(!first){event.preventDefault();$('expand-trajectory').focus();return;}
     if(!focusable.includes(active)||(event.shiftKey?active===first:active===last)){event.preventDefault();(event.shiftKey?last:first).focus();}
   }
-  function renderTrajectory(){
+  function renderTrajectory(frameTime=null){
     updateExerciseReturn();
     const run=currentTrajectory(),has=!!run?.xyz;$('trajectory-empty').hidden=has;$('trajectory-content').hidden=!has;
     $('reset-view').disabled=!has;renderPlaybackControls(run);renderTrajectoryDataLink(run);
@@ -700,7 +700,7 @@
     if(!window.$3Dmol){$('trajectory-content').hidden=true;$('trajectory-empty').hidden=false;$('trajectory-empty').textContent='O visualizador molecular não foi carregado. Mantenha a pasta vendor junto ao aplicativo. As distâncias continuam disponíveis.';return;}
     try{if(!state.viewer){state.viewer=$3Dmol.createViewer($('molecule'),{backgroundColor:'white',orthographic:true,antialias:true});state.viewer.setProjection('orthographic');state.initialView=state.viewer.getView().slice();}
       const changedRun=state.viewRun!==run.id;
-      if(changedRun){clearAtomLabels();state.frame=0;state.selectedAtom=null;state.viewRun=run.id;state.timeFormat=timeFormat(run.xyz.frames);ensureTrajectoryReadouts();$('frame-slider').value='0';state.viewer.removeAllModels();state.model=state.viewer.addModel();state.renderAtoms=null;state.renderFrame=null;state.styleKey=null;state.frameGeometry=null;}
+      if(changedRun){const exact=Number.isFinite(frameTime)?run.xyz.frames.findIndex(frame=>frame.time===frameTime):-1;clearAtomLabels();state.frame=Math.max(0,exact);state.selectedAtom=null;state.viewRun=run.id;state.timeFormat=timeFormat(run.xyz.frames);ensureTrajectoryReadouts();$('frame-slider').value=String(state.frame);state.viewer.removeAllModels();state.model=state.viewer.addModel();state.renderAtoms=null;state.renderFrame=null;state.styleKey=null;state.frameGeometry=null;}
       const wallSphere=metadata(run).wallSphere||metadata(run).initialWallInfo||null,changedWall=state.wallSphere!==wallSphere;
       if(changedRun||changedWall){state.wallKey=null;state.wallSphere=wallSphere;}
       state.cellIndex=A.cellIndex(run);
@@ -819,7 +819,7 @@
     };
     state.timer=requestAnimationFrame(tick);
   }
-  function initialPairs(run){if(state.pairs[run.id])return;const els=run.xyz.elements,zn=els.indexOf('Zn'),ns=els.map((e,i)=>e==='N'?i:null).filter(x=>x!==null);state.pairs[run.id]=run.reference&&run.key==='chelation_continuous'&&els.length===97&&els[0]==='Zn'&&els[61]==='N'&&els[64]==='N'&&els[7]==='O'&&els[25]==='O'?[[0,61],[0,64],[0,7],[0,25]]:run.reference&&run.key==='controle_dt025_31A'?[[0,10],[0,1],[0,31]]:zn>=0&&ns.length?[...ns.slice(0,2).map(n=>[zn,n]),...(run.key?.includes('_longo')?[[zn,25]]:[])]:els.length>1?[[0,1]]:[];}
+  function initialPairs(run){if(state.pairs[run.id])return;const els=run.xyz.elements,zn=els.indexOf('Zn'),ns=els.map((e,i)=>e==='N'?i:null).filter(x=>x!==null);state.pairs[run.id]=run.reference&&run.exercisePreset==='zn_pressure'&&els.length===97&&zn===0&&ns.length===6?ns.map(n=>[zn,n]):run.reference&&run.key==='chelation_continuous'&&els.length===97&&els[0]==='Zn'&&els[61]==='N'&&els[64]==='N'&&els[7]==='O'&&els[25]==='O'?[[0,61],[0,64],[0,7],[0,25]]:run.reference&&run.key==='controle_dt025_31A'?[[0,10],[0,1],[0,31]]:zn>=0&&ns.length?[...ns.slice(0,2).map(n=>[zn,n]),...(run.key?.includes('_longo')?[[zn,25]]:[])]:els.length>1?[[0,1]]:[];}
   function ensureGeometryMeasures(run){initialPairs(run);if(!state.geometryMeasures[run.id])state.geometryMeasures[run.id]={distance:state.pairs[run.id],angle:[],dihedral:[]};return state.geometryMeasures[run.id];}
   function geometryType(){return $('geometry-type')?.value||'distance';}
   function geometryLabel(xyz,indices,type){const labels=indices.map((index,i)=>`${esc(xyz.elements[index]||'Átomo')} ${index}`);return type==='distance'?`${labels[0]} — ${labels[1]}`:labels.join(' — ');}
@@ -931,7 +931,7 @@
   document.querySelectorAll('[name="energy-series"]').forEach(c=>c.addEventListener('change',renderEnergy));
   $('trajectory-energy-source').addEventListener('change',()=>{$('associate-trajectory-data').disabled=!$('trajectory-energy-source').value;});
   $('associate-trajectory-data').addEventListener('click',associateTrajectoryData);
-  $('trajectory-run').addEventListener('change',()=>{stop();renderTrajectory();});$('reset-view').addEventListener('click',resetView);for(const id of ['atom-labels','proximity-lines','hydrogen-bonds','coordination-contacts'])$(id).addEventListener('change',()=>{drawFrame();renderContactLegend(currentTrajectory());});$('coordination-cutoff').addEventListener('input',()=>drawFrame());
+  $('trajectory-run').addEventListener('change',()=>{const previous=state.runs.find(run=>run.id===state.viewRun),next=currentTrajectory();const time=previous?.reference&&next?.reference&&previous.exercisePreset==='zn_pressure'&&next.exercisePreset==='zn_pressure'?previous.xyz.frames[state.frame]?.time:null;stop();renderTrajectory(time);});$('reset-view').addEventListener('click',resetView);for(const id of ['atom-labels','proximity-lines','hydrogen-bonds','coordination-contacts'])$(id).addEventListener('change',()=>{drawFrame();renderContactLegend(currentTrajectory());});$('coordination-cutoff').addEventListener('input',()=>drawFrame());
   $('rotate-molecule').addEventListener('click',()=>setInteraction('rotate'));$('pan-molecule').addEventListener('click',()=>setInteraction('pan'));
   $('highlight-kind').addEventListener('change',highlightMode);
   $('highlight-atom').addEventListener('change',()=>{state.selectedAtom=Number($('highlight-atom').value);renderAtomInfo();});

@@ -29,6 +29,14 @@ test('all retained MD outputs agree with CSV values; input metadata recognizes N
   checked++;
  }}assert.equal(checked,30);assert.equal(joined,2);
 });
+test('a physical-time gap breaks the plotted segment even when step numbers remain consecutive',()=>{
+ const data=R.parseEnergyCSV([header,...[0,.5,1,100,100.5].map((time,i)=>row(i,time))].join('\n'));
+ assert.deepEqual(data.rows.map(r=>r.segment),[0,0,0,1,1]);
+ assert.deepEqual(data.rows.map(r=>r.time),[0,.5,1,100,100.5]);
+ const rounded=R.parseEnergyCSV([header,...[0,.2,.5,.8,1,1.2,1.5].map((time,i)=>row(i,time))].join('\n'));
+ assert.ok(rounded.rows.every(r=>r.segment===0),'Ordinary 0.25 fs output rounding is not a gap');
+});
+
 test('real timestep controls retain the full duration and measured energy amplitudes',()=>{
  for(const [name,lesson,count,span] of [['etanol_dt025','4-timestep',2001,.000038],['etanol_nve','3-xtb2-etanol',1001,.000114],['etanol_dt200','4-timestep',251,.002526]]){
   const data=R.parseEnergyCSV(csv(name,lesson));assert.equal(data.rows.length,count);assert.equal(data.rows.at(-1).time,500);assert.ok(Math.abs(R.stats(data.rows,'total').span-span)<1e-10);

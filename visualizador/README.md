@@ -134,3 +134,5 @@ O exercício 04c também oferece novos inputs livres/assistidos com/sem parede, 
 
 
 **04d · en sem assistência:** [abrir 1 / 1000 / 4000 bar](index.html?exemplo=zn_pressure&aba=trajetoria). As três referências usam o mesmo início de Zn²⁺ + 20 águas + três en (97 átomos), com todos os N afastados, 5 ps e nenhuma restrição Zn–N. Cada caso mantém todos os 10001 quadros reais. A esfera elástica é finita e não periódica: o alvo externo difere da pressão média medida, que flutua; 1 bar expande a esfera. A comparação não começa no quelato final nem no encontro selecionado de 04c. O complemento Cell de 43 átomos continua separado.
+
+Ao alternar **Simulação** entre os três casos de 04d, a reprodução pausa e conserva o mesmo tempo físico, usando o quadro original correspondente. Abrir outro exemplo continua começando pelo início. Na aba **Geometria**, 04d oferece inicialmente as seis distâncias de Zn0 aos N61/64, N73/76 e N85/88, permitindo conferir as três en.
