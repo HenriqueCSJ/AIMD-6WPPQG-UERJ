@@ -58,7 +58,6 @@ A ausência de coordenação em três trajetórias de 5 ps não demonstra imposs
   Initvel 300_K
   Cell Sphere 0, 0, 0, 9.0_A Spring 50 Elastic 100_fs, 0.0005 Pressure 1
   Dump Position Stride 2 Filename "zn_en_1bar_5ps-traj.xyz"
-  Dump Velocity Stride 2000 Filename "zn_en_1bar_5ps-vel.xyz"
   Thermostat CSVR 300_K Timecon 20_fs
   Run 2000
   # Continue inside the same MD process, preserving the elastic wall history.
@@ -83,7 +82,6 @@ end
   Initvel 300_K
   Cell Sphere 0, 0, 0, 9.0_A Spring 50 Elastic 100_fs, 0.0005 Pressure 1000
   Dump Position Stride 2 Filename "zn_en_1000bar_5ps-traj.xyz"
-  Dump Velocity Stride 2000 Filename "zn_en_1000bar_5ps-vel.xyz"
   Thermostat CSVR 300_K Timecon 20_fs
   Run 2000
   # Continue inside the same MD process, preserving the elastic wall history.
@@ -108,7 +106,6 @@ end
   Initvel 300_K
   Cell Sphere 0, 0, 0, 9.0_A Spring 50 Elastic 100_fs, 0.0005 Pressure 4000
   Dump Position Stride 2 Filename "zn_en_4000bar_5ps-traj.xyz"
-  Dump Velocity Stride 2000 Filename "zn_en_4000bar_5ps-vel.xyz"
   Thermostat CSVR 300_K Timecon 20_fs
   Run 2000
   # Continue inside the same MD process, preserving the elastic wall history.

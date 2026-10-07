@@ -34,6 +34,8 @@ def input_resources(body, folder):
             attr = ' download' if download else ''
             return f'<a href="{html.escape(href, quote=True)}"{attr}>{html.escape(label)}</a>'
         links = [link(key, 'Baixar input completo')]
+        if item.get('executedInput'):
+            links.append(link(item['executedInput'], 'Input original executado'))
         for structure in item['structures']:
             links.append(link(structure, 'Baixar XYZ de entrada · ' + Path(structure).name))
         results = {}

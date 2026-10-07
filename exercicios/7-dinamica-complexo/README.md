@@ -37,7 +37,6 @@ As variantes usam **XTB2/ALPB(water), timestep de 0,25 fs, velocidades inicializ
   Thermostat CSVR 300_K Timecon 100_fs
   Cell None
   Dump Position Stride 2 Filename "zn_solv_h2o_sem_parede-traj.xyz"
-  Dump Velocity Stride 2000 Filename "zn_solv_h2o_sem_parede-vel.xyz"
   Run 4000
 end
 * xyzfile 2 1 zn_ion_20h2o_solvator.solvator.xyz
@@ -62,7 +61,6 @@ end
   Thermostat CSVR 300_K Timecon 100_fs
   Cell Sphere 0, 0, 0, 6.5_A Spring 10.0
   Dump Position Stride 2 Filename "zn_solv_h2o_spring10-traj.xyz"
-  Dump Velocity Stride 2000 Filename "zn_solv_h2o_spring10-vel.xyz"
   Run 4000
 end
 * xyzfile 2 1 zn_ion_20h2o_solvator.solvator.xyz
@@ -87,7 +85,6 @@ end
   Thermostat CSVR 300_K Timecon 100_fs
   Cell Sphere 0, 0, 0, 6.5_A Spring 50.0
   Dump Position Stride 2 Filename "zn_solv_h2o_spring50-traj.xyz"
-  Dump Velocity Stride 2000 Filename "zn_solv_h2o_spring50-vel.xyz"
   Run 4000
 end
 * xyzfile 2 1 zn_ion_20h2o_solvator.solvator.xyz
@@ -112,7 +109,6 @@ end
   Thermostat CSVR 300_K Timecon 100_fs
   Cell Sphere 0, 0, 0, 6.5_A Spring 200.0
   Dump Position Stride 2 Filename "zn_solv_h2o_spring200-traj.xyz"
-  Dump Velocity Stride 2000 Filename "zn_solv_h2o_spring200-vel.xyz"
   Run 4000
 end
 * xyzfile 2 1 zn_ion_20h2o_solvator.solvator.xyz

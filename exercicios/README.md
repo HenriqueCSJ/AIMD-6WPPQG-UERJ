@@ -77,6 +77,8 @@ O [roteiro de quatro horas](roteiro-4h.md) preserva **15 min de descanso, 25 min
 
 ## Como executar
 
+**Inputs da aula e originais:** em 04b e 04d, as cópias para a aula omitem apenas a gravação opcional de velocidades. Os inputs executados e todos os resultados permanecem nos downloads; forças e integração são iguais.
+
 **Input e geometria:** os exemplos pequenos independentes usam `* xyz carga multiplicidade`, com as coordenadas dentro do próprio input; o XYZ separado é opcional para executar e serve para consultar ou editar a geometria. Os sistemas maiores e as etapas dependentes usam `* xyzfile carga multiplicidade arquivo.xyz`: nesse caso, o XYZ é obrigatório na mesma pasta do input. Cada atividade oferece os dois downloads lado a lado. Nos reinícios, mantenha também o checkpoint `.mdrestart` indicado: ele fornece o estado de continuação, que o XYZ isolado não substitui. O exemplo de Al exige ainda `scc.inp`.
 
 A configuração do ORCA no PATH é feita **uma vez**, durante a [instalação](../tutoriais/README.md). Nos exercícios, basta entrar na pasta que contém o input e executar o comando mostrado na atividade. Mantenha os arquivos XYZ, de reinício ou outros auxiliares junto do input, conforme o pacote fornecido.

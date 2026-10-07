@@ -33,6 +33,33 @@ def protocol(path):
 
 
 class ExerciseResourcesTests(unittest.TestCase):
+    def test_seven_teaching_copies_omit_only_the_optional_velocity_dump(self):
+        expected = {
+            f'exercicios/7-dinamica-complexo/inputs/zn_solv_h2o_{suffix}.inp':
+            f'exercicios/7-dinamica-complexo/resultados/zn_solv_h2o_{suffix}/zn_solv_h2o_{suffix}.inp'
+            for suffix in ['sem_parede', 'spring10', 'spring50', 'spring200']
+        }
+        expected.update({
+            f'exercicios/14-zn-en-pressao/zn_en_{pressure}bar_5ps.inp':
+            f'exercicios/14-zn-en-pressao/resultados/zn_en_{pressure}bar_5ps/zn_en_{pressure}bar_5ps.inp'
+            for pressure in [1, 1000, 4000]
+        })
+        actual = {key: item['executedInput'] for key, item in DATA['inputs'].items() if item.get('executedInput')}
+        self.assertEqual(actual, expected)
+        for teaching, executed in actual.items():
+            original = (ROOT / executed).read_text(encoding='utf-8').splitlines()
+            removed = [line for line in original if re.match(r'^\s*Dump Velocity ', line)]
+            self.assertEqual(len(removed), 1, executed)
+            self.assertEqual(removed[0].strip(), f'Dump Velocity Stride 2000 Filename "{DATA["inputs"][teaching]["case"]}-vel.xyz"')
+            self.assertEqual(normalized((ROOT / teaching).read_text(encoding='utf-8')), normalized('\n'.join(line for line in original if line != removed[0])), teaching)
+            self.assertIn(executed, DATA['inputs'])
+            page = ROOT / 'exercicios' / Path(teaching).parts[1] / 'index.html'
+            rendered = page.read_text(encoding='utf-8')
+            card = re.search(r'<div class="input-resources" data-input="' + re.escape(teaching) + r'">(.*?)</div></div>', rendered, re.S)[1]
+            href = executed.split('/resultados/', 1)[1]
+            self.assertIn(f'href="resultados/{href}" download>Input original executado', card)
+        self.assertIn('Dump Velocity Stride 1', (EX / '1-agua-dft/inputs/agua_dump.inp').read_text())
+
     def test_chelation_classroom_has_two_minimal_inputs_and_all_nine_original_support_protocols_remain_copyable(self):
         folder = EX / '11-formacao-quelato'
         main = (folder / 'README.md').read_text(encoding='utf-8')
@@ -123,8 +150,12 @@ class ExerciseResourcesTests(unittest.TestCase):
         covered = {protocol(path) for path in displayed}
         paths = {p.relative_to(ROOT).as_posix() for p in EX.rglob('*.inp')}
         self.assertEqual(paths, set(DATA['inputs']))
+        # Only the seven explicitly declared native/teaching pairs may use a
+        # teaching copy. Their sole output-line difference is checked above.
+        teaching_for_executed = {item['executedInput']: key for key, item in DATA['inputs'].items() if item.get('executedInput')}
         for key in paths:
-            self.assertIn(protocol(ROOT / key), covered, f'No complete copyable protocol: {key}')
+            copy_key = teaching_for_executed.get(key, key)
+            self.assertIn(protocol(ROOT / copy_key), covered, f'No complete copyable protocol: {key}')
 
     def test_every_input_has_separate_structure_downloads_and_a_contextual_lab(self):
         manifest = json.loads((ROOT / 'visualizador/examples.js').read_text(encoding='utf-8').split('window.AIMD_EXAMPLES = ', 1)[1].strip().rstrip(';'))

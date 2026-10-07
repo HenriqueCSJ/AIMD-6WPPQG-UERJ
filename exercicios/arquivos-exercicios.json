@@ -862,9 +862,10 @@
       "dependencies": [],
       "preset": "arquivo_zn_en_1000bar",
       "state": "complete_md",
-      "status": "Dinâmica executada; resultados disponíveis.",
+      "status": "Input da aula; resultados de referência disponíveis.",
       "resultsPackage": "exercicios/14-zn-en-pressao/resultados-completos.zip",
-      "case": "zn_en_1000bar_5ps"
+      "case": "zn_en_1000bar_5ps",
+      "executedInput": "exercicios/14-zn-en-pressao/resultados/zn_en_1000bar_5ps/zn_en_1000bar_5ps.inp"
     },
     "exercicios/14-zn-en-pressao/zn_en_1bar_5ps.inp": {
       "structures": [
@@ -873,9 +874,10 @@
       "dependencies": [],
       "preset": "arquivo_zn_en_1bar",
       "state": "complete_md",
-      "status": "Dinâmica executada; resultados disponíveis.",
+      "status": "Input da aula; resultados de referência disponíveis.",
       "resultsPackage": "exercicios/14-zn-en-pressao/resultados-completos.zip",
-      "case": "zn_en_1bar_5ps"
+      "case": "zn_en_1bar_5ps",
+      "executedInput": "exercicios/14-zn-en-pressao/resultados/zn_en_1bar_5ps/zn_en_1bar_5ps.inp"
     },
     "exercicios/14-zn-en-pressao/zn_en_4000bar_5ps.inp": {
       "structures": [
@@ -884,9 +886,10 @@
       "dependencies": [],
       "preset": "arquivo_zn_en_4000bar",
       "state": "complete_md",
-      "status": "Dinâmica executada; resultados disponíveis.",
+      "status": "Input da aula; resultados de referência disponíveis.",
       "resultsPackage": "exercicios/14-zn-en-pressao/resultados-completos.zip",
-      "case": "zn_en_4000bar_5ps"
+      "case": "zn_en_4000bar_5ps",
+      "executedInput": "exercicios/14-zn-en-pressao/resultados/zn_en_4000bar_5ps/zn_en_4000bar_5ps.inp"
     },
     "exercicios/2-solvente-implicito/inputs/agua_cpcm.inp": {
       "structures": [
@@ -1708,11 +1711,12 @@
       "dependencies": [],
       "preset": "arquivo_zn_solv_h2o_sem_parede",
       "state": "complete_md",
-      "status": "MD executada diretamente da saída SOLVATOR, sem ajuste das águas; 1 ps.",
+      "status": "Input da aula; resultados de referência disponíveis.",
       "resultsPackage": "exercicios/7-dinamica-complexo/resultados-completos.zip",
       "case": "zn_solv_h2o_sem_parede",
       "executionPackage": "exercicios/7-dinamica-complexo/aula-zn_solv_h2o_sem_parede.zip",
-      "casePackage": "exercicios/7-dinamica-complexo/resultado-zn_solv_h2o_sem_parede.zip"
+      "casePackage": "exercicios/7-dinamica-complexo/resultado-zn_solv_h2o_sem_parede.zip",
+      "executedInput": "exercicios/7-dinamica-complexo/resultados/zn_solv_h2o_sem_parede/zn_solv_h2o_sem_parede.inp"
     },
     "exercicios/7-dinamica-complexo/inputs/zn_solv_h2o_spring10.inp": {
       "structures": [
@@ -1721,11 +1725,12 @@
       "dependencies": [],
       "preset": "arquivo_zn_solv_h2o_spring10",
       "state": "complete_md",
-      "status": "MD executada diretamente da saída SOLVATOR, sem ajuste das águas; 1 ps.",
+      "status": "Input da aula; resultados de referência disponíveis.",
       "resultsPackage": "exercicios/7-dinamica-complexo/resultados-completos.zip",
       "case": "zn_solv_h2o_spring10",
       "executionPackage": "exercicios/7-dinamica-complexo/aula-zn_solv_h2o_spring10.zip",
-      "casePackage": "exercicios/7-dinamica-complexo/resultado-zn_solv_h2o_spring10.zip"
+      "casePackage": "exercicios/7-dinamica-complexo/resultado-zn_solv_h2o_spring10.zip",
+      "executedInput": "exercicios/7-dinamica-complexo/resultados/zn_solv_h2o_spring10/zn_solv_h2o_spring10.inp"
     },
     "exercicios/7-dinamica-complexo/inputs/zn_solv_h2o_spring50.inp": {
       "structures": [
@@ -1734,11 +1739,12 @@
       "dependencies": [],
       "preset": "arquivo_zn_solv_h2o_spring50",
       "state": "complete_md",
-      "status": "MD executada diretamente da saída SOLVATOR, sem ajuste das águas; 1 ps.",
+      "status": "Input da aula; resultados de referência disponíveis.",
       "resultsPackage": "exercicios/7-dinamica-complexo/resultados-completos.zip",
       "case": "zn_solv_h2o_spring50",
       "executionPackage": "exercicios/7-dinamica-complexo/aula-zn_solv_h2o_spring50.zip",
-      "casePackage": "exercicios/7-dinamica-complexo/resultado-zn_solv_h2o_spring50.zip"
+      "casePackage": "exercicios/7-dinamica-complexo/resultado-zn_solv_h2o_spring50.zip",
+      "executedInput": "exercicios/7-dinamica-complexo/resultados/zn_solv_h2o_spring50/zn_solv_h2o_spring50.inp"
     },
     "exercicios/7-dinamica-complexo/inputs/zn_solv_h2o_spring200.inp": {
       "structures": [
@@ -1747,11 +1753,12 @@
       "dependencies": [],
       "preset": "arquivo_zn_solv_h2o_spring200",
       "state": "complete_md",
-      "status": "MD executada diretamente da saída SOLVATOR, sem ajuste das águas; 1 ps.",
+      "status": "Input da aula; resultados de referência disponíveis.",
       "resultsPackage": "exercicios/7-dinamica-complexo/resultados-completos.zip",
       "case": "zn_solv_h2o_spring200",
       "executionPackage": "exercicios/7-dinamica-complexo/aula-zn_solv_h2o_spring200.zip",
-      "casePackage": "exercicios/7-dinamica-complexo/resultado-zn_solv_h2o_spring200.zip"
+      "casePackage": "exercicios/7-dinamica-complexo/resultado-zn_solv_h2o_spring200.zip",
+      "executedInput": "exercicios/7-dinamica-complexo/resultados/zn_solv_h2o_spring200/zn_solv_h2o_spring200.inp"
     },
     "exercicios/7-dinamica-complexo/resultados/zn_solv_h2o_sem_parede/zn_solv_h2o_sem_parede.inp": {
       "structures": [

@@ -210,7 +210,15 @@ for(const [input,item] of Object.entries(resources.inputs)){
 }
 // Ordinary scripts, rather than fetch(), preserve direct file:// use offline.
 // The small manifest is loaded at startup; calculations are loaded on demand.
-const version='20261006-en-minimal',sources={},folder=path.join(root,'visualizador/examples');
+for(const [input,item] of Object.entries(resources.inputs)){
+ if(!item.executedInput)continue;
+ for(const key of presets[item.preset].runs){
+  const files=runs[key].files,teaching=files.find(file=>file.path===input),executed=files.find(file=>file.path===item.executedInput);
+  if(!teaching||!executed)throw new Error(`Missing teaching/executed input pair: ${input}`);
+  teaching.label='Input da aula · '+teaching.name;executed.label='Input executado · '+executed.name;
+ }
+}
+const version='20261006-dump-simple',sources={},folder=path.join(root,'visualizador/examples');
 fs.mkdirSync(folder,{recursive:true});let totalBytes=0;
 for(const [key,run] of Object.entries(runs)){
  const filename=`${key}.js`,full=path.join(folder,filename);
